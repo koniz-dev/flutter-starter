@@ -1,0 +1,179 @@
+diff --git a/lib/core/accessibility/accessibility_helpers.dart b/lib/core/accessibility/accessibility_helpers.dart
+index b9e164d5ff4..650a3849ab3 100644
+--- a/lib/core/accessibility/accessibility_helpers.dart
++++ b/lib/core/accessibility/accessibility_helpers.dart
+@@ -1,9 +1,8 @@
+ import 'dart:math' as math;
+ 
+-import 'package:flutter/material.dart';
+-
+ import 'package:flutter_starter/core/accessibility/accessibility_constants.dart';
+ import 'package:flutter_starter/l10n/app_localizations.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ /// Accessibility helper functions
+ ///
+diff --git a/lib/core/accessibility/focus_announcer.dart b/lib/core/accessibility/focus_announcer.dart
+index b002cafd943..d20b2fbba84 100644
+--- a/lib/core/accessibility/focus_announcer.dart
++++ b/lib/core/accessibility/focus_announcer.dart
+@@ -1,9 +1,9 @@
+ import 'dart:async';
+ 
+-import 'package:flutter/material.dart';
+ import 'package:flutter/semantics.dart';
+ import 'package:flutter_starter/core/localization/localization_extensions.dart';
+ import 'package:flutter_starter/core/localization/localization_service.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ /// Service for announcing focus changes to screen readers
+ ///
+diff --git a/lib/shared/accessibility/accessibility_widgets.dart b/lib/shared/accessibility/accessibility_widgets.dart
+index 8123c7a1511..6c73eb87a74 100644
+--- a/lib/shared/accessibility/accessibility_widgets.dart
++++ b/lib/shared/accessibility/accessibility_widgets.dart
+@@ -1,7 +1,6 @@
+-import 'package:flutter/material.dart';
+-
+ import 'package:flutter_starter/core/accessibility/accessibility_helpers.dart';
+ import 'package:flutter_starter/core/localization/localization_extensions.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ /// Accessible button widget with proper semantics and touch targets
+ ///
+@@ -357,7 +356,7 @@ class AccessibleProgressIndicator extends StatelessWidget {
+ /// Helps manage focus for keyboard navigation and screen readers.
+ ///
+ /// Deliberately **not** named `FocusManager`: this library is meant to be
+-/// imported alongside `package:flutter/material.dart`, which exports Flutter's
++/// imported alongside `package:material_ui/material_ui.dart`, which exports Flutter's
+ /// own `FocusManager` singleton. A same-named class here makes the very common
+ /// `FocusManager.instance.primaryFocus?.unfocus()` a hard compile error
+ /// (`'FocusManager' is imported from both ...`) in any file that imports both.
+diff --git a/lib/shared/design_system/tokens/app_colors.dart b/lib/shared/design_system/tokens/app_colors.dart
+index 589f7219423..01a781c7a27 100644
+--- a/lib/shared/design_system/tokens/app_colors.dart
++++ b/lib/shared/design_system/tokens/app_colors.dart
+@@ -1,4 +1,4 @@
+-import 'package:flutter/material.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ /// Semantic color tokens for the Design System.
+ ///
+diff --git a/lib/shared/design_system/tokens/app_typography.dart b/lib/shared/design_system/tokens/app_typography.dart
+index 7660a7eb600..edeec270dd0 100644
+--- a/lib/shared/design_system/tokens/app_typography.dart
++++ b/lib/shared/design_system/tokens/app_typography.dart
+@@ -1,5 +1,5 @@
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/shared/design_system/tokens/app_colors.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ /// Semantic typography tokens for the Design System.
+ ///
+diff --git a/lib/shared/design_system/tokens/default_design_tokens.dart b/lib/shared/design_system/tokens/default_design_tokens.dart
+index c2e8ac2fcb2..be05b23d56c 100644
+--- a/lib/shared/design_system/tokens/default_design_tokens.dart
++++ b/lib/shared/design_system/tokens/default_design_tokens.dart
+@@ -1,7 +1,7 @@
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/core/contracts/design_tokens_contracts.dart';
+ import 'package:flutter_starter/shared/design_system/tokens/app_colors.dart';
+ import 'package:flutter_starter/shared/design_system/tokens/app_typography.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ /// Default semantic token implementation.
+ ///
+diff --git a/lib/shared/extensions/context_extensions.dart b/lib/shared/extensions/context_extensions.dart
+index 6db69191657..9bd347e0ac7 100644
+--- a/lib/shared/extensions/context_extensions.dart
++++ b/lib/shared/extensions/context_extensions.dart
+@@ -1,5 +1,5 @@
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/shared/design_system/tokens/app_colors.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ /// BuildContext extension methods
+ ///
+diff --git a/lib/shared/theme/app_theme.dart b/lib/shared/theme/app_theme.dart
+index d6806fe5655..74ccd982785 100644
+--- a/lib/shared/theme/app_theme.dart
++++ b/lib/shared/theme/app_theme.dart
+@@ -1,6 +1,6 @@
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/shared/design_system/tokens/app_colors.dart';
+ import 'package:flutter_starter/shared/design_system/tokens/default_design_tokens.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ /// Application theme configuration
+ class AppTheme {
+diff --git a/lib/shared/widgets/error_widget.dart b/lib/shared/widgets/error_widget.dart
+index 8879a1dcefe..d967d34f7cd 100644
+--- a/lib/shared/widgets/error_widget.dart
++++ b/lib/shared/widgets/error_widget.dart
+@@ -1,6 +1,6 @@
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/core/localization/localization_extensions.dart';
+ import 'package:flutter_starter/shared/accessibility/accessibility_widgets.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ /// Reusable error widget
+ ///
+diff --git a/lib/shared/widgets/language_switcher.dart b/lib/shared/widgets/language_switcher.dart
+index 6c80b012abf..07fb0214052 100644
+--- a/lib/shared/widgets/language_switcher.dart
++++ b/lib/shared/widgets/language_switcher.dart
+@@ -1,4 +1,3 @@
+-import 'package:flutter/material.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ 
+ import 'package:flutter_starter/core/localization/localization_extensions.dart';
+@@ -6,6 +5,7 @@ import 'package:flutter_starter/core/localization/localization_providers.dart';
+ import 'package:flutter_starter/core/localization/localization_service.dart';
+ import 'package:flutter_starter/shared/accessibility/accessibility_widgets.dart';
+ import 'package:flutter_starter/shared/design_system/tokens/app_colors.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ /// Language switcher widget
+ ///
+diff --git a/lib/shared/widgets/loading_indicator.dart b/lib/shared/widgets/loading_indicator.dart
+index 113a7065a1e..93d84d090ba 100644
+--- a/lib/shared/widgets/loading_indicator.dart
++++ b/lib/shared/widgets/loading_indicator.dart
+@@ -1,4 +1,4 @@
+-import 'package:flutter/material.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ /// Reusable loading indicator widget
+ class LoadingIndicator extends StatelessWidget {
+diff --git a/lib/shared/widgets/optimized_image.dart b/lib/shared/widgets/optimized_image.dart
+index 1b60ece4a3f..f8eda6323bd 100644
+--- a/lib/shared/widgets/optimized_image.dart
++++ b/lib/shared/widgets/optimized_image.dart
+@@ -2,8 +2,8 @@ import 'dart:async';
+ import 'dart:math' as math;
+ import 'dart:ui' as ui;
+ 
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/core/utils/image_cache_helper.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ /// Optimized image widget with automatic caching and error handling
+ ///
+diff --git a/lib/shared/widgets/optimized_list_view.dart b/lib/shared/widgets/optimized_list_view.dart
+index 40a80fc2ea7..1cc7c301183 100644
+--- a/lib/shared/widgets/optimized_list_view.dart
++++ b/lib/shared/widgets/optimized_list_view.dart
+@@ -1,11 +1,11 @@
+ import 'dart:async';
+ 
+ import 'package:flutter/foundation.dart';
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/core/localization/localization_extensions.dart';
+ import 'package:flutter_starter/core/utils/pagination_helper.dart'
+     show PaginationScrollExtension;
+ import 'package:flutter_starter/shared/widgets/error_widget.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ /// Optimized ListView with pagination support
+ ///

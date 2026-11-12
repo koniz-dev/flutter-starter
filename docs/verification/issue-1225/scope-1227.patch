@@ -1,0 +1,2248 @@
+diff --git a/integration_test/app_e2e_test.dart b/integration_test/app_e2e_test.dart
+index f4ac48e78b7..ac488941876 100644
+--- a/integration_test/app_e2e_test.dart
++++ b/integration_test/app_e2e_test.dart
+@@ -1,6 +1,6 @@
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/main.dart' as app;
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ import 'package:patrol/patrol.dart';
+ 
+ /// Boots the app and waits for the first frame.
+diff --git a/test/acceptance/acceptance_helpers.dart b/test/acceptance/acceptance_helpers.dart
+index 02c7d5f986c..696ee21f215 100644
+--- a/test/acceptance/acceptance_helpers.dart
++++ b/test/acceptance/acceptance_helpers.dart
+@@ -13,8 +13,6 @@
+ /// in the same test.
+ library;
+ 
+-import 'package:flutter/material.dart';
+-import 'package:flutter_localizations/flutter_localizations.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ // `Override` is exported from misc.dart, not from flutter_riverpod.dart.
+ import 'package:flutter_riverpod/misc.dart' show Override;
+@@ -23,6 +21,7 @@ import 'package:flutter_starter/features/auth/di/auth_providers.dart';
+ import 'package:flutter_starter/l10n/app_localizations.dart';
+ import 'package:flutter_starter/shared/theme/app_theme.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ /// Default capture surface. Wider than the 800x600 test default because Ahem
+ /// glyphs are far wider than real ones, so a narrow surface wraps and clips
+@@ -65,9 +64,7 @@ Future<void> pumpAcceptance(
+         theme: theme ?? AppTheme.lightTheme,
+         localizationsDelegates: const [
+           AppLocalizations.delegate,
+-          GlobalMaterialLocalizations.delegate,
+-          GlobalWidgetsLocalizations.delegate,
+-          GlobalCupertinoLocalizations.delegate,
++          ...GlobalMaterialLocalizations.delegates,
+         ],
+         supportedLocales: LocalizationService.supportedLocales,
+         home: widget,
+diff --git a/test/acceptance/forced_logout_acceptance_test.dart b/test/acceptance/forced_logout_acceptance_test.dart
+index 66e1616fe9c..1514cce8771 100644
+--- a/test/acceptance/forced_logout_acceptance_test.dart
++++ b/test/acceptance/forced_logout_acceptance_test.dart
+@@ -5,8 +5,6 @@ import 'dart:convert';
+ import 'dart:typed_data';
+ 
+ import 'package:dio/dio.dart';
+-import 'package:flutter/material.dart';
+-import 'package:flutter_localizations/flutter_localizations.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/core/di/providers.dart';
+ import 'package:flutter_starter/core/errors/exceptions.dart';
+@@ -22,6 +20,7 @@ import 'package:flutter_starter/l10n/app_localizations.dart';
+ import 'package:flutter_starter/main.dart' show createAppContainer;
+ import 'package:flutter_starter/shared/theme/app_theme.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ import '../helpers/in_memory_stores.dart';
+ import 'acceptance_helpers.dart';
+@@ -96,9 +95,7 @@ void main() {
+           routerConfig: router,
+           localizationsDelegates: const [
+             AppLocalizations.delegate,
+-            GlobalMaterialLocalizations.delegate,
+-            GlobalWidgetsLocalizations.delegate,
+-            GlobalCupertinoLocalizations.delegate,
++            ...GlobalMaterialLocalizations.delegates,
+           ],
+           supportedLocales: LocalizationService.supportedLocales,
+         ),
+diff --git a/test/acceptance/home_screen_acceptance_test.dart b/test/acceptance/home_screen_acceptance_test.dart
+index e6bbbaeee51..dc786dede8d 100644
+--- a/test/acceptance/home_screen_acceptance_test.dart
++++ b/test/acceptance/home_screen_acceptance_test.dart
+@@ -1,9 +1,9 @@
+ @Tags(['golden'])
+ library;
+ 
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/features/home/presentation/screens/home_screen.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ import 'acceptance_helpers.dart';
+ 
+diff --git a/test/acceptance/list_view_states_acceptance_test.dart b/test/acceptance/list_view_states_acceptance_test.dart
+index f40f8c431ff..1a468ee9e36 100644
+--- a/test/acceptance/list_view_states_acceptance_test.dart
++++ b/test/acceptance/list_view_states_acceptance_test.dart
+@@ -1,10 +1,10 @@
+ @Tags(['golden'])
+ library;
+ 
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/l10n/app_localizations.dart';
+ import 'package:flutter_starter/shared/widgets/optimized_list_view.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ import 'acceptance_helpers.dart';
+ 
+diff --git a/test/acceptance/logout_failure_acceptance_test.dart b/test/acceptance/logout_failure_acceptance_test.dart
+index dfbf9815be5..e269b1f979e 100644
+--- a/test/acceptance/logout_failure_acceptance_test.dart
++++ b/test/acceptance/logout_failure_acceptance_test.dart
+@@ -1,8 +1,6 @@
+ @Tags(['golden'])
+ library;
+ 
+-import 'package:flutter/material.dart';
+-import 'package:flutter_localizations/flutter_localizations.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/core/errors/exceptions.dart';
+ import 'package:flutter_starter/core/localization/localization_service.dart';
+@@ -20,6 +18,7 @@ import 'package:flutter_starter/l10n/app_localizations.dart';
+ import 'package:flutter_starter/main.dart' show createAppContainer;
+ import 'package:flutter_starter/shared/theme/app_theme.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ import 'package:shared_preferences/shared_preferences.dart';
+ 
+ import 'acceptance_helpers.dart';
+@@ -134,9 +133,7 @@ void main() {
+             routerConfig: router,
+             localizationsDelegates: const [
+               AppLocalizations.delegate,
+-              GlobalMaterialLocalizations.delegate,
+-              GlobalWidgetsLocalizations.delegate,
+-              GlobalCupertinoLocalizations.delegate,
++              ...GlobalMaterialLocalizations.delegates,
+             ],
+             supportedLocales: LocalizationService.supportedLocales,
+           ),
+diff --git a/test/acceptance/session_restore_acceptance_test.dart b/test/acceptance/session_restore_acceptance_test.dart
+index aa2c8064844..fb6ff5a3d5a 100644
+--- a/test/acceptance/session_restore_acceptance_test.dart
++++ b/test/acceptance/session_restore_acceptance_test.dart
+@@ -1,8 +1,6 @@
+ @Tags(['golden'])
+ library;
+ 
+-import 'package:flutter/material.dart';
+-import 'package:flutter_localizations/flutter_localizations.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/core/localization/localization_service.dart';
+ import 'package:flutter_starter/core/routing/app_router.dart';
+@@ -18,6 +16,7 @@ import 'package:flutter_starter/main.dart' show createAppContainer;
+ import 'package:flutter_starter/shared/theme/app_theme.dart';
+ import 'package:flutter_test/flutter_test.dart';
+ import 'package:go_router/go_router.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ import 'acceptance_helpers.dart';
+ 
+@@ -85,9 +84,7 @@ Future<GoRouter> _pumpColdStart(
+         routerConfig: router,
+         localizationsDelegates: const [
+           AppLocalizations.delegate,
+-          GlobalMaterialLocalizations.delegate,
+-          GlobalWidgetsLocalizations.delegate,
+-          GlobalCupertinoLocalizations.delegate,
++          ...GlobalMaterialLocalizations.delegates,
+         ],
+         supportedLocales: LocalizationService.supportedLocales,
+       ),
+diff --git a/test/acceptance/startup_failure_acceptance_test.dart b/test/acceptance/startup_failure_acceptance_test.dart
+index 09e21537542..fe0c8b95ab7 100644
+--- a/test/acceptance/startup_failure_acceptance_test.dart
++++ b/test/acceptance/startup_failure_acceptance_test.dart
+@@ -1,9 +1,9 @@
+ @Tags(['golden'])
+ library;
+ 
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/core/startup/startup_failure_app.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ import 'acceptance_helpers.dart';
+ 
+diff --git a/test/acceptance/theme_contrast_acceptance_test.dart b/test/acceptance/theme_contrast_acceptance_test.dart
+index bb69c508c90..a362d8674cc 100644
+--- a/test/acceptance/theme_contrast_acceptance_test.dart
++++ b/test/acceptance/theme_contrast_acceptance_test.dart
+@@ -1,9 +1,9 @@
+ @Tags(['golden'])
+ library;
+ 
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/shared/theme/app_theme.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ import 'acceptance_helpers.dart';
+ 
+diff --git a/test/core/accessibility/accessibility_helpers_test.dart b/test/core/accessibility/accessibility_helpers_test.dart
+index 074578cdd9c..dbbfde1c9ae 100644
+--- a/test/core/accessibility/accessibility_helpers_test.dart
++++ b/test/core/accessibility/accessibility_helpers_test.dart
+@@ -1,8 +1,8 @@
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/core/accessibility/accessibility_constants.dart';
+ import 'package:flutter_starter/core/accessibility/accessibility_helpers.dart';
+ import 'package:flutter_starter/l10n/app_localizations.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ void main() {
+   final en = lookupAppLocalizations(const Locale('en'));
+diff --git a/test/core/accessibility/focus_announcer_direction_test.dart b/test/core/accessibility/focus_announcer_direction_test.dart
+index b37ca1e24e9..7dd043a3b5f 100644
+--- a/test/core/accessibility/focus_announcer_direction_test.dart
++++ b/test/core/accessibility/focus_announcer_direction_test.dart
+@@ -4,13 +4,12 @@
+ // every locale, and the announcement strings were hardcoded English. These
+ // tests intercept the platform message that actually leaves the framework, so
+ // they assert what a screen reader would really be handed.
+-import 'package:flutter/material.dart';
+ import 'package:flutter/services.dart';
+-import 'package:flutter_localizations/flutter_localizations.dart';
+ import 'package:flutter_starter/core/accessibility/focus_announcer.dart';
+ import 'package:flutter_starter/core/localization/localization_service.dart';
+ import 'package:flutter_starter/l10n/app_localizations.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ class _Probe extends StatelessWidget {
+   const _Probe();
+@@ -24,9 +23,7 @@ Widget _appIn(Locale locale) {
+     locale: locale,
+     localizationsDelegates: const [
+       AppLocalizations.delegate,
+-      GlobalMaterialLocalizations.delegate,
+-      GlobalWidgetsLocalizations.delegate,
+-      GlobalCupertinoLocalizations.delegate,
++      ...GlobalMaterialLocalizations.delegates,
+     ],
+     supportedLocales: LocalizationService.supportedLocales,
+     home: const Scaffold(body: _Probe()),
+diff --git a/test/core/accessibility/focus_announcer_test.dart b/test/core/accessibility/focus_announcer_test.dart
+index c13afa8cdd3..67c71542f36 100644
+--- a/test/core/accessibility/focus_announcer_test.dart
++++ b/test/core/accessibility/focus_announcer_test.dart
+@@ -1,6 +1,6 @@
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/core/accessibility/focus_announcer.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ void main() {
+   group('FocusAnnouncer', () {
+diff --git a/test/core/constants/ui_keys_test.dart b/test/core/constants/ui_keys_test.dart
+index 8b1ba128123..bfb67282931 100644
+--- a/test/core/constants/ui_keys_test.dart
++++ b/test/core/constants/ui_keys_test.dart
+@@ -9,7 +9,6 @@
+ // These tests run under plain `flutter test`. Removing a `key:` from one of
+ // the three widgets below fails the default suite.
+ 
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/core/constants/ui_keys.dart';
+ import 'package:flutter_starter/features/auth/di/auth_providers.dart';
+ import 'package:flutter_starter/features/auth/domain/usecases/login_usecase.dart';
+@@ -18,6 +17,7 @@ import 'package:flutter_starter/features/auth/presentation/screens/login_screen.
+ import 'package:flutter_starter/features/auth/presentation/screens/register_screen.dart';
+ import 'package:flutter_starter/features/home/presentation/screens/home_screen.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ import 'package:mocktail/mocktail.dart';
+ 
+ import '../../helpers/pump_app.dart';
+diff --git a/test/core/localization/device_locale_test.dart b/test/core/localization/device_locale_test.dart
+index 4b9fb22b672..64e780a75a2 100644
+--- a/test/core/localization/device_locale_test.dart
++++ b/test/core/localization/device_locale_test.dart
+@@ -5,12 +5,12 @@
+ // MaterialApp.router always received that non-null locale, so a device set to
+ // Vietnamese opened a starter that ships a Vietnamese ARB in English.
+ 
+-import 'package:flutter/material.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/core/localization/localization_service.dart';
+ import 'package:flutter_starter/l10n/app_localizations.dart';
+ import 'package:flutter_starter/main.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ import 'package:shared_preferences/shared_preferences.dart';
+ 
+ final AppLocalizations _en = lookupAppLocalizations(const Locale('en'));
+diff --git a/test/core/localization/generated_delegates_test.dart b/test/core/localization/generated_delegates_test.dart
+new file mode 100644
+index 00000000000..d9ad927c992
+--- /dev/null
++++ b/test/core/localization/generated_delegates_test.dart
+@@ -0,0 +1,36 @@
++import 'package:cupertino_ui/cupertino_ui.dart';
++import 'package:flutter_starter/l10n/app_localizations.dart';
++import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
++
++void main() {
++  for (final locale in AppLocalizations.supportedLocales) {
++    testWidgets('generated delegates serve standalone UI for $locale', (
++      tester,
++    ) async {
++      await tester.pumpWidget(
++        MaterialApp(
++          locale: locale,
++          supportedLocales: AppLocalizations.supportedLocales,
++          localizationsDelegates: AppLocalizations.localizationsDelegates,
++          home: Builder(
++            builder: (context) {
++              expect(AppLocalizations.of(context), isNotNull);
++              expect(
++                MaterialLocalizations.of(context).okButtonLabel,
++                isNotEmpty,
++              );
++              expect(
++                CupertinoLocalizations.of(context).copyButtonLabel,
++                isNotEmpty,
++              );
++              return const SizedBox.shrink();
++            },
++          ),
++        ),
++      );
++      await tester.pumpAndSettle();
++      expect(tester.takeException(), isNull);
++    });
++  }
++}
+diff --git a/test/core/localization/localization_providers_test.dart b/test/core/localization/localization_providers_test.dart
+index c7d13d2ae82..b5252b6f1b8 100644
+--- a/test/core/localization/localization_providers_test.dart
++++ b/test/core/localization/localization_providers_test.dart
+@@ -1,10 +1,10 @@
+-import 'package:flutter/material.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/core/di/providers.dart';
+ import 'package:flutter_starter/core/localization/localization_providers.dart';
+ import 'package:flutter_starter/core/localization/localization_service.dart';
+ import 'package:flutter_starter/core/storage/storage_service.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ import 'package:mocktail/mocktail.dart';
+ 
+ class MockStorageService extends Mock implements StorageService {}
+diff --git a/test/core/localization/localization_service_test.dart b/test/core/localization/localization_service_test.dart
+index 4ba65169934..f9ce18ded9c 100644
+--- a/test/core/localization/localization_service_test.dart
++++ b/test/core/localization/localization_service_test.dart
+@@ -1,7 +1,7 @@
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/core/localization/localization_service.dart';
+ import 'package:flutter_starter/core/storage/storage_service.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ import 'package:mocktail/mocktail.dart';
+ import 'package:shared_preferences/shared_preferences.dart';
+ 
+diff --git a/test/core/localization/localized_formatters_l10n_test.dart b/test/core/localization/localized_formatters_l10n_test.dart
+index 6a6cb5e0463..7c38c44a426 100644
+--- a/test/core/localization/localized_formatters_l10n_test.dart
++++ b/test/core/localization/localized_formatters_l10n_test.dart
+@@ -1,9 +1,9 @@
+ // Regression tests: localized date and relative-time formatting.
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/core/localization/localized_formatters.dart';
+ import 'package:flutter_starter/l10n/app_localizations.dart';
+ import 'package:flutter_test/flutter_test.dart';
+ import 'package:intl/date_symbol_data_local.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ void main() {
+   setUpAll(initializeDateFormatting);
+diff --git a/test/core/localization/localized_formatters_test.dart b/test/core/localization/localized_formatters_test.dart
+index d620f6865c8..186d93173ae 100644
+--- a/test/core/localization/localized_formatters_test.dart
++++ b/test/core/localization/localized_formatters_test.dart
+@@ -1,7 +1,7 @@
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/core/localization/localized_formatters.dart';
+ import 'package:flutter_test/flutter_test.dart';
+ import 'package:intl/date_symbol_data_local.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ void main() {
+   group('LocalizedFormatters', () {
+diff --git a/test/core/localization/supported_locales_test.dart b/test/core/localization/supported_locales_test.dart
+index 28bc5fcddbb..34d6cf18f07 100644
+--- a/test/core/localization/supported_locales_test.dart
++++ b/test/core/localization/supported_locales_test.dart
+@@ -2,10 +2,10 @@
+ import 'dart:convert';
+ import 'dart:io';
+ 
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/core/localization/localization_service.dart';
+ import 'package:flutter_starter/l10n/app_localizations.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ void main() {
+   group('SupportedLocale.fromLocaleString', () {
+diff --git a/test/core/logging/uncaught_error_handlers_test.dart b/test/core/logging/uncaught_error_handlers_test.dart
+index fcfd752e3c8..fee40cbdf7b 100644
+--- a/test/core/logging/uncaught_error_handlers_test.dart
++++ b/test/core/logging/uncaught_error_handlers_test.dart
+@@ -4,7 +4,6 @@ import 'dart:io';
+ import 'dart:ui';
+ 
+ import 'package:flutter/foundation.dart';
+-import 'package:flutter/material.dart';
+ import 'package:flutter/services.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/core/logging/error_reporter_providers.dart';
+@@ -14,6 +13,7 @@ import 'package:flutter_starter/core/logging/logging_providers.dart';
+ import 'package:flutter_starter/core/logging/logging_service.dart';
+ import 'package:flutter_starter/core/logging/uncaught_error_handlers.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ class _RecordingReporter implements IErrorReporter {
+   final reports = <({String message, Object? error, StackTrace? stack})>[];
+diff --git a/test/core/network/forced_logout_session_test.dart b/test/core/network/forced_logout_session_test.dart
+index 93b7a86b5a3..d5694fd6561 100644
+--- a/test/core/network/forced_logout_session_test.dart
++++ b/test/core/network/forced_logout_session_test.dart
+@@ -24,8 +24,6 @@ import 'dart:convert';
+ import 'dart:typed_data';
+ 
+ import 'package:dio/dio.dart';
+-import 'package:flutter/material.dart';
+-import 'package:flutter_localizations/flutter_localizations.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/core/constants/app_constants.dart';
+ import 'package:flutter_starter/core/di/providers.dart';
+@@ -42,6 +40,7 @@ import 'package:flutter_starter/features/home/presentation/screens/home_screen.d
+ import 'package:flutter_starter/l10n/app_localizations.dart';
+ import 'package:flutter_starter/shared/theme/app_theme.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ import '../../helpers/in_memory_stores.dart';
+ 
+@@ -230,9 +229,7 @@ void main() {
+             routerConfig: router,
+             localizationsDelegates: const [
+               AppLocalizations.delegate,
+-              GlobalMaterialLocalizations.delegate,
+-              GlobalWidgetsLocalizations.delegate,
+-              GlobalCupertinoLocalizations.delegate,
++              ...GlobalMaterialLocalizations.delegates,
+             ],
+             supportedLocales: LocalizationService.supportedLocales,
+           ),
+diff --git a/test/core/performance/performance_screen_mixin_test.dart b/test/core/performance/performance_screen_mixin_test.dart
+index b127755bbb3..9d523143b75 100644
+--- a/test/core/performance/performance_screen_mixin_test.dart
++++ b/test/core/performance/performance_screen_mixin_test.dart
+@@ -1,8 +1,8 @@
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/core/performance/i_performance_service.dart';
+ import 'package:flutter_starter/core/performance/performance_attributes.dart';
+ import 'package:flutter_starter/core/performance/performance_screen_mixin.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ import 'package:mocktail/mocktail.dart';
+ 
+ class MockPerformanceService extends Mock implements IPerformanceService {}
+diff --git a/test/core/routing/app_router_test.dart b/test/core/routing/app_router_test.dart
+index 096974f5ae3..01cd0061df2 100644
+--- a/test/core/routing/app_router_test.dart
++++ b/test/core/routing/app_router_test.dart
+@@ -1,5 +1,3 @@
+-import 'package:flutter/material.dart';
+-import 'package:flutter_localizations/flutter_localizations.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/core/logging/logging_service.dart';
+ import 'package:flutter_starter/core/routing/app_router.dart';
+@@ -11,6 +9,7 @@ import 'package:flutter_starter/features/home/presentation/screens/home_screen.d
+ import 'package:flutter_starter/l10n/app_localizations.dart';
+ import 'package:flutter_test/flutter_test.dart';
+ import 'package:go_router/go_router.dart';
++import 'package:material_ui/material_ui.dart';
+ import 'package:mocktail/mocktail.dart';
+ 
+ class MockLoggingService extends Mock implements LoggingService {}
+@@ -162,9 +161,7 @@ void main() {
+             routerConfig: router,
+             localizationsDelegates: const [
+               AppLocalizations.delegate,
+-              GlobalMaterialLocalizations.delegate,
+-              GlobalWidgetsLocalizations.delegate,
+-              GlobalCupertinoLocalizations.delegate,
++              ...GlobalMaterialLocalizations.delegates,
+             ],
+             supportedLocales: const [Locale('en')],
+           ),
+@@ -198,9 +195,7 @@ void main() {
+             routerConfig: router,
+             localizationsDelegates: const [
+               AppLocalizations.delegate,
+-              GlobalMaterialLocalizations.delegate,
+-              GlobalWidgetsLocalizations.delegate,
+-              GlobalCupertinoLocalizations.delegate,
++              ...GlobalMaterialLocalizations.delegates,
+             ],
+             supportedLocales: const [Locale('en')],
+           ),
+@@ -240,9 +235,7 @@ void main() {
+             routerConfig: router,
+             localizationsDelegates: const [
+               AppLocalizations.delegate,
+-              GlobalMaterialLocalizations.delegate,
+-              GlobalWidgetsLocalizations.delegate,
+-              GlobalCupertinoLocalizations.delegate,
++              ...GlobalMaterialLocalizations.delegates,
+             ],
+             supportedLocales: const [Locale('en')],
+           ),
+@@ -314,9 +307,7 @@ void main() {
+             routerConfig: router,
+             localizationsDelegates: const [
+               AppLocalizations.delegate,
+-              GlobalMaterialLocalizations.delegate,
+-              GlobalWidgetsLocalizations.delegate,
+-              GlobalCupertinoLocalizations.delegate,
++              ...GlobalMaterialLocalizations.delegates,
+             ],
+             supportedLocales: const [Locale('en')],
+           ),
+@@ -395,9 +386,7 @@ void main() {
+             routerConfig: router,
+             localizationsDelegates: const [
+               AppLocalizations.delegate,
+-              GlobalMaterialLocalizations.delegate,
+-              GlobalWidgetsLocalizations.delegate,
+-              GlobalCupertinoLocalizations.delegate,
++              ...GlobalMaterialLocalizations.delegates,
+             ],
+             supportedLocales: const [Locale('en')],
+           ),
+diff --git a/test/core/routing/navigation_extensions_test.dart b/test/core/routing/navigation_extensions_test.dart
+index 52448ea99aa..bb206b4a6ed 100644
+--- a/test/core/routing/navigation_extensions_test.dart
++++ b/test/core/routing/navigation_extensions_test.dart
+@@ -1,5 +1,3 @@
+-import 'package:flutter/material.dart';
+-import 'package:flutter_localizations/flutter_localizations.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/core/routing/app_router.dart';
+ import 'package:flutter_starter/core/routing/app_routes.dart';
+@@ -13,6 +11,7 @@ import 'package:flutter_starter/features/home/presentation/screens/home_screen.d
+ import 'package:flutter_starter/l10n/app_localizations.dart';
+ import 'package:flutter_test/flutter_test.dart';
+ import 'package:go_router/go_router.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ class _TestAuthNotifier extends AuthNotifier {
+   _TestAuthNotifier(this._initial);
+@@ -71,9 +70,7 @@ void main() {
+           routerConfig: router,
+           localizationsDelegates: const [
+             AppLocalizations.delegate,
+-            GlobalMaterialLocalizations.delegate,
+-            GlobalWidgetsLocalizations.delegate,
+-            GlobalCupertinoLocalizations.delegate,
++            ...GlobalMaterialLocalizations.delegates,
+           ],
+           supportedLocales: const [Locale('en')],
+         ),
+diff --git a/test/core/routing/navigation_logging_test.dart b/test/core/routing/navigation_logging_test.dart
+index 558763f142a..5c8f423f438 100644
+--- a/test/core/routing/navigation_logging_test.dart
++++ b/test/core/routing/navigation_logging_test.dart
+@@ -1,7 +1,7 @@
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/core/logging/logging_service.dart';
+ import 'package:flutter_starter/core/routing/navigation_logging.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ import 'package:mocktail/mocktail.dart';
+ 
+ class MockLoggingService extends Mock implements LoggingService {}
+diff --git a/test/core/routing/screen_navigation_test.dart b/test/core/routing/screen_navigation_test.dart
+index dec8a038ebe..395749690be 100644
+--- a/test/core/routing/screen_navigation_test.dart
++++ b/test/core/routing/screen_navigation_test.dart
+@@ -1,4 +1,3 @@
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/core/constants/ui_keys.dart';
+ import 'package:flutter_starter/core/routing/app_routes.dart';
+ import 'package:flutter_starter/features/auth/presentation/providers/auth_provider.dart';
+@@ -6,6 +5,7 @@ import 'package:flutter_starter/features/auth/presentation/screens/login_screen.
+ import 'package:flutter_starter/features/auth/presentation/screens/register_screen.dart';
+ import 'package:flutter_test/flutter_test.dart';
+ import 'package:go_router/go_router.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ import '../../helpers/pump_app.dart';
+ 
+diff --git a/test/core/startup/startup_failure_app_test.dart b/test/core/startup/startup_failure_app_test.dart
+index 3a3fb250456..01e2e650253 100644
+--- a/test/core/startup/startup_failure_app_test.dart
++++ b/test/core/startup/startup_failure_app_test.dart
+@@ -1,8 +1,8 @@
+ import 'dart:async';
+ 
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/core/startup/startup_failure_app.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ void main() {
+   // A migration failure used to throw before `runApp`,
+diff --git a/test/core/startup/startup_reachability_test.dart b/test/core/startup/startup_reachability_test.dart
+index 7b8b8677934..b5d79c76c5c 100644
+--- a/test/core/startup/startup_reachability_test.dart
++++ b/test/core/startup/startup_reachability_test.dart
+@@ -2,7 +2,6 @@ import 'dart:async';
+ import 'dart:convert';
+ import 'dart:ui';
+ 
+-import 'package:flutter/material.dart';
+ import 'package:flutter/services.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/core/di/providers.dart';
+@@ -14,6 +13,7 @@ import 'package:flutter_starter/core/storage/storage_version.dart';
+ import 'package:flutter_starter/features/auth/presentation/providers/auth_provider.dart';
+ import 'package:flutter_starter/main.dart' as app;
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ import 'package:shared_preferences/shared_preferences.dart';
+ 
+ /// Regression suite: a startup failure must reach the screen.
+diff --git a/test/core/utils/disposal_tracker_throw_test.dart b/test/core/utils/disposal_tracker_throw_test.dart
+index 8380a8b70c3..ed9ba118bf5 100644
+--- a/test/core/utils/disposal_tracker_throw_test.dart
++++ b/test/core/utils/disposal_tracker_throw_test.dart
+@@ -2,9 +2,9 @@
+ // first that threw: the rest were never disposed and super.dispose() never
+ // ran.
+ 
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/core/utils/memory_helper.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ final List<String> _log = [];
+ 
+diff --git a/test/core/utils/image_cache_helper_cached_test.dart b/test/core/utils/image_cache_helper_cached_test.dart
+index cb7e8e7aaca..76c5b8c3d60 100644
+--- a/test/core/utils/image_cache_helper_cached_test.dart
++++ b/test/core/utils/image_cache_helper_cached_test.dart
+@@ -4,9 +4,9 @@
+ // LateInitializationError, the completer never completed, and the call
+ // reported failure only after the whole timeout.
+ 
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/core/utils/image_cache_helper.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ void main() {
+   testWidgets('preloading an image already in the cache succeeds at once', (
+diff --git a/test/core/utils/image_cache_helper_redaction_test.dart b/test/core/utils/image_cache_helper_redaction_test.dart
+index a47d8c0cc73..bbd2d5efcb7 100644
+--- a/test/core/utils/image_cache_helper_redaction_test.dart
++++ b/test/core/utils/image_cache_helper_redaction_test.dart
+@@ -5,9 +5,9 @@
+ import 'dart:io';
+ 
+ import 'package:flutter/foundation.dart';
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/core/utils/image_cache_helper.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ void main() {
+   late List<String> printed;
+diff --git a/test/core/utils/image_cache_helper_test.dart b/test/core/utils/image_cache_helper_test.dart
+index 5c62f994919..668eb2f5e87 100644
+--- a/test/core/utils/image_cache_helper_test.dart
++++ b/test/core/utils/image_cache_helper_test.dart
+@@ -1,6 +1,6 @@
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/core/utils/image_cache_helper.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ void main() {
+   // Initialize Flutter binding for image cache access
+diff --git a/test/core/utils/memory_helper_test.dart b/test/core/utils/memory_helper_test.dart
+index 9c2c7a735c0..11af1448d56 100644
+--- a/test/core/utils/memory_helper_test.dart
++++ b/test/core/utils/memory_helper_test.dart
+@@ -1,6 +1,6 @@
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/core/utils/memory_helper.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ void main() {
+   group('MemoryHelper', () {
+diff --git a/test/core/utils/pagination_helper_test.dart b/test/core/utils/pagination_helper_test.dart
+index 9ea5f112083..1ae9e1f3453 100644
+--- a/test/core/utils/pagination_helper_test.dart
++++ b/test/core/utils/pagination_helper_test.dart
+@@ -1,8 +1,8 @@
+ import 'dart:async';
+ 
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/core/utils/pagination_helper.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ void main() {
+   group('PaginationConfig', () {
+diff --git a/test/core/utils/provider_disposal_test.dart b/test/core/utils/provider_disposal_test.dart
+index aec7b205d73..b93f0c46d86 100644
+--- a/test/core/utils/provider_disposal_test.dart
++++ b/test/core/utils/provider_disposal_test.dart
+@@ -1,8 +1,8 @@
+-import 'package:flutter/material.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/core/utils/memory_helper.dart';
+ import 'package:flutter_starter/core/utils/provider_disposal.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ void main() {
+   group('ProviderDisposal', () {
+diff --git a/test/docs/accessibility_touch_target_snippet_test.dart b/test/docs/accessibility_touch_target_snippet_test.dart
+index b46f69ea368..0e9065f11db 100644
+--- a/test/docs/accessibility_touch_target_snippet_test.dart
++++ b/test/docs/accessibility_touch_target_snippet_test.dart
+@@ -5,9 +5,9 @@
+ 
+ import 'dart:io';
+ 
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/shared/accessibility/accessibility_widgets.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ /// The `testWidgets(...)` call in [text] whose description is [name], with
+ /// its indentation removed.
+diff --git a/test/features/auth/demo/demo_auth_test.dart b/test/features/auth/demo/demo_auth_test.dart
+index b6893340376..68dda536e66 100644
+--- a/test/features/auth/demo/demo_auth_test.dart
++++ b/test/features/auth/demo/demo_auth_test.dart
+@@ -4,8 +4,6 @@
+ import 'dart:io';
+ 
+ import 'package:dio/dio.dart';
+-import 'package:flutter/material.dart';
+-import 'package:flutter_localizations/flutter_localizations.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_riverpod/misc.dart' show Override;
+ import 'package:flutter_starter/core/constants/ui_keys.dart';
+@@ -22,6 +20,7 @@ import 'package:flutter_starter/features/auth/presentation/screens/login_screen.
+ import 'package:flutter_starter/l10n/app_localizations.dart';
+ import 'package:flutter_starter/main.dart' show createAppContainer;
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ import '../../../helpers/in_memory_stores.dart';
+ 
+@@ -228,9 +227,7 @@ void main() {
+           child: const MaterialApp(
+             localizationsDelegates: [
+               AppLocalizations.delegate,
+-              GlobalMaterialLocalizations.delegate,
+-              GlobalWidgetsLocalizations.delegate,
+-              GlobalCupertinoLocalizations.delegate,
++              ...GlobalMaterialLocalizations.delegates,
+             ],
+             home: LoginScreen(),
+           ),
+@@ -268,9 +265,7 @@ Future<ProviderContainer> _pumpApp(
+         routerConfig: container.read(goRouterProvider),
+         localizationsDelegates: const [
+           AppLocalizations.delegate,
+-          GlobalMaterialLocalizations.delegate,
+-          GlobalWidgetsLocalizations.delegate,
+-          GlobalCupertinoLocalizations.delegate,
++          ...GlobalMaterialLocalizations.delegates,
+         ],
+         supportedLocales: LocalizationService.supportedLocales,
+       ),
+diff --git a/test/features/auth/demo/demo_sign_in_card_contrast_test.dart b/test/features/auth/demo/demo_sign_in_card_contrast_test.dart
+index b8dfea0b722..400263f055a 100644
+--- a/test/features/auth/demo/demo_sign_in_card_contrast_test.dart
++++ b/test/features/auth/demo/demo_sign_in_card_contrast_test.dart
+@@ -1,8 +1,6 @@
+ // The demo card's controls must be readable against the card in both shipped
+ // themes: the fill button is the one control the offline demo flow depends on.
+ 
+-import 'package:flutter/material.dart';
+-import 'package:flutter_localizations/flutter_localizations.dart';
+ import 'package:flutter_starter/core/accessibility/accessibility_constants.dart';
+ import 'package:flutter_starter/core/accessibility/accessibility_helpers.dart';
+ import 'package:flutter_starter/core/constants/ui_keys.dart';
+@@ -11,6 +9,7 @@ import 'package:flutter_starter/features/auth/demo/demo_sign_in_card.dart';
+ import 'package:flutter_starter/l10n/app_localizations.dart';
+ import 'package:flutter_starter/shared/theme/app_theme.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ void main() {
+   final themes = {
+@@ -27,9 +26,7 @@ void main() {
+           theme: theme,
+           localizationsDelegates: const [
+             AppLocalizations.delegate,
+-            GlobalMaterialLocalizations.delegate,
+-            GlobalWidgetsLocalizations.delegate,
+-            GlobalCupertinoLocalizations.delegate,
++            ...GlobalMaterialLocalizations.delegates,
+           ],
+           supportedLocales: LocalizationService.supportedLocales,
+           home: Scaffold(body: DemoSignInCard(onFill: () {})),
+diff --git a/test/features/auth/logout_teardown_test.dart b/test/features/auth/logout_teardown_test.dart
+index 00a15490b52..b26a005133e 100644
+--- a/test/features/auth/logout_teardown_test.dart
++++ b/test/features/auth/logout_teardown_test.dart
+@@ -1,6 +1,4 @@
+ import 'package:dio/dio.dart';
+-import 'package:flutter/material.dart';
+-import 'package:flutter_localizations/flutter_localizations.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/core/constants/app_constants.dart';
+ import 'package:flutter_starter/core/contracts/network_contracts.dart';
+@@ -21,6 +19,7 @@ import 'package:flutter_starter/features/auth/presentation/screens/login_screen.
+ import 'package:flutter_starter/features/home/presentation/screens/home_screen.dart';
+ import 'package:flutter_starter/l10n/app_localizations.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ import 'package:shared_preferences/shared_preferences.dart';
+ 
+ import '../../helpers/in_memory_stores.dart';
+@@ -295,9 +294,7 @@ void main() {
+             routerConfig: router,
+             localizationsDelegates: const [
+               AppLocalizations.delegate,
+-              GlobalMaterialLocalizations.delegate,
+-              GlobalWidgetsLocalizations.delegate,
+-              GlobalCupertinoLocalizations.delegate,
++              ...GlobalMaterialLocalizations.delegates,
+             ],
+             supportedLocales: const [Locale('en')],
+           ),
+diff --git a/test/features/auth/presentation/screens/auth_error_navigation_test.dart b/test/features/auth/presentation/screens/auth_error_navigation_test.dart
+index b3d8c415d36..807ba57b9a0 100644
+--- a/test/features/auth/presentation/screens/auth_error_navigation_test.dart
++++ b/test/features/auth/presentation/screens/auth_error_navigation_test.dart
+@@ -6,8 +6,6 @@
+ // router and the real repository; only the remote is replaced, and it rejects
+ // every sign-in and registration with a 401.
+ 
+-import 'package:flutter/material.dart';
+-import 'package:flutter_localizations/flutter_localizations.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/core/constants/ui_keys.dart';
+ import 'package:flutter_starter/core/di/providers.dart';
+@@ -21,6 +19,7 @@ import 'package:flutter_starter/features/auth/presentation/screens/login_screen.
+ import 'package:flutter_starter/features/auth/presentation/screens/register_screen.dart';
+ import 'package:flutter_starter/l10n/app_localizations.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ import '../../../../helpers/in_memory_stores.dart';
+ 
+@@ -78,9 +77,7 @@ void main() {
+           routerConfig: container.read(goRouterProvider),
+           localizationsDelegates: const [
+             AppLocalizations.delegate,
+-            GlobalMaterialLocalizations.delegate,
+-            GlobalWidgetsLocalizations.delegate,
+-            GlobalCupertinoLocalizations.delegate,
++            ...GlobalMaterialLocalizations.delegates,
+           ],
+           supportedLocales: const [Locale('en')],
+         ),
+diff --git a/test/features/auth/presentation/screens/auth_forms_keyboard_test.dart b/test/features/auth/presentation/screens/auth_forms_keyboard_test.dart
+index 1806355650a..f1762060a61 100644
+--- a/test/features/auth/presentation/screens/auth_forms_keyboard_test.dart
++++ b/test/features/auth/presentation/screens/auth_forms_keyboard_test.dart
+@@ -1,8 +1,8 @@
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/core/constants/ui_keys.dart';
+ import 'package:flutter_starter/core/routing/app_routes.dart';
+ import 'package:flutter_starter/features/auth/presentation/providers/auth_provider.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ import '../../../../helpers/pump_app.dart';
+ 
+diff --git a/test/features/auth/presentation/screens/auth_localized_error_test.dart b/test/features/auth/presentation/screens/auth_localized_error_test.dart
+index aa1caa9eef3..35b7e08d85c 100644
+--- a/test/features/auth/presentation/screens/auth_localized_error_test.dart
++++ b/test/features/auth/presentation/screens/auth_localized_error_test.dart
+@@ -1,5 +1,3 @@
+-import 'package:flutter/material.dart';
+-import 'package:flutter_localizations/flutter_localizations.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/core/constants/ui_keys.dart';
+ import 'package:flutter_starter/core/errors/failures.dart';
+@@ -12,6 +10,7 @@ import 'package:flutter_starter/features/auth/presentation/screens/login_screen.
+ import 'package:flutter_starter/features/auth/presentation/screens/register_screen.dart';
+ import 'package:flutter_starter/l10n/app_localizations.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ import 'package:mocktail/mocktail.dart';
+ 
+ // AuthNotifier used to store `failure.message` - the
+@@ -38,9 +37,7 @@ Future<void> _pump(WidgetTester tester, Widget screen, AuthRepository repo) {
+         locale: _vi,
+         localizationsDelegates: const [
+           AppLocalizations.delegate,
+-          GlobalMaterialLocalizations.delegate,
+-          GlobalWidgetsLocalizations.delegate,
+-          GlobalCupertinoLocalizations.delegate,
++          ...GlobalMaterialLocalizations.delegates,
+         ],
+         supportedLocales: LocalizationService.supportedLocales,
+         home: screen,
+diff --git a/test/features/auth/presentation/screens/email_whitespace_test.dart b/test/features/auth/presentation/screens/email_whitespace_test.dart
+index 79d35e35b92..504d0c4a0e5 100644
+--- a/test/features/auth/presentation/screens/email_whitespace_test.dart
++++ b/test/features/auth/presentation/screens/email_whitespace_test.dart
+@@ -1,4 +1,3 @@
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/core/constants/ui_keys.dart';
+ import 'package:flutter_starter/core/errors/failures.dart';
+ import 'package:flutter_starter/core/utils/result.dart';
+@@ -8,6 +7,7 @@ import 'package:flutter_starter/features/auth/domain/usecases/register_usecase.d
+ import 'package:flutter_starter/features/auth/presentation/screens/login_screen.dart';
+ import 'package:flutter_starter/features/auth/presentation/screens/register_screen.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ import 'package:mocktail/mocktail.dart';
+ 
+ import '../../../../helpers/pump_app.dart';
+diff --git a/test/features/auth/presentation/screens/login_screen_test.dart b/test/features/auth/presentation/screens/login_screen_test.dart
+index 9bccd223f2b..ff5605e377a 100644
+--- a/test/features/auth/presentation/screens/login_screen_test.dart
++++ b/test/features/auth/presentation/screens/login_screen_test.dart
+@@ -1,7 +1,5 @@
+ import 'dart:async';
+ 
+-import 'package:flutter/material.dart';
+-import 'package:flutter_localizations/flutter_localizations.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/core/errors/failures.dart';
+ import 'package:flutter_starter/core/localization/localization_service.dart';
+@@ -15,6 +13,7 @@ import 'package:flutter_starter/features/auth/presentation/screens/register_scre
+ import 'package:flutter_starter/l10n/app_localizations.dart';
+ import 'package:flutter_test/flutter_test.dart';
+ import 'package:go_router/go_router.dart';
++import 'package:material_ui/material_ui.dart';
+ import 'package:mocktail/mocktail.dart';
+ 
+ class MockLoginUseCase extends Mock implements LoginUseCase {}
+@@ -48,9 +47,7 @@ void main() {
+           routerConfig: router,
+           localizationsDelegates: const [
+             AppLocalizations.delegate,
+-            GlobalMaterialLocalizations.delegate,
+-            GlobalWidgetsLocalizations.delegate,
+-            GlobalCupertinoLocalizations.delegate,
++            ...GlobalMaterialLocalizations.delegates,
+           ],
+           supportedLocales: LocalizationService.supportedLocales,
+         ),
+diff --git a/test/features/auth/presentation/screens/register_screen_test.dart b/test/features/auth/presentation/screens/register_screen_test.dart
+index bd87154ddaf..804817d29b1 100644
+--- a/test/features/auth/presentation/screens/register_screen_test.dart
++++ b/test/features/auth/presentation/screens/register_screen_test.dart
+@@ -1,7 +1,5 @@
+ import 'dart:async';
+ 
+-import 'package:flutter/material.dart';
+-import 'package:flutter_localizations/flutter_localizations.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/core/localization/localization_service.dart';
+ import 'package:flutter_starter/core/routing/app_routes.dart';
+@@ -13,6 +11,7 @@ import 'package:flutter_starter/features/auth/presentation/screens/register_scre
+ import 'package:flutter_starter/l10n/app_localizations.dart';
+ import 'package:flutter_test/flutter_test.dart';
+ import 'package:go_router/go_router.dart';
++import 'package:material_ui/material_ui.dart';
+ import 'package:mocktail/mocktail.dart';
+ 
+ import '../../../../helpers/mock_factories.dart';
+@@ -227,9 +226,7 @@ void main() {
+             routerConfig: router,
+             localizationsDelegates: const [
+               AppLocalizations.delegate,
+-              GlobalMaterialLocalizations.delegate,
+-              GlobalWidgetsLocalizations.delegate,
+-              GlobalCupertinoLocalizations.delegate,
++              ...GlobalMaterialLocalizations.delegates,
+             ],
+             supportedLocales: LocalizationService.supportedLocales,
+           ),
+diff --git a/test/features/auth/presentation/screens/rejected_credentials_message_test.dart b/test/features/auth/presentation/screens/rejected_credentials_message_test.dart
+index 4c144305cce..a272e998fd4 100644
+--- a/test/features/auth/presentation/screens/rejected_credentials_message_test.dart
++++ b/test/features/auth/presentation/screens/rejected_credentials_message_test.dart
+@@ -9,8 +9,6 @@
+ // replaced, and it rejects the credentials the way the network layer does: a
+ // ServerException carrying 401.
+ 
+-import 'package:flutter/material.dart';
+-import 'package:flutter_localizations/flutter_localizations.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/core/constants/ui_keys.dart';
+ import 'package:flutter_starter/core/di/providers.dart';
+@@ -27,6 +25,7 @@ import 'package:flutter_starter/features/auth/presentation/screens/login_screen.
+ import 'package:flutter_starter/features/auth/presentation/screens/register_screen.dart';
+ import 'package:flutter_starter/l10n/app_localizations.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ import '../../../../helpers/in_memory_stores.dart';
+ 
+@@ -69,9 +68,7 @@ Future<void> _pump(WidgetTester tester, Widget screen, Locale locale) {
+         locale: locale,
+         localizationsDelegates: const [
+           AppLocalizations.delegate,
+-          GlobalMaterialLocalizations.delegate,
+-          GlobalWidgetsLocalizations.delegate,
+-          GlobalCupertinoLocalizations.delegate,
++          ...GlobalMaterialLocalizations.delegates,
+         ],
+         supportedLocales: LocalizationService.supportedLocales,
+         home: screen,
+diff --git a/test/features/auth/presentation/widgets/auth_button_test.dart b/test/features/auth/presentation/widgets/auth_button_test.dart
+index 39b1c33a6e1..de2d071e8a6 100644
+--- a/test/features/auth/presentation/widgets/auth_button_test.dart
++++ b/test/features/auth/presentation/widgets/auth_button_test.dart
+@@ -1,6 +1,6 @@
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/features/auth/presentation/widgets/auth_button.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ void main() {
+   group('AuthButton', () {
+diff --git a/test/features/auth/session_restore_test.dart b/test/features/auth/session_restore_test.dart
+index 68638efaed8..5bbfe1f8c17 100644
+--- a/test/features/auth/session_restore_test.dart
++++ b/test/features/auth/session_restore_test.dart
+@@ -1,8 +1,6 @@
+ import 'dart:async';
+ import 'dart:convert';
+ 
+-import 'package:flutter/material.dart';
+-import 'package:flutter_localizations/flutter_localizations.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/core/constants/app_constants.dart';
+ import 'package:flutter_starter/core/contracts/storage_contracts.dart';
+@@ -21,6 +19,7 @@ import 'package:flutter_starter/features/home/presentation/screens/home_screen.d
+ import 'package:flutter_starter/l10n/app_localizations.dart';
+ import 'package:flutter_test/flutter_test.dart';
+ import 'package:go_router/go_router.dart';
++import 'package:material_ui/material_ui.dart';
+ import 'package:mocktail/mocktail.dart';
+ 
+ /// Regression tests: the persisted session used to never be read back, so
+@@ -110,9 +109,7 @@ Future<GoRouter> _pumpRouter(
+         routerConfig: router,
+         localizationsDelegates: const [
+           AppLocalizations.delegate,
+-          GlobalMaterialLocalizations.delegate,
+-          GlobalWidgetsLocalizations.delegate,
+-          GlobalCupertinoLocalizations.delegate,
++          ...GlobalMaterialLocalizations.delegates,
+         ],
+         supportedLocales: const [Locale('en')],
+       ),
+diff --git a/test/features/feature_flags/feature_flag_layers_agree_test.dart b/test/features/feature_flags/feature_flag_layers_agree_test.dart
+index 6b6c5891753..fb7722f85fa 100644
+--- a/test/features/feature_flags/feature_flag_layers_agree_test.dart
++++ b/test/features/feature_flags/feature_flag_layers_agree_test.dart
+@@ -8,8 +8,6 @@
+ // so a widget listening to `isFeatureEnabledProvider(key)` kept the old value.
+ 
+ import 'package:flutter/foundation.dart';
+-import 'package:flutter/material.dart';
+-import 'package:flutter_localizations/flutter_localizations.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/core/utils/result.dart';
+ import 'package:flutter_starter/features/feature_flags/domain/entities/feature_flag.dart';
+@@ -18,6 +16,7 @@ import 'package:flutter_starter/features/feature_flags/presentation/providers/fe
+ import 'package:flutter_starter/features/feature_flags/presentation/screens/feature_flags_debug_screen.dart';
+ import 'package:flutter_starter/l10n/app_localizations.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ import 'package:shared_preferences/shared_preferences.dart';
+ 
+ void main() {
+@@ -115,9 +114,7 @@ void main() {
+       child: const MaterialApp(
+         localizationsDelegates: [
+           AppLocalizations.delegate,
+-          GlobalMaterialLocalizations.delegate,
+-          GlobalWidgetsLocalizations.delegate,
+-          GlobalCupertinoLocalizations.delegate,
++          ...GlobalMaterialLocalizations.delegates,
+         ],
+         supportedLocales: AppLocalizations.supportedLocales,
+         home: FeatureFlagsDebugScreen(),
+diff --git a/test/features/feature_flags/presentation/providers/feature_flags_timeout_test.dart b/test/features/feature_flags/presentation/providers/feature_flags_timeout_test.dart
+index 08736cbc5ba..be5cc8e9396 100644
+--- a/test/features/feature_flags/presentation/providers/feature_flags_timeout_test.dart
++++ b/test/features/feature_flags/presentation/providers/feature_flags_timeout_test.dart
+@@ -1,6 +1,5 @@
+ import 'dart:async';
+ 
+-import 'package:flutter/material.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/core/logging/logging_providers.dart';
+ import 'package:flutter_starter/core/logging/logging_service.dart';
+@@ -15,6 +14,7 @@ import 'package:flutter_starter/features/feature_flags/presentation/screens/feat
+ import 'package:flutter_starter/features/feature_flags/presentation/widgets/feature_flag_builder.dart';
+ import 'package:flutter_starter/l10n/app_localizations.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ import '../../../../helpers/in_memory_stores.dart';
+ 
+@@ -272,7 +272,10 @@ void main() {
+       UncontrolledProviderScope(
+         container: container,
+         child: const MaterialApp(
+-          localizationsDelegates: AppLocalizations.localizationsDelegates,
++          localizationsDelegates: [
++            AppLocalizations.delegate,
++            ...GlobalMaterialLocalizations.delegates,
++          ],
+           supportedLocales: AppLocalizations.supportedLocales,
+           home: FeatureFlagsDebugScreen(),
+         ),
+diff --git a/test/features/feature_flags/presentation/screens/feature_flags_debug_screen_failure_test.dart b/test/features/feature_flags/presentation/screens/feature_flags_debug_screen_failure_test.dart
+index 4f12cfd9930..b640e90e6cc 100644
+--- a/test/features/feature_flags/presentation/screens/feature_flags_debug_screen_failure_test.dart
++++ b/test/features/feature_flags/presentation/screens/feature_flags_debug_screen_failure_test.dart
+@@ -3,8 +3,6 @@
+ // allFeatureFlagsProvider turned a repository failure into an empty map, so
+ // the screen said "no flags" instead of showing the error and its retry.
+ 
+-import 'package:flutter/material.dart';
+-import 'package:flutter_localizations/flutter_localizations.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/core/errors/failures.dart';
+ import 'package:flutter_starter/core/utils/result.dart';
+@@ -15,6 +13,7 @@ import 'package:flutter_starter/features/feature_flags/presentation/providers/fe
+ import 'package:flutter_starter/features/feature_flags/presentation/screens/feature_flags_debug_screen.dart';
+ import 'package:flutter_starter/l10n/app_localizations.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ import 'package:mocktail/mocktail.dart';
+ 
+ class _MockManager extends Mock implements FeatureFlagsManager {}
+@@ -35,9 +34,7 @@ Widget _app(List<Object> overrides) => ProviderScope(
+   child: const MaterialApp(
+     localizationsDelegates: [
+       AppLocalizations.delegate,
+-      GlobalMaterialLocalizations.delegate,
+-      GlobalWidgetsLocalizations.delegate,
+-      GlobalCupertinoLocalizations.delegate,
++      ...GlobalMaterialLocalizations.delegates,
+     ],
+     supportedLocales: AppLocalizations.supportedLocales,
+     home: FeatureFlagsDebugScreen(),
+diff --git a/test/features/feature_flags/presentation/screens/feature_flags_debug_screen_test.dart b/test/features/feature_flags/presentation/screens/feature_flags_debug_screen_test.dart
+index c311c6b4289..8387a4c3a5b 100644
+--- a/test/features/feature_flags/presentation/screens/feature_flags_debug_screen_test.dart
++++ b/test/features/feature_flags/presentation/screens/feature_flags_debug_screen_test.dart
+@@ -1,7 +1,5 @@
+ import 'dart:async';
+ 
+-import 'package:flutter/material.dart';
+-import 'package:flutter_localizations/flutter_localizations.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/core/utils/result.dart';
+ import 'package:flutter_starter/features/feature_flags/domain/entities/feature_flag.dart';
+@@ -10,6 +8,7 @@ import 'package:flutter_starter/features/feature_flags/presentation/providers/fe
+ import 'package:flutter_starter/features/feature_flags/presentation/screens/feature_flags_debug_screen.dart';
+ import 'package:flutter_starter/l10n/app_localizations.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ import 'package:mocktail/mocktail.dart';
+ 
+ class MockFeatureFlagsManager extends Mock implements FeatureFlagsManager {}
+@@ -62,9 +61,7 @@ void main() {
+           locale: locale,
+           localizationsDelegates: const [
+             AppLocalizations.delegate,
+-            GlobalMaterialLocalizations.delegate,
+-            GlobalWidgetsLocalizations.delegate,
+-            GlobalCupertinoLocalizations.delegate,
++            ...GlobalMaterialLocalizations.delegates,
+           ],
+           supportedLocales: AppLocalizations.supportedLocales,
+           home: const FeatureFlagsDebugScreen(),
+diff --git a/test/features/feature_flags/presentation/widgets/feature_flag_builder_test.dart b/test/features/feature_flags/presentation/widgets/feature_flag_builder_test.dart
+index ef8d6c25bef..ed7bc78e0c7 100644
+--- a/test/features/feature_flags/presentation/widgets/feature_flag_builder_test.dart
++++ b/test/features/feature_flags/presentation/widgets/feature_flag_builder_test.dart
+@@ -1,9 +1,9 @@
+-import 'package:flutter/material.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/features/feature_flags/domain/feature_flags_manager.dart';
+ import 'package:flutter_starter/features/feature_flags/presentation/providers/feature_flags_providers.dart';
+ import 'package:flutter_starter/features/feature_flags/presentation/widgets/feature_flag_builder.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ import 'package:mocktail/mocktail.dart';
+ 
+ class MockFeatureFlagsManager extends Mock implements FeatureFlagsManager {}
+diff --git a/test/features/feature_flags/routing/feature_flags_routes_test.dart b/test/features/feature_flags/routing/feature_flags_routes_test.dart
+index 0440c9c788b..e6e5ea1aa6f 100644
+--- a/test/features/feature_flags/routing/feature_flags_routes_test.dart
++++ b/test/features/feature_flags/routing/feature_flags_routes_test.dart
+@@ -1,5 +1,3 @@
+-import 'package:flutter/material.dart';
+-import 'package:flutter_localizations/flutter_localizations.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/core/routing/app_router.dart';
+ import 'package:flutter_starter/core/routing/app_routes.dart';
+@@ -14,6 +12,7 @@ import 'package:flutter_starter/features/feature_flags/presentation/screens/feat
+ import 'package:flutter_starter/l10n/app_localizations.dart';
+ import 'package:flutter_test/flutter_test.dart';
+ import 'package:go_router/go_router.dart';
++import 'package:material_ui/material_ui.dart';
+ import 'package:mocktail/mocktail.dart';
+ 
+ class _MockFeatureFlagsManager extends Mock implements FeatureFlagsManager {}
+@@ -73,9 +72,7 @@ void main() {
+           routerConfig: router,
+           localizationsDelegates: const [
+             AppLocalizations.delegate,
+-            GlobalMaterialLocalizations.delegate,
+-            GlobalWidgetsLocalizations.delegate,
+-            GlobalCupertinoLocalizations.delegate,
++            ...GlobalMaterialLocalizations.delegates,
+           ],
+           supportedLocales: const [Locale('en')],
+         ),
+diff --git a/test/features/home/presentation/screens/home_heading_layout_test.dart b/test/features/home/presentation/screens/home_heading_layout_test.dart
+index d996bd58364..bff27d4468f 100644
+--- a/test/features/home/presentation/screens/home_heading_layout_test.dart
++++ b/test/features/home/presentation/screens/home_heading_layout_test.dart
+@@ -1,9 +1,8 @@
+-import 'package:flutter/material.dart';
+-import 'package:flutter_localizations/flutter_localizations.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/features/home/presentation/screens/home_screen.dart';
+ import 'package:flutter_starter/l10n/app_localizations.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ void main() {
+   // On a phone the welcome heading wraps; centered with an edge inset, every
+@@ -18,9 +17,7 @@ void main() {
+         child: MaterialApp(
+           localizationsDelegates: [
+             AppLocalizations.delegate,
+-            GlobalMaterialLocalizations.delegate,
+-            GlobalWidgetsLocalizations.delegate,
+-            GlobalCupertinoLocalizations.delegate,
++            ...GlobalMaterialLocalizations.delegates,
+           ],
+           supportedLocales: AppLocalizations.supportedLocales,
+           home: HomeScreen(),
+diff --git a/test/features/home/presentation/screens/home_hint_localized_test.dart b/test/features/home/presentation/screens/home_hint_localized_test.dart
+index 2b2e78dc902..96adc3a32f0 100644
+--- a/test/features/home/presentation/screens/home_hint_localized_test.dart
++++ b/test/features/home/presentation/screens/home_hint_localized_test.dart
+@@ -1,9 +1,8 @@
+-import 'package:flutter/material.dart';
+-import 'package:flutter_localizations/flutter_localizations.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/features/home/presentation/screens/home_screen.dart';
+ import 'package:flutter_starter/l10n/app_localizations.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ // HomeScreen used to render its
+ // 'Add screens under lib/features/.' hint as a literal, so it read in English
+@@ -18,9 +17,7 @@ Future<void> _pump(WidgetTester tester, Locale locale) async {
+         locale: locale,
+         localizationsDelegates: const [
+           AppLocalizations.delegate,
+-          GlobalMaterialLocalizations.delegate,
+-          GlobalWidgetsLocalizations.delegate,
+-          GlobalCupertinoLocalizations.delegate,
++          ...GlobalMaterialLocalizations.delegates,
+         ],
+         supportedLocales: AppLocalizations.supportedLocales,
+         home: const HomeScreen(),
+diff --git a/test/features/home/presentation/screens/home_screen_test.dart b/test/features/home/presentation/screens/home_screen_test.dart
+index 522bd6d501b..0676f1fcc12 100644
+--- a/test/features/home/presentation/screens/home_screen_test.dart
++++ b/test/features/home/presentation/screens/home_screen_test.dart
+@@ -1,11 +1,10 @@
+-import 'package:flutter/material.dart';
+-import 'package:flutter_localizations/flutter_localizations.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/features/home/presentation/screens/home_screen.dart';
+ import 'package:flutter_starter/l10n/app_localizations.dart';
+ import 'package:flutter_starter/shared/widgets/language_switcher.dart';
+ import 'package:flutter_test/flutter_test.dart';
+ import 'package:go_router/go_router.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ void main() {
+   group('HomeScreen', () {
+@@ -14,9 +13,7 @@ void main() {
+         child: MaterialApp.router(
+           localizationsDelegates: const [
+             AppLocalizations.delegate,
+-            GlobalMaterialLocalizations.delegate,
+-            GlobalWidgetsLocalizations.delegate,
+-            GlobalCupertinoLocalizations.delegate,
++            ...GlobalMaterialLocalizations.delegates,
+           ],
+           supportedLocales: AppLocalizations.supportedLocales,
+           routerConfig: GoRouter(
+diff --git a/test/features/home/presentation/screens/home_sign_out_test.dart b/test/features/home/presentation/screens/home_sign_out_test.dart
+index a969e175625..53cd59c8958 100644
+--- a/test/features/home/presentation/screens/home_sign_out_test.dart
++++ b/test/features/home/presentation/screens/home_sign_out_test.dart
+@@ -1,6 +1,5 @@
+ import 'dart:async';
+ 
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/core/constants/ui_keys.dart';
+ import 'package:flutter_starter/core/routing/app_routes.dart';
+ import 'package:flutter_starter/features/auth/data/datasources/auth_remote_datasource.dart';
+@@ -9,6 +8,7 @@ import 'package:flutter_starter/features/auth/presentation/providers/auth_provid
+ import 'package:flutter_starter/features/auth/presentation/screens/login_screen.dart';
+ import 'package:flutter_starter/features/home/presentation/screens/home_screen.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ import '../../../../helpers/signed_in_app.dart';
+ 
+diff --git a/test/features/tasks/presentation/providers/tasks_wipe_failure_test.dart b/test/features/tasks/presentation/providers/tasks_wipe_failure_test.dart
+index f7f00b6d884..ccb4eb47174 100644
+--- a/test/features/tasks/presentation/providers/tasks_wipe_failure_test.dart
++++ b/test/features/tasks/presentation/providers/tasks_wipe_failure_test.dart
+@@ -1,7 +1,6 @@
+ import 'dart:async';
+ import 'dart:convert';
+ 
+-import 'package:flutter/material.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/core/di/providers.dart';
+ import 'package:flutter_starter/core/logging/logging_providers.dart';
+@@ -17,6 +16,7 @@ import 'package:flutter_starter/features/tasks/routing/tasks_routes.dart';
+ import 'package:flutter_starter/l10n/app_localizations.dart';
+ import 'package:flutter_test/flutter_test.dart';
+ import 'package:go_router/go_router.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ import '../../../../helpers/in_memory_stores.dart';
+ 
+@@ -308,7 +308,10 @@ void main() {
+         UncontrolledProviderScope(
+           container: container,
+           child: const MaterialApp(
+-            localizationsDelegates: AppLocalizations.localizationsDelegates,
++            localizationsDelegates: [
++              AppLocalizations.delegate,
++              ...GlobalMaterialLocalizations.delegates,
++            ],
+             supportedLocales: AppLocalizations.supportedLocales,
+             home: TasksListScreen(),
+           ),
+diff --git a/test/features/tasks/presentation/screens/task_detail_navigation_test.dart b/test/features/tasks/presentation/screens/task_detail_navigation_test.dart
+index 0c6ef670cba..1521fb145fa 100644
+--- a/test/features/tasks/presentation/screens/task_detail_navigation_test.dart
++++ b/test/features/tasks/presentation/screens/task_detail_navigation_test.dart
+@@ -1,4 +1,3 @@
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/core/errors/failures.dart';
+ import 'package:flutter_starter/core/routing/app_routes.dart';
+ import 'package:flutter_starter/core/routing/navigation_extensions.dart';
+@@ -15,6 +14,7 @@ import 'package:flutter_starter/features/tasks/presentation/screens/tasks_list_s
+ import 'package:flutter_starter/l10n/app_localizations.dart';
+ import 'package:flutter_test/flutter_test.dart';
+ import 'package:go_router/go_router.dart';
++import 'package:material_ui/material_ui.dart';
+ import 'package:mocktail/mocktail.dart';
+ 
+ import '../../../../helpers/pump_app.dart';
+diff --git a/test/features/tasks/presentation/screens/task_detail_screen_test.dart b/test/features/tasks/presentation/screens/task_detail_screen_test.dart
+index e8b52ea469a..9f5e8943d56 100644
+--- a/test/features/tasks/presentation/screens/task_detail_screen_test.dart
++++ b/test/features/tasks/presentation/screens/task_detail_screen_test.dart
+@@ -1,7 +1,5 @@
+ import 'dart:async';
+ 
+-import 'package:flutter/material.dart';
+-import 'package:flutter_localizations/flutter_localizations.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/core/errors/failures.dart';
+ import 'package:flutter_starter/core/localization/localization_service.dart';
+@@ -19,6 +17,7 @@ import 'package:flutter_starter/features/tasks/presentation/screens/task_detail_
+ import 'package:flutter_starter/l10n/app_localizations.dart';
+ import 'package:flutter_test/flutter_test.dart';
+ import 'package:go_router/go_router.dart';
++import 'package:material_ui/material_ui.dart';
+ import 'package:mocktail/mocktail.dart';
+ 
+ import '../../../../helpers/test_fixtures.dart';
+@@ -59,9 +58,7 @@ Widget createTestWidget({
+       locale: locale,
+       localizationsDelegates: const [
+         AppLocalizations.delegate,
+-        GlobalMaterialLocalizations.delegate,
+-        GlobalWidgetsLocalizations.delegate,
+-        GlobalCupertinoLocalizations.delegate,
++        ...GlobalMaterialLocalizations.delegates,
+       ],
+       supportedLocales: LocalizationService.supportedLocales,
+     ),
+@@ -790,9 +787,7 @@ void main() {
+               routerConfig: router,
+               localizationsDelegates: const [
+                 AppLocalizations.delegate,
+-                GlobalMaterialLocalizations.delegate,
+-                GlobalWidgetsLocalizations.delegate,
+-                GlobalCupertinoLocalizations.delegate,
++                ...GlobalMaterialLocalizations.delegates,
+               ],
+               supportedLocales: LocalizationService.supportedLocales,
+             ),
+diff --git a/test/features/tasks/presentation/screens/task_not_found_test.dart b/test/features/tasks/presentation/screens/task_not_found_test.dart
+index 1f374f73609..978dc995680 100644
+--- a/test/features/tasks/presentation/screens/task_not_found_test.dart
++++ b/test/features/tasks/presentation/screens/task_not_found_test.dart
+@@ -1,5 +1,3 @@
+-import 'package:flutter/material.dart';
+-import 'package:flutter_localizations/flutter_localizations.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/core/errors/failures.dart';
+ import 'package:flutter_starter/core/localization/localization_service.dart';
+@@ -18,6 +16,7 @@ import 'package:flutter_starter/features/tasks/presentation/screens/tasks_list_s
+ import 'package:flutter_starter/l10n/app_localizations.dart';
+ import 'package:flutter_test/flutter_test.dart';
+ import 'package:go_router/go_router.dart';
++import 'package:material_ui/material_ui.dart';
+ import 'package:mocktail/mocktail.dart';
+ 
+ import '../../../../helpers/pump_app.dart';
+@@ -50,9 +49,7 @@ Future<void> _pumpEs(WidgetTester tester, TasksRepository repo) async {
+         locale: _es,
+         localizationsDelegates: const [
+           AppLocalizations.delegate,
+-          GlobalMaterialLocalizations.delegate,
+-          GlobalWidgetsLocalizations.delegate,
+-          GlobalCupertinoLocalizations.delegate,
++          ...GlobalMaterialLocalizations.delegates,
+         ],
+         supportedLocales: LocalizationService.supportedLocales,
+         home: const TaskDetailScreen(taskId: 'missing'),
+diff --git a/test/features/tasks/presentation/screens/tasks_list_screen_test.dart b/test/features/tasks/presentation/screens/tasks_list_screen_test.dart
+index 77df5746d96..3d30b1e33fb 100644
+--- a/test/features/tasks/presentation/screens/tasks_list_screen_test.dart
++++ b/test/features/tasks/presentation/screens/tasks_list_screen_test.dart
+@@ -1,7 +1,5 @@
+ import 'dart:async';
+ 
+-import 'package:flutter/material.dart';
+-import 'package:flutter_localizations/flutter_localizations.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/core/errors/failures.dart';
+ import 'package:flutter_starter/core/localization/localization_service.dart';
+@@ -16,6 +14,7 @@ import 'package:flutter_starter/features/tasks/domain/usecases/toggle_task_compl
+ import 'package:flutter_starter/features/tasks/presentation/screens/tasks_list_screen.dart';
+ import 'package:flutter_starter/l10n/app_localizations.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ import 'package:mocktail/mocktail.dart';
+ 
+ import '../../../../helpers/test_fixtures.dart';
+@@ -45,9 +44,7 @@ Widget createTestWidget({
+       locale: locale,
+       localizationsDelegates: const [
+         AppLocalizations.delegate,
+-        GlobalMaterialLocalizations.delegate,
+-        GlobalWidgetsLocalizations.delegate,
+-        GlobalCupertinoLocalizations.delegate,
++        ...GlobalMaterialLocalizations.delegates,
+       ],
+       supportedLocales: LocalizationService.supportedLocales,
+       home: child,
+diff --git a/test/features/tasks/presentation/screens/tasks_localized_error_test.dart b/test/features/tasks/presentation/screens/tasks_localized_error_test.dart
+index 70624462c95..b52f37c0ee6 100644
+--- a/test/features/tasks/presentation/screens/tasks_localized_error_test.dart
++++ b/test/features/tasks/presentation/screens/tasks_localized_error_test.dart
+@@ -1,5 +1,3 @@
+-import 'package:flutter/material.dart';
+-import 'package:flutter_localizations/flutter_localizations.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/core/errors/failures.dart';
+ import 'package:flutter_starter/core/localization/localization_service.dart';
+@@ -11,6 +9,7 @@ import 'package:flutter_starter/features/tasks/presentation/screens/task_detail_
+ import 'package:flutter_starter/features/tasks/presentation/screens/tasks_list_screen.dart';
+ import 'package:flutter_starter/l10n/app_localizations.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ import 'package:mocktail/mocktail.dart';
+ 
+ import '../../../../helpers/test_fixtures.dart';
+@@ -37,9 +36,7 @@ Future<void> _pump(WidgetTester tester, Widget screen, TasksRepository repo) {
+         locale: _vi,
+         localizationsDelegates: const [
+           AppLocalizations.delegate,
+-          GlobalMaterialLocalizations.delegate,
+-          GlobalWidgetsLocalizations.delegate,
+-          GlobalCupertinoLocalizations.delegate,
++          ...GlobalMaterialLocalizations.delegates,
+         ],
+         supportedLocales: LocalizationService.supportedLocales,
+         home: screen,
+diff --git a/test/features/tasks/presentation/screens/tasks_row_semantics_test.dart b/test/features/tasks/presentation/screens/tasks_row_semantics_test.dart
+index f384ea023cb..0b602b02a65 100644
+--- a/test/features/tasks/presentation/screens/tasks_row_semantics_test.dart
++++ b/test/features/tasks/presentation/screens/tasks_row_semantics_test.dart
+@@ -4,8 +4,6 @@
+ // Colors.grey and Colors.red, below WCAG AA; it now takes theme colours that
+ // the contrast suite checks.
+ 
+-import 'package:flutter/material.dart';
+-import 'package:flutter_localizations/flutter_localizations.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/core/localization/localization_service.dart';
+ import 'package:flutter_starter/core/utils/result.dart';
+@@ -16,6 +14,7 @@ import 'package:flutter_starter/features/tasks/presentation/screens/tasks_list_s
+ import 'package:flutter_starter/l10n/app_localizations.dart';
+ import 'package:flutter_starter/shared/theme/app_theme.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ import 'package:mocktail/mocktail.dart';
+ 
+ import '../../../../helpers/test_fixtures.dart';
+@@ -38,9 +37,7 @@ Future<void> _pumpTasks(WidgetTester tester, {ThemeData? theme}) async {
+         theme: theme,
+         localizationsDelegates: const [
+           AppLocalizations.delegate,
+-          GlobalMaterialLocalizations.delegate,
+-          GlobalWidgetsLocalizations.delegate,
+-          GlobalCupertinoLocalizations.delegate,
++          ...GlobalMaterialLocalizations.delegates,
+         ],
+         supportedLocales: LocalizationService.supportedLocales,
+         home: const TasksListScreen(),
+diff --git a/test/features/tasks/routing/tasks_home_entry_test.dart b/test/features/tasks/routing/tasks_home_entry_test.dart
+index 00bb56a05ef..a853ba2da7c 100644
+--- a/test/features/tasks/routing/tasks_home_entry_test.dart
++++ b/test/features/tasks/routing/tasks_home_entry_test.dart
+@@ -1,9 +1,9 @@
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/core/constants/ui_keys.dart';
+ import 'package:flutter_starter/features/home/presentation/screens/home_screen.dart';
+ import 'package:flutter_starter/features/tasks/presentation/screens/tasks_list_screen.dart';
+ import 'package:flutter_starter/features/tasks/routing/tasks_routes.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ import '../../../helpers/signed_in_app.dart';
+ 
+diff --git a/test/features/tasks/routing/tasks_routes_test.dart b/test/features/tasks/routing/tasks_routes_test.dart
+index 8682e1def6f..c78d41771dd 100644
+--- a/test/features/tasks/routing/tasks_routes_test.dart
++++ b/test/features/tasks/routing/tasks_routes_test.dart
+@@ -1,5 +1,3 @@
+-import 'package:flutter/material.dart';
+-import 'package:flutter_localizations/flutter_localizations.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/core/routing/app_router.dart';
+ import 'package:flutter_starter/core/routing/app_routes.dart';
+@@ -17,6 +15,7 @@ import 'package:flutter_starter/features/tasks/presentation/screens/tasks_list_s
+ import 'package:flutter_starter/l10n/app_localizations.dart';
+ import 'package:flutter_test/flutter_test.dart';
+ import 'package:go_router/go_router.dart';
++import 'package:material_ui/material_ui.dart';
+ import 'package:mocktail/mocktail.dart';
+ 
+ import '../../../helpers/test_fixtures.dart';
+@@ -86,9 +85,7 @@ void main() {
+           routerConfig: router,
+           localizationsDelegates: const [
+             AppLocalizations.delegate,
+-            GlobalMaterialLocalizations.delegate,
+-            GlobalWidgetsLocalizations.delegate,
+-            GlobalCupertinoLocalizations.delegate,
++            ...GlobalMaterialLocalizations.delegates,
+           ],
+           supportedLocales: const [Locale('en')],
+         ),
+diff --git a/test/helpers/helpers_test.dart b/test/helpers/helpers_test.dart
+index c8691d378e1..340ca48780d 100644
+--- a/test/helpers/helpers_test.dart
++++ b/test/helpers/helpers_test.dart
+@@ -3,11 +3,11 @@
+ // findWidgetWithText, findTextFormFieldByLabel, waitForCondition - had no
+ // caller and were deleted rather than fixed, along with the other unused ones.
+ 
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/core/errors/exceptions.dart';
+ import 'package:flutter_starter/core/errors/failures.dart';
+ import 'package:flutter_starter/core/utils/result.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ import 'in_memory_stores.dart';
+ import 'pump_app.dart';
+diff --git a/test/helpers/pump_app.dart b/test/helpers/pump_app.dart
+index 03b9cae103b..a19ae840186 100644
+--- a/test/helpers/pump_app.dart
++++ b/test/helpers/pump_app.dart
+@@ -1,11 +1,10 @@
+-import 'package:flutter/material.dart';
+-import 'package:flutter_localizations/flutter_localizations.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/core/localization/localization_service.dart';
+ import 'package:flutter_starter/core/routing/app_router.dart';
+ import 'package:flutter_starter/l10n/app_localizations.dart';
+ import 'package:flutter_test/flutter_test.dart';
+ import 'package:go_router/go_router.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ /// Pumps a widget with ProviderScope
+ ///
+@@ -65,9 +64,7 @@ Future<void> pumpApp(
+         theme: theme ?? ThemeData.light(),
+         localizationsDelegates: const [
+           AppLocalizations.delegate,
+-          GlobalMaterialLocalizations.delegate,
+-          GlobalWidgetsLocalizations.delegate,
+-          GlobalCupertinoLocalizations.delegate,
++          ...GlobalMaterialLocalizations.delegates,
+         ],
+         supportedLocales: LocalizationService.supportedLocales,
+         home: Scaffold(body: widget),
+@@ -127,9 +124,7 @@ Future<GoRouter> pumpAppRouter(
+         routerConfig: router,
+         localizationsDelegates: const [
+           AppLocalizations.delegate,
+-          GlobalMaterialLocalizations.delegate,
+-          GlobalWidgetsLocalizations.delegate,
+-          GlobalCupertinoLocalizations.delegate,
++          ...GlobalMaterialLocalizations.delegates,
+         ],
+         supportedLocales: LocalizationService.supportedLocales,
+       ),
+diff --git a/test/helpers/signed_in_app.dart b/test/helpers/signed_in_app.dart
+index e5e6f9c6e98..4414b7525ed 100644
+--- a/test/helpers/signed_in_app.dart
++++ b/test/helpers/signed_in_app.dart
+@@ -1,5 +1,3 @@
+-import 'package:flutter/material.dart';
+-import 'package:flutter_localizations/flutter_localizations.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_riverpod/misc.dart' show Override;
+ import 'package:flutter_starter/core/localization/localization_service.dart';
+@@ -14,6 +12,7 @@ import 'package:flutter_starter/l10n/app_localizations.dart';
+ import 'package:flutter_starter/main.dart' show createAppContainer;
+ import 'package:flutter_test/flutter_test.dart';
+ import 'package:go_router/go_router.dart';
++import 'package:material_ui/material_ui.dart';
+ import 'package:shared_preferences/shared_preferences.dart';
+ 
+ /// A session kept in memory, so a test can see it cleared.
+@@ -123,9 +122,7 @@ Future<SignedInApp> pumpSignedInApp(
+         routerConfig: router,
+         localizationsDelegates: const [
+           AppLocalizations.delegate,
+-          GlobalMaterialLocalizations.delegate,
+-          GlobalWidgetsLocalizations.delegate,
+-          GlobalCupertinoLocalizations.delegate,
++          ...GlobalMaterialLocalizations.delegates,
+         ],
+         supportedLocales: LocalizationService.supportedLocales,
+       ),
+diff --git a/test/helpers/test_helpers.dart b/test/helpers/test_helpers.dart
+index 4404b69545e..8ec7a5881a3 100644
+--- a/test/helpers/test_helpers.dart
++++ b/test/helpers/test_helpers.dart
+@@ -1,8 +1,8 @@
+-import 'package:flutter/material.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/core/errors/failures.dart';
+ import 'package:flutter_starter/core/utils/result.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ /// Creates a test MaterialApp with ProviderScope
+ ///
+diff --git a/test/main_test.dart b/test/main_test.dart
+index 6a7a30919bb..f2636a9dbb8 100644
+--- a/test/main_test.dart
++++ b/test/main_test.dart
+@@ -1,5 +1,3 @@
+-import 'package:flutter/material.dart';
+-import 'package:flutter_localizations/flutter_localizations.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/core/localization/localization_providers.dart';
+ import 'package:flutter_starter/core/localization/localization_service.dart';
+@@ -8,6 +6,7 @@ import 'package:flutter_starter/l10n/app_localizations.dart';
+ import 'package:flutter_starter/main.dart';
+ import 'package:flutter_starter/shared/theme/app_theme.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ /// A locale notifier pinned to a non-English, non-default locale.
+ class _FixedLocale extends LocaleNotifier {
+@@ -198,9 +197,7 @@ void main() {
+           child: MaterialApp(
+             localizationsDelegates: const [
+               AppLocalizations.delegate,
+-              GlobalMaterialLocalizations.delegate,
+-              GlobalWidgetsLocalizations.delegate,
+-              GlobalCupertinoLocalizations.delegate,
++              ...GlobalMaterialLocalizations.delegates,
+             ],
+             supportedLocales: LocalizationService.supportedLocales,
+             home: const HomeScreen(),
+@@ -220,9 +217,7 @@ void main() {
+           child: MaterialApp(
+             localizationsDelegates: const [
+               AppLocalizations.delegate,
+-              GlobalMaterialLocalizations.delegate,
+-              GlobalWidgetsLocalizations.delegate,
+-              GlobalCupertinoLocalizations.delegate,
++              ...GlobalMaterialLocalizations.delegates,
+             ],
+             supportedLocales: LocalizationService.supportedLocales,
+             home: const HomeScreen(),
+diff --git a/test/shared/accessibility/accessibility_test_helpers.dart b/test/shared/accessibility/accessibility_test_helpers.dart
+index a0ca4feb167..fdd69d1ed55 100644
+--- a/test/shared/accessibility/accessibility_test_helpers.dart
++++ b/test/shared/accessibility/accessibility_test_helpers.dart
+@@ -1,10 +1,10 @@
+ import 'dart:ui' show Tristate;
+ 
+-import 'package:flutter/material.dart';
+ import 'package:flutter/rendering.dart';
+ import 'package:flutter_starter/core/accessibility/accessibility_constants.dart';
+ import 'package:flutter_starter/core/accessibility/accessibility_helpers.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ /// Accessibility testing helpers
+ ///
+diff --git a/test/shared/accessibility/accessibility_test_helpers_test.dart b/test/shared/accessibility/accessibility_test_helpers_test.dart
+index 475293d8728..1f0ded41639 100644
+--- a/test/shared/accessibility/accessibility_test_helpers_test.dart
++++ b/test/shared/accessibility/accessibility_test_helpers_test.dart
+@@ -3,8 +3,8 @@
+ // a test built on them could not fail. Each is pinned on a widget that has
+ // the property and one that does not.
+ 
+-import 'package:flutter/material.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ import 'accessibility_test_helpers.dart';
+ 
+diff --git a/test/shared/accessibility/accessibility_widgets_test.dart b/test/shared/accessibility/accessibility_widgets_test.dart
+index 48637888652..f1093b0e444 100644
+--- a/test/shared/accessibility/accessibility_widgets_test.dart
++++ b/test/shared/accessibility/accessibility_widgets_test.dart
+@@ -1,7 +1,7 @@
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/shared/accessibility/accessibility_widgets.dart'
+     as app_widgets;
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ void main() {
+   group('AccessibleButton', () {
+diff --git a/test/shared/accessibility/focus_manager_shadowing_test.dart b/test/shared/accessibility/focus_manager_shadowing_test.dart
+index 2cf71505b71..3ce7f5b3a09 100644
+--- a/test/shared/accessibility/focus_manager_shadowing_test.dart
++++ b/test/shared/accessibility/focus_manager_shadowing_test.dart
+@@ -1,15 +1,15 @@
+ // Regression test: no local `FocusManager` may shadow Flutter's.
+ //
+-// This file imports `package:flutter/material.dart` and
++// This file imports `package:material_ui/material_ui.dart` and
+ // `accessibility_widgets.dart` **without a prefix** and uses
+ // `FocusManager.instance`. That is the exact combination that failed to
+ // compile while `accessibility_widgets.dart` declared its own
+ // `class FocusManager`: `'FocusManager' is imported from both ...`. If the
+ // widget is ever renamed back, this file stops compiling - the failure is the
+ // assertion.
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/shared/accessibility/accessibility_widgets.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ void main() {
+   group('accessibility_widgets does not shadow Flutter FocusManager', () {
+diff --git a/test/shared/accessibility/single_button_node_test.dart b/test/shared/accessibility/single_button_node_test.dart
+index 64f89cbef89..3c06a449e4d 100644
+--- a/test/shared/accessibility/single_button_node_test.dart
++++ b/test/shared/accessibility/single_button_node_test.dart
+@@ -1,13 +1,12 @@
+ import 'dart:ui' show Tristate;
+ 
+-import 'package:flutter/material.dart';
+ import 'package:flutter/rendering.dart';
+-import 'package:flutter_localizations/flutter_localizations.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/features/home/presentation/screens/home_screen.dart';
+ import 'package:flutter_starter/l10n/app_localizations.dart';
+ import 'package:flutter_starter/shared/accessibility/accessibility_widgets.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ // AccessibleButton and AccessibleIconButton used to wrap a Material button -
+ // which makes its own button node - in a second
+@@ -36,9 +35,7 @@ Future<void> _pump(WidgetTester tester, Widget child) {
+     MaterialApp(
+       localizationsDelegates: const [
+         AppLocalizations.delegate,
+-        GlobalMaterialLocalizations.delegate,
+-        GlobalWidgetsLocalizations.delegate,
+-        GlobalCupertinoLocalizations.delegate,
++        ...GlobalMaterialLocalizations.delegates,
+       ],
+       supportedLocales: AppLocalizations.supportedLocales,
+       home: Scaffold(body: Center(child: child)),
+@@ -177,9 +174,7 @@ void main() {
+         child: MaterialApp(
+           localizationsDelegates: [
+             AppLocalizations.delegate,
+-            GlobalMaterialLocalizations.delegate,
+-            GlobalWidgetsLocalizations.delegate,
+-            GlobalCupertinoLocalizations.delegate,
++            ...GlobalMaterialLocalizations.delegates,
+           ],
+           supportedLocales: AppLocalizations.supportedLocales,
+           home: HomeScreen(),
+diff --git a/test/shared/design_system/tokens/app_colors_test.dart b/test/shared/design_system/tokens/app_colors_test.dart
+index f10674421fc..111382a13ed 100644
+--- a/test/shared/design_system/tokens/app_colors_test.dart
++++ b/test/shared/design_system/tokens/app_colors_test.dart
+@@ -1,6 +1,6 @@
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/shared/design_system/tokens/app_colors.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ // The exact-value expectations below were merged in from the duplicate
+ // test/shared/theme/app_colors_test.dart, which imported this same subject
+diff --git a/test/shared/design_system/tokens/app_typography_test.dart b/test/shared/design_system/tokens/app_typography_test.dart
+index 29b3f9df0b1..de240cbf052 100644
+--- a/test/shared/design_system/tokens/app_typography_test.dart
++++ b/test/shared/design_system/tokens/app_typography_test.dart
+@@ -1,6 +1,6 @@
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/shared/design_system/tokens/app_typography.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ // The fontSize/fontWeight expectations below were merged in from the duplicate
+ // test/shared/theme/app_text_styles_test.dart, which imported this same
+diff --git a/test/shared/design_system/tokens/default_design_tokens_test.dart b/test/shared/design_system/tokens/default_design_tokens_test.dart
+index e23b651b4b3..8475cf4c426 100644
+--- a/test/shared/design_system/tokens/default_design_tokens_test.dart
++++ b/test/shared/design_system/tokens/default_design_tokens_test.dart
+@@ -1,9 +1,9 @@
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/core/contracts/design_tokens_contracts.dart';
+ import 'package:flutter_starter/shared/design_system/tokens/app_colors.dart';
+ import 'package:flutter_starter/shared/design_system/tokens/app_typography.dart';
+ import 'package:flutter_starter/shared/design_system/tokens/default_design_tokens.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ void main() {
+   const tokens = DefaultDesignTokens();
+diff --git a/test/shared/extensions/context_extensions_test.dart b/test/shared/extensions/context_extensions_test.dart
+index 9a3bdc0ef5b..3134e83ae35 100644
+--- a/test/shared/extensions/context_extensions_test.dart
++++ b/test/shared/extensions/context_extensions_test.dart
+@@ -1,7 +1,7 @@
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/shared/extensions/context_extensions.dart';
+ import 'package:flutter_test/flutter_test.dart';
+ import 'package:go_router/go_router.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ void main() {
+   group('ContextExtensions', () {
+diff --git a/test/shared/localized_strings_test.dart b/test/shared/localized_strings_test.dart
+index 95c0b1558fb..14bbe4b61b5 100644
+--- a/test/shared/localized_strings_test.dart
++++ b/test/shared/localized_strings_test.dart
+@@ -9,9 +9,7 @@
+ // text with the Ahem font, so every glyph is an opaque block. Which string is
+ // announced is only observable through the semantics tree, which is what these
+ // assertions read.
+-import 'package:flutter/material.dart';
+ import 'package:flutter/semantics.dart';
+-import 'package:flutter_localizations/flutter_localizations.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/core/localization/localization_providers.dart';
+ import 'package:flutter_starter/core/localization/localization_service.dart';
+@@ -21,6 +19,7 @@ import 'package:flutter_starter/shared/widgets/error_widget.dart';
+ import 'package:flutter_starter/shared/widgets/language_switcher.dart';
+ import 'package:flutter_starter/shared/widgets/optimized_list_view.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ /// Every English literal once found hardcoded in these widgets.
+ const _englishLiterals = <String>[
+@@ -54,9 +53,7 @@ Widget _viApp(Widget child) {
+       locale: const Locale('vi'),
+       localizationsDelegates: const [
+         AppLocalizations.delegate,
+-        GlobalMaterialLocalizations.delegate,
+-        GlobalWidgetsLocalizations.delegate,
+-        GlobalCupertinoLocalizations.delegate,
++        ...GlobalMaterialLocalizations.delegates,
+       ],
+       supportedLocales: LocalizationService.supportedLocales,
+       home: Scaffold(body: child),
+diff --git a/test/shared/theme/app_theme_font_family_test.dart b/test/shared/theme/app_theme_font_family_test.dart
+index 4d860450e33..e1ed89c28a3 100644
+--- a/test/shared/theme/app_theme_font_family_test.dart
++++ b/test/shared/theme/app_theme_font_family_test.dart
+@@ -1,7 +1,7 @@
+ import 'package:flutter/foundation.dart';
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/shared/theme/app_theme.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ /// What typeface the app actually resolves, per target platform.
+ ///
+diff --git a/test/shared/theme/app_theme_test.dart b/test/shared/theme/app_theme_test.dart
+index 34114495b78..8929448e296 100644
+--- a/test/shared/theme/app_theme_test.dart
++++ b/test/shared/theme/app_theme_test.dart
+@@ -1,6 +1,6 @@
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/shared/theme/app_theme.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ void main() {
+   group('AppTheme', () {
+diff --git a/test/shared/theme/login_error_contrast_test.dart b/test/shared/theme/login_error_contrast_test.dart
+index 53daf29d11d..fe74efc1a6f 100644
+--- a/test/shared/theme/login_error_contrast_test.dart
++++ b/test/shared/theme/login_error_contrast_test.dart
+@@ -6,9 +6,7 @@
+ // the RenderParagraph - rather than the token, so a theme that overrides
+ // errorStyle, or a widget that ignores the scheme, is caught too.
+ 
+-import 'package:flutter/material.dart';
+ import 'package:flutter/rendering.dart';
+-import 'package:flutter_localizations/flutter_localizations.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/core/accessibility/accessibility_constants.dart';
+ import 'package:flutter_starter/core/accessibility/accessibility_helpers.dart';
+@@ -17,6 +15,7 @@ import 'package:flutter_starter/features/auth/presentation/screens/login_screen.
+ import 'package:flutter_starter/l10n/app_localizations.dart';
+ import 'package:flutter_starter/shared/theme/app_theme.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ void main() {
+   final en = lookupAppLocalizations(const Locale('en'));
+@@ -33,9 +32,7 @@ void main() {
+             theme: theme,
+             localizationsDelegates: const [
+               AppLocalizations.delegate,
+-              GlobalMaterialLocalizations.delegate,
+-              GlobalWidgetsLocalizations.delegate,
+-              GlobalCupertinoLocalizations.delegate,
++              ...GlobalMaterialLocalizations.delegates,
+             ],
+             supportedLocales: const [Locale('en')],
+             home: const LoginScreen(),
+diff --git a/test/shared/theme/theme_contrast_test.dart b/test/shared/theme/theme_contrast_test.dart
+index 6eb3358cce5..a56e6b9fa0f 100644
+--- a/test/shared/theme/theme_contrast_test.dart
++++ b/test/shared/theme/theme_contrast_test.dart
+@@ -19,13 +19,13 @@
+ /// 10.5pt bold - not large text, so its 3:1 exemption does not apply.
+ library;
+ 
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/core/accessibility/accessibility_constants.dart';
+ import 'package:flutter_starter/core/accessibility/accessibility_helpers.dart';
+ import 'package:flutter_starter/shared/design_system/tokens/app_colors.dart';
+ import 'package:flutter_starter/shared/extensions/context_extensions.dart';
+ import 'package:flutter_starter/shared/theme/app_theme.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ /// A foreground/background pair with the floor it has to clear.
+ class _Pair {
+diff --git a/test/shared/widgets/error_widget_test.dart b/test/shared/widgets/error_widget_test.dart
+index cee0b14298c..3a1a520bc32 100644
+--- a/test/shared/widgets/error_widget_test.dart
++++ b/test/shared/widgets/error_widget_test.dart
+@@ -1,6 +1,6 @@
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/shared/widgets/error_widget.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ void main() {
+   group('AppErrorWidget', () {
+diff --git a/test/shared/widgets/language_switcher_test.dart b/test/shared/widgets/language_switcher_test.dart
+index 9e7320e1edc..540427f6846 100644
+--- a/test/shared/widgets/language_switcher_test.dart
++++ b/test/shared/widgets/language_switcher_test.dart
+@@ -1,13 +1,12 @@
+ import 'dart:async';
+ 
+-import 'package:flutter/material.dart';
+-import 'package:flutter_localizations/flutter_localizations.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/core/localization/localization_providers.dart';
+ import 'package:flutter_starter/core/localization/localization_service.dart';
+ import 'package:flutter_starter/l10n/app_localizations.dart';
+ import 'package:flutter_starter/shared/widgets/language_switcher.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ import 'package:mocktail/mocktail.dart';
+ 
+ class MockLocalizationService extends Mock implements LocalizationService {}
+@@ -34,9 +33,7 @@ Widget createTestWidget({
+     child: MaterialApp(
+       localizationsDelegates: const [
+         AppLocalizations.delegate,
+-        GlobalMaterialLocalizations.delegate,
+-        GlobalWidgetsLocalizations.delegate,
+-        GlobalCupertinoLocalizations.delegate,
++        ...GlobalMaterialLocalizations.delegates,
+       ],
+       supportedLocales: LocalizationService.supportedLocales,
+       home: Scaffold(body: child),
+@@ -102,9 +99,7 @@ void main() {
+             child: MaterialApp(
+               localizationsDelegates: const [
+                 AppLocalizations.delegate,
+-                GlobalMaterialLocalizations.delegate,
+-                GlobalWidgetsLocalizations.delegate,
+-                GlobalCupertinoLocalizations.delegate,
++                ...GlobalMaterialLocalizations.delegates,
+               ],
+               supportedLocales: LocalizationService.supportedLocales,
+               home: Scaffold(
+diff --git a/test/shared/widgets/language_switcher_unknown_locale_test.dart b/test/shared/widgets/language_switcher_unknown_locale_test.dart
+index 91740376337..c1aaf62c1ed 100644
+--- a/test/shared/widgets/language_switcher_unknown_locale_test.dart
++++ b/test/shared/widgets/language_switcher_unknown_locale_test.dart
+@@ -4,14 +4,13 @@
+ // a stale or hand-edited language code reaches the widgets. It used to hit a
+ // `firstWhere` with no `orElse` and throw `Bad state: No element`,
+ // red-screening the containing route.
+-import 'package:flutter/material.dart';
+-import 'package:flutter_localizations/flutter_localizations.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/core/localization/localization_providers.dart';
+ import 'package:flutter_starter/core/localization/localization_service.dart';
+ import 'package:flutter_starter/l10n/app_localizations.dart';
+ import 'package:flutter_starter/shared/widgets/language_switcher.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ Widget _wrap(Widget child, {required Locale storedLocale}) {
+   final container = ProviderContainer(
+@@ -26,9 +25,7 @@ Widget _wrap(Widget child, {required Locale storedLocale}) {
+     child: MaterialApp(
+       localizationsDelegates: const [
+         AppLocalizations.delegate,
+-        GlobalMaterialLocalizations.delegate,
+-        GlobalWidgetsLocalizations.delegate,
+-        GlobalCupertinoLocalizations.delegate,
++        ...GlobalMaterialLocalizations.delegates,
+       ],
+       supportedLocales: LocalizationService.supportedLocales,
+       home: Scaffold(body: child),
+diff --git a/test/shared/widgets/loading_indicator_test.dart b/test/shared/widgets/loading_indicator_test.dart
+index 5e4674f3807..a075f29d2c2 100644
+--- a/test/shared/widgets/loading_indicator_test.dart
++++ b/test/shared/widgets/loading_indicator_test.dart
+@@ -1,6 +1,6 @@
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/shared/widgets/loading_indicator.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ void main() {
+   group('LoadingIndicator', () {
+diff --git a/test/shared/widgets/optimized_image_decoding_test.dart b/test/shared/widgets/optimized_image_decoding_test.dart
+index b2484dcaee1..8cd37532eb9 100644
+--- a/test/shared/widgets/optimized_image_decoding_test.dart
++++ b/test/shared/widgets/optimized_image_decoding_test.dart
+@@ -1,7 +1,7 @@
+ // Regression tests: images decode at the device pixel ratio.
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/shared/widgets/optimized_image.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ Widget _atDevicePixelRatio(double ratio, Widget child) {
+   return MediaQuery(
+diff --git a/test/shared/widgets/optimized_image_test.dart b/test/shared/widgets/optimized_image_test.dart
+index 105e150ac63..f95ab16ca32 100644
+--- a/test/shared/widgets/optimized_image_test.dart
++++ b/test/shared/widgets/optimized_image_test.dart
+@@ -3,9 +3,9 @@ import 'dart:io';
+ import 'dart:typed_data';
+ import 'dart:ui' as ui;
+ 
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/shared/widgets/optimized_image.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ // 1x1 transparent PNG.
+ final Uint8List _kTestPng = Uint8List.fromList(<int>[
+diff --git a/test/shared/widgets/optimized_list_view_controller_test.dart b/test/shared/widgets/optimized_list_view_controller_test.dart
+index 3e7d3eeaf09..555b1942988 100644
+--- a/test/shared/widgets/optimized_list_view_controller_test.dart
++++ b/test/shared/widgets/optimized_list_view_controller_test.dart
+@@ -6,9 +6,9 @@
+ // The tests read ChangeNotifier.hasListeners, which is protected.
+ // ignore_for_file: invalid_use_of_protected_member
+ 
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/shared/widgets/optimized_list_view.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ final List<String> _items = [for (var i = 0; i < 100; i++) 'Item $i'];
+ 
+diff --git a/test/shared/widgets/optimized_list_view_error_test.dart b/test/shared/widgets/optimized_list_view_error_test.dart
+index a03787cf432..c86e20bea1c 100644
+--- a/test/shared/widgets/optimized_list_view_error_test.dart
++++ b/test/shared/widgets/optimized_list_view_error_test.dart
+@@ -2,21 +2,18 @@
+ //
+ // An empty list must not look the same whether the load succeeded with no
+ // results or failed outright.
+-import 'package:flutter/material.dart';
+-import 'package:flutter_localizations/flutter_localizations.dart';
+ import 'package:flutter_starter/core/localization/localization_service.dart';
+ import 'package:flutter_starter/l10n/app_localizations.dart';
+ import 'package:flutter_starter/shared/widgets/optimized_list_view.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ Widget _wrap(Widget child, {Locale locale = const Locale('en')}) {
+   return MaterialApp(
+     locale: locale,
+     localizationsDelegates: const [
+       AppLocalizations.delegate,
+-      GlobalMaterialLocalizations.delegate,
+-      GlobalWidgetsLocalizations.delegate,
+-      GlobalCupertinoLocalizations.delegate,
++      ...GlobalMaterialLocalizations.delegates,
+     ],
+     supportedLocales: LocalizationService.supportedLocales,
+     home: Scaffold(body: child),
+diff --git a/test/shared/widgets/optimized_list_view_pagination_test.dart b/test/shared/widgets/optimized_list_view_pagination_test.dart
+index ce199d322a6..45f5b898b95 100644
+--- a/test/shared/widgets/optimized_list_view_pagination_test.dart
++++ b/test/shared/widgets/optimized_list_view_pagination_test.dart
+@@ -1,8 +1,8 @@
+ import 'dart:async';
+ 
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/shared/widgets/optimized_list_view.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ Widget _list(
+   List<String> items,
+diff --git a/test/shared/widgets/optimized_list_view_test.dart b/test/shared/widgets/optimized_list_view_test.dart
+index 5859e7b8d06..b5ab62516f3 100644
+--- a/test/shared/widgets/optimized_list_view_test.dart
++++ b/test/shared/widgets/optimized_list_view_test.dart
+@@ -1,6 +1,6 @@
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/shared/widgets/optimized_list_view.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ void main() {
+   group('OptimizedListView', () {
+diff --git a/test/tooling/import_rules_test.dart b/test/tooling/import_rules_test.dart
+index f3b31a23604..f6c991c9d82 100644
+--- a/test/tooling/import_rules_test.dart
++++ b/test/tooling/import_rules_test.dart
+@@ -156,7 +156,9 @@ bool _domainImportsFlutterUi(String sourcePath, String uri) {
+   final feature = featureOf(sourcePath);
+   if (feature == null) return false;
+   if (!sourcePath.startsWith('lib/features/$feature/domain/')) return false;
+-  return uri.startsWith('package:flutter/') && uri != kFlutterFoundation;
++  return (uri.startsWith('package:flutter/') && uri != kFlutterFoundation) ||
++      uri.startsWith('package:material_ui/') ||
++      uri.startsWith('package:cupertino_ui/');
+ }
+ 
+ bool _crossFeatureImport(String sourcePath, String uri) {
+@@ -489,6 +491,18 @@ void main() {
+       }
+     });
+ 
++    test('domain rejects standalone design libraries and their internals', () {
++      for (final uri in const [
++        'package:material_ui/material_ui.dart',
++        'package:material_ui/src/theme_data.dart',
++        'package:cupertino_ui/cupertino_ui.dart',
++        'package:cupertino_ui/src/theme.dart',
++      ]) {
++        expect(ruleFor(domainFile, uri), 'domain_imports_flutter_ui');
++        expect(ruleFor(screenFile, uri), isNull);
++      }
++    });
++
+     test('domain may import foundation.dart, and presentation material', () {
+       expect(ruleFor(domainFile, kFlutterFoundation), isNull);
+       expect(ruleFor(screenFile, 'package:flutter/material.dart'), isNull);

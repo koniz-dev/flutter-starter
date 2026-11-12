@@ -1,0 +1,20 @@
+Issue #1226; epic:docs
+Base: 30912d93c075777d3a3d8da5b8cbb41b770d71af
+Integrated candidate: 6fbc814064a8a9be359ca4fe150b26e96d913c8a
+docs/api/examples/adding-features.md
+docs/api/examples/api-integration.md
+docs/architecture/overview.md
+docs/guides/accessibility/README.md
+docs/guides/features/internationalization-guide.md
+docs/guides/migration/upgrading-this-starter.md
+docs/guides/security/blueprints.md
+docs/guides/testing/guide.md
+examples/performance_examples.dart
+
+Scope commit records:
+6fbc814064a8a9be359ca4fe150b26e96d913c8a docs(i18n): explain regeneration of standalone localization delegates
+Refs koniz-dev/flutter-starter#1226
+
+3105aa810866bbdc9c1d51c4f85f6c821731b901 fix(docs): migrate standalone Flutter UI libraries
+Refs koniz-dev/flutter-starter#1226
+

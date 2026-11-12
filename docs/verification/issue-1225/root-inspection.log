@@ -1,0 +1,14 @@
+Root premerge artifact inspection for PR #1237 / SDK migration #1225–#1236
+Accepted source: 6fbc814064a8a9be359ca4fe150b26e96d913c8a
+Base: 30912d93c075777d3a3d8da5b8cbb41b770d71af
+
+Read actual lib diff: existing implementations change only imports and MaterialApp delegate composition. Two new typed const delegate adapters route generated Global* names through l10n.yaml prefixes. Generated output is recreated by supported gen-l10n; no deprecated-member suppression added. Header's unused-import annotations are confined to generated subclass imports and do not suppress deprecated-member diagnostics.
+Read pubspec diff and five package provenance records; UI versions/hash unchanged, three SDK test-support pins reviewed. No new native plugin, endpoint, credential or storage behavior.
+Read independent 1237_probe_test.dart: actual ProviderScope/ConsumerWidget, modern dark theme, both design localization lookups, PatrolTester finder/type and text entry across all four locales. Read raw root and renamed-clone five-case pass output.
+Read 1237_router_probe_test.dart and actual single-case pass: modern MaterialApp.router, route transition, dark theme/localization and missing-route page render.
+Read 1237_review_clone.py and raw clone commands: clone is independent/no-hardlinks at accepted SHA; deleting every generated locale Dart file then gen-l10n twice restores a clean tree. Package rename uses a different real package name and actual pub get/gen-l10n/probe executions.
+Read full negative-control cause/tail: removing only the header then regenerating fails delegate identity plus ar/es/vi widget cases; English fallback passes. This is a runtime type/localization failure, not a compile error. Shipped four-case regression independently fails three locales before the generator fix and passes all four afterward.
+Read 1225-audit.log: 29 focused cases pass, with environment asset/format/analyzer gates. Read docs-check: all documentation checks pass. Full acceptance logs contain 4376 pass / 14 skip and exact completion + exit 0; fresh clone pub get/gen/gen/pub get each preserve a completely clean tree.
+All 163 changed paths are assigned exactly once in 350-accepted-scopes.json and per-scope patches/logs. No standing goldens copied or cited. No visual equivalence, device Patrol, signing/backend/store or minimum-SDK complete-suite claim.
+
+Final current-head CI, merge parity and postmerge QA/security remain separate gates; this file does not claim they have completed.

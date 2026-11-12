@@ -1,0 +1,22 @@
+Issue #1225; epic:tooling-ci
+Base: 30912d93c075777d3a3d8da5b8cbb41b770d71af
+Integrated candidate: 6fbc814064a8a9be359ca4fe150b26e96d913c8a
+bricks/feature_clean/__brick__/lib/features/{{feature_name}}/presentation/screens/{{feature_name}}_screen.dart
+pubspec.lock
+pubspec.yaml
+scripts/dev/create_feature.ps1
+scripts/dev/create_feature.sh
+tool/golden/no_feature_flags/lib/core/routing/navigation_extensions.dart
+tool/golden/no_tasks/lib/core/routing/navigation_extensions.dart
+tool/golden/stripped/integration_test/app_e2e_test.dart
+tool/golden/stripped/lib/core/routing/navigation_extensions.dart
+tool/golden/stripped/lib/features/home/presentation/screens/home_screen.dart
+tool/golden/stripped/lib/main.dart
+
+Scope commit records:
+8e61172dbbc7bc091735696aa08a272f2735dc4c fix(tooling): align SDK test pins and stripped localization delegates
+Refs koniz-dev/flutter-starter#1225
+
+8a38aea6a0175f501fceea6edefacd3d2625e46c fix(tooling): prepare standalone Flutter UI dependencies and generators
+Refs koniz-dev/flutter-starter#1225
+

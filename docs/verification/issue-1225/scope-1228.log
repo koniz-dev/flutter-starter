@@ -1,0 +1,21 @@
+Issue #1228; epic:design-system
+Base: 30912d93c075777d3a3d8da5b8cbb41b770d71af
+Integrated candidate: 6fbc814064a8a9be359ca4fe150b26e96d913c8a
+lib/core/accessibility/accessibility_helpers.dart
+lib/core/accessibility/focus_announcer.dart
+lib/shared/accessibility/accessibility_widgets.dart
+lib/shared/design_system/tokens/app_colors.dart
+lib/shared/design_system/tokens/app_typography.dart
+lib/shared/design_system/tokens/default_design_tokens.dart
+lib/shared/extensions/context_extensions.dart
+lib/shared/theme/app_theme.dart
+lib/shared/widgets/error_widget.dart
+lib/shared/widgets/language_switcher.dart
+lib/shared/widgets/loading_indicator.dart
+lib/shared/widgets/optimized_image.dart
+lib/shared/widgets/optimized_list_view.dart
+
+Scope commit records:
+0c3ff9fbb4fb9eb57e76ed802805db83d5302bf3 fix(design-system): migrate standalone Flutter UI libraries
+Refs koniz-dev/flutter-starter#1228
+

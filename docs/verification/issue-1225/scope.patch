@@ -1,0 +1,234 @@
+diff --git a/bricks/feature_clean/__brick__/lib/features/{{feature_name}}/presentation/screens/{{feature_name}}_screen.dart b/bricks/feature_clean/__brick__/lib/features/{{feature_name}}/presentation/screens/{{feature_name}}_screen.dart
+index 1fdb7e76eb7..65ebde16073 100644
+--- a/bricks/feature_clean/__brick__/lib/features/{{feature_name}}/presentation/screens/{{feature_name}}_screen.dart
++++ b/bricks/feature_clean/__brick__/lib/features/{{feature_name}}/presentation/screens/{{feature_name}}_screen.dart
+@@ -1,7 +1,7 @@
+-import 'package:flutter/material.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/core/localization/localization_extensions.dart';
+ import 'package:flutter_starter/features/{{feature_name}}/presentation/providers/{{feature_name}}_provider.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ /// Screen showing a single {{class_name}}.
+ class {{class_name}}Screen extends ConsumerWidget {
+diff --git a/pubspec.lock b/pubspec.lock
+index 30c25742dee..79b8c1d69f5 100644
+--- a/pubspec.lock
++++ b/pubspec.lock
+@@ -141,10 +141,10 @@ packages:
+     dependency: transitive
+     description:
+       name: clock
+-      sha256: fddb70d9b5277016c77a80201021d40a2247104d9f4aa7bab7157b7e3f05b84b
++      sha256: e51d50bca3217c9a9fa2b41a30e4a38971133f5f9ec7a3d57bae095007f1d28e
+       url: "https://pub.dev"
+     source: hosted
+-    version: "1.1.2"
++    version: "1.1.3"
+   code_assets:
+     dependency: transitive
+     description:
+@@ -194,7 +194,7 @@ packages:
+     source: hosted
+     version: "2.0.0"
+   cupertino_ui:
+-    dependency: transitive
++    dependency: "direct main"
+     description:
+       name: cupertino_ui
+       sha256: a47c4e7c66fd7444a063a602597fceb238f705c3f6b1322bc0053d0a2638ee6e
+@@ -597,7 +597,7 @@ packages:
+     source: hosted
+     version: "0.13.0"
+   material_ui:
+-    dependency: transitive
++    dependency: "direct main"
+     description:
+       name: material_ui
+       sha256: e4031746f96c8316864d9b92bce375f1320a36ed56e166307e1e1bda9d90b4ab
+@@ -941,10 +941,10 @@ packages:
+     dependency: transitive
+     description:
+       name: stack_trace
+-      sha256: "8b27215b45d22309b5cddda1aa2b19bdfec9df0e765f2de506401c071d38d1b1"
++      sha256: "277654b3034d17ac6f9f1cb5595db011b1d5d41e8806866db28e0abaa101c490"
+       url: "https://pub.dev"
+     source: hosted
+-    version: "1.12.1"
++    version: "1.12.2"
+   state_notifier:
+     dependency: transitive
+     description:
+@@ -997,10 +997,10 @@ packages:
+     dependency: transitive
+     description:
+       name: test_api
+-      sha256: "2a122cbe059f8b610d3a5415f42e255b6c17b1f21eee1d960f31080237fb4f11"
++      sha256: "0a10344e901e5b2e63819567951cb6a06673ed6b84f40462188ff5a0c41f371f"
+       url: "https://pub.dev"
+     source: hosted
+-    version: "0.7.12"
++    version: "0.7.14"
+   typed_data:
+     dependency: transitive
+     description:
+diff --git a/pubspec.yaml b/pubspec.yaml
+index 09817472142..46cc684ed6b 100644
+--- a/pubspec.yaml
++++ b/pubspec.yaml
+@@ -12,6 +12,7 @@ dependencies:
+   # UI Components - iOS style icons
+   crypto: ^3.0.8
+   cupertino_icons: ^2.0.0
++  cupertino_ui: ^1.1.4
+ 
+   # Network Layer - HTTP client with interceptors support
+   dio: ^5.11.1
+@@ -55,6 +56,9 @@ dependencies:
+   # Logging - Comprehensive logging solution with multiple outputs
+   logger: ^2.8.0
+ 
++  # UI Components - standalone Material design library
++  material_ui: ^1.8.0
++
+   # File System - Path provider for file-based logging
+   path: ^1.9.1
+   path_provider: ^2.1.6
+diff --git a/scripts/dev/create_feature.ps1 b/scripts/dev/create_feature.ps1
+index 7df366c6460..c980ef24689 100644
+--- a/scripts/dev/create_feature.ps1
++++ b/scripts/dev/create_feature.ps1
+@@ -216,10 +216,10 @@ final class ${FeaturePascal}Notifier extends Notifier<AsyncValue<${FeaturePascal
+ "@
+ 
+ Write-GeneratedFile "lib/features/$($FeatureName)/presentation/screens/$($FeatureName)_screen.dart" @"
+-import 'package:flutter/material.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/core/localization/localization_extensions.dart';
+ import 'package:flutter_starter/features/${FeatureName}/presentation/providers/${FeatureName}_provider.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ /// Screen showing a single ${FeaturePascal}.
+ class ${FeaturePascal}Screen extends ConsumerWidget {
+diff --git a/scripts/dev/create_feature.sh b/scripts/dev/create_feature.sh
+index 01f6ee7d825..245ee79f076 100755
+--- a/scripts/dev/create_feature.sh
++++ b/scripts/dev/create_feature.sh
+@@ -219,10 +219,10 @@ final class ${FEATURE_PASCAL}Notifier extends Notifier<AsyncValue<${FEATURE_PASC
+ EOF
+ 
+ cat > "$BASE_DIR/presentation/screens/${FEATURE_NAME}_screen.dart" <<EOF
+-import 'package:flutter/material.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/core/localization/localization_extensions.dart';
+ import 'package:flutter_starter/features/${FEATURE_NAME}/presentation/providers/${FEATURE_NAME}_provider.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ /// Screen showing a single ${FEATURE_PASCAL}.
+ class ${FEATURE_PASCAL}Screen extends ConsumerWidget {
+diff --git a/tool/golden/no_feature_flags/lib/core/routing/navigation_extensions.dart b/tool/golden/no_feature_flags/lib/core/routing/navigation_extensions.dart
+index 84c4c4f807f..d40d68ec48f 100644
+--- a/tool/golden/no_feature_flags/lib/core/routing/navigation_extensions.dart
++++ b/tool/golden/no_feature_flags/lib/core/routing/navigation_extensions.dart
+@@ -3,9 +3,9 @@
+ 
+ import 'dart:async';
+ 
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/core/routing/app_routes.dart';
+ import 'package:go_router/go_router.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ /// Navigation extensions for GoRouter
+ ///
+diff --git a/tool/golden/no_tasks/lib/core/routing/navigation_extensions.dart b/tool/golden/no_tasks/lib/core/routing/navigation_extensions.dart
+index b176ae9b5d0..3c5e8b75b11 100644
+--- a/tool/golden/no_tasks/lib/core/routing/navigation_extensions.dart
++++ b/tool/golden/no_tasks/lib/core/routing/navigation_extensions.dart
+@@ -3,9 +3,9 @@
+ 
+ import 'dart:async';
+ 
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/core/routing/app_routes.dart';
+ import 'package:go_router/go_router.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ /// Navigation extensions for GoRouter
+ ///
+diff --git a/tool/golden/stripped/integration_test/app_e2e_test.dart b/tool/golden/stripped/integration_test/app_e2e_test.dart
+index afe6c9cb0d5..c1589dff5a6 100644
+--- a/tool/golden/stripped/integration_test/app_e2e_test.dart
++++ b/tool/golden/stripped/integration_test/app_e2e_test.dart
+@@ -1,7 +1,7 @@
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/main.dart' as app;
+ import 'package:flutter_test/flutter_test.dart';
+ import 'package:patrol/patrol.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ /// Boots the app and waits for the first frame.
+ ///
+diff --git a/tool/golden/stripped/lib/core/routing/navigation_extensions.dart b/tool/golden/stripped/lib/core/routing/navigation_extensions.dart
+index 487ac3b5d85..747743bf74e 100644
+--- a/tool/golden/stripped/lib/core/routing/navigation_extensions.dart
++++ b/tool/golden/stripped/lib/core/routing/navigation_extensions.dart
+@@ -1,8 +1,8 @@
+ import 'dart:async';
+ 
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/core/routing/app_routes.dart';
+ import 'package:go_router/go_router.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ /// Navigation extensions for GoRouter (stripped baseline).
+ extension NavigationExtensions on BuildContext {
+diff --git a/tool/golden/stripped/lib/features/home/presentation/screens/home_screen.dart b/tool/golden/stripped/lib/features/home/presentation/screens/home_screen.dart
+index b27eb493a33..9422529d3c4 100644
+--- a/tool/golden/stripped/lib/features/home/presentation/screens/home_screen.dart
++++ b/tool/golden/stripped/lib/features/home/presentation/screens/home_screen.dart
+@@ -1,4 +1,3 @@
+-import 'package:flutter/material.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ 
+ import 'package:flutter_starter/core/constants/ui_keys.dart';
+@@ -7,6 +6,7 @@ import 'package:flutter_starter/core/routing/navigation_extensions.dart';
+ import 'package:flutter_starter/core/routing/routes_registry.dart';
+ import 'package:flutter_starter/l10n/app_localizations.dart';
+ import 'package:flutter_starter/shared/widgets/language_switcher.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ /// Home screen after sign-in (minimal shell; extend per product).
+ ///
+diff --git a/tool/golden/stripped/lib/main.dart b/tool/golden/stripped/lib/main.dart
+index e98f0e1da6b..963a549258a 100644
+--- a/tool/golden/stripped/lib/main.dart
++++ b/tool/golden/stripped/lib/main.dart
+@@ -2,8 +2,6 @@
+ // ignore_for_file: public_member_api_docs
+ 
+ import 'package:flutter/foundation.dart' show kReleaseMode;
+-import 'package:flutter/material.dart';
+-import 'package:flutter_localizations/flutter_localizations.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ // `Override` is not in flutter_riverpod.dart's export list; misc.dart is
+ // where riverpod 3 exposes it. Needed only for createAppContainer's
+@@ -23,6 +21,7 @@ import 'package:flutter_starter/features/auth/di/auth_providers.dart';
+ import 'package:flutter_starter/features/auth/presentation/providers/auth_provider.dart';
+ import 'package:flutter_starter/l10n/app_localizations.dart';
+ import 'package:flutter_starter/shared/theme/app_theme.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ // Disables Riverpod auto-retry for EVERY provider, for the whole process
+ // lifetime - not just for startup. A container-level `Retry` is
+@@ -263,9 +262,7 @@ class MyApp extends ConsumerWidget {
+       locale: locale,
+       localizationsDelegates: const [
+         AppLocalizations.delegate,
+-        GlobalMaterialLocalizations.delegate,
+-        GlobalWidgetsLocalizations.delegate,
+-        GlobalCupertinoLocalizations.delegate,
++        ...GlobalMaterialLocalizations.delegates,
+       ],
+       supportedLocales: LocalizationService.supportedLocales,
+       builder: (context, child) {

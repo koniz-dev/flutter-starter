@@ -1,0 +1,1455 @@
+Independent postmerge QA and dependency/security review PR1237.
+Merged e14ad8f14073304f349fe45b9823b810c47c1983; accepted6fbc814064a8a9be359ca4fe150b26e96d913c8a.
+No tracked writes or issue mutations; evidence publication deferred to root.
+$ ['git', 'status', '--porcelain']
+
+exit:0
+$ ['git', 'rev-parse', 'HEAD', '6fbc8140^{tree}', 'e14ad8f1^{tree}']
+e14ad8f14073304f349fe45b9823b810c47c1983
+49ca6e70f997441555b7ecbaa3c484689ce43c23
+49ca6e70f997441555b7ecbaa3c484689ce43c23
+
+exit:0
+$ ['git', 'show', '-s', '--format=%H%n%P%n%B', 'HEAD']
+e14ad8f14073304f349fe45b9823b810c47c1983
+30912d93c075777d3a3d8da5b8cbb41b770d71af
+fix(ui): migrate standalone Material and Cupertino libraries (#1237)
+
+Refs koniz-dev/flutter-starter#1225
+Refs koniz-dev/flutter-starter#1226
+Refs koniz-dev/flutter-starter#1227
+Refs koniz-dev/flutter-starter#1228
+Refs koniz-dev/flutter-starter#1229
+Refs koniz-dev/flutter-starter#1230
+Refs koniz-dev/flutter-starter#1231
+Refs koniz-dev/flutter-starter#1232
+Refs koniz-dev/flutter-starter#1233
+Refs koniz-dev/flutter-starter#1234
+Refs koniz-dev/flutter-starter#1235
+Refs koniz-dev/flutter-starter#1236
+
+exit:0
+$ ['git', 'diff', '--exit-code', '6fbc8140', 'e14ad8f1']
+
+exit:0
+LIVE PR merge/head verification:
+{
+  "number": 1237,
+  "state": "closed",
+  "merged_at": "2026-11-12T00:39:03Z",
+  "merge_commit_sha": "e14ad8f14073304f349fe45b9823b810c47c1983",
+  "body": "Flutter stable 3.50 makes the existing SDK Material/Cupertino imports deprecated, causing Quality gate and every Strip job to fail. Migrate runtime code, tests, examples and generators to standalone UI libraries while retaining the existing material_ui 1.8.0 / cupertino_ui 1.1.4 versions and archive hashes; the SDK updates three test-support pins.\n\nUse matching standalone localization delegates. The SDK gen-l10n template still emits legacy Global* references, so a supported l10n header binds those identifiers to small standalone delegate adapters. Relative header imports survive application package renaming. A real widget regression exercises the generated convenience delegates in all four locales (legacy output fails ar/es/vi). Extend the architecture guard to reject standalone UI imports in domain code and document custom UI type migration/regeneration.\n\nThe scopes are tracked separately by canonical epic and implemented in serial commits; they integrate atomically because legacy and standalone public UI types differ. Native configuration PR #1224 remains separate and will be rebased after this prerequisite.\n\nValidation: isolated official Flutter 3.50.0 archive SHA256 verified; format/analyzer clean; full host suite 4,376 passed / 14 skipped; 29 focused guard/localization cases and docs checks passed. A fresh independent clone in a path containing spaces stays clean after pub get, gen-l10n twice and pub get. All seven current-head CI checks succeeded: Quality gate, Docs and every Strip variant (including renamed-both).\n\nFresh independent adversarial review by review_1237 found no actionable findings. Eleven independent probe executions cover actual Riverpod/Patrol text entry, modern themes/localization in all four locales, package renaming and GoRouter navigation/error rendering. Deleting generated locale files and regenerating restores committed bytes; removing only the header reproduces four failures in independent negative controls. Root inspected the actual probe sources, raw commands/results, source diff and five dependency provenance records. Postmerge QA/security and evidence-backed per-issue closure follow the merge.\n\nRefs koniz-dev/flutter-starter#1225\nRefs koniz-dev/flutter-starter#1226\nRefs koniz-dev/flutter-starter#1227\nRefs koniz-dev/flutter-starter#1228\nRefs koniz-dev/flutter-starter#1229\nRefs koniz-dev/flutter-starter#1230\nRefs koniz-dev/flutter-starter#1231\nRefs koniz-dev/flutter-starter#1232\nRefs koniz-dev/flutter-starter#1233\nRefs koniz-dev/flutter-starter#1234\nRefs koniz-dev/flutter-starter#1235\nRefs koniz-dev/flutter-starter#1236\n"
+}
+LIVE accepted-head check runs:
+[
+  {
+    "name": "Strip both-samples-removed + analyze + test",
+    "state": "SUCCESS",
+    "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43127236964/job/130882308045"
+  },
+  {
+    "name": "Strip tasks-removed + analyze + test",
+    "state": "SUCCESS",
+    "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43127236964/job/130882307962"
+  },
+  {
+    "name": "Strip feature-flags-removed + analyze + test",
+    "state": "SUCCESS",
+    "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43127236964/job/130882307949"
+  },
+  {
+    "name": "Strip keep-samples + analyze + test",
+    "state": "SUCCESS",
+    "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43127236964/job/130882307767"
+  },
+  {
+    "name": "Strip renamed-both + analyze + test",
+    "state": "SUCCESS",
+    "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43127236964/job/130882307626"
+  },
+  {
+    "name": "Docs check",
+    "state": "SUCCESS",
+    "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43127236799/job/130882307409"
+  },
+  {
+    "name": "Quality gate",
+    "state": "SUCCESS",
+    "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43127236767/job/130882307117"
+  }
+]
+LIVE issue criteria and labels:
+{
+  "number": 1225,
+  "title": "fix(ci): restore stable Flutter 3.50 compatibility",
+  "labels": [
+    "type:bug",
+    "epic:tooling-ci",
+    "priority:P0",
+    "status:in-progress"
+  ],
+  "assignees": [
+    "koniz-dev"
+  ],
+  "body": "Flutter stable advanced to 3.50.0 (ab2912035e160d9cad6306df307576da6128ebdb) on 2026-11-11. PR #1224 Quality gate fails on 237 deprecated-member diagnostics for legacy Material/Cupertino imports, also present on its base 30912d93. This blocks the native fix #1213 and all subsequent code changes.\n\nScope: pubspec.yaml/lock direct standalone UI dependencies, tooling/brick/golden fixtures, migration guard compatibility and integration validation. Runtime, tests and documentation changes are split into per-epic child issues. Root implements serially with one active claim. Commits retain individual Refs; the coordinated PR merges only once all scopes pass together, because mixing legacy and standalone public UI types is unsafe. Ready child issues stay blocked and unassigned until integrated validation; no issue closes before merged evidence.\n\n## Acceptance criteria\n\n1. Direct material_ui/cupertino_ui dependencies resolve from pub.dev with reviewed publisher/lock hashes; flutter pub get leaves tracked files unchanged under stable 3.50.\n2. Generated feature/template and strip fixtures use supported UI imports; text-literal and documentation guards still recognize the migrated source. All five actual Strip CI jobs succeed on the integrated head.\n3. Flutter 3.50 format, analyze and full host tests pass without suppressing deprecated-member diagnostics; current-head Quality gate and every other actual check succeed (or intentional manual platform skips).\n4. Fresh independent premerge review, merged-source parity, postmerge QA/security and evidence cover the integrated migration. Each child is verified against that same merged tree. An adopter migration note covers changed public UI types/localization and third-party compatibility where needed.\n\n## Scope issues\n\n- [ ] #1226 (epic:docs)\n- [ ] #1227 (epic:testing)\n- [ ] #1228 (epic:design-system)\n- [ ] #1229 (epic:core-di)\n- [ ] #1230 (epic:i18n)\n- [ ] #1231 (epic:core-foundation)\n- [ ] #1232 (epic:core-routing)\n- [ ] #1233 (epic:app-shell)\n- [ ] #1234 (epic:feature-auth)\n- [ ] #1235 (epic:feature-flags)\n- [ ] #1236 (epic:feature-tasks)\n"
+}
+LIVE issue criteria and labels:
+{
+  "number": 1226,
+  "title": "fix(docs): migrate standalone Flutter UI libraries",
+  "labels": [
+    "type:bug",
+    "epic:docs",
+    "priority:P0",
+    "status:blocked"
+  ],
+  "assignees": [],
+  "body": "Part of #1225; unblocks #1213. Flutter 3.50 deprecates SDK Material/Cupertino libraries; standalone and legacy public UI types differ. This issue owns only `epic:docs` paths from the canonical map. Root implements serially; commits integrate with sibling scopes in one gated PR. Closure requires merged evidence, not just an import edit.\n\n## Scope\n\n- `docs/api/examples/adding-features.md`\n- `docs/api/examples/api-integration.md`\n- `docs/architecture/overview.md`\n- `docs/guides/accessibility/README.md`\n- `docs/guides/features/internationalization-guide.md`\n- `docs/guides/security/blueprints.md`\n- `docs/guides/testing/guide.md`\n- `examples/performance_examples.dart`\n\nAlso include generated/localization or helper files within this same epic required by the migration; retain the canonical epic boundary.\n\n## Acceptance criteria\n\n1. Owned sources use supported standalone UI imports and consistent public UI/localization types; existing application behavior remains covered by the integrated host suite. No deprecation suppressions hide migration failures.\n2. Relevant generated output, examples, fixtures and documentation in this epic remain consistent; code generation or applicable scope guards leave tracked files unchanged.\n3. The coordinated PR passes Flutter 3.50 format/analyze/full host tests and every actual CI check; accepted and merged trees match. Independent review and postmerge QA cover this scope, with named evidence linked here before closure.\n"
+}
+LIVE issue criteria and labels:
+{
+  "number": 1227,
+  "title": "fix(testing): migrate standalone Flutter UI libraries",
+  "labels": [
+    "type:bug",
+    "epic:testing",
+    "priority:P0",
+    "status:blocked"
+  ],
+  "assignees": [],
+  "body": "Part of #1225; unblocks #1213. Flutter 3.50 deprecates SDK Material/Cupertino libraries; standalone and legacy public UI types differ. This issue owns only `epic:testing` paths from the canonical map. Root implements serially; commits integrate with sibling scopes in one gated PR. Closure requires merged evidence, not just an import edit.\n\n## Scope\n\n- `integration_test/app_e2e_test.dart`\n- `test/acceptance/acceptance_helpers.dart`\n- `test/acceptance/forced_logout_acceptance_test.dart`\n- `test/acceptance/home_screen_acceptance_test.dart`\n- `test/acceptance/list_view_states_acceptance_test.dart`\n- `test/acceptance/logout_failure_acceptance_test.dart`\n- `test/acceptance/session_restore_acceptance_test.dart`\n- `test/acceptance/startup_failure_acceptance_test.dart`\n- `test/acceptance/theme_contrast_acceptance_test.dart`\n- `test/core/accessibility/accessibility_helpers_test.dart`\n- `test/core/accessibility/focus_announcer_direction_test.dart`\n- `test/core/accessibility/focus_announcer_test.dart`\n- `test/core/constants/ui_keys_test.dart`\n- `test/core/localization/device_locale_test.dart`\n- `test/core/localization/localization_providers_test.dart`\n- `test/core/localization/localization_service_test.dart`\n- `test/core/localization/localized_formatters_l10n_test.dart`\n- `test/core/localization/localized_formatters_test.dart`\n- `test/core/localization/supported_locales_test.dart`\n- `test/core/logging/uncaught_error_handlers_test.dart`\n- `test/core/network/forced_logout_session_test.dart`\n- `test/core/performance/performance_screen_mixin_test.dart`\n- `test/core/routing/app_router_test.dart`\n- `test/core/routing/navigation_extensions_test.dart`\n- `test/core/routing/navigation_logging_test.dart`\n- `test/core/routing/screen_navigation_test.dart`\n- `test/core/startup/startup_failure_app_test.dart`\n- `test/core/startup/startup_reachability_test.dart`\n- `test/core/utils/disposal_tracker_throw_test.dart`\n- `test/core/utils/image_cache_helper_cached_test.dart`\n- `test/core/utils/image_cache_helper_redaction_test.dart`\n- `test/core/utils/image_cache_helper_test.dart`\n- `test/core/utils/memory_helper_test.dart`\n- `test/core/utils/pagination_helper_test.dart`\n- `test/core/utils/provider_disposal_test.dart`\n- `test/docs/accessibility_touch_target_snippet_test.dart`\n- `test/features/auth/demo/demo_auth_test.dart`\n- `test/features/auth/demo/demo_sign_in_card_contrast_test.dart`\n- `test/features/auth/logout_teardown_test.dart`\n- `test/features/auth/presentation/screens/auth_error_navigation_test.dart`\n- `test/features/auth/presentation/screens/auth_forms_keyboard_test.dart`\n- `test/features/auth/presentation/screens/auth_localized_error_test.dart`\n- `test/features/auth/presentation/screens/email_whitespace_test.dart`\n- `test/features/auth/presentation/screens/login_screen_test.dart`\n- `test/features/auth/presentation/screens/register_screen_test.dart`\n- `test/features/auth/presentation/screens/rejected_credentials_message_test.dart`\n- `test/features/auth/presentation/widgets/auth_button_test.dart`\n- `test/features/auth/session_restore_test.dart`\n- `test/features/feature_flags/feature_flag_layers_agree_test.dart`\n- `test/features/feature_flags/presentation/providers/feature_flags_timeout_test.dart`\n- `test/features/feature_flags/presentation/screens/feature_flags_debug_screen_failure_test.dart`\n- `test/features/feature_flags/presentation/screens/feature_flags_debug_screen_test.dart`\n- `test/features/feature_flags/presentation/widgets/feature_flag_builder_test.dart`\n- `test/features/feature_flags/routing/feature_flags_routes_test.dart`\n- `test/features/home/presentation/screens/home_heading_layout_test.dart`\n- `test/features/home/presentation/screens/home_hint_localized_test.dart`\n- `test/features/home/presentation/screens/home_screen_test.dart`\n- `test/features/home/presentation/screens/home_sign_out_test.dart`\n- `test/features/tasks/presentation/providers/tasks_wipe_failure_test.dart`\n- `test/features/tasks/presentation/screens/task_detail_navigation_test.dart`\n- `test/features/tasks/presentation/screens/task_detail_screen_test.dart`\n- `test/features/tasks/presentation/screens/task_not_found_test.dart`\n- `test/features/tasks/presentation/screens/tasks_list_screen_test.dart`\n- `test/features/tasks/presentation/screens/tasks_localized_error_test.dart`\n- `test/features/tasks/presentation/screens/tasks_row_semantics_test.dart`\n- `test/features/tasks/routing/tasks_home_entry_test.dart`\n- `test/features/tasks/routing/tasks_routes_test.dart`\n- `test/helpers/helpers_test.dart`\n- `test/helpers/pump_app.dart`\n- `test/helpers/signed_in_app.dart`\n- `test/helpers/test_helpers.dart`\n- `test/main_test.dart`\n- `test/shared/accessibility/accessibility_test_helpers.dart`\n- `test/shared/accessibility/accessibility_test_helpers_test.dart`\n- `test/shared/accessibility/accessibility_widgets_test.dart`\n- `test/shared/accessibility/focus_manager_shadowing_test.dart`\n- `test/shared/accessibility/single_button_node_test.dart`\n- `test/shared/design_system/tokens/app_colors_test.dart`\n- `test/shared/design_system/tokens/app_typography_test.dart`\n- `test/shared/design_system/tokens/default_design_tokens_test.dart`\n- `test/shared/extensions/context_extensions_test.dart`\n- `test/shared/localized_strings_test.dart`\n- `test/shared/theme/app_theme_font_family_test.dart`\n- `test/shared/theme/app_theme_test.dart`\n- `test/shared/theme/login_error_contrast_test.dart`\n- `test/shared/theme/theme_contrast_test.dart`\n- `test/shared/widgets/error_widget_test.dart`\n- `test/shared/widgets/language_switcher_test.dart`\n- `test/shared/widgets/language_switcher_unknown_locale_test.dart`\n- `test/shared/widgets/loading_indicator_test.dart`\n- `test/shared/widgets/optimized_image_decoding_test.dart`\n- `test/shared/widgets/optimized_image_test.dart`\n- `test/shared/widgets/optimized_list_view_controller_test.dart`\n- `test/shared/widgets/optimized_list_view_error_test.dart`\n- `test/shared/widgets/optimized_list_view_pagination_test.dart`\n- `test/shared/widgets/optimized_list_view_test.dart`\n- `test/tooling/import_rules_test.dart`\n\nAlso include generated/localization or helper files within this same epic required by the migration; retain the canonical epic boundary.\n\n## Acceptance criteria\n\n1. Owned sources use supported standalone UI imports and consistent public UI/localization types; existing application behavior remains covered by the integrated host suite. No deprecation suppressions hide migration failures.\n2. Relevant generated output, examples, fixtures and documentation in this epic remain consistent; code generation or applicable scope guards leave tracked files unchanged.\n3. The coordinated PR passes Flutter 3.50 format/analyze/full host tests and every actual CI check; accepted and merged trees match. Independent review and postmerge QA cover this scope, with named evidence linked here before closure.\n"
+}
+LIVE issue criteria and labels:
+{
+  "number": 1228,
+  "title": "fix(design-system): migrate standalone Flutter UI libraries",
+  "labels": [
+    "type:bug",
+    "epic:design-system",
+    "priority:P0",
+    "status:blocked"
+  ],
+  "assignees": [],
+  "body": "Part of #1225; unblocks #1213. Flutter 3.50 deprecates SDK Material/Cupertino libraries; standalone and legacy public UI types differ. This issue owns only `epic:design-system` paths from the canonical map. Root implements serially; commits integrate with sibling scopes in one gated PR. Closure requires merged evidence, not just an import edit.\n\n## Scope\n\n- `lib/core/accessibility/accessibility_helpers.dart`\n- `lib/core/accessibility/focus_announcer.dart`\n- `lib/shared/accessibility/accessibility_widgets.dart`\n- `lib/shared/design_system/tokens/app_colors.dart`\n- `lib/shared/design_system/tokens/app_typography.dart`\n- `lib/shared/design_system/tokens/default_design_tokens.dart`\n- `lib/shared/extensions/context_extensions.dart`\n- `lib/shared/theme/app_theme.dart`\n- `lib/shared/widgets/error_widget.dart`\n- `lib/shared/widgets/language_switcher.dart`\n- `lib/shared/widgets/loading_indicator.dart`\n- `lib/shared/widgets/optimized_image.dart`\n- `lib/shared/widgets/optimized_list_view.dart`\n\nAlso include generated/localization or helper files within this same epic required by the migration; retain the canonical epic boundary.\n\n## Acceptance criteria\n\n1. Owned sources use supported standalone UI imports and consistent public UI/localization types; existing application behavior remains covered by the integrated host suite. No deprecation suppressions hide migration failures.\n2. Relevant generated output, examples, fixtures and documentation in this epic remain consistent; code generation or applicable scope guards leave tracked files unchanged.\n3. The coordinated PR passes Flutter 3.50 format/analyze/full host tests and every actual CI check; accepted and merged trees match. Independent review and postmerge QA cover this scope, with named evidence linked here before closure.\n"
+}
+LIVE issue criteria and labels:
+{
+  "number": 1229,
+  "title": "fix(core-di): migrate standalone Flutter UI libraries",
+  "labels": [
+    "type:bug",
+    "priority:P0",
+    "status:blocked",
+    "epic:core-di"
+  ],
+  "assignees": [],
+  "body": "Part of #1225; unblocks #1213. Flutter 3.50 deprecates SDK Material/Cupertino libraries; standalone and legacy public UI types differ. This issue owns only `epic:core-di` paths from the canonical map. Root implements serially; commits integrate with sibling scopes in one gated PR. Closure requires merged evidence, not just an import edit.\n\n## Scope\n\n- `lib/core/contracts/design_tokens_contracts.dart`\n\nAlso include generated/localization or helper files within this same epic required by the migration; retain the canonical epic boundary.\n\n## Acceptance criteria\n\n1. Owned sources use supported standalone UI imports and consistent public UI/localization types; existing application behavior remains covered by the integrated host suite. No deprecation suppressions hide migration failures.\n2. Relevant generated output, examples, fixtures and documentation in this epic remain consistent; code generation or applicable scope guards leave tracked files unchanged.\n3. The coordinated PR passes Flutter 3.50 format/analyze/full host tests and every actual CI check; accepted and merged trees match. Independent review and postmerge QA cover this scope, with named evidence linked here before closure.\n"
+}
+LIVE issue criteria and labels:
+{
+  "number": 1230,
+  "title": "fix(i18n): migrate standalone Flutter UI libraries",
+  "labels": [
+    "type:bug",
+    "priority:P0",
+    "status:blocked",
+    "epic:i18n"
+  ],
+  "assignees": [],
+  "body": "Part of #1225; unblocks #1213. Flutter 3.50 deprecates SDK Material/Cupertino libraries; standalone and legacy public UI types differ. This issue owns only `epic:i18n` paths from the canonical map. Root implements serially; commits integrate with sibling scopes in one gated PR. Closure requires merged evidence, not just an import edit.\n\n## Scope\n\n- `lib/core/localization/localization_providers.dart`\n- `lib/core/localization/localization_service.dart`\n- `lib/core/localization/localized_formatters.dart`\n\nAlso include generated/localization or helper files within this same epic required by the migration; retain the canonical epic boundary.\n\n## Acceptance criteria\n\n1. Owned sources use supported standalone UI imports and consistent public UI/localization types; existing application behavior remains covered by the integrated host suite. No deprecation suppressions hide migration failures.\n2. Relevant generated output, examples, fixtures and documentation in this epic remain consistent; code generation or applicable scope guards leave tracked files unchanged.\n3. The coordinated PR passes Flutter 3.50 format/analyze/full host tests and every actual CI check; accepted and merged trees match. Independent review and postmerge QA cover this scope, with named evidence linked here before closure.\n"
+}
+LIVE issue criteria and labels:
+{
+  "number": 1231,
+  "title": "fix(core-foundation): migrate standalone Flutter UI libraries",
+  "labels": [
+    "type:bug",
+    "priority:P0",
+    "status:blocked",
+    "epic:core-foundation"
+  ],
+  "assignees": [],
+  "body": "Part of #1225; unblocks #1213. Flutter 3.50 deprecates SDK Material/Cupertino libraries; standalone and legacy public UI types differ. This issue owns only `epic:core-foundation` paths from the canonical map. Root implements serially; commits integrate with sibling scopes in one gated PR. Closure requires merged evidence, not just an import edit.\n\n## Scope\n\n- `lib/core/performance/performance_screen_mixin.dart`\n- `lib/core/utils/image_cache_helper.dart`\n- `lib/core/utils/memory_helper.dart`\n- `lib/core/utils/pagination_helper.dart`\n\nAlso include generated/localization or helper files within this same epic required by the migration; retain the canonical epic boundary.\n\n## Acceptance criteria\n\n1. Owned sources use supported standalone UI imports and consistent public UI/localization types; existing application behavior remains covered by the integrated host suite. No deprecation suppressions hide migration failures.\n2. Relevant generated output, examples, fixtures and documentation in this epic remain consistent; code generation or applicable scope guards leave tracked files unchanged.\n3. The coordinated PR passes Flutter 3.50 format/analyze/full host tests and every actual CI check; accepted and merged trees match. Independent review and postmerge QA cover this scope, with named evidence linked here before closure.\n"
+}
+LIVE issue criteria and labels:
+{
+  "number": 1232,
+  "title": "fix(core-routing): migrate standalone Flutter UI libraries",
+  "labels": [
+    "type:bug",
+    "epic:core-routing",
+    "priority:P0",
+    "status:blocked"
+  ],
+  "assignees": [],
+  "body": "Part of #1225; unblocks #1213. Flutter 3.50 deprecates SDK Material/Cupertino libraries; standalone and legacy public UI types differ. This issue owns only `epic:core-routing` paths from the canonical map. Root implements serially; commits integrate with sibling scopes in one gated PR. Closure requires merged evidence, not just an import edit.\n\n## Scope\n\n- `lib/core/routing/navigation_extensions.dart`\n- `lib/core/routing/navigation_logging.dart`\n- `lib/core/routing/route_not_found_screen.dart`\n\nAlso include generated/localization or helper files within this same epic required by the migration; retain the canonical epic boundary.\n\n## Acceptance criteria\n\n1. Owned sources use supported standalone UI imports and consistent public UI/localization types; existing application behavior remains covered by the integrated host suite. No deprecation suppressions hide migration failures.\n2. Relevant generated output, examples, fixtures and documentation in this epic remain consistent; code generation or applicable scope guards leave tracked files unchanged.\n3. The coordinated PR passes Flutter 3.50 format/analyze/full host tests and every actual CI check; accepted and merged trees match. Independent review and postmerge QA cover this scope, with named evidence linked here before closure.\n"
+}
+LIVE issue criteria and labels:
+{
+  "number": 1233,
+  "title": "fix(app-shell): migrate standalone Flutter UI libraries",
+  "labels": [
+    "type:bug",
+    "priority:P0",
+    "status:blocked",
+    "epic:app-shell"
+  ],
+  "assignees": [],
+  "body": "Part of #1225; unblocks #1213. Flutter 3.50 deprecates SDK Material/Cupertino libraries; standalone and legacy public UI types differ. This issue owns only `epic:app-shell` paths from the canonical map. Root implements serially; commits integrate with sibling scopes in one gated PR. Closure requires merged evidence, not just an import edit.\n\n## Scope\n\n- `lib/core/startup/startup_failure_app.dart`\n- `lib/features/home/presentation/screens/home_screen.dart`\n- `lib/main.dart`\n\nAlso include generated/localization or helper files within this same epic required by the migration; retain the canonical epic boundary.\n\n## Acceptance criteria\n\n1. Owned sources use supported standalone UI imports and consistent public UI/localization types; existing application behavior remains covered by the integrated host suite. No deprecation suppressions hide migration failures.\n2. Relevant generated output, examples, fixtures and documentation in this epic remain consistent; code generation or applicable scope guards leave tracked files unchanged.\n3. The coordinated PR passes Flutter 3.50 format/analyze/full host tests and every actual CI check; accepted and merged trees match. Independent review and postmerge QA cover this scope, with named evidence linked here before closure.\n"
+}
+LIVE issue criteria and labels:
+{
+  "number": 1234,
+  "title": "fix(feature-auth): migrate standalone Flutter UI libraries",
+  "labels": [
+    "type:bug",
+    "epic:feature-auth",
+    "priority:P0",
+    "status:blocked"
+  ],
+  "assignees": [],
+  "body": "Part of #1225; unblocks #1213. Flutter 3.50 deprecates SDK Material/Cupertino libraries; standalone and legacy public UI types differ. This issue owns only `epic:feature-auth` paths from the canonical map. Root implements serially; commits integrate with sibling scopes in one gated PR. Closure requires merged evidence, not just an import edit.\n\n## Scope\n\n- `lib/features/auth/demo/demo_sign_in_card.dart`\n- `lib/features/auth/presentation/screens/login_screen.dart`\n- `lib/features/auth/presentation/screens/register_screen.dart`\n- `lib/features/auth/presentation/widgets/auth_button.dart`\n\nAlso include generated/localization or helper files within this same epic required by the migration; retain the canonical epic boundary.\n\n## Acceptance criteria\n\n1. Owned sources use supported standalone UI imports and consistent public UI/localization types; existing application behavior remains covered by the integrated host suite. No deprecation suppressions hide migration failures.\n2. Relevant generated output, examples, fixtures and documentation in this epic remain consistent; code generation or applicable scope guards leave tracked files unchanged.\n3. The coordinated PR passes Flutter 3.50 format/analyze/full host tests and every actual CI check; accepted and merged trees match. Independent review and postmerge QA cover this scope, with named evidence linked here before closure.\n"
+}
+LIVE issue criteria and labels:
+{
+  "number": 1235,
+  "title": "fix(feature-flags): migrate standalone Flutter UI libraries",
+  "labels": [
+    "type:bug",
+    "priority:P0",
+    "status:blocked",
+    "epic:feature-flags"
+  ],
+  "assignees": [],
+  "body": "Part of #1225; unblocks #1213. Flutter 3.50 deprecates SDK Material/Cupertino libraries; standalone and legacy public UI types differ. This issue owns only `epic:feature-flags` paths from the canonical map. Root implements serially; commits integrate with sibling scopes in one gated PR. Closure requires merged evidence, not just an import edit.\n\n## Scope\n\n- `lib/features/feature_flags/presentation/screens/feature_flags_debug_screen.dart`\n- `lib/features/feature_flags/presentation/widgets/feature_flag_builder.dart`\n- `lib/features/feature_flags/routing/feature_flags_routes.dart`\n\nAlso include generated/localization or helper files within this same epic required by the migration; retain the canonical epic boundary.\n\n## Acceptance criteria\n\n1. Owned sources use supported standalone UI imports and consistent public UI/localization types; existing application behavior remains covered by the integrated host suite. No deprecation suppressions hide migration failures.\n2. Relevant generated output, examples, fixtures and documentation in this epic remain consistent; code generation or applicable scope guards leave tracked files unchanged.\n3. The coordinated PR passes Flutter 3.50 format/analyze/full host tests and every actual CI check; accepted and merged trees match. Independent review and postmerge QA cover this scope, with named evidence linked here before closure.\n"
+}
+LIVE issue criteria and labels:
+{
+  "number": 1236,
+  "title": "fix(feature-tasks): migrate standalone Flutter UI libraries",
+  "labels": [
+    "type:bug",
+    "epic:feature-tasks",
+    "priority:P0",
+    "status:blocked"
+  ],
+  "assignees": [],
+  "body": "Part of #1225; unblocks #1213. Flutter 3.50 deprecates SDK Material/Cupertino libraries; standalone and legacy public UI types differ. This issue owns only `epic:feature-tasks` paths from the canonical map. Root implements serially; commits integrate with sibling scopes in one gated PR. Closure requires merged evidence, not just an import edit.\n\n## Scope\n\n- `lib/features/tasks/presentation/screens/task_detail_screen.dart`\n- `lib/features/tasks/presentation/screens/tasks_list_screen.dart`\n- `lib/features/tasks/routing/tasks_routes.dart`\n\nAlso include generated/localization or helper files within this same epic required by the migration; retain the canonical epic boundary.\n\n## Acceptance criteria\n\n1. Owned sources use supported standalone UI imports and consistent public UI/localization types; existing application behavior remains covered by the integrated host suite. No deprecation suppressions hide migration failures.\n2. Relevant generated output, examples, fixtures and documentation in this epic remain consistent; code generation or applicable scope guards leave tracked files unchanged.\n3. The coordinated PR passes Flutter 3.50 format/analyze/full host tests and every actual CI check; accepted and merged trees match. Independent review and postmerge QA cover this scope, with named evidence linked here before closure.\n"
+}
+
+LIVE Quality job130882307117 decoded log inspected in full by tool; total UTF-8 text characters: 1635959. Selected raw SDK/analyzer/test/coverage/tree lines:
+2026-11-12T00:26:08.8770495Z   key: flutter-linux-stable-3.50.0-x64-ab2912035e160d9cad6306df307576da6128ebdb
+2026-11-12T00:26:09.1353542Z Cache not found for input keys: flutter-linux-stable-3.50.0-x64-ab2912035e160d9cad6306df307576da6128ebdb
+2026-11-12T00:26:09.3117332Z   key: flutter-pub-linux-stable-3.50.0-x64-ab2912035e160d9cad6306df307576da6128ebdb-5820e156eccb662b3bf678ab83fee8ad38ada86ec38a67abcb44d7891adc761a
+2026-11-12T00:26:09.5726050Z Cache not found for input keys: flutter-pub-linux-stable-3.50.0-x64-ab2912035e160d9cad6306df307576da6128ebdb-5820e156eccb662b3bf678ab83fee8ad38ada86ec38a67abcb44d7891adc761a
+2026-11-12T00:28:18.1535259Z No issues found! (ran in 18.9s)
+2026-11-12T00:28:19.6026591Z [36;1mecho "Test order seed: ${seed:-unknown}"[0m
+2026-11-12T00:28:19.6026995Z [36;1mecho "- Test order seed: \`${seed:-unknown}\`" >> "$GITHUB_STEP_SUMMARY"[0m
+2026-11-12T00:36:57.8141830Z 🎉 4375 tests passed, 16 skipped.
+2026-11-12T00:36:57.9995166Z Test order seed: 3948247676
+2026-11-12T00:36:58.0099324Z   COVERAGE_MIN_TOTAL: 94
+2026-11-12T00:36:58.0371921Z   Total lines: 5472
+2026-11-12T00:36:58.0372238Z   Covered lines: 5286
+2026-11-12T00:36:58.0372455Z   Coverage: 96.60%
+2026-11-12T00:36:58.0390497Z [0;32m✓ Coverage 96.60% meets minimum threshold of 94%[0m
+2026-11-12T00:36:58.0459353Z [36;1mecho "No tracked file changed."[0m
+2026-11-12T00:36:58.0634657Z No tracked file changed.
+2026-11-12T00:37:00.0803946Z Failed to save: Unable to reserve cache with key flutter-pub-linux-stable-3.50.0-x64-ab2912035e160d9cad6306df307576da6128ebdb-5820e156eccb662b3bf678ab83fee8ad38ada86ec38a67abcb44d7891adc761a, another job may be creating this cache.
+2026-11-12T00:37:06.9388844Z Failed to save: Unable to reserve cache with key flutter-linux-stable-3.50.0-x64-ab2912035e160d9cad6306df307576da6128ebdb, another job may be creating this cache.
+
+CI skipped-case inventory (raw):
+2026-11-12T00:29:17.0785708Z ⏭️ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_brick_display_name_test.dart: the AndroidManifest parses and carries the name (skipped)
+2026-11-12T00:29:17.0786744Z Skip: xmllint is not installed
+2026-11-12T00:29:17.2898706Z ⏭️ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_brick_display_name_test.dart: the Info.plist parses and carries the name (skipped)
+2026-11-12T00:29:17.2899941Z Skip: xmllint is not installed
+2026-11-12T00:32:44.9478820Z ⏭️ /home/runner/work/flutter-starter/flutter-starter/test/features/feature_flags/data/services/local_feature_flags_service_test.dart: LocalFeatureFlagsService no unreachable environment source a supplied FEATURE_ define is not presented as a flag source (skipped)
+2026-11-12T00:32:44.9480416Z Skip: run with --dart-define=FEATURE_ENABLE_EXPERIMENTAL_FEATURES=true
+2026-11-12T00:33:15.4710189Z ⏭️ /home/runner/work/flutter-starter/flutter-starter/test/acceptance/login_demo_acceptance_test.dart: (suite) (skipped)
+2026-11-12T00:33:15.4712164Z Skip: Host-renderer dependent. Run: flutter test --run-skipped --tags golden test/acceptance
+2026-11-12T00:33:15.4714059Z ⏭️ /home/runner/work/flutter-starter/flutter-starter/test/acceptance/logout_failure_acceptance_test.dart: (suite) (skipped)
+2026-11-12T00:33:15.4715841Z Skip: Host-renderer dependent. Run: flutter test --run-skipped --tags golden test/acceptance
+2026-11-12T00:33:15.4717618Z ⏭️ /home/runner/work/flutter-starter/flutter-starter/test/acceptance/home_screen_acceptance_test.dart: (suite) (skipped)
+2026-11-12T00:33:15.4720639Z Skip: Host-renderer dependent. Run: flutter test --run-skipped --tags golden test/acceptance
+2026-11-12T00:33:15.4722531Z ⏭️ /home/runner/work/flutter-starter/flutter-starter/test/acceptance/theme_contrast_acceptance_test.dart: (suite) (skipped)
+2026-11-12T00:33:15.4724202Z Skip: Host-renderer dependent. Run: flutter test --run-skipped --tags golden test/acceptance
+2026-11-12T00:33:15.4754624Z ⏭️ /home/runner/work/flutter-starter/flutter-starter/test/acceptance/list_view_states_acceptance_test.dart: (suite) (skipped)
+2026-11-12T00:33:15.4755596Z Skip: Host-renderer dependent. Run: flutter test --run-skipped --tags golden test/acceptance
+2026-11-12T00:33:15.4756773Z ⏭️ /home/runner/work/flutter-starter/flutter-starter/test/acceptance/startup_failure_acceptance_test.dart: (suite) (skipped)
+2026-11-12T00:33:15.4757568Z Skip: Host-renderer dependent. Run: flutter test --run-skipped --tags golden test/acceptance
+2026-11-12T00:33:15.4758444Z ⏭️ /home/runner/work/flutter-starter/flutter-starter/test/acceptance/session_restore_acceptance_test.dart: (suite) (skipped)
+2026-11-12T00:33:15.4759190Z Skip: Host-renderer dependent. Run: flutter test --run-skipped --tags golden test/acceptance
+2026-11-12T00:33:15.4760025Z ⏭️ /home/runner/work/flutter-starter/flutter-starter/test/acceptance/forced_logout_acceptance_test.dart: (suite) (skipped)
+2026-11-12T00:33:15.4760809Z Skip: Host-renderer dependent. Run: flutter test --run-skipped --tags golden test/acceptance
+2026-11-12T00:36:32.7101037Z ⏭️ /home/runner/work/flutter-starter/flutter-starter/test/core/config/dart_defines_test.dart: end-to-end with a supplied --dart-define BASE_URL reaches EnvConfig and AppConfig (skipped)
+2026-11-12T00:36:32.7102105Z Skip: run with --dart-define=BASE_URL=<url> to exercise this
+2026-11-12T00:36:32.7103524Z ⏭️ /home/runner/work/flutter-starter/flutter-starter/test/core/config/dart_defines_test.dart: end-to-end with a supplied --dart-define pinning defines reach AppConfig, and web never reports pinning effective (skipped)
+2026-11-12T00:36:32.7105224Z Skip: run with --dart-define=ENABLE_SSL_PINNING=true and API_SSL_FINGERPRINTS=<sha256> to exercise this
+2026-11-12T00:36:34.0568666Z ⏭️ /home/runner/work/flutter-starter/flutter-starter/test/core/config/env_typed_getters_test.dart: criterion 1: a .env without the key falls through to the define getDouble (skipped)
+2026-11-12T00:36:34.0577239Z Skip: run with --dart-define=ENABLE_SSL_PINNING=true --dart-define=API_CONNECT_TIMEOUT=60 --dart-define=API_TIMEOUT=2.5
+2026-11-12T00:36:34.0579982Z ⏭️ /home/runner/work/flutter-starter/flutter-starter/test/core/config/env_typed_getters_test.dart: criterion 1: a .env without the key falls through to the define getBool (skipped)
+2026-11-12T00:36:34.0583429Z Skip: run with --dart-define=ENABLE_SSL_PINNING=true --dart-define=API_CONNECT_TIMEOUT=60 --dart-define=API_TIMEOUT=2.5
+2026-11-12T00:36:34.0586357Z ⏭️ /home/runner/work/flutter-starter/flutter-starter/test/core/config/env_typed_getters_test.dart: criterion 1: a .env without the key falls through to the define getInt (skipped)
+2026-11-12T00:36:34.0589251Z Skip: run with --dart-define=ENABLE_SSL_PINNING=true --dart-define=API_CONNECT_TIMEOUT=60 --dart-define=API_TIMEOUT=2.5
+$ ['/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/sdk-350/flutter/bin/flutter', '--no-version-check', 'test', '--no-pub', '.git/codex-issue-work/1237_probe_test.dart', '.git/codex-issue-work/1237_router_probe_test.dart', '--reporter', 'expanded']
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1237_probe_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1237_probe_test.dart: generated list has standalone delegate identities
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1237_probe_test.dart: Riverpod and Patrol act on standalone widgets: ar
+00:01 +2: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1237_router_probe_test.dart: GoRouter uses modern pages and locale delegates on navigation and errors
+00:01 +3: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1237_router_probe_test.dart: GoRouter uses modern pages and locale delegates on navigation and errors
+00:01 +4: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1237_router_probe_test.dart: GoRouter uses modern pages and locale delegates on navigation and errors
+00:01 +5: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1237_router_probe_test.dart: GoRouter uses modern pages and locale delegates on navigation and errors
+00:02 +6: All tests passed!
+
+exit:0
+Issue#1226 epic:docs: 9 owned changed paths; evidence scope-1226.patch exactly equals accepted git diff for that canonical scope.
+Issue#1227 epic:testing: 98 owned changed paths; evidence scope-1227.patch exactly equals accepted git diff for that canonical scope.
+Issue#1228 epic:design-system: 13 owned changed paths; evidence scope-1228.patch exactly equals accepted git diff for that canonical scope.
+Issue#1229 epic:core-di: 1 owned changed paths; evidence scope-1229.patch exactly equals accepted git diff for that canonical scope.
+Issue#1230 epic:i18n: 11 owned changed paths; evidence scope-1230.patch exactly equals accepted git diff for that canonical scope.
+Issue#1231 epic:core-foundation: 4 owned changed paths; evidence scope-1231.patch exactly equals accepted git diff for that canonical scope.
+Issue#1232 epic:core-routing: 3 owned changed paths; evidence scope-1232.patch exactly equals accepted git diff for that canonical scope.
+Issue#1233 epic:app-shell: 3 owned changed paths; evidence scope-1233.patch exactly equals accepted git diff for that canonical scope.
+Issue#1234 epic:feature-auth: 4 owned changed paths; evidence scope-1234.patch exactly equals accepted git diff for that canonical scope.
+Issue#1235 epic:feature-flags: 3 owned changed paths; evidence scope-1235.patch exactly equals accepted git diff for that canonical scope.
+Issue#1236 epic:feature-tasks: 3 owned changed paths; evidence scope-1236.patch exactly equals accepted git diff for that canonical scope.
+Issue#1225 epic:tooling-ci: 11 owned changed paths; evidence scope.patch exactly equals accepted git diff for that canonical scope.
+All 163 changed paths partitioned exactly once across 12 canonical epics; merged squash retains all 12 issue references.
+RAW artifact format.log: 143 chars / 4 lines.
+$ /Users/nguyenanhkiet/Playground/flutter-starter/scripts/dev/format_dart.sh --check
+
+Formatted 619 files (0 changed) in 1.88 seconds.
+exit: 0
+
+RAW artifact analyze.log: 124 chars / 5 lines.
+$ flutter analyze
+
+Analyzing flutter-starter...                                    
+No issues found! (ran in 17.1s)
+exit: 0
+
+RAW artifact tests.log: 17640 chars / 124 lines.
+layground/flutter-starter/test/docs/lib_doc_snippets_test.dart: criterion 1: every // compile doc example in lib/ analyzes with no error or warning
+05:59 +4368 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/lib_doc_snippets_test.dart: criterion 1: every // compile doc example in lib/ analyzes with no error or warning
+06:00 +4369 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/testing_guide_snippets_test.dart: criterion 1: every self-contained dart snippet in CONTRIBUTING.md analyzes with no error or warning
+06:00 +4370 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/testing_guide_snippets_test.dart: criterion 1: every self-contained dart snippet in CONTRIBUTING.md analyzes with no error or warning
+06:00 +4371 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/testing_guide_snippets_test.dart: criterion 1: every self-contained dart snippet in CONTRIBUTING.md analyzes with no error or warning
+06:00 +4372 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/testing_guide_snippets_test.dart: criterion 1: every self-contained dart snippet in CONTRIBUTING.md analyzes with no error or warning
+06:00 +4373 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/testing_guide_snippets_test.dart: criterion 1: every self-contained dart snippet in CONTRIBUTING.md analyzes with no error or warning
+06:01 +4374 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/testing_guide_snippets_test.dart: criterion 1: every self-contained dart snippet in docs/architecture/overview.md analyzes with no error or warning
+06:09 +4375 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/testing_guide_snippets_test.dart: no snippet imports test/ through the package
+06:09 +4376 ~14: All tests passed!
+exit: 0
+
+RAW artifact local-audit.log: 5545 chars / 42 lines.
+:00 +18: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: rule predicates lib/core importing lib/features is a violation
+00:00 +19: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: rule predicates the route registry seam is permanently allowed
+00:00 +20: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: strippable sample paths cover what tool/strip_sample_features.dart deletes
+00:00 +21: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: strippable sample paths do not cover files no strip variant removes
+00:00 +22: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: directive parsing picks up import and export, with line numbers
+00:00 +23: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: directive parsing a commented-out directive is not a violation
+00:00 +24: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: directive parsing handles show/hide/as clauses and double quotes
+00:09 +25: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/generated_delegates_test.dart: generated delegates serve standalone UI for ar
+00:12 +26: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/generated_delegates_test.dart: generated delegates serve standalone UI for en
+00:12 +27: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/generated_delegates_test.dart: generated delegates serve standalone UI for es
+00:12 +28: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/generated_delegates_test.dart: generated delegates serve standalone UI for vi
+00:12 +29: All tests passed!
+
+RAW artifact docs-check.log: 427 chars / 9 lines.
+links: checked 674 relative link(s) in 75 file(s); 0 broken
+emoji: scanned 66 file(s); 0 line(s) with emoji
+signatures: checked 13 documented constructor(s); 0 mismatched
+symbols: checked 116 directive(s); 0 unresolved
+env runs: scanned 64 file(s); 0 run(s) ignoring the copied .env
+dart-defines: scanned 62 file(s) against 14 known key(s); 0 unknown
+test paths: scanned 64 file(s); 0 missing
+
+OK: documentation checks passed.
+
+RAW artifact fresh-clone.log: 5823 chars / 127 lines.
+available)
+  glob 2.1.3 (2.2.0 available)
+  go_router 18.1.3 (18.1.4 available)
+  hooks 1.0.2 (2.2.0 available)
+  html 0.15.6 (0.15.7 available)
+  http_multi_server 3.2.2 (3.2.3 available)
+  image 4.8.0 (4.12.0 available)
+  io 1.0.5 (1.1.0 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  material_ui 1.8.0 (1.11.0 available)
+  mime 2.0.0 (2.1.0 available)
+  mustache_template 2.0.4 (2.0.6 available)
+  native_toolchain_c 0.17.6 (0.19.6 available)
+  objective_c 9.3.0 (9.6.4 available)
+  package_config 2.2.0 (3.0.0 available)
+  path_provider_android 2.2.22 (2.3.1 available)
+  path_provider_linux 2.2.1 (2.2.2 available)
+  path_provider_platform_interface 2.1.2 (2.1.3 available)
+  petitparser 7.0.2 (7.1.0 available)
+  platform 3.1.6 (3.2.0 available)
+  pool 1.5.2 (1.5.3 available)
+  posix 6.5.0 (6.5.4 available)
+  process 5.0.5 (5.0.6 available)
+  pub_semver 2.2.0 (2.2.1 available)
+  pubspec_parse 1.5.0 (1.7.0 available)
+  shared_preferences_android 2.4.21 (2.5.5 available)
+  shared_preferences_foundation 2.5.6 (2.6.2 available)
+  shared_preferences_platform_interface 2.4.1 (2.4.2 available)
+  shelf 1.4.2 (1.4.3 available)
+  stream_transform 2.1.1 (2.1.2 available)
+  test_api 0.7.14 (0.7.15 available)
+  uuid 4.5.3 (4.6.0 available)
+  vector_math 2.4.3 (2.4.4 available)
+  vm_service 15.0.2 (15.4.0 available)
+  web 1.1.1 (1.1.2 available)
+  webdriver 3.1.0 (3.2.0 available)
+  xml 6.6.1 (7.1.0 available)
+Got dependencies!
+48 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+PASS: exit 0 and tracked/untracked working tree clean.
+Fresh clone accepted source: 6fbc814064a8a9be359ca4fe150b26e96d913c8a
+No ignored project outputs reused; path contains spaces. SDK release/hash recorded in350-sdk.json.
+
+RAW artifact tree-parity.log: 187 chars / 4 lines.
+Accepted source: 6fbc814064a8a9be359ca4fe150b26e96d913c8a
+Merged main: e14ad8f14073304f349fe45b9823b810c47c1983
+Both source trees: 49ca6e70f997441555b7ecbaa3c484689ce43c23
+Identical: yes
+
+RAW artifact refs.log: 229 chars / 4 lines.
+Commits in 30912d93c075777d3a3d8da5b8cbb41b770d71af..HEAD
+  ok    e14ad8f1 fix(ui): migrate standalone Material and Cupertino libraries (#1237)
+
+OK: every message links with 'Refs koniz-dev/flutter-starter#N' and closes nothing.
+
+RAW artifact deliverable.log: 73 chars / 1 lines.
+Deliverable: HEAD carries nothing that only serves the upstream process.
+
+RAW artifact epic-coverage.log: 58 chars / 1 lines.
+Epic coverage OK: every tracked surface maps to one epic.
+
+RAW artifact root-inspection.log: 2489 chars / 14 lines.
+ree SDK test-support pins reviewed. No new native plugin, endpoint, credential or storage behavior.
+Read independent 1237_probe_test.dart: actual ProviderScope/ConsumerWidget, modern dark theme, both design localization lookups, PatrolTester finder/type and text entry across all four locales. Read raw root and renamed-clone five-case pass output.
+Read 1237_router_probe_test.dart and actual single-case pass: modern MaterialApp.router, route transition, dark theme/localization and missing-route page render.
+Read 1237_review_clone.py and raw clone commands: clone is independent/no-hardlinks at accepted SHA; deleting every generated locale Dart file then gen-l10n twice restores a clean tree. Package rename uses a different real package name and actual pub get/gen-l10n/probe executions.
+Read full negative-control cause/tail: removing only the header then regenerating fails delegate identity plus ar/es/vi widget cases; English fallback passes. This is a runtime type/localization failure, not a compile error. Shipped four-case regression independently fails three locales before the generator fix and passes all four afterward.
+Read 1225-audit.log: 29 focused cases pass, with environment asset/format/analyzer gates. Read docs-check: all documentation checks pass. Full acceptance logs contain 4376 pass / 14 skip and exact completion + exit 0; fresh clone pub get/gen/gen/pub get each preserve a completely clean tree.
+All 163 changed paths are assigned exactly once in 350-accepted-scopes.json and per-scope patches/logs. No standing goldens copied or cited. No visual equivalence, device Patrol, signing/backend/store or minimum-SDK complete-suite claim.
+
+Final current-head CI, merge parity and postmerge QA/security remain separate gates; this file does not claim they have completed.
+
+LIVE workflow/job/step metadata:
+{
+  "run": {
+    "id": 43127236767,
+    "name": "CI",
+    "event": "pull_request",
+    "head_branch": "codex/fix-flutter-350-ui-compatibility",
+    "head_sha": "6fbc814064a8a9be359ca4fe150b26e96d913c8a",
+    "status": "completed",
+    "conclusion": "success",
+    "html_url": "https://github.com/koniz-dev/flutter-starter/actions/runs/43127236767"
+  },
+  "jobs": [
+    {
+      "id": 130882307117,
+      "name": "Quality gate",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-11-12T00:26:05Z",
+          "completed_at": "2026-11-12T00:26:06Z"
+        },
+        {
+          "name": "Checkout code",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-11-12T00:26:06Z",
+          "completed_at": "2026-11-12T00:26:08Z"
+        },
+        {
+          "name": "Decide the gate scope",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-11-12T00:26:08Z",
+          "completed_at": "2026-11-12T00:26:08Z"
+        },
+        {
+          "name": "Setup Flutter",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-11-12T00:26:08Z",
+          "completed_at": "2026-11-12T00:26:48Z"
+        },
+        {
+          "name": "Install dependencies",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-11-12T00:26:48Z",
+          "completed_at": "2026-11-12T00:27:00Z"
+        },
+        {
+          "name": "Run the tests that read markdown",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 6,
+          "started_at": "2026-11-12T00:27:00Z",
+          "completed_at": "2026-11-12T00:27:00Z"
+        },
+        {
+          "name": "Check generated code is up to date",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-11-12T00:27:00Z",
+          "completed_at": "2026-11-12T00:27:56Z"
+        },
+        {
+          "name": "Verify formatting",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-11-12T00:27:56Z",
+          "completed_at": "2026-11-12T00:27:58Z"
+        },
+        {
+          "name": "Analyze code",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-11-12T00:27:58Z",
+          "completed_at": "2026-11-12T00:28:18Z"
+        },
+        {
+          "name": "Import every library for coverage",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-11-12T00:28:18Z",
+          "completed_at": "2026-11-12T00:28:19Z"
+        },
+        {
+          "name": "Run tests (random order)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-11-12T00:28:19Z",
+          "completed_at": "2026-11-12T00:36:58Z"
+        },
+        {
+          "name": "Enforce minimum coverage",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-11-12T00:36:58Z",
+          "completed_at": "2026-11-12T00:36:58Z"
+        },
+        {
+          "name": "Tracked files are unchanged",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-11-12T00:36:58Z",
+          "completed_at": "2026-11-12T00:36:58Z"
+        },
+        {
+          "name": "Post Setup Flutter",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 25,
+          "started_at": "2026-11-12T00:36:58Z",
+          "completed_at": "2026-11-12T00:37:07Z"
+        },
+        {
+          "name": "Post Checkout code",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 26,
+          "started_at": "2026-11-12T00:37:07Z",
+          "completed_at": "2026-11-12T00:37:07Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 27,
+          "started_at": "2026-11-12T00:37:07Z",
+          "completed_at": "2026-11-12T00:37:07Z"
+        }
+      ]
+    }
+  ]
+}
+LIVE workflow/job/step metadata:
+{
+  "run": {
+    "id": 43127236799,
+    "name": "Docs check",
+    "event": "pull_request",
+    "head_branch": "codex/fix-flutter-350-ui-compatibility",
+    "head_sha": "6fbc814064a8a9be359ca4fe150b26e96d913c8a",
+    "status": "completed",
+    "conclusion": "success",
+    "html_url": "https://github.com/koniz-dev/flutter-starter/actions/runs/43127236799"
+  },
+  "jobs": [
+    {
+      "id": 130882307409,
+      "name": "Docs check",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-11-12T00:26:04Z",
+          "completed_at": "2026-11-12T00:26:05Z"
+        },
+        {
+          "name": "Checkout code",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-11-12T00:26:05Z",
+          "completed_at": "2026-11-12T00:26:06Z"
+        },
+        {
+          "name": "Setup Flutter",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-11-12T00:26:06Z",
+          "completed_at": "2026-11-12T00:26:38Z"
+        },
+        {
+          "name": "Install dependencies",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-11-12T00:26:38Z",
+          "completed_at": "2026-11-12T00:26:47Z"
+        },
+        {
+          "name": "Check documentation links, anchors and emoji",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-11-12T00:26:47Z",
+          "completed_at": "2026-11-12T00:26:48Z"
+        },
+        {
+          "name": "Post Setup Flutter",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-11-12T00:26:48Z",
+          "completed_at": "2026-11-12T00:27:01Z"
+        },
+        {
+          "name": "Post Checkout code",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-11-12T00:27:01Z",
+          "completed_at": "2026-11-12T00:27:01Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-11-12T00:27:01Z",
+          "completed_at": "2026-11-12T00:27:01Z"
+        }
+      ]
+    }
+  ]
+}
+LIVE workflow/job/step metadata:
+{
+  "run": {
+    "id": 43127236964,
+    "name": "Strip smoke",
+    "event": "pull_request",
+    "head_branch": "codex/fix-flutter-350-ui-compatibility",
+    "head_sha": "6fbc814064a8a9be359ca4fe150b26e96d913c8a",
+    "status": "completed",
+    "conclusion": "success",
+    "html_url": "https://github.com/koniz-dev/flutter-starter/actions/runs/43127236964"
+  },
+  "jobs": [
+    {
+      "id": 130882307626,
+      "name": "Strip renamed-both + analyze + test",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-11-12T00:26:04Z",
+          "completed_at": "2026-11-12T00:26:05Z"
+        },
+        {
+          "name": "Checkout code",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-11-12T00:26:05Z",
+          "completed_at": "2026-11-12T00:26:07Z"
+        },
+        {
+          "name": "Decide the strip scope",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-11-12T00:26:07Z",
+          "completed_at": "2026-11-12T00:26:07Z"
+        },
+        {
+          "name": "Setup Flutter",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-11-12T00:26:07Z",
+          "completed_at": "2026-11-12T00:26:37Z"
+        },
+        {
+          "name": "Install dependencies (full starter)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-11-12T00:26:37Z",
+          "completed_at": "2026-11-12T00:26:46Z"
+        },
+        {
+          "name": "Rename to my_app first, as fork-and-customize Option B documents",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-11-12T00:26:46Z",
+          "completed_at": "2026-11-12T00:27:36Z"
+        },
+        {
+          "name": "Apply strip",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-11-12T00:27:36Z",
+          "completed_at": "2026-11-12T00:27:54Z"
+        },
+        {
+          "name": "Generate a feature slice and drop the bricks (keep-samples)",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 8,
+          "started_at": "2026-11-12T00:27:54Z",
+          "completed_at": "2026-11-12T00:27:54Z"
+        },
+        {
+          "name": "The strip removed itself (sample variants)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-11-12T00:27:54Z",
+          "completed_at": "2026-11-12T00:27:55Z"
+        },
+        {
+          "name": "Install dependencies (after strip)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-11-12T00:27:55Z",
+          "completed_at": "2026-11-12T00:27:56Z"
+        },
+        {
+          "name": "Analyze stripped tree",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-11-12T00:27:56Z",
+          "completed_at": "2026-11-12T00:28:00Z"
+        },
+        {
+          "name": "Run tests (stripped tree)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-11-12T00:28:00Z",
+          "completed_at": "2026-11-12T00:32:17Z"
+        },
+        {
+          "name": "Post Setup Flutter",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 23,
+          "started_at": "2026-11-12T00:32:17Z",
+          "completed_at": "2026-11-12T00:32:24Z"
+        },
+        {
+          "name": "Post Checkout code",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 24,
+          "started_at": "2026-11-12T00:32:24Z",
+          "completed_at": "2026-11-12T00:32:24Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 25,
+          "started_at": "2026-11-12T00:32:24Z",
+          "completed_at": "2026-11-12T00:32:24Z"
+        }
+      ]
+    },
+    {
+      "id": 130882307767,
+      "name": "Strip keep-samples + analyze + test",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-11-12T00:26:05Z",
+          "completed_at": "2026-11-12T00:26:06Z"
+        },
+        {
+          "name": "Checkout code",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-11-12T00:26:06Z",
+          "completed_at": "2026-11-12T00:26:08Z"
+        },
+        {
+          "name": "Decide the strip scope",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-11-12T00:26:08Z",
+          "completed_at": "2026-11-12T00:26:08Z"
+        },
+        {
+          "name": "Setup Flutter",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-11-12T00:26:08Z",
+          "completed_at": "2026-11-12T00:26:37Z"
+        },
+        {
+          "name": "Install dependencies (full starter)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-11-12T00:26:37Z",
+          "completed_at": "2026-11-12T00:26:48Z"
+        },
+        {
+          "name": "Rename to my_app first, as fork-and-customize Option B documents",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 6,
+          "started_at": "2026-11-12T00:26:48Z",
+          "completed_at": "2026-11-12T00:26:48Z"
+        },
+        {
+          "name": "Apply strip",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-11-12T00:26:48Z",
+          "completed_at": "2026-11-12T00:26:49Z"
+        },
+        {
+          "name": "Generate a feature slice and drop the bricks (keep-samples)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-11-12T00:26:49Z",
+          "completed_at": "2026-11-12T00:27:11Z"
+        },
+        {
+          "name": "The strip removed itself (sample variants)",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 9,
+          "started_at": "2026-11-12T00:27:11Z",
+          "completed_at": "2026-11-12T00:27:11Z"
+        },
+        {
+          "name": "Install dependencies (after strip)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-11-12T00:27:11Z",
+          "completed_at": "2026-11-12T00:27:12Z"
+        },
+        {
+          "name": "Analyze stripped tree",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-11-12T00:27:12Z",
+          "completed_at": "2026-11-12T00:27:20Z"
+        },
+        {
+          "name": "Run tests (stripped tree)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-11-12T00:27:20Z",
+          "completed_at": "2026-11-12T00:32:11Z"
+        },
+        {
+          "name": "Post Setup Flutter",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 23,
+          "started_at": "2026-11-12T00:32:11Z",
+          "completed_at": "2026-11-12T00:32:18Z"
+        },
+        {
+          "name": "Post Checkout code",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 24,
+          "started_at": "2026-11-12T00:32:18Z",
+          "completed_at": "2026-11-12T00:32:18Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 25,
+          "started_at": "2026-11-12T00:32:18Z",
+          "completed_at": "2026-11-12T00:32:18Z"
+        }
+      ]
+    },
+    {
+      "id": 130882307949,
+      "name": "Strip feature-flags-removed + analyze + test",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-11-12T00:26:05Z",
+          "completed_at": "2026-11-12T00:26:06Z"
+        },
+        {
+          "name": "Checkout code",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-11-12T00:26:06Z",
+          "completed_at": "2026-11-12T00:26:10Z"
+        },
+        {
+          "name": "Decide the strip scope",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-11-12T00:26:10Z",
+          "completed_at": "2026-11-12T00:26:11Z"
+        },
+        {
+          "name": "Setup Flutter",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-11-12T00:26:11Z",
+          "completed_at": "2026-11-12T00:26:41Z"
+        },
+        {
+          "name": "Install dependencies (full starter)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-11-12T00:26:41Z",
+          "completed_at": "2026-11-12T00:26:50Z"
+        },
+        {
+          "name": "Rename to my_app first, as fork-and-customize Option B documents",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 6,
+          "started_at": "2026-11-12T00:26:50Z",
+          "completed_at": "2026-11-12T00:26:50Z"
+        },
+        {
+          "name": "Apply strip",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-11-12T00:26:50Z",
+          "completed_at": "2026-11-12T00:27:13Z"
+        },
+        {
+          "name": "Generate a feature slice and drop the bricks (keep-samples)",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 8,
+          "started_at": "2026-11-12T00:27:13Z",
+          "completed_at": "2026-11-12T00:27:13Z"
+        },
+        {
+          "name": "The strip removed itself (sample variants)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-11-12T00:27:13Z",
+          "completed_at": "2026-11-12T00:27:14Z"
+        },
+        {
+          "name": "Install dependencies (after strip)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-11-12T00:27:14Z",
+          "completed_at": "2026-11-12T00:27:14Z"
+        },
+        {
+          "name": "Analyze stripped tree",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-11-12T00:27:14Z",
+          "completed_at": "2026-11-12T00:27:24Z"
+        },
+        {
+          "name": "Run tests (stripped tree)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-11-12T00:27:24Z",
+          "completed_at": "2026-11-12T00:32:19Z"
+        },
+        {
+          "name": "Post Setup Flutter",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 23,
+          "started_at": "2026-11-12T00:32:19Z",
+          "completed_at": "2026-11-12T00:32:26Z"
+        },
+        {
+          "name": "Post Checkout code",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 24,
+          "started_at": "2026-11-12T00:32:26Z",
+          "completed_at": "2026-11-12T00:32:26Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 25,
+          "started_at": "2026-11-12T00:32:26Z",
+          "completed_at": "2026-11-12T00:32:26Z"
+        }
+      ]
+    },
+    {
+      "id": 130882307962,
+      "name": "Strip tasks-removed + analyze + test",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-11-12T00:26:04Z",
+          "completed_at": "2026-11-12T00:26:05Z"
+        },
+        {
+          "name": "Checkout code",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-11-12T00:26:05Z",
+          "completed_at": "2026-11-12T00:26:08Z"
+        },
+        {
+          "name": "Decide the strip scope",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-11-12T00:26:08Z",
+          "completed_at": "2026-11-12T00:26:08Z"
+        },
+        {
+          "name": "Setup Flutter",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-11-12T00:26:08Z",
+          "completed_at": "2026-11-12T00:26:48Z"
+        },
+        {
+          "name": "Install dependencies (full starter)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-11-12T00:26:48Z",
+          "completed_at": "2026-11-12T00:26:58Z"
+        },
+        {
+          "name": "Rename to my_app first, as fork-and-customize Option B documents",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 6,
+          "started_at": "2026-11-12T00:26:58Z",
+          "completed_at": "2026-11-12T00:26:58Z"
+        },
+        {
+          "name": "Apply strip",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-11-12T00:26:58Z",
+          "completed_at": "2026-11-12T00:27:25Z"
+        },
+        {
+          "name": "Generate a feature slice and drop the bricks (keep-samples)",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 8,
+          "started_at": "2026-11-12T00:27:25Z",
+          "completed_at": "2026-11-12T00:27:25Z"
+        },
+        {
+          "name": "The strip removed itself (sample variants)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-11-12T00:27:25Z",
+          "completed_at": "2026-11-12T00:27:26Z"
+        },
+        {
+          "name": "Install dependencies (after strip)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-11-12T00:27:26Z",
+          "completed_at": "2026-11-12T00:27:27Z"
+        },
+        {
+          "name": "Analyze stripped tree",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-11-12T00:27:27Z",
+          "completed_at": "2026-11-12T00:27:39Z"
+        },
+        {
+          "name": "Run tests (stripped tree)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-11-12T00:27:39Z",
+          "completed_at": "2026-11-12T00:32:45Z"
+        },
+        {
+          "name": "Post Setup Flutter",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 23,
+          "started_at": "2026-11-12T00:32:45Z",
+          "completed_at": "2026-11-12T00:32:53Z"
+        },
+        {
+          "name": "Post Checkout code",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 24,
+          "started_at": "2026-11-12T00:32:53Z",
+          "completed_at": "2026-11-12T00:32:53Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 25,
+          "started_at": "2026-11-12T00:32:53Z",
+          "completed_at": "2026-11-12T00:32:53Z"
+        }
+      ]
+    },
+    {
+      "id": 130882308045,
+      "name": "Strip both-samples-removed + analyze + test",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-11-12T00:26:04Z",
+          "completed_at": "2026-11-12T00:26:05Z"
+        },
+        {
+          "name": "Checkout code",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-11-12T00:26:05Z",
+          "completed_at": "2026-11-12T00:26:07Z"
+        },
+        {
+          "name": "Decide the strip scope",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-11-12T00:26:07Z",
+          "completed_at": "2026-11-12T00:26:07Z"
+        },
+        {
+          "name": "Setup Flutter",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-11-12T00:26:07Z",
+          "completed_at": "2026-11-12T00:26:37Z"
+        },
+        {
+          "name": "Install dependencies (full starter)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-11-12T00:26:37Z",
+          "completed_at": "2026-11-12T00:26:45Z"
+        },
+        {
+          "name": "Rename to my_app first, as fork-and-customize Option B documents",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 6,
+          "started_at": "2026-11-12T00:26:45Z",
+          "completed_at": "2026-11-12T00:26:45Z"
+        },
+        {
+          "name": "Apply strip",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-11-12T00:26:45Z",
+          "completed_at": "2026-11-12T00:27:19Z"
+        },
+        {
+          "name": "Generate a feature slice and drop the bricks (keep-samples)",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 8,
+          "started_at": "2026-11-12T00:27:19Z",
+          "completed_at": "2026-11-12T00:27:19Z"
+        },
+        {
+          "name": "The strip removed itself (sample variants)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-11-12T00:27:19Z",
+          "completed_at": "2026-11-12T00:27:20Z"
+        },
+        {
+          "name": "Install dependencies (after strip)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-11-12T00:27:20Z",
+          "completed_at": "2026-11-12T00:27:21Z"
+        },
+        {
+          "name": "Analyze stripped tree",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-11-12T00:27:21Z",
+          "completed_at": "2026-11-12T00:27:31Z"
+        },
+        {
+          "name": "Run tests (stripped tree)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-11-12T00:27:31Z",
+          "completed_at": "2026-11-12T00:31:53Z"
+        },
+        {
+          "name": "Post Setup Flutter",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 23,
+          "started_at": "2026-11-12T00:31:53Z",
+          "completed_at": "2026-11-12T00:32:00Z"
+        },
+        {
+          "name": "Post Checkout code",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 24,
+          "started_at": "2026-11-12T00:32:00Z",
+          "completed_at": "2026-11-12T00:32:00Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 25,
+          "started_at": "2026-11-12T00:32:00Z",
+          "completed_at": "2026-11-12T00:32:00Z"
+        }
+      ]
+    }
+  ]
+}
+CI raw completion: 4375 tests passed /16 skipped; host raw completion:4376 /14. CI includes one generated coverage-helper load test and skips the two xmllint checks unavailable on Linux; remaining skips are explicitly opt-in defines and standing golden suites. All four new generated-localization locale cases and the architecture guard run in the host/CI suite. Quality raw coverage5286/5472=96.60% exceeds94% floor; tracked-tree check explicitly reports no changed files.
+Public prepared-evidence credential-pattern scan: 52 text files inspected; candidate locations (no candidate values printed):
+[]
+$ ['git', 'diff', '30912d93', 'e14ad8f1', '--', 'lib/core/network', 'lib/core/storage', 'lib/core/security', 'lib/core/session', 'lib/features/auth']
+diff --git a/lib/features/auth/demo/demo_sign_in_card.dart b/lib/features/auth/demo/demo_sign_in_card.dart
+index 263604a7f0e..368d7004913 100644
+--- a/lib/features/auth/demo/demo_sign_in_card.dart
++++ b/lib/features/auth/demo/demo_sign_in_card.dart
+@@ -1,7 +1,7 @@
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/core/constants/ui_keys.dart';
+ import 'package:flutter_starter/features/auth/demo/demo_auth.dart';
+ import 'package:flutter_starter/l10n/app_localizations.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ /// Tells the user the app is signing in offline and offers the demo account.
+ ///
+diff --git a/lib/features/auth/presentation/screens/login_screen.dart b/lib/features/auth/presentation/screens/login_screen.dart
+index 7bd47e7ed08..d8a1ebe306e 100644
+--- a/lib/features/auth/presentation/screens/login_screen.dart
++++ b/lib/features/auth/presentation/screens/login_screen.dart
+@@ -1,4 +1,3 @@
+-import 'package:flutter/material.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/core/constants/ui_keys.dart';
+ import 'package:flutter_starter/core/localization/failure_localizations.dart';
+@@ -11,6 +10,7 @@ import 'package:flutter_starter/features/auth/presentation/auth_redirect.dart';
+ import 'package:flutter_starter/features/auth/presentation/providers/auth_provider.dart';
+ import 'package:flutter_starter/features/auth/presentation/widgets/auth_form_body.dart';
+ import 'package:flutter_starter/l10n/app_localizations.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ /// Login screen for user authentication
+ class LoginScreen extends ConsumerStatefulWidget {
+diff --git a/lib/features/auth/presentation/screens/register_screen.dart b/lib/features/auth/presentation/screens/register_screen.dart
+index b44171c2c3b..1678a1cc140 100644
+--- a/lib/features/auth/presentation/screens/register_screen.dart
++++ b/lib/features/auth/presentation/screens/register_screen.dart
+@@ -1,4 +1,3 @@
+-import 'package:flutter/material.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/core/constants/ui_keys.dart';
+ import 'package:flutter_starter/core/localization/failure_localizations.dart';
+@@ -9,6 +8,7 @@ import 'package:flutter_starter/features/auth/presentation/auth_redirect.dart';
+ import 'package:flutter_starter/features/auth/presentation/providers/auth_provider.dart';
+ import 'package:flutter_starter/features/auth/presentation/widgets/auth_form_body.dart';
+ import 'package:flutter_starter/l10n/app_localizations.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ /// Registration screen for new user signup
+ class RegisterScreen extends ConsumerStatefulWidget {
+diff --git a/lib/features/auth/presentation/widgets/auth_button.dart b/lib/features/auth/presentation/widgets/auth_button.dart
+index a294d8942be..dba4e3d7233 100644
+--- a/lib/features/auth/presentation/widgets/auth_button.dart
++++ b/lib/features/auth/presentation/widgets/auth_button.dart
+@@ -1,6 +1,5 @@
+-import 'package:flutter/material.dart';
+-
+ import 'package:flutter_starter/shared/accessibility/accessibility_widgets.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ /// Reusable authentication button widget
+ ///
+
+exit:0
+
+PER-CRITERION INDEPENDENT QA COVERAGE
+Parent #1225:
+1. Direct dependency/provenance: dependency-provenance.log + independently fetched version/publisher metadata in1237-review.log + merged pubspec/lock. Both UI versions and hashes unchanged from base; only classification changes. SDK clock/stack_trace/test_api requirements independently matched package metadata. Fresh-clone.log and own clone deletion/regeneration proof show clean resolution/regeneration.
+2. Generators/strip/guards: scope.patch exactly equals merged tooling scope; shell/PowerShell/brick imports and six golden counterparts reviewed. Live Strip jobs (all five variants, including renamed-both) succeed on accepted SHA. local-audit.log completes29 scope cases; raw CI includes architecture guard and codegen/tree-unchanged steps. No deprecation suppression was introduced; SDK generation uses explicit namespace bindings and unused-import annotations only.
+3. Stable full gates: raw format.log and analyze.log exit0; tests.log has full completion4376 passed/14 skipped. Live Quality run43127236767 succeeds on3.50.0 and completes4375/16 with coverage5286/5472=96.60% above94%, explicit clean tracked tree. CI counts differ by one generated coverage-helper load test and two Linux xmllint-unavailable skips. Live Docs succeeds. Tree identities equal49ca6e70f997441555b7ecbaa3c484689ce43c23; postmerge interop rerun6/6 passes.
+4. Atomic review/guidance: accepted-scopes.json partitions all163 paths into exactly12 canonical epic scopes; each scope patch independently equals source diff. Merged squash retains all12Refs. Premerge independent review captured own11 probe executions, generator deletion/recreation, renamed package and negative control. This independent postmerge QA/security phase adds merged6-probe rerun. Adopter migration and internationalization guides describe custom public type imports, generated header/relative paths and third-party context-bridge limitations. Root still owns publication, changelog and serial closure.
+
+Children #1226–#1236 (each has three acceptance criteria; exact live criteria captured above):
+#1226 epic:docs:
+AC1: PASS for merged source: scope-1226.patch exactly matches all9 owned merged paths and retains consistent standalone type identities; format/analyzer/full suites prove the integrated tree, with own runtime interop probes for localization/Riverpod/Patrol/GoRouter. No new deprecated-member suppressions in scope.
+AC2: PASS for code/generated/fixture consistency: scope-1226.log names owned paths and original serial commit refs; fresh generation recreates committed bytes; live codegen/tree checks and all five Strip variants cover generated and stripped forms. Docs scope additionally has successful Docs check; testing scope adds domain guard and locale regression whose negative control fails without header.
+AC3: PASS for merged validation/review prerequisites: same accepted/merged tree, full host completion, all7 actual PR checks success, independent premerge review and this postmerge QA. Named scope artifacts exist in prepared parent evidence. Root must publish evidence and link the child-specific record before closing; no publication/closure was asserted by this review.
+#1227 epic:testing:
+AC1: PASS for merged source: scope-1227.patch exactly matches all98 owned merged paths and retains consistent standalone type identities; format/analyzer/full suites prove the integrated tree, with own runtime interop probes for localization/Riverpod/Patrol/GoRouter. No new deprecated-member suppressions in scope.
+AC2: PASS for code/generated/fixture consistency: scope-1227.log names owned paths and original serial commit refs; fresh generation recreates committed bytes; live codegen/tree checks and all five Strip variants cover generated and stripped forms. Docs scope additionally has successful Docs check; testing scope adds domain guard and locale regression whose negative control fails without header.
+AC3: PASS for merged validation/review prerequisites: same accepted/merged tree, full host completion, all7 actual PR checks success, independent premerge review and this postmerge QA. Named scope artifacts exist in prepared parent evidence. Root must publish evidence and link the child-specific record before closing; no publication/closure was asserted by this review.
+#1228 epic:design-system:
+AC1: PASS for merged source: scope-1228.patch exactly matches all13 owned merged paths and retains consistent standalone type identities; format/analyzer/full suites prove the integrated tree, with own runtime interop probes for localization/Riverpod/Patrol/GoRouter. No new deprecated-member suppressions in scope.
+AC2: PASS for code/generated/fixture consistency: scope-1228.log names owned paths and original serial commit refs; fresh generation recreates committed bytes; live codegen/tree checks and all five Strip variants cover generated and stripped forms. Docs scope additionally has successful Docs check; testing scope adds domain guard and locale regression whose negative control fails without header.
+AC3: PASS for merged validation/review prerequisites: same accepted/merged tree, full host completion, all7 actual PR checks success, independent premerge review and this postmerge QA. Named scope artifacts exist in prepared parent evidence. Root must publish evidence and link the child-specific record before closing; no publication/closure was asserted by this review.
+#1229 epic:core-di:
+AC1: PASS for merged source: scope-1229.patch exactly matches all1 owned merged paths and retains consistent standalone type identities; format/analyzer/full suites prove the integrated tree, with own runtime interop probes for localization/Riverpod/Patrol/GoRouter. No new deprecated-member suppressions in scope.
+AC2: PASS for code/generated/fixture consistency: scope-1229.log names owned paths and original serial commit refs; fresh generation recreates committed bytes; live codegen/tree checks and all five Strip variants cover generated and stripped forms. Docs scope additionally has successful Docs check; testing scope adds domain guard and locale regression whose negative control fails without header.
+AC3: PASS for merged validation/review prerequisites: same accepted/merged tree, full host completion, all7 actual PR checks success, independent premerge review and this postmerge QA. Named scope artifacts exist in prepared parent evidence. Root must publish evidence and link the child-specific record before closing; no publication/closure was asserted by this review.
+#1230 epic:i18n:
+AC1: PASS for merged source: scope-1230.patch exactly matches all11 owned merged paths and retains consistent standalone type identities; format/analyzer/full suites prove the integrated tree, with own runtime interop probes for localization/Riverpod/Patrol/GoRouter. No new deprecated-member suppressions in scope.
+AC2: PASS for code/generated/fixture consistency: scope-1230.log names owned paths and original serial commit refs; fresh generation recreates committed bytes; live codegen/tree checks and all five Strip variants cover generated and stripped forms. Docs scope additionally has successful Docs check; testing scope adds domain guard and locale regression whose negative control fails without header.
+AC3: PASS for merged validation/review prerequisites: same accepted/merged tree, full host completion, all7 actual PR checks success, independent premerge review and this postmerge QA. Named scope artifacts exist in prepared parent evidence. Root must publish evidence and link the child-specific record before closing; no publication/closure was asserted by this review.
+#1231 epic:core-foundation:
+AC1: PASS for merged source: scope-1231.patch exactly matches all4 owned merged paths and retains consistent standalone type identities; format/analyzer/full suites prove the integrated tree, with own runtime interop probes for localization/Riverpod/Patrol/GoRouter. No new deprecated-member suppressions in scope.
+AC2: PASS for code/generated/fixture consistency: scope-1231.log names owned paths and original serial commit refs; fresh generation recreates committed bytes; live codegen/tree checks and all five Strip variants cover generated and stripped forms. Docs scope additionally has successful Docs check; testing scope adds domain guard and locale regression whose negative control fails without header.
+AC3: PASS for merged validation/review prerequisites: same accepted/merged tree, full host completion, all7 actual PR checks success, independent premerge review and this postmerge QA. Named scope artifacts exist in prepared parent evidence. Root must publish evidence and link the child-specific record before closing; no publication/closure was asserted by this review.
+#1232 epic:core-routing:
+AC1: PASS for merged source: scope-1232.patch exactly matches all3 owned merged paths and retains consistent standalone type identities; format/analyzer/full suites prove the integrated tree, with own runtime interop probes for localization/Riverpod/Patrol/GoRouter. No new deprecated-member suppressions in scope.
+AC2: PASS for code/generated/fixture consistency: scope-1232.log names owned paths and original serial commit refs; fresh generation recreates committed bytes; live codegen/tree checks and all five Strip variants cover generated and stripped forms. Docs scope additionally has successful Docs check; testing scope adds domain guard and locale regression whose negative control fails without header.
+AC3: PASS for merged validation/review prerequisites: same accepted/merged tree, full host completion, all7 actual PR checks success, independent premerge review and this postmerge QA. Named scope artifacts exist in prepared parent evidence. Root must publish evidence and link the child-specific record before closing; no publication/closure was asserted by this review.
+#1233 epic:app-shell:
+AC1: PASS for merged source: scope-1233.patch exactly matches all3 owned merged paths and retains consistent standalone type identities; format/analyzer/full suites prove the integrated tree, with own runtime interop probes for localization/Riverpod/Patrol/GoRouter. No new deprecated-member suppressions in scope.
+AC2: PASS for code/generated/fixture consistency: scope-1233.log names owned paths and original serial commit refs; fresh generation recreates committed bytes; live codegen/tree checks and all five Strip variants cover generated and stripped forms. Docs scope additionally has successful Docs check; testing scope adds domain guard and locale regression whose negative control fails without header.
+AC3: PASS for merged validation/review prerequisites: same accepted/merged tree, full host completion, all7 actual PR checks success, independent premerge review and this postmerge QA. Named scope artifacts exist in prepared parent evidence. Root must publish evidence and link the child-specific record before closing; no publication/closure was asserted by this review.
+#1234 epic:feature-auth:
+AC1: PASS for merged source: scope-1234.patch exactly matches all4 owned merged paths and retains consistent standalone type identities; format/analyzer/full suites prove the integrated tree, with own runtime interop probes for localization/Riverpod/Patrol/GoRouter. No new deprecated-member suppressions in scope.
+AC2: PASS for code/generated/fixture consistency: scope-1234.log names owned paths and original serial commit refs; fresh generation recreates committed bytes; live codegen/tree checks and all five Strip variants cover generated and stripped forms. Docs scope additionally has successful Docs check; testing scope adds domain guard and locale regression whose negative control fails without header.
+AC3: PASS for merged validation/review prerequisites: same accepted/merged tree, full host completion, all7 actual PR checks success, independent premerge review and this postmerge QA. Named scope artifacts exist in prepared parent evidence. Root must publish evidence and link the child-specific record before closing; no publication/closure was asserted by this review.
+#1235 epic:feature-flags:
+AC1: PASS for merged source: scope-1235.patch exactly matches all3 owned merged paths and retains consistent standalone type identities; format/analyzer/full suites prove the integrated tree, with own runtime interop probes for localization/Riverpod/Patrol/GoRouter. No new deprecated-member suppressions in scope.
+AC2: PASS for code/generated/fixture consistency: scope-1235.log names owned paths and original serial commit refs; fresh generation recreates committed bytes; live codegen/tree checks and all five Strip variants cover generated and stripped forms. Docs scope additionally has successful Docs check; testing scope adds domain guard and locale regression whose negative control fails without header.
+AC3: PASS for merged validation/review prerequisites: same accepted/merged tree, full host completion, all7 actual PR checks success, independent premerge review and this postmerge QA. Named scope artifacts exist in prepared parent evidence. Root must publish evidence and link the child-specific record before closing; no publication/closure was asserted by this review.
+#1236 epic:feature-tasks:
+AC1: PASS for merged source: scope-1236.patch exactly matches all3 owned merged paths and retains consistent standalone type identities; format/analyzer/full suites prove the integrated tree, with own runtime interop probes for localization/Riverpod/Patrol/GoRouter. No new deprecated-member suppressions in scope.
+AC2: PASS for code/generated/fixture consistency: scope-1236.log names owned paths and original serial commit refs; fresh generation recreates committed bytes; live codegen/tree checks and all five Strip variants cover generated and stripped forms. Docs scope additionally has successful Docs check; testing scope adds domain guard and locale regression whose negative control fails without header.
+AC3: PASS for merged validation/review prerequisites: same accepted/merged tree, full host completion, all7 actual PR checks success, independent premerge review and this postmerge QA. Named scope artifacts exist in prepared parent evidence. Root must publish evidence and link the child-specific record before closing; no publication/closure was asserted by this review.
+
+RISK-GATED SECURITY CONCLUSION
+No actionable security findings on the reviewed merged tree. Auth changes are four presentation/demo import migrations; network/storage/security/session implementations have zero diff. Public design-library types change deliberately and are described in adopter docs; token handling, interceptor order, secure-store boundaries and RASP defaults are unaffected. Runtime UI packages were already resolved on base, now directly referenced; both publisher/archive identities retained. Three SDK-driven test-support patch upgrades have reviewed tools.dart.dev metadata and SDK requirement matches; no new native plugin, credential scope or external service appears in their dependency graphs.
+Prepared public evidence:52 text artifacts scanned for GitHub/OpenAI/AWS key patterns, private-key headers, JWT structures, credential-bearing URLs and bearer-token literals; zero candidates. Source/probe/metadata/log contexts were inspected, with no observed real secret or credential-bearing backend URL. Own postmerge log/excerpt also checked with the same patterns before delivery.
+
+LIMITATIONS AND HANDOFF
+This phase verifies source/gates and prepared raw evidence against merged main; evidence branch publication, per-child links, maintainer changelog and issue closure remain root-owned pending steps. No broad unrelated audit, issue mutation, tracked root edit, persistent config/environment change or SDK upgrade occurred. No device Patrol/native signing/backend/store/visual-equivalence assurance is claimed. Standing golden suites are explicitly skipped; no screenshots are used for these mechanism criteria. Full suite was not redundantly rerun because accepted and merged trees are byte-identical and raw complete host/CI runs already pass; six independent focused probes were rerun on merged main and pass.
+
+FINAL VERDICT: No actionable findings. Ready for root to publish the reviewed evidence and complete the remaining serialized verification/closure steps.
+Final root git status --porcelain: empty; exit0. Own review log and Quality excerpt contain no credential-pattern matches after excluding the scan description prose itself.

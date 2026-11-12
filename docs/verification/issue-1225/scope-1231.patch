@@ -1,0 +1,47 @@
+diff --git a/lib/core/performance/performance_screen_mixin.dart b/lib/core/performance/performance_screen_mixin.dart
+index 9b051ae0957..c10e59a35b0 100644
+--- a/lib/core/performance/performance_screen_mixin.dart
++++ b/lib/core/performance/performance_screen_mixin.dart
+@@ -1,6 +1,6 @@
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/core/performance/i_performance_service.dart';
+ import 'package:flutter_starter/core/performance/performance_attributes.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ /// Mixin for automatic screen performance monitoring
+ ///
+diff --git a/lib/core/utils/image_cache_helper.dart b/lib/core/utils/image_cache_helper.dart
+index 31b1ac2029c..3783b49249a 100644
+--- a/lib/core/utils/image_cache_helper.dart
++++ b/lib/core/utils/image_cache_helper.dart
+@@ -1,7 +1,7 @@
+ import 'dart:async';
+ 
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ /// Helper class for managing image caching
+ ///
+diff --git a/lib/core/utils/memory_helper.dart b/lib/core/utils/memory_helper.dart
+index aec4666acaf..e844bff02f9 100644
+--- a/lib/core/utils/memory_helper.dart
++++ b/lib/core/utils/memory_helper.dart
+@@ -1,5 +1,5 @@
+ import 'package:flutter/foundation.dart';
+-import 'package:flutter/material.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ /// Helper class for memory management and leak detection
+ ///
+diff --git a/lib/core/utils/pagination_helper.dart b/lib/core/utils/pagination_helper.dart
+index 940a06ac2fc..64497b731e3 100644
+--- a/lib/core/utils/pagination_helper.dart
++++ b/lib/core/utils/pagination_helper.dart
+@@ -1,5 +1,5 @@
+ import 'package:flutter/foundation.dart';
+-import 'package:flutter/material.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ /// Pagination configuration
+ class PaginationConfig {

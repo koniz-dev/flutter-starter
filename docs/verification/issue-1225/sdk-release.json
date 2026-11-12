@@ -1,0 +1,11 @@
+{
+  "hash": "ab2912035e160d9cad6306df307576da6128ebdb",
+  "channel": "stable",
+  "version": "3.50.0",
+  "dart_sdk_version": "3.14.0",
+  "dart_sdk_arch": "x64",
+  "release_date": "2026-11-11T18:46:05.748380Z",
+  "archive": "stable/macos/flutter_macos_3.50.0-stable.zip",
+  "sha256": "d4e1bf2e2fc0c2e92267f45660c16a7d805e84ad42cb40b64b466446bffe48e0",
+  "url": "https://storage.googleapis.com/flutter_infra_release/releases/stable/macos/flutter_macos_3.50.0-stable.zip"
+}

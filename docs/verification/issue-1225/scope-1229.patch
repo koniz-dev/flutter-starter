@@ -1,0 +1,13 @@
+diff --git a/lib/core/contracts/design_tokens_contracts.dart b/lib/core/contracts/design_tokens_contracts.dart
+index 9f33d86261d..61904d70501 100644
+--- a/lib/core/contracts/design_tokens_contracts.dart
++++ b/lib/core/contracts/design_tokens_contracts.dart
+@@ -1,7 +1,7 @@
+ // Lightweight boundary contract file; repetitive per-member docs are omitted.
+ // ignore_for_file: public_member_api_docs
+ 
+-import 'package:flutter/material.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ /// Semantic design tokens contract used by theme adapters.
+ abstract class AppDesignTokens {

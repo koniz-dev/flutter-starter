@@ -1,0 +1,167 @@
+diff --git a/l10n.yaml b/l10n.yaml
+index 8d0e1f4b3a2..b0a46070728 100644
+--- a/l10n.yaml
++++ b/l10n.yaml
+@@ -3,3 +3,14 @@ template-arb-file: app_en.arb
+ output-localization-file: app_localizations.dart
+ output-class: AppLocalizations
+ 
++# The SDK generator still references legacy Global* classes. Explicit prefixes
++# bind those names to standalone delegate adapters without editing its output.
++# Relative imports preserve package renaming by the setup brick.
++# Every locale file receives this header; the prefixes are used by the base
++# file only, so the generated subclasses need the unused-import annotations.
++header: |
++  // Bind the SDK generator's Global* names to standalone design-library delegates.
++  // ignore: unused_import
++  import '../core/localization/cupertino_localizations_delegate.dart' as GlobalCupertinoLocalizations;
++  // ignore: unused_import
++  import '../core/localization/material_localizations_delegate.dart' as GlobalMaterialLocalizations;
+diff --git a/lib/core/localization/cupertino_localizations_delegate.dart b/lib/core/localization/cupertino_localizations_delegate.dart
+new file mode 100644
+index 00000000000..c40da0360a3
+--- /dev/null
++++ b/lib/core/localization/cupertino_localizations_delegate.dart
+@@ -0,0 +1,9 @@
++import 'package:cupertino_ui/cupertino_ui.dart' as ui;
++
++/// Standalone Cupertino delegate for SDK-generated localization code.
++///
++/// The `l10n.yaml` header binds its generated `GlobalCupertinoLocalizations`
++/// reference to this library prefix instead of the legacy SDK class. Keep this
++/// adapter until the generator itself emits standalone design-library imports.
++const ui.LocalizationsDelegate<ui.CupertinoLocalizations> delegate =
++    ui.GlobalCupertinoLocalizations.delegate;
+diff --git a/lib/core/localization/localization_providers.dart b/lib/core/localization/localization_providers.dart
+index 7ad1ee4b832..3c81a43a91e 100644
+--- a/lib/core/localization/localization_providers.dart
++++ b/lib/core/localization/localization_providers.dart
+@@ -1,7 +1,7 @@
+-import 'package:flutter/material.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/core/di/providers.dart';
+ import 'package:flutter_starter/core/localization/localization_service.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ /// Provider for [LocalizationService] instance
+ ///
+diff --git a/lib/core/localization/localization_service.dart b/lib/core/localization/localization_service.dart
+index b8bd533b85e..17758a49b39 100644
+--- a/lib/core/localization/localization_service.dart
++++ b/lib/core/localization/localization_service.dart
+@@ -1,6 +1,6 @@
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/core/constants/app_constants.dart';
+ import 'package:flutter_starter/core/storage/storage_service.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ /// Supported locales in the application
+ ///
+diff --git a/lib/core/localization/localized_formatters.dart b/lib/core/localization/localized_formatters.dart
+index 2e681de9cb4..4cac7e9a02f 100644
+--- a/lib/core/localization/localized_formatters.dart
++++ b/lib/core/localization/localized_formatters.dart
+@@ -1,7 +1,7 @@
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/core/localization/localization_service.dart';
+ import 'package:flutter_starter/l10n/app_localizations.dart';
+ import 'package:intl/intl.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ /// Localized formatting utilities
+ ///
+diff --git a/lib/core/localization/material_localizations_delegate.dart b/lib/core/localization/material_localizations_delegate.dart
+new file mode 100644
+index 00000000000..61a1549fc9d
+--- /dev/null
++++ b/lib/core/localization/material_localizations_delegate.dart
+@@ -0,0 +1,9 @@
++import 'package:material_ui/material_ui.dart' as ui;
++
++/// Standalone Material delegate for the SDK localization generator's namespace.
++///
++/// The `l10n.yaml` header binds its generated `GlobalMaterialLocalizations`
++/// reference to this library prefix instead of the legacy SDK class. Keep this
++/// adapter until the generator itself emits standalone design-library imports.
++const ui.LocalizationsDelegate<ui.MaterialLocalizations> delegate =
++    ui.GlobalMaterialLocalizations.delegate;
+diff --git a/lib/l10n/app_localizations.dart b/lib/l10n/app_localizations.dart
+index 87647fa5c99..bc16eb99bd9 100644
+--- a/lib/l10n/app_localizations.dart
++++ b/lib/l10n/app_localizations.dart
+@@ -1,3 +1,11 @@
++// Bind the SDK generator's Global* names to standalone design-library delegates.
++// ignore: unused_import
++import '../core/localization/cupertino_localizations_delegate.dart'
++    as GlobalCupertinoLocalizations;
++// ignore: unused_import
++import '../core/localization/material_localizations_delegate.dart'
++    as GlobalMaterialLocalizations;
++
+ import 'dart:async';
+ 
+ import 'package:flutter/foundation.dart';
+diff --git a/lib/l10n/app_localizations_ar.dart b/lib/l10n/app_localizations_ar.dart
+index 6dd7b06dff6..3da8f283a7e 100644
+--- a/lib/l10n/app_localizations_ar.dart
++++ b/lib/l10n/app_localizations_ar.dart
+@@ -1,3 +1,11 @@
++// Bind the SDK generator's Global* names to standalone design-library delegates.
++// ignore: unused_import
++import '../core/localization/cupertino_localizations_delegate.dart'
++    as GlobalCupertinoLocalizations;
++// ignore: unused_import
++import '../core/localization/material_localizations_delegate.dart'
++    as GlobalMaterialLocalizations;
++
+ // ignore: unused_import
+ import 'package:intl/intl.dart' as intl;
+ 
+diff --git a/lib/l10n/app_localizations_en.dart b/lib/l10n/app_localizations_en.dart
+index 1329b747034..f4cd78146e7 100644
+--- a/lib/l10n/app_localizations_en.dart
++++ b/lib/l10n/app_localizations_en.dart
+@@ -1,3 +1,11 @@
++// Bind the SDK generator's Global* names to standalone design-library delegates.
++// ignore: unused_import
++import '../core/localization/cupertino_localizations_delegate.dart'
++    as GlobalCupertinoLocalizations;
++// ignore: unused_import
++import '../core/localization/material_localizations_delegate.dart'
++    as GlobalMaterialLocalizations;
++
+ // ignore: unused_import
+ import 'package:intl/intl.dart' as intl;
+ 
+diff --git a/lib/l10n/app_localizations_es.dart b/lib/l10n/app_localizations_es.dart
+index f6d3dae0114..be3e2ceb19f 100644
+--- a/lib/l10n/app_localizations_es.dart
++++ b/lib/l10n/app_localizations_es.dart
+@@ -1,3 +1,11 @@
++// Bind the SDK generator's Global* names to standalone design-library delegates.
++// ignore: unused_import
++import '../core/localization/cupertino_localizations_delegate.dart'
++    as GlobalCupertinoLocalizations;
++// ignore: unused_import
++import '../core/localization/material_localizations_delegate.dart'
++    as GlobalMaterialLocalizations;
++
+ // ignore: unused_import
+ import 'package:intl/intl.dart' as intl;
+ 
+diff --git a/lib/l10n/app_localizations_vi.dart b/lib/l10n/app_localizations_vi.dart
+index 813c90912cd..e875d1e9851 100644
+--- a/lib/l10n/app_localizations_vi.dart
++++ b/lib/l10n/app_localizations_vi.dart
+@@ -1,3 +1,11 @@
++// Bind the SDK generator's Global* names to standalone design-library delegates.
++// ignore: unused_import
++import '../core/localization/cupertino_localizations_delegate.dart'
++    as GlobalCupertinoLocalizations;
++// ignore: unused_import
++import '../core/localization/material_localizations_delegate.dart'
++    as GlobalMaterialLocalizations;
++
+ // ignore: unused_import
+ import 'package:intl/intl.dart' as intl;
+ 

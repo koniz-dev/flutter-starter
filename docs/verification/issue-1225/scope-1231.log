@@ -1,0 +1,12 @@
+Issue #1231; epic:core-foundation
+Base: 30912d93c075777d3a3d8da5b8cbb41b770d71af
+Integrated candidate: 6fbc814064a8a9be359ca4fe150b26e96d913c8a
+lib/core/performance/performance_screen_mixin.dart
+lib/core/utils/image_cache_helper.dart
+lib/core/utils/memory_helper.dart
+lib/core/utils/pagination_helper.dart
+
+Scope commit records:
+ce6fd37e1f0920b61ece0503d4475279477aac1c fix(core-foundation): migrate standalone Flutter UI libraries
+Refs koniz-dev/flutter-starter#1231
+

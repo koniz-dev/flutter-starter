@@ -1,0 +1,10 @@
+Live Quality gate job 130882307117, accepted head 6fbc814064a8a9be359ca4fe150b26e96d913c8a
+https://github.com/koniz-dev/flutter-starter/actions/runs/43127236767/job/130882307117
+Selected raw completion/analyzer/coverage lines; job conclusion verified separately in ci.json.
+2026-11-12T00:27:58.1172162Z Formatted 619 files (0 changed) in 1.49 seconds.
+2026-11-12T00:28:18.1535259Z No issues found! (ran in 18.9s)
+2026-11-12T00:36:57.8141830Z 🎉 4375 tests passed, 16 skipped.
+2026-11-12T00:36:58.0371921Z   Total lines: 5472
+2026-11-12T00:36:58.0372238Z   Covered lines: 5286
+2026-11-12T00:36:58.0372455Z   Coverage: 96.60%
+2026-11-12T00:36:58.0390497Z [0;32m✓ Coverage 96.60% meets minimum threshold of 94%[0m
