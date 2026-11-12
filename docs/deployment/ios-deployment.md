@@ -10,6 +10,35 @@ Archive an **IPA** and distribute via **App Store Connect** (TestFlight or App S
 - Apple Developer Program membership.
 - Certificates and provisioning profiles (Xcode automatic signing locally, or match/certificates in CI).
 
+## Native configuration checks
+
+The checked-in iOS and macOS projects include Flutter's Swift Package Manager
+integration. iOS uses the UIScene lifecycle, with plugin registration in
+`didInitializeImplicitFlutterEngine`. Custom native lifecycle code should follow
+the [Flutter UIScene migration guide](https://docs.flutter.dev/release/breaking-changes/uiscenedelegate).
+
+From the repository root on macOS with Xcode and CocoaPods installed:
+
+```bash
+flutter build ios --config-only --no-codesign
+git status --short
+flutter build macos --config-only
+git status --short
+```
+
+Both configuration commands should complete without changing the checkout.
+These checks resolve native dependencies and generate build configuration;
+App Store distribution still follows the signing steps below. Review new
+migrations when upgrading Flutter or Xcode.
+
+Swift package resolutions are committed for
+[iOS](../../ios/Runner.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved)
+and [macOS](../../macos/Runner.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved).
+Flutter's generated package under `Flutter/ephemeral` and CocoaPods output stay
+ignored. The Podfiles, workspace references and CocoaPods configuration remain
+available for plugins that need Flutter's
+[CocoaPods fallback](https://docs.flutter.dev/packages-and-plugins/swift-package-manager/for-app-developers).
+
 ## Steps
 
 1. **Signing in Xcode** — Open `ios/Runner.xcworkspace`, set **Signing & Capabilities** for Release.
