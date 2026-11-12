@@ -138,7 +138,7 @@ to mistype.
 | Storage | `lib/core/storage/adapters/` |
 | Routing | None. Navigation is a `BuildContext` extension, not a contract plus adapter; `go_router` stays inside `lib/core/routing/` |
 | Theme | Prefer tokens in `lib/shared/design_system/` + `lib/shared/theme/app_theme.dart` |
-| State | Notifiers under `lib/features/*/presentation/providers/`; one implements a controller contract (`AuthNotifier`), the tasks slice deliberately does not |
+| State | Notifiers under `lib/features/*/presentation/providers/`, read directly through their generated providers; none sits behind a controller contract |
 
 ## Optional modules
 
