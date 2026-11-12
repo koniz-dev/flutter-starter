@@ -40,8 +40,9 @@ String? existingFeatureProblem(String featureName, {required String root}) {
   final lib = 'lib/features/$featureName';
   final test = 'test/features/$featureName';
   final exists = [lib, test].any(
+    // Links are not followed: a dangling link is in the way too.
     (path) =>
-        FileSystemEntity.typeSync('$root/$path') !=
+        FileSystemEntity.typeSync('$root/$path', followLinks: false) !=
         FileSystemEntityType.notFound,
   );
   if (!exists) return null;

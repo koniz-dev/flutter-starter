@@ -23,5 +23,5 @@ void run(HookContext context) {
   }
   if (problems.isEmpty) return;
   problems.forEach(context.logger.err);
-  throw ArgumentError('feature_clean: invalid input, nothing was generated.');
+  throw ArgumentError('feature_clean: nothing was generated.');
 }

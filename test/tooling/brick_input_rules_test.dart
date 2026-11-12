@@ -288,24 +288,83 @@ void main() => hook.run(_Context());
       );
     });
 
-    test('the message is the one create_feature.sh prints', () {
-      final script = File('scripts/dev/create_feature.sh').readAsStringSync();
+    test('a dangling link of that name is in the way too', () {
+      Directory('${root.path}/lib/features').createSync(recursive: true);
+      Link('${root.path}/lib/features/auth').createSync('${root.path}/gone');
 
       expect(
-        script,
+        feature.existingFeatureProblem('auth', root: root.path),
+        contains('refusing to overwrite'),
+      );
+    }, testOn: '!windows');
+
+    test('the message is the one both create_feature scripts print', () {
+      Directory('${root.path}/lib/features/auth').createSync(recursive: true);
+      final message = feature.existingFeatureProblem('auth', root: root.path)!;
+      final sh = File('scripts/dev/create_feature.sh').readAsStringSync();
+      final ps1 = File('scripts/dev/create_feature.ps1').readAsStringSync();
+
+      // Each script's own line, with its variables filled in for `auth`.
+      final fromSh = RegExp(
+        r'echo "Error: (\$BASE_DIR or \$TEST_DIR [^"]+)"',
+      ).firstMatch(sh)!.group(1)!;
+      final fromPs1 = RegExp(
+        r'Write-Error "(\$BaseDir or \$TestDir [^"]+)"',
+      ).firstMatch(ps1)!.group(1)!;
+      String filled(String line) => line
+          .replaceFirst(RegExp(r'\$(BASE_DIR|BaseDir)'), 'lib/features/auth')
+          .replaceFirst(RegExp(r'\$(TEST_DIR|TestDir)'), 'test/features/auth');
+
+      expect(filled(fromSh), message);
+      expect(filled(fromPs1), message);
+    });
+
+    test('pre_gen refuses an existing feature and writes nothing', () {
+      Directory(
+        '${root.path}/lib/features/user_profile',
+      ).createSync(recursive: true);
+      final hook = File('bricks/feature_clean/hooks/pre_gen.dart').absolute.uri;
+      // Outside the output directory, so the listing below is the hook's.
+      final scripts = Directory.systemTemp.createTempSync('feature_pre_gen_');
+      addTearDown(() => scripts.deleteSync(recursive: true));
+      final script = File('${scripts.path}/run_pre_gen.dart')
+        ..writeAsStringSync('''
+import 'package:mason/mason.dart';
+import '$hook' as hook;
+
+class _Context implements HookContext {
+  @override
+  Map<String, dynamic> vars = {
+    'feature_name': 'user_profile',
+    'class_name': 'UserProfile',
+    'include_tests': true,
+  };
+
+  @override
+  final Logger logger = Logger();
+}
+
+void main() => hook.run(_Context());
+''');
+      List<String> listing() => [
+        for (final entity in root.listSync(recursive: true)) entity.path,
+      ]..sort();
+      final before = listing();
+
+      final result = Process.runSync('dart', [
+        '--packages=${File('.dart_tool/package_config.json').absolute.path}',
+        script.path,
+      ], workingDirectory: root.path);
+
+      expect(result.exitCode, isNot(0));
+      expect(
+        '${result.stdout}${result.stderr}',
         contains(
-          r'echo "Error: $BASE_DIR or $TEST_DIR already exists; '
-          'refusing to overwrite"',
+          'lib/features/user_profile or test/features/user_profile already '
+          'exists; refusing to overwrite',
         ),
       );
-    });
-
-    test('pre_gen applies the rule', () {
-      final hook = File(
-        'bricks/feature_clean/hooks/pre_gen.dart',
-      ).readAsStringSync();
-
-      expect(hook, contains('existingFeatureProblem('));
-    });
+      expect(listing(), before);
+    }, timeout: const Timeout(Duration(minutes: 2)));
   });
 }
