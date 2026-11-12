@@ -58,7 +58,11 @@ Future<({int exitCode, String output, List<String> calls})> _run(
     Process.runSync('chmod', ['+x', file.path]);
   }
   Directory('${dir.path}/scripts/ci').createSync(recursive: true);
-  for (final script in ['build_all.sh', 'ssl_pinning_defines.sh']) {
+  for (final script in [
+    'build_all.sh',
+    'ssl_pinning_defines.sh',
+    'release_base_url.sh',
+  ]) {
     File('scripts/ci/$script').copySync('${dir.path}/scripts/ci/$script');
   }
   final log = File('${dir.path}/flutter.log');
@@ -75,6 +79,8 @@ Future<({int exitCode, String output, List<String> calls})> _run(
       // Not inherited from the machine running the tests.
       'API_SSL_FINGERPRINTS': '',
       'ENABLE_SSL_PINNING': '',
+      'BASE_URL_STAGING': 'https://api.staging.test',
+      'BASE_URL_PRODUCTION': 'https://api.production.test',
       ...(env ?? {'API_SSL_FINGERPRINTS': _fingerprints}),
     },
   );
@@ -250,7 +256,11 @@ void main() {
     final stub = File('${bin.path}/flutter')..writeAsStringSync(_stubFlutter);
     Process.runSync('chmod', ['+x', stub.path]);
     Directory('${dir.path}/scripts/ci').createSync(recursive: true);
-    for (final script in ['build_all.sh', 'ssl_pinning_defines.sh']) {
+    for (final script in [
+      'build_all.sh',
+      'ssl_pinning_defines.sh',
+      'release_base_url.sh',
+    ]) {
       File('scripts/ci/$script').copySync('${dir.path}/scripts/ci/$script');
     }
     final log = File('${dir.path}/flutter.log');

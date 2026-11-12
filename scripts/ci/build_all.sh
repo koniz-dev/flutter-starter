@@ -56,15 +56,14 @@ if [ "$ENVIRONMENT" != "staging" ] && [ "$ENVIRONMENT" != "production" ]; then
     exit 1
 fi
 
-# Set base URL based on environment
-case $ENVIRONMENT in
-    staging)
-        BASE_URL="${BASE_URL_STAGING:-https://api-staging.example.com}"
-        ;;
-    production)
-        BASE_URL="${BASE_URL_PRODUCTION:-https://api.example.com}"
-        ;;
-esac
+# The API the build points at comes from BASE_URL_STAGING or
+# BASE_URL_PRODUCTION. There is no placeholder fallback: refuse before
+# anything is cleaned or built.
+# shellcheck source=scripts/ci/release_base_url.sh
+. "$(dirname "$0")/release_base_url.sh"
+if ! release_base_url "$ENVIRONMENT"; then
+    exit 1
+fi
 
 echo -e "${BLUE}Building for environment: $ENVIRONMENT${NC}"
 echo "Base URL: $BASE_URL"
