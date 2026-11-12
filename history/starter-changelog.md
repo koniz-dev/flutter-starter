@@ -27,6 +27,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **A Patrol run with skipped tests is no longer green.** The E2E workflow and `scripts/test/run_e2e_tests.sh` both run `scripts/test/check_patrol_summary.sh`, which passes only when every collected test ran and passed (`Total` not 0, `Failed` and `Skipped` 0, `Successful` equal to `Total`). The local script used to exit 0 on an empty or fully skipped run. Copy the new script together with the workflow.
+
+- **The Android build on the current stable is checked every week.** `build.yml`'s "Android on JDK 25" job also runs on a weekly schedule in the template repository, so a Flutter stable that raises its Gradle, AGP or Kotlin floors turns a run red. A repository created from the template skips it; `docs/deployment/summary.md` says how to enable it there.
+
+- **The docs say the committed lock follows the current stable.** On an older Flutter that still meets the 3.47 floor, `flutter pub get` rewrites the SDK-pinned entries of `pubspec.lock`; the README, CONTRIBUTING and the getting-started guide say not to commit that diff.
+
+- **Architecture and API docs match the code again.** The layer diagram and its Mermaid block, the feature brick's generated names, the tasks date formatting, ADR 0001/0002 status and several snippets were corrected; presentation snippets note the text-literal guard.
+
 - **Scripts smoke stays green in a stripped project.** After a sample strip or `--remove-bricks`, the setup-brick and manual-rename jobs skip the steps that need Mason or the strip tool, with a notice, instead of failing on files the strip removed.
 
 - **The feature brick refuses to overwrite an existing feature.** `mason make feature_clean` for a name that already has `lib/features/<name>` or `test/features/<name>` now stops before writing anything, as `create_feature.sh` does. It used to prompt file by file, or fail part-way with no terminal.
