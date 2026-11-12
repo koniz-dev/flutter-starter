@@ -18,12 +18,14 @@
 
 import 'dart:io';
 
-/// The floors, stated once. Flutter 3.47's own minimums, from
-/// `DependencyVersionChecker.kt`; raise them when Flutter raises its own.
+/// The floors, stated once. Flutter 3.50's warn floors, from
+/// `DependencyVersionChecker.kt` - below them a build prints "will soon be
+/// dropped", and below its error floors (AGP 9.1.1, Kotlin 2.4.10) it fails.
+/// Raise them when Flutter raises its own.
 const Map<String, String> androidToolchainFloors = {
-  'Gradle': '9.1.0',
-  'Android Gradle Plugin': '9.0.1',
-  'Kotlin': '2.3.20',
+  'Gradle': '9.5.0',
+  'Android Gradle Plugin': '9.3.1',
+  'Kotlin': '2.4.20',
 };
 
 const String _wrapperPath = 'android/gradle/wrapper/gradle-wrapper.properties';

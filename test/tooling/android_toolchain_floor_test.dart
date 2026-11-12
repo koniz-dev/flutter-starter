@@ -13,9 +13,9 @@ import '../../tool/check_android_toolchain.dart';
 
 /// A throwaway project root holding just the two files the check reads.
 Directory _fixture({
-  String gradle = '9.3.1',
-  String agp = '9.1.0',
-  String kotlin = '2.4.0',
+  String gradle = '9.5.0',
+  String agp = '9.3.1',
+  String kotlin = '2.4.20',
 }) {
   final root = Directory.systemTemp.createTempSync('toolchain_floor_');
   addTearDown(() => root.deleteSync(recursive: true));
@@ -52,7 +52,7 @@ void main() {
     final problems = androidToolchainProblems(_fixture(gradle: '8.14'));
 
     expect(problems, hasLength(1));
-    expect(problems.single, startsWith('Gradle 8.14 is below the floor 9.1.0'));
+    expect(problems.single, startsWith('Gradle 8.14 is below the floor 9.5.0'));
   });
 
   test('fails on AGP and Kotlin below their floors, one message each', () {
@@ -61,15 +61,33 @@ void main() {
     );
 
     expect(problems, [
-      startsWith('Android Gradle Plugin 8.11.1 is below the floor 9.0.1'),
-      startsWith('Kotlin 2.2.20 is below the floor 2.3.20'),
+      startsWith('Android Gradle Plugin 8.11.1 is below the floor 9.3.1'),
+      startsWith('Kotlin 2.2.20 is below the floor 2.4.20'),
+    ]);
+  });
+
+  // What the project carried when Flutter 3.50 raised its floors: AGP and
+  // Kotlin below the error floors, so the build failed outright.
+  test('the toolchain Flutter 3.50 refuses is reported, one message each', () {
+    final problems = androidToolchainProblems(
+      _fixture(gradle: '9.3.1', agp: '9.1.0', kotlin: '2.4.0'),
+    );
+
+    expect(problems, [
+      startsWith('Gradle 9.3.1 is below the floor 9.5.0'),
+      startsWith('Android Gradle Plugin 9.1.0 is below the floor 9.3.1'),
+      startsWith('Kotlin 2.4.0 is below the floor 2.4.20'),
     ]);
   });
 
   test('a version exactly at the floor passes', () {
     expect(
       androidToolchainProblems(
-        _fixture(gradle: '9.1.0', agp: '9.0.1', kotlin: '2.3.20'),
+        _fixture(
+          gradle: androidToolchainFloors['Gradle']!,
+          agp: androidToolchainFloors['Android Gradle Plugin']!,
+          kotlin: androidToolchainFloors['Kotlin']!,
+        ),
       ),
       isEmpty,
     );
