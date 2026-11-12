@@ -243,4 +243,128 @@ void main() => hook.run(_Context());
     expect('${result.stdout}${result.stderr}', contains('depends on'));
     expect(dir.listSync().map((e) => e.path).toSet(), before);
   }, timeout: const Timeout(Duration(minutes: 2)));
+
+  // The brick used to write into a feature that already existed - prompting
+  // to overwrite its files, or failing part-way with no terminal attached.
+  group('feature_clean existing feature', () {
+    late Directory root;
+
+    setUp(() {
+      root = Directory.systemTemp.createTempSync('feature_clean_existing_');
+    });
+    tearDown(() => root.deleteSync(recursive: true));
+
+    test('nothing in the way is accepted', () {
+      Directory('${root.path}/lib/features/auth').createSync(recursive: true);
+
+      expect(feature.existingFeatureProblem('notes', root: root.path), isNull);
+    });
+
+    test('an existing lib/features/<name> is refused', () {
+      Directory('${root.path}/lib/features/auth').createSync(recursive: true);
+
+      expect(
+        feature.existingFeatureProblem('auth', root: root.path),
+        'lib/features/auth or test/features/auth already exists; '
+        'refusing to overwrite',
+      );
+    });
+
+    test('an existing test/features/<name> alone is refused', () {
+      Directory('${root.path}/test/features/auth').createSync(recursive: true);
+
+      expect(
+        feature.existingFeatureProblem('auth', root: root.path),
+        contains('refusing to overwrite'),
+      );
+    });
+
+    test('a file of that name is in the way too', () {
+      File('${root.path}/lib/features/auth').createSync(recursive: true);
+
+      expect(
+        feature.existingFeatureProblem('auth', root: root.path),
+        contains('refusing to overwrite'),
+      );
+    });
+
+    test('a dangling link of that name is in the way too', () {
+      Directory('${root.path}/lib/features').createSync(recursive: true);
+      Link('${root.path}/lib/features/auth').createSync('${root.path}/gone');
+
+      expect(
+        feature.existingFeatureProblem('auth', root: root.path),
+        contains('refusing to overwrite'),
+      );
+    }, testOn: '!windows');
+
+    test('the message is the one both create_feature scripts print', () {
+      Directory('${root.path}/lib/features/auth').createSync(recursive: true);
+      final message = feature.existingFeatureProblem('auth', root: root.path)!;
+      final sh = File('scripts/dev/create_feature.sh').readAsStringSync();
+      final ps1 = File('scripts/dev/create_feature.ps1').readAsStringSync();
+
+      // Each script's own line, with its variables filled in for `auth`.
+      final fromSh = RegExp(
+        r'echo "Error: (\$BASE_DIR or \$TEST_DIR [^"]+)"',
+      ).firstMatch(sh)!.group(1)!;
+      final fromPs1 = RegExp(
+        r'Write-Error "(\$BaseDir or \$TestDir [^"]+)"',
+      ).firstMatch(ps1)!.group(1)!;
+      String filled(String line) => line
+          .replaceFirst(RegExp(r'\$(BASE_DIR|BaseDir)'), 'lib/features/auth')
+          .replaceFirst(RegExp(r'\$(TEST_DIR|TestDir)'), 'test/features/auth');
+
+      expect(filled(fromSh), message);
+      expect(filled(fromPs1), message);
+    });
+
+    test('pre_gen refuses an existing feature and writes nothing', () {
+      Directory(
+        '${root.path}/lib/features/user_profile',
+      ).createSync(recursive: true);
+      final hook = File('bricks/feature_clean/hooks/pre_gen.dart').absolute.uri;
+      // Outside the output directory, so the listing below is the hook's.
+      final scripts = Directory.systemTemp.createTempSync('feature_pre_gen_');
+      addTearDown(() => scripts.deleteSync(recursive: true));
+      final script = File('${scripts.path}/run_pre_gen.dart')
+        ..writeAsStringSync('''
+import 'package:mason/mason.dart';
+import '$hook' as hook;
+
+class _Context implements HookContext {
+  @override
+  Map<String, dynamic> vars = {
+    'feature_name': 'user_profile',
+    'class_name': 'UserProfile',
+    'include_tests': true,
+  };
+
+  @override
+  final Logger logger = Logger();
+}
+
+void main() => hook.run(_Context());
+''');
+      List<String> listing() => [
+        for (final entity in root.listSync(recursive: true)) entity.path,
+      ]..sort();
+      final before = listing();
+
+      final result = Process.runSync('dart', [
+        '--packages=${File('.dart_tool/package_config.json').absolute.path}',
+        script.path,
+      ], workingDirectory: root.path);
+
+      expect(result.exitCode, isNot(0));
+      expect(
+        '${result.stdout}${result.stderr}',
+        contains(
+          'lib/features/user_profile or test/features/user_profile already '
+          'exists; refusing to overwrite',
+        ),
+      );
+      expect(listing(), before);
+    }, timeout: const Timeout(Duration(minutes: 2)));
+  });
 }
