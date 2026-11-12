@@ -21,6 +21,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- [Monorepo sample stripping](https://github.com/koniz-dev/flutter-starter/issues/1214): scope the Git dirty check to the app directory so untracked, unstaged or staged sibling edits no longer require force. Preserve protections for app edits, normalized overwrite targets and hidden index changes; real monorepo fixtures verify sibling contents and Git state remain unchanged.
+
 - [Native configuration migrations](https://github.com/koniz-dev/flutter-starter/issues/1213): retain iOS/macOS SwiftPM integration, pinned package resolutions and CocoaPods fallback, and adopt the iOS UIScene implicit-engine plugin-registration callback. Fresh clones configure both platforms on Flutter 3.50 without changing tracked files; unsigned iOS compilation is verified.
 
 - [Flutter 3.50 compatibility](https://github.com/koniz-dev/flutter-starter/issues/1225): migrate runtime UI, tests, examples, feature generators and strip fixtures to the standalone Material/Cupertino libraries, preserve generated localization delegates through supported header adapters, and keep the architecture guard effective. Covers the coordinated scopes #1226–#1236.
