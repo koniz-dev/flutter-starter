@@ -36,6 +36,15 @@ path runs [`scripts/ci/ssl_pinning_defines.sh`](../../scripts/ci/ssl_pinning_def
 which refuses the build before it starts when neither is set. Web is exempt:
 pinning does not apply there.
 
+Every staging or production build also needs the URL of your API. `build.yml`
+takes it from its `base_url` input, or else from `BASE_URL_STAGING` /
+`BASE_URL_PRODUCTION` (a repository variable or secret, whichever you set);
+[`scripts/ci/build_all.sh`](../../scripts/ci/build_all.sh) reads the same two
+names from the environment. Neither falls back to a placeholder:
+[`scripts/ci/release_base_url.sh`](../../scripts/ci/release_base_url.sh)
+refuses the build before it starts when the URL is missing, is not https, or
+is on `example.com`.
+
 ## Related docs
 
 - [Configuration](../guides/configuration.md) — `BASE_URL`, flavors, and `dart-define`.

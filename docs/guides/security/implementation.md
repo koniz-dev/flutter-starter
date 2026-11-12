@@ -143,15 +143,20 @@ set -euo pipefail
 ENVIRONMENT=${1:-production}
 BUILD_TYPE=${2:-apk}  # apk, appbundle, ios
 
-# Each environment gets its own API host. Export BASE_URL to override it.
+# Each environment gets its own API host, from BASE_URL_PRODUCTION or
+# BASE_URL_STAGING. No fallback: a build without one would point at nothing.
 case "$ENVIRONMENT" in
-  production) BASE_URL=${BASE_URL:-https://api.example.com} ;;
-  staging)    BASE_URL=${BASE_URL:-https://api-staging.example.com} ;;
+  production) BASE_URL=${BASE_URL_PRODUCTION:-} ;;
+  staging)    BASE_URL=${BASE_URL_STAGING:-} ;;
   *)
     echo "Unknown environment '$ENVIRONMENT' (expected production or staging)" >&2
     exit 1
     ;;
 esac
+if [ -z "$BASE_URL" ]; then
+  echo "No API base URL for $ENVIRONMENT: refusing to build" >&2
+  exit 1
+fi
 
 # Pinning is on by default in staging and production. With an empty list,
 # the release refuses to start, so refuse to build it in the first place.

@@ -42,7 +42,7 @@ on:
           - staging
           - production
       base_url:
-        description: 'Override BASE_URL (optional)'
+        description: 'BASE_URL (empty: the repository variable or secret BASE_URL_STAGING / BASE_URL_PRODUCTION)'
         required: false
         default: ''
       # Pinning is on in staging and production, and a release built with
@@ -179,19 +179,17 @@ jobs:
         env:
           INPUT_ENVIRONMENT: ${{ inputs.environment }}
           INPUT_BASE_URL: ${{ inputs.base_url }}
+          BASE_URL_STAGING: ${{ vars.BASE_URL_STAGING || secrets.BASE_URL_STAGING }}
+          BASE_URL_PRODUCTION: ${{ vars.BASE_URL_PRODUCTION || secrets.BASE_URL_PRODUCTION }}
           API_SSL_FINGERPRINTS: ${{ inputs.ssl_fingerprints || vars.API_SSL_FINGERPRINTS }}
           ENABLE_SSL_PINNING: ${{ inputs.ssl_pinning == 'off' && 'false' || '' }}
         run: |
           ENVIRONMENT="$INPUT_ENVIRONMENT"
-          BASE_URL="$INPUT_BASE_URL"
-          # A staging or production release refuses a non-https BASE_URL
-          # (lib/main.dart), so the fallback is AppConfig's https default.
-          if [ -z "$BASE_URL" ]; then
-            case "$ENVIRONMENT" in
-              staging) BASE_URL="https://api-staging.example.com" ;;
-              *) BASE_URL="https://api.example.com" ;;
-            esac
-          fi
+          # The base_url input, else the repository variable for this
+          # environment. Refuses, before building, when neither is set or
+          # the URL is not https or is the example.com placeholder.
+          . scripts/ci/release_base_url.sh
+          release_base_url "$ENVIRONMENT" "$INPUT_BASE_URL" || exit 1
 
           # Refuses a staging or production build with no fingerprints and
           # no explicit opt-out, before building.
@@ -257,19 +255,17 @@ jobs:
         env:
           INPUT_ENVIRONMENT: ${{ inputs.environment }}
           INPUT_BASE_URL: ${{ inputs.base_url }}
+          BASE_URL_STAGING: ${{ vars.BASE_URL_STAGING || secrets.BASE_URL_STAGING }}
+          BASE_URL_PRODUCTION: ${{ vars.BASE_URL_PRODUCTION || secrets.BASE_URL_PRODUCTION }}
           API_SSL_FINGERPRINTS: ${{ inputs.ssl_fingerprints || vars.API_SSL_FINGERPRINTS }}
           ENABLE_SSL_PINNING: ${{ inputs.ssl_pinning == 'off' && 'false' || '' }}
         run: |
           ENVIRONMENT="$INPUT_ENVIRONMENT"
-          BASE_URL="$INPUT_BASE_URL"
-          # A staging or production release refuses a non-https BASE_URL
-          # (lib/main.dart), so the fallback is AppConfig's https default.
-          if [ -z "$BASE_URL" ]; then
-            case "$ENVIRONMENT" in
-              staging) BASE_URL="https://api-staging.example.com" ;;
-              *) BASE_URL="https://api.example.com" ;;
-            esac
-          fi
+          # The base_url input, else the repository variable for this
+          # environment. Refuses, before building, when neither is set or
+          # the URL is not https or is the example.com placeholder.
+          . scripts/ci/release_base_url.sh
+          release_base_url "$ENVIRONMENT" "$INPUT_BASE_URL" || exit 1
 
           # Refuses a staging or production build with no fingerprints and
           # no explicit opt-out, before building.
@@ -313,17 +309,15 @@ jobs:
         env:
           INPUT_ENVIRONMENT: ${{ inputs.environment }}
           INPUT_BASE_URL: ${{ inputs.base_url }}
+          BASE_URL_STAGING: ${{ vars.BASE_URL_STAGING || secrets.BASE_URL_STAGING }}
+          BASE_URL_PRODUCTION: ${{ vars.BASE_URL_PRODUCTION || secrets.BASE_URL_PRODUCTION }}
         run: |
           ENVIRONMENT="$INPUT_ENVIRONMENT"
-          BASE_URL="$INPUT_BASE_URL"
-          # A staging or production release refuses a non-https BASE_URL
-          # (lib/main.dart), so the fallback is AppConfig's https default.
-          if [ -z "$BASE_URL" ]; then
-            case "$ENVIRONMENT" in
-              staging) BASE_URL="https://api-staging.example.com" ;;
-              *) BASE_URL="https://api.example.com" ;;
-            esac
-          fi
+          # The base_url input, else the repository variable for this
+          # environment. Refuses, before building, when neither is set or
+          # the URL is not https or is the example.com placeholder.
+          . scripts/ci/release_base_url.sh
+          release_base_url "$ENVIRONMENT" "$INPUT_BASE_URL" || exit 1
 
           flutter build web \
             --dart-define=ENVIRONMENT="$ENVIRONMENT" \

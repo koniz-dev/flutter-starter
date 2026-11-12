@@ -238,7 +238,7 @@ await loader.load();
 
 ```bash
 # Run build size analysis (a release build: it needs your fingerprints)
-API_SSL_FINGERPRINTS=... ./scripts/ci/build_all.sh production --analyze-size
+BASE_URL_PRODUCTION=https://... API_SSL_FINGERPRINTS=... ./scripts/ci/build_all.sh production --analyze-size
 ```
 
 **Features:**

@@ -219,7 +219,7 @@ imageCache.maximumSizeBytes = 100 << 20; // 100 MB
 
 4. **Build Size**
    ```bash
-   API_SSL_FINGERPRINTS=... ./scripts/ci/build_all.sh --analyze-size
+   BASE_URL_PRODUCTION=https://... API_SSL_FINGERPRINTS=... ./scripts/ci/build_all.sh --analyze-size
    ```
 
 ---
