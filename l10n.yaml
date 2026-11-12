@@ -3,3 +3,14 @@ template-arb-file: app_en.arb
 output-localization-file: app_localizations.dart
 output-class: AppLocalizations
 
+# The SDK generator still references legacy Global* classes. Explicit prefixes
+# bind those names to standalone delegate adapters without editing its output.
+# Relative imports preserve package renaming by the setup brick.
+# Every locale file receives this header; the prefixes are used by the base
+# file only, so the generated subclasses need the unused-import annotations.
+header: |
+  // Bind the SDK generator's Global* names to standalone design-library delegates.
+  // ignore: unused_import
+  import '../core/localization/cupertino_localizations_delegate.dart' as GlobalCupertinoLocalizations;
+  // ignore: unused_import
+  import '../core/localization/material_localizations_delegate.dart' as GlobalMaterialLocalizations;
