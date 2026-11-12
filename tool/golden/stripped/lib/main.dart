@@ -2,7 +2,6 @@
 // ignore_for_file: public_member_api_docs
 
 import 'package:flutter/foundation.dart' show kReleaseMode;
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 // `Override` is not in flutter_riverpod.dart's export list; misc.dart is
 // where riverpod 3 exposes it. Needed only for createAppContainer's
@@ -263,9 +262,7 @@ class MyApp extends ConsumerWidget {
       locale: locale,
       localizationsDelegates: const [
         AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
+        ...GlobalMaterialLocalizations.delegates,
       ],
       supportedLocales: LocalizationService.supportedLocales,
       builder: (context, child) {
