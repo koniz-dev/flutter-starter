@@ -1,0 +1,12 @@
+Issue #1234; epic:feature-auth
+Base: 30912d93c075777d3a3d8da5b8cbb41b770d71af
+Integrated candidate: 6fbc814064a8a9be359ca4fe150b26e96d913c8a
+lib/features/auth/demo/demo_sign_in_card.dart
+lib/features/auth/presentation/screens/login_screen.dart
+lib/features/auth/presentation/screens/register_screen.dart
+lib/features/auth/presentation/widgets/auth_button.dart
+
+Scope commit records:
+4d3e34689a8697a7b015045b01280470a8f1be0c fix(feature-auth): migrate standalone Flutter UI libraries
+Refs koniz-dev/flutter-starter#1234
+
