@@ -12,7 +12,9 @@ name: Build (Manual)
 # AGP or Kotlin floors with no change in this repository: Flutter 3.50 did,
 # and the Android build was broken on `main` until a PR happened to touch
 # this file. A repository created from the template skips the scheduled run
-# (`github.event.repository.is_template` is true only in the template).
+# (`github.event.repository.is_template` is true only in the template); to
+# get it there, drop that clause from the job's `if:` and from
+# test/tooling/android_floor_schedule_test.dart.
 on:
   schedule:
     - cron: '30 4 * * 1' # weekly (Mon 04:30 UTC), after e2e-android.yml's slot

@@ -36,28 +36,30 @@ void main() {
     }
     final jobs =
         (loadYaml(file.readAsStringSync()) as YamlMap)['jobs'] as YamlMap;
-    final scheduled = {
+    // The whole condition, whitespace collapsed: a substring check would
+    // pass a guard followed by `&& false`, or a job that runs on anything
+    // but a dispatch.
+    final conditions = {
       for (final job in jobs.entries)
-        if ('${(job.value as YamlMap)['if']}'.contains("'schedule'"))
-          '${job.key}': '${(job.value as YamlMap)['if']}',
+        '${job.key}': '${(job.value as YamlMap)['if']}'
+            .replaceAll(RegExp(r'\s+'), ' ')
+            .trim(),
     };
 
-    expect(scheduled.keys, ['android-jdk25']);
-    expect(
-      scheduled['android-jdk25'],
-      contains(
-        "(github.event_name == 'schedule' && "
-        'github.event.repository.is_template)',
-      ),
-    );
-    // Every other job is guarded by a dispatch input, which a scheduled run
-    // does not have: it must not start a release build nobody asked for.
-    for (final job in jobs.entries.where((j) => j.key != 'android-jdk25')) {
-      expect(
-        '${(job.value as YamlMap)['if']}',
-        startsWith('inputs.platform =='),
-        reason: '${job.key}',
-      );
-    }
+    // A project that wants the weekly run in its own repository drops the
+    // `is_template` clause from the workflow and from this value.
+    expect(conditions, {
+      'android-jdk25':
+          "github.event_name == 'pull_request' || "
+          "(github.event_name == 'schedule' && "
+          'github.event.repository.is_template) || '
+          "inputs.platform == 'all' || inputs.platform == 'android'",
+      // Guarded by a dispatch input, which a scheduled run does not have: it
+      // must not start a release build nobody asked for.
+      'build-android':
+          "inputs.platform == 'all' || inputs.platform == 'android'",
+      'build-ios': "inputs.platform == 'all' || inputs.platform == 'ios'",
+      'build-web': "inputs.platform == 'all' || inputs.platform == 'web'",
+    });
   });
 }
