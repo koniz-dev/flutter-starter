@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/performance/i_performance_service.dart';
 import 'package:flutter_starter/core/performance/performance_attributes.dart';
@@ -8,6 +7,7 @@ import 'package:flutter_starter/core/performance/performance_providers.dart';
 import 'package:flutter_starter/core/performance/performance_screen_mixin.dart';
 import 'package:flutter_starter/core/performance/performance_utils.dart';
 import 'package:flutter_starter/core/utils/result.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Reference snippets for `IPerformanceService`.
 ///

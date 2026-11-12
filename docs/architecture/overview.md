@@ -131,7 +131,7 @@ dependency acceptable.
 **Should NOT:**
 - Depend on a framework for behaviour
 - Know about UI or data sources
-- Import `package:flutter/material.dart`, Dio, or any I/O package
+- Import `package:material_ui/material_ui.dart`, Dio, or any I/O package
 
 **On "pure Dart".** The rule is *no framework behaviour in the domain layer*,
 not *no Flutter import at all*. The domain entities

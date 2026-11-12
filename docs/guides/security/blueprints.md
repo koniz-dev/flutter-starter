@@ -75,8 +75,8 @@ class SessionManager {
 
 ```dart
 // Illustrative only — this starter uses ConsumerWidget + go_router; adapt DI.
-import 'package:flutter/material.dart';
 import 'package:flutter_starter/core/security/session_manager.dart';
+import 'package:material_ui/material_ui.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -193,9 +193,9 @@ class ConsentManager {
 
 ```dart
 // Blueprint: lib/features/privacy/presentation/screens/consent_screen.dart
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/privacy/consent_manager.dart';
+import 'package:material_ui/material_ui.dart';
 
 // Add consentManagerProvider in your DI layer.
 

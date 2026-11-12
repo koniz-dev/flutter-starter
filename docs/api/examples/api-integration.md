@@ -215,13 +215,13 @@ final result = await executeWithRetry(() => loginUseCase(email, password));
 ### Complete Login Flow
 
 ```dart
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/errors/failures.dart';
-import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_starter/core/routing/navigation_extensions.dart';
+import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_starter/features/auth/di/auth_providers.dart';
 import 'package:flutter_starter/shared/extensions/context_extensions.dart';
+import 'package:material_ui/material_ui.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -308,10 +308,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 ### Check Authentication Status
 
 ```dart
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_starter/features/auth/di/auth_providers.dart';
+import 'package:material_ui/material_ui.dart';
 
 class AuthGuard extends ConsumerWidget {
   final Widget authenticatedChild;

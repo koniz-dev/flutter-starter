@@ -425,3 +425,35 @@ If you encounter issues during upgrade:
 - [Common Tasks](../features/common-tasks.md) - Common development tasks
 
 
+
+
+## Standalone UI libraries on Flutter 3.50
+
+The starter imports Material widgets from `package:material_ui/material_ui.dart`
+and Cupertino widgets from `package:cupertino_ui/cupertino_ui.dart`. Both are
+explicit dependencies. Update custom widgets, theme extensions and design-token
+implementations to use the same imports: SDK and standalone `ThemeData`,
+`ColorScheme` and other design-library types have different identities.
+
+Keep using `AppLocalizations.delegate` for application strings. For a standalone
+`MaterialApp`, add `...GlobalMaterialLocalizations.delegates` from `material_ui`;
+this includes the matching Material, Cupertino and framework widget delegates.
+The SDK-generated `AppLocalizations.localizationsDelegates` convenience list
+still contains legacy design-library delegates, so use the explicit list instead:
+
+```dart
+import 'package:material_ui/material_ui.dart';
+import 'package:flutter_starter/l10n/app_localizations.dart';
+
+const delegates = [
+  AppLocalizations.delegate,
+  ...GlobalMaterialLocalizations.delegates,
+];
+```
+
+Check third-party UI packages during migration. A legacy widget that reads the
+old Material theme/localizations may need the temporary compatibility bridge in
+`MaterialApp.builder`; a bridge does not convert public API argument types.
+See the [Flutter migration guide](https://docs.flutter.dev/release/breaking-changes/material-ui-and-cupertino-ui)
+for package interoperability details. The starter does not install a bridge for
+widgets that do not need one.

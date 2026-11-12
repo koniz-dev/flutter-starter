@@ -63,7 +63,7 @@ The app provides accessible widget wrappers:
 - `AccessibleFocus` - Focus management for keyboard and screen reader
   navigation. Named this way on purpose: a widget called `FocusManager` would
   collide with Flutter's own `FocusManager` singleton in any file that imports
-  both this library and `package:flutter/material.dart`.
+  both this library and `package:material_ui/material_ui.dart`.
 
 ### Helper Functions
 
