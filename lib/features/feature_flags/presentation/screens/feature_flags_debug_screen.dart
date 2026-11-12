@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/errors/failures.dart';
 import 'package:flutter_starter/core/localization/localization_extensions.dart';
@@ -6,6 +5,7 @@ import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_starter/features/feature_flags/domain/entities/feature_flag.dart';
 import 'package:flutter_starter/features/feature_flags/domain/feature_flags_manager.dart';
 import 'package:flutter_starter/features/feature_flags/presentation/providers/feature_flags_providers.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Debug screen for managing feature flags
 ///
