@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_starter/core/constants/ui_keys.dart';
 import 'package:flutter_starter/features/auth/demo/demo_auth.dart';
 import 'package:flutter_starter/l10n/app_localizations.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Tells the user the app is signing in offline and offers the demo account.
 ///
