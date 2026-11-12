@@ -1,0 +1,9 @@
+Issue #1229; epic:core-di
+Base: 30912d93c075777d3a3d8da5b8cbb41b770d71af
+Integrated candidate: 6fbc814064a8a9be359ca4fe150b26e96d913c8a
+lib/core/contracts/design_tokens_contracts.dart
+
+Scope commit records:
+ce651f89863b22bf0484671651eba6224ada0991 fix(core-di): migrate standalone Flutter UI libraries
+Refs koniz-dev/flutter-starter#1229
+
