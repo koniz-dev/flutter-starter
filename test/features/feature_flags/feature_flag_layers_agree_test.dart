@@ -16,8 +16,8 @@ import 'package:flutter_starter/features/feature_flags/presentation/providers/fe
 import 'package:flutter_starter/features/feature_flags/presentation/screens/feature_flags_debug_screen.dart';
 import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

@@ -3,8 +3,8 @@ import 'package:flutter_starter/features/feature_flags/domain/feature_flags_mana
 import 'package:flutter_starter/features/feature_flags/presentation/providers/feature_flags_providers.dart';
 import 'package:flutter_starter/features/feature_flags/presentation/widgets/feature_flag_builder.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:mocktail/mocktail.dart';
 
 class MockFeatureFlagsManager extends Mock implements FeatureFlagsManager {}
 

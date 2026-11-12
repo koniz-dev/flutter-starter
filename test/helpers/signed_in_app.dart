@@ -12,8 +12,8 @@ import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:flutter_starter/main.dart' show createAppContainer;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// A session kept in memory, so a test can see it cleared.
 class InMemorySessionDataSource implements AuthLocalDataSource {

@@ -17,8 +17,8 @@ import 'package:flutter_starter/features/tasks/presentation/screens/task_detail_
 import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mocktail/mocktail.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:mocktail/mocktail.dart';
 
 import '../../../../helpers/test_fixtures.dart';
 
