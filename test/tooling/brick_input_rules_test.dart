@@ -243,4 +243,69 @@ void main() => hook.run(_Context());
     expect('${result.stdout}${result.stderr}', contains('depends on'));
     expect(dir.listSync().map((e) => e.path).toSet(), before);
   }, timeout: const Timeout(Duration(minutes: 2)));
+
+  // The brick used to write into a feature that already existed - prompting
+  // to overwrite its files, or failing part-way with no terminal attached.
+  group('feature_clean existing feature', () {
+    late Directory root;
+
+    setUp(() {
+      root = Directory.systemTemp.createTempSync('feature_clean_existing_');
+    });
+    tearDown(() => root.deleteSync(recursive: true));
+
+    test('nothing in the way is accepted', () {
+      Directory('${root.path}/lib/features/auth').createSync(recursive: true);
+
+      expect(feature.existingFeatureProblem('notes', root: root.path), isNull);
+    });
+
+    test('an existing lib/features/<name> is refused', () {
+      Directory('${root.path}/lib/features/auth').createSync(recursive: true);
+
+      expect(
+        feature.existingFeatureProblem('auth', root: root.path),
+        'lib/features/auth or test/features/auth already exists; '
+        'refusing to overwrite',
+      );
+    });
+
+    test('an existing test/features/<name> alone is refused', () {
+      Directory('${root.path}/test/features/auth').createSync(recursive: true);
+
+      expect(
+        feature.existingFeatureProblem('auth', root: root.path),
+        contains('refusing to overwrite'),
+      );
+    });
+
+    test('a file of that name is in the way too', () {
+      File('${root.path}/lib/features/auth').createSync(recursive: true);
+
+      expect(
+        feature.existingFeatureProblem('auth', root: root.path),
+        contains('refusing to overwrite'),
+      );
+    });
+
+    test('the message is the one create_feature.sh prints', () {
+      final script = File('scripts/dev/create_feature.sh').readAsStringSync();
+
+      expect(
+        script,
+        contains(
+          r'echo "Error: $BASE_DIR or $TEST_DIR already exists; '
+          'refusing to overwrite"',
+        ),
+      );
+    });
+
+    test('pre_gen applies the rule', () {
+      final hook = File(
+        'bricks/feature_clean/hooks/pre_gen.dart',
+      ).readAsStringSync();
+
+      expect(hook, contains('existingFeatureProblem('));
+    });
+  });
 }

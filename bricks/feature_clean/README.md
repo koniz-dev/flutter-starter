@@ -45,7 +45,10 @@ Four things keep that true:
 
 - A `pre_gen` hook (`hooks/pre_gen.dart`) refuses a `feature_name` that is
   not snake_case or a `class_name` that is not UpperCamelCase, through
-  `hooks/input_rules.dart`, before anything is written. After changing
+  `hooks/input_rules.dart`, before anything is written. It also refuses
+  when `lib/features/<feature_name>` or `test/features/<feature_name>`
+  already exists, as `scripts/dev/create_feature.sh` does, so an existing
+  feature is never overwritten or half-written. After changing
   any file under `hooks/`, run `dart pub get` in `bricks/feature_clean/hooks/`.
 - A `post_gen` hook (`hooks/post_gen.dart`) runs
   `dart fix --apply --code=directives_ordering` and `dart format` on the
