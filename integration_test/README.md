@@ -68,7 +68,7 @@ patrol test --target integration_test/app_e2e_test.dart --dart-define=BASE_URL=h
 
 ## CI
 
-The workflow fails the job when the summary reports `Total: 0` or a non-zero `Failed:` count. Both were real false-green paths: `patrol test` exits 0 on an empty test set, and piping its output without `pipefail` swallowed a genuine failure. A green run here is now meaningful.
+The workflow fails the job unless every collected test ran and passed: the summary must report a non-zero `Total:`, `Failed: 0`, `Skipped: 0` and `Successful:` equal to `Total:` ([`scripts/test/check_patrol_summary.sh`](../scripts/test/check_patrol_summary.sh), which `run_e2e_tests.sh` applies locally too). These were real false-green paths: `patrol test` exits 0 on an empty or fully skipped test set, and piping its output without `pipefail` swallowed a genuine failure. A green run here is now meaningful.
 
 Patrol does **not** run on pull requests. Use **GitHub Actions → E2E Android (Patrol) → Run workflow** (see [`.github/workflows/e2e-android.yml`](../.github/workflows/e2e-android.yml)); the template repository also runs it weekly on a schedule, which a repository created from the template skips. It needs no backend: built without `BASE_URL`, the login flow signs in through the offline demo account.
 
