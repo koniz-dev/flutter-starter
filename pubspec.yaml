@@ -12,7 +12,7 @@ dependencies:
   # UI Components - iOS style icons
   crypto: ^3.0.8
   cupertino_icons: ^2.0.0
-  cupertino_ui: ^1.1.4
+  cupertino_ui: ^1.1.6
 
   # Network Layer - HTTP client with interceptors support
   dio: ^5.11.1
@@ -75,7 +75,7 @@ dependencies:
 
 dev_dependencies:
   # Documentation guards use the Dart tokenizer (already in the codegen graph).
-  analyzer: ^14.6.0
+  analyzer: ^14.7.0
 
   # Code Generation - Build system for generating code from annotations
   build_runner: ^2.17.1
