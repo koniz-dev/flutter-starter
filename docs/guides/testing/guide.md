@@ -538,7 +538,7 @@ Unit-test gates run automatically on push and pull requests targeting **`main`**
 - One job (**Quality gate**): **format → analyze → unit tests** on a **single** Ubuntu runner (fewer billed minutes than parallel jobs).
 - In branch protection, require **Quality gate**.
 
-Platform builds are **not** part of that PR gate by default; use [`.github/workflows/build.yml`](../../../.github/workflows/build.yml) (**Run workflow**) when you want Android/iOS/Web compile checks on CI.
+Platform builds are **not** part of that PR gate by default; use [`.github/workflows/build.yml`](../../../.github/workflows/build.yml) (**Run workflow**) when you want Android/iOS/Web compile checks on CI. It needs the URL of your API: fill in its `base_url` input, or set `BASE_URL_STAGING` / `BASE_URL_PRODUCTION` as a repository variable or secret.
 
 ### Coverage Enforcement
 

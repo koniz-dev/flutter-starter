@@ -22,7 +22,9 @@
 #   - the URL must be set;
 #   - it must be an absolute https URL, because a staging or production
 #     release refuses any other scheme at startup (lib/main.dart);
-#   - its host must not be example.com or a subdomain of it.
+#   - its host must not be example.com or a subdomain of it;
+#   - it must not contain whitespace, "%" or a backslash, which could spell
+#     that host in a form this check does not read.
 #
 # Works on bash 3.2.
 
@@ -54,6 +56,16 @@ release_base_url() {
     return 1
   fi
 
+  # Dart reads %61 as "a" and a backslash as "/", so either could spell the
+  # placeholder host past the check below; whitespace is never part of a URL.
+  case "$url" in
+    *%*|*\\*|*[[:space:]]*)
+      echo "Error: base URL '$url' contains whitespace, '%' or a" >&2
+      echo "backslash. Write the host and path literally." >&2
+      return 1
+      ;;
+  esac
+
   local lower
   lower=$(printf '%s' "$url" | tr '[:upper:]' '[:lower:]')
   case "$lower" in
@@ -73,15 +85,15 @@ release_base_url() {
     \[*) ;; # an IPv6 literal: its colons are not a port separator
     *) host="${host%%:*}" ;;
   esac
-  host="${host%.}"
+  while [ "${host%.}" != "$host" ]; do host="${host%.}"; done
   if [ -z "$host" ]; then
     echo "Error: base URL '$url' has no host." >&2
     return 1
   fi
   case "$host" in
     example.com|*.example.com)
-      echo "Error: base URL '$url' is the starter's placeholder host. Set" >&2
-      echo "$source to your API." >&2
+      echo "Error: base URL '$url' is the starter's placeholder host. Pass" >&2
+      echo "the URL of your API, or set $source to it." >&2
       return 1
       ;;
   esac

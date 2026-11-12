@@ -80,6 +80,7 @@ void main() {
       'https://API.Example.COM.',
       'https://user:pw@api.example.com:8443/v1',
       'HTTPS://api.example.com?x=1',
+      'https://example.com..',
     ]) {
       final result = await _resolve(['production', url]);
 
@@ -109,6 +110,10 @@ void main() {
       'https://',
       'https:///v1',
       'ws://api.my-api.test',
+      // Spellings Dart would resolve to another host than the one written.
+      'https://api.ex%61mple.com',
+      r'https://api.example.com\foo',
+      'https://my api.test',
     ]) {
       final result = await _resolve(['staging', url]);
 
@@ -177,11 +182,12 @@ void main() {
   test('no build script or workflow carries a placeholder base URL', () {
     final offenders = <String>[
       for (final dir in ['scripts/ci', '.github/workflows'])
-        for (final file in Directory(dir).listSync().whereType<File>())
-          for (final (index, line) in file.readAsLinesSync().indexed)
-            if (RegExp(r'''BASE_URL\S*=\S*example\.com''').hasMatch(line) ||
-                RegExp(r'''BASE_URL\S*:-https?://''').hasMatch(line))
-              '${file.path}:${index + 1}: ${line.trim()}',
+        if (Directory(dir).existsSync())
+          for (final file in Directory(dir).listSync().whereType<File>())
+            for (final (index, line) in file.readAsLinesSync().indexed)
+              if (RegExp(r'''BASE_URL\S*=\S*example\.com''').hasMatch(line) ||
+                  RegExp(r'''BASE_URL\S*:-https?://''').hasMatch(line))
+                '${file.path}:${index + 1}: ${line.trim()}',
     ];
 
     expect(offenders, isEmpty);
@@ -197,7 +203,7 @@ void main() {
     // The release builds continue onto their --dart-define lines; the debug
     // smoke build is a single line and takes no URL.
     final builds = RegExp(
-      r'^\s+flutter build (apk|ios|web) \\$',
+      r'^\s+flutter build (apk|appbundle|ipa|ios|web) \\$',
       multiLine: true,
     ).allMatches(workflow).length;
     const resolved =
