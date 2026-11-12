@@ -5,7 +5,8 @@
 #
 # The changelog covers commits since the last tag reachable from HEAD. For the
 # first release, when there is no such tag, set RELEASE_CHANGELOG_SINCE=<ref>;
-# generate_changelog.sh refuses otherwise rather than listing every commit.
+# otherwise this refuses, before the tests run, rather than listing every
+# commit.
 
 set -e
 
@@ -17,8 +18,15 @@ BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 # Every path below is the repository's, wherever this is run from.
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPT_DIR="$(CDPATH='' cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR/../.."
+# Reached through a symlink, or copied somewhere else, "two levels up" is
+# not the project.
+if [ ! -f pubspec.yaml ]; then
+    echo "Error: $PWD is not the project root (no pubspec.yaml). Run" >&2
+    echo "scripts/ci/release.sh by its path inside the project." >&2
+    exit 1
+fi
 
 # Check if we're on main branch
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)

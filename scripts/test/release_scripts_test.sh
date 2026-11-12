@@ -291,6 +291,32 @@ else
     fail "release.sh from a subdirectory releases the root project (exit $rc: $(printf '%s' "$out" | tail -4 | tr '\n' ' '))"
 fi
 
+# An exported CDPATH makes a plain `cd scripts/ci` print the directory, which
+# doubled the path the scripts computed for themselves.
+(cd "$repo" && git_q checkout -q main)
+out=$(cd "$repo" && CDPATH=".:$WORK" bash scripts/ci/generate_changelog.sh 9.9.9 2>&1); rc=$?
+if [ $rc -eq 0 ] && grep -q '^## \[9.9.9\] - ' "$repo/CHANGELOG.md"; then
+    pass "generate_changelog.sh finds the root with CDPATH exported"
+else
+    fail "generate_changelog.sh finds the root with CDPATH exported (exit $rc: $out)"
+fi
+(cd "$repo" && git_q checkout -q -- CHANGELOG.md)
+out=$(cd "$repo" && CDPATH=".:$WORK" PATH="$WORK/bin:$PATH" bash scripts/ci/release.sh patch < /dev/null 2>&1); rc=$?
+if printf '%s' "$out" | grep -q "already exists. Nothing was changed" && [ -z "$(cd "$repo" && git status --short)" ]; then
+    pass "release.sh finds the root with CDPATH exported"
+else
+    fail "release.sh finds the root with CDPATH exported (exit $rc: $(printf '%s' "$out" | tail -3 | tr '\n' ' '))"
+fi
+# Through a symlink the script's own location is not the project.
+mkdir -p "$WORK/elsewhere/a/b"
+ln -s "$repo/scripts/ci/generate_changelog.sh" "$WORK/elsewhere/a/b/gen"
+out=$(cd "$repo" && bash "$WORK/elsewhere/a/b/gen" 9.9.9 2>&1); rc=$?
+if [ $rc -ne 0 ] && printf '%s' "$out" | grep -q "is not the project root" && [ ! -e "$WORK/elsewhere/CHANGELOG.md" ]; then
+    pass "a script reached through a symlink says it is not at the project root"
+else
+    fail "a script reached through a symlink says it is not at the project root (exit $rc: $out)"
+fi
+
 # --- bump_version.sh keeps a trailing comment
 bump_fixture() { # pubspec-version-line -> echoes the rewritten line
     local dir="$WORK/bump-$RANDOM"

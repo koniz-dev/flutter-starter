@@ -22,8 +22,15 @@ set -euo pipefail
 # pubspec.yaml and CHANGELOG.md are the repository's, wherever this is run
 # from: run from lib/, it used to report success and write a fresh
 # lib/CHANGELOG.md.
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPT_DIR="$(CDPATH='' cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR/../.."
+# Reached through a symlink, or copied somewhere else, "two levels up" is
+# not the project: say so instead of writing a changelog there.
+if [ ! -f pubspec.yaml ]; then
+    echo "Error: $PWD is not the project root (no pubspec.yaml). Run" >&2
+    echo "scripts/ci/generate_changelog.sh by its path inside the project." >&2
+    exit 1
+fi
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
