@@ -62,6 +62,12 @@ After modifying ARB files, generate the localization code:
 flutter gen-l10n
 ```
 
+Keep the `header` in `l10n.yaml`: it binds SDK-generated Material and Cupertino
+delegate names to the standalone UI libraries. The generated
+`AppLocalizations.localizationsDelegates` list then works with `material_ui`.
+The relative header imports survive package renaming; update them if you move
+the generated output directory. See the [UI library migration notes](../migration/upgrading-this-starter.md#standalone-ui-libraries-on-flutter-350).
+
 This command generates the `AppLocalizations` class into `lib/l10n/` (`output-localization-file: app_localizations.dart` in `l10n.yaml`), imported as `package:flutter_starter/l10n/app_localizations.dart`. The generated files are committed.
 
 ## Text Localization

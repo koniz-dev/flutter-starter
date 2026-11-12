@@ -438,12 +438,19 @@ implementations to use the same imports: SDK and standalone `ThemeData`,
 Keep using `AppLocalizations.delegate` for application strings. For a standalone
 `MaterialApp`, add `...GlobalMaterialLocalizations.delegates` from `material_ui`;
 this includes the matching Material, Cupertino and framework widget delegates.
-The SDK-generated `AppLocalizations.localizationsDelegates` convenience list
-still contains legacy design-library delegates, so use the explicit list instead:
+The starter configures the SDK generator through the `header` in `l10n.yaml`.
+It binds the generated global-delegate names to the two standalone delegate
+adapters in `lib/core/localization/`, so
+`AppLocalizations.localizationsDelegates` also supplies the correct UI types.
+Keep this header when regenerating translations with `flutter gen-l10n`; do not
+edit the generated files. Its relative imports survive package renaming. If you
+move the generated output directory, update those paths too.
+
+An explicit delegate list works as well:
 
 ```dart
-import 'package:material_ui/material_ui.dart';
 import 'package:flutter_starter/l10n/app_localizations.dart';
+import 'package:material_ui/material_ui.dart';
 
 const delegates = [
   AppLocalizations.delegate,
