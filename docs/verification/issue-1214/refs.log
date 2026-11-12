@@ -1,0 +1,4 @@
+Commits in 91131bf5f6c55f3ff0d634be4d49008846a6b99d..HEAD
+  ok    f48cf28f fix(tooling): scope strip dirty checks to app paths (#1238)
+
+OK: every message links with 'Refs koniz-dev/flutter-starter#N' and closes nothing.

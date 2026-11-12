@@ -1,0 +1,49 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_rerun_test.dart
+00:00 +0: a nested app allows untracked sibling edits but protects its own edits
+00:05 +0 -1: a nested app allows untracked sibling edits but protects its own edits [E]
+  Expected: <0>
+    Actual: <2>
+  exit 2
+  Refusing to strip an edited working tree. Nothing was deleted:
+  ?? sibling_notes.txt
+  Commit or stash your changes first. Use --force only if you intentionally accept overwriting or deleting them.
+  
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/tooling/strip_rerun_test.dart 386:7            main.<fn>
+  
+00:05 +0 -1: a nested app allows unstaged sibling edits but protects its own edits
+00:14 +0 -2: a nested app allows unstaged sibling edits but protects its own edits [E]
+  Expected: <0>
+    Actual: <2>
+  exit 2
+  Refusing to strip an edited working tree. Nothing was deleted:
+   M sibling_notes.txt
+  Commit or stash your changes first. Use --force only if you intentionally accept overwriting or deleting them.
+  
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/tooling/strip_rerun_test.dart 386:7            main.<fn>
+  
+00:16 +0 -2: a nested app allows staged sibling edits but protects its own edits
+00:22 +0 -3: a nested app allows staged sibling edits but protects its own edits [E]
+  Expected: <0>
+    Actual: <2>
+  exit 2
+  Refusing to strip an edited working tree. Nothing was deleted:
+  M  sibling_notes.txt
+  Commit or stash your changes first. Use --force only if you intentionally accept overwriting or deleting them.
+  
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/tooling/strip_rerun_test.dart 386:7            main.<fn>
+  
+00:23 +0 -3: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_rerun_test.dart: a nested app allows staged sibling edits but protects its own edits
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_rerun_test.dart: a nested app allows unstaged sibling edits but protects its own edits
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_rerun_test.dart: a nested app allows untracked sibling edits but protects its own edits

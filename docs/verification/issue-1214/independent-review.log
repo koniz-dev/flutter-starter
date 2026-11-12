@@ -1,0 +1,669 @@
+Fresh independent adversarial premerge tooling review PR1238 / issue1214
+Base 91131bf5f6c55f3ff0d634be4d49008846a6b99d; accepted 653bb6725442a64eaa0f4e14abf777631e35bd8b
+Read-only tracked source; scratch fixtures only under W. IsolatedSDK3.50 PATH is inherited by nested tool processes. First inconsistent PATH harness was retained as invalid in1214-review-first-invalid.log.
+$ ['which', 'dart']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter
+/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/sdk-350/flutter/bin/dart
+
+exit:0
+$ ['/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/sdk-350/flutter/bin/dart', '--version']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter
+Dart SDK version: 3.14.0 (stable) (Wed Nov 4 16:28:39 2026 -0800) on "macos_x64"
+
+exit:0
+$ ['git', 'status', '--porcelain']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter
+
+exit:0
+$ ['git', 'diff', '91131bf5f6c55f3ff0d634be4d49008846a6b99d', '653bb6725442a64eaa0f4e14abf777631e35bd8b', '--']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter
+diff --git a/test/tooling/strip_rerun_test.dart b/test/tooling/strip_rerun_test.dart
+index 2cffc847f1b..09d97cff469 100644
+--- a/test/tooling/strip_rerun_test.dart
++++ b/test/tooling/strip_rerun_test.dart
+@@ -70,6 +70,40 @@ Directory _copyOfHead() {
+   return root;
+ }
+ 
++/// Nests the fixture app in an enclosing repository with an optional sibling.
++Directory _nestedApp(Directory root, {bool trackedSibling = false}) {
++  final app = Directory('${root.path}/app')..createSync();
++  for (final entry in root.listSync()) {
++    final name = entry.uri.pathSegments.where((part) => part.isNotEmpty).last;
++    if (name == '.git' || name == 'app') continue;
++    entry.renameSync('${app.path}/$name');
++  }
++  File('${root.path}/.gitattributes').writeAsStringSync(
++    'app/lib/core/routing/app_routes.dart text eol=crlf\n',
++  );
++  if (trackedSibling) {
++    File('${root.path}/sibling_notes.txt').writeAsStringSync('baseline\n');
++  }
++  for (final args in [
++    ['add', '--all'],
++    [
++      '-c',
++      'core.hooksPath=/dev/null',
++      '-c',
++      'user.name=Fixture',
++      '-c',
++      'user.email=fixture@example.invalid',
++      'commit',
++      '-qm',
++      'nest app',
++    ],
++  ]) {
++    final result = Process.runSync('git', args, workingDirectory: root.path);
++    expect(result.exitCode, 0, reason: '${result.stderr}');
++  }
++  return app;
++}
++
+ ProcessResult _strip(Directory cwd, Directory root, List<String> args) =>
+     Process.runSync('dart', [
+       '--packages=$_packages',
+@@ -296,38 +330,7 @@ void main() {
+   test(
+     'a clean app nested in a monorepo resolves committed override paths',
+     () {
+-      final app = Directory('${root.path}/app')..createSync();
+-      for (final entry in root.listSync()) {
+-        final name = entry.uri.pathSegments
+-            .where((part) => part.isNotEmpty)
+-            .last;
+-        if (name == '.git' || name == 'app') continue;
+-        entry.renameSync('${app.path}/$name');
+-      }
+-      File('${root.path}/.gitattributes').writeAsStringSync(
+-        'app/lib/core/routing/app_routes.dart text eol=crlf\n',
+-      );
+-      for (final args in [
+-        ['add', '--all'],
+-        [
+-          '-c',
+-          'core.hooksPath=/dev/null',
+-          '-c',
+-          'user.name=Fixture',
+-          '-c',
+-          'user.email=fixture@example.invalid',
+-          'commit',
+-          '-qm',
+-          'nest app',
+-        ],
+-      ]) {
+-        final result = Process.runSync(
+-          'git',
+-          args,
+-          workingDirectory: root.path,
+-        );
+-        expect(result.exitCode, 0, reason: '${result.stderr}');
+-      }
++      final app = _nestedApp(root);
+       final target = File('${app.path}/lib/core/routing/app_routes.dart')
+         ..deleteSync();
+       expect(
+@@ -353,6 +356,50 @@ void main() {
+     skip: skip,
+   );
+ 
++  for (final state in ['untracked', 'unstaged', 'staged']) {
++    test('a nested app allows $state sibling edits but protects its own '
++        'edits', () {
++      final app = _nestedApp(root, trackedSibling: state != 'untracked');
++      final sibling = File('${root.path}/sibling_notes.txt');
++      final editedSibling = 'outside edit: $state\n';
++      sibling.writeAsStringSync(editedSibling);
++      if (state == 'staged') {
++        final added = Process.runSync('git', [
++          'add',
++          '--',
++          'sibling_notes.txt',
++        ], workingDirectory: root.path);
++        expect(added.exitCode, 0, reason: '${added.stderr}');
++      }
++
++      final readme = File('${app.path}/README.md');
++      final originalReadme = readme.readAsStringSync();
++      readme.writeAsStringSync('$originalReadme\nLocal app edit\n');
++      final refused = _strip(app, app, ['--remove-tasks']);
++      expect(refused.exitCode, 2, reason: _out(refused));
++      expect('${refused.stderr}', contains('README.md'));
++      expect(Directory('${app.path}/lib/features/tasks').existsSync(), isTrue);
++      expect(readme.readAsStringSync(), endsWith('Local app edit\n'));
++
++      readme.writeAsStringSync(originalReadme);
++      final result = _strip(app, app, ['--remove-tasks']);
++      expect(result.exitCode, 0, reason: _out(result));
++      expect(Directory('${app.path}/lib/features/tasks').existsSync(), isFalse);
++      expect(sibling.readAsStringSync(), editedSibling);
++      final expectedStatus = switch (state) {
++        'untracked' => '?? sibling_notes.txt',
++        'unstaged' => ' M sibling_notes.txt',
++        _ => 'M  sibling_notes.txt',
++      };
++      final status = Process.runSync('git', [
++        'status',
++        '--porcelain',
++      ], workingDirectory: root.path);
++      expect(status.exitCode, 0, reason: '${status.stderr}');
++      expect('${status.stdout}', contains(expectedStatus));
++    }, skip: skip);
++  }
++
+   for (final flag in ['assume-unchanged', 'skip-worktree']) {
+     for (final bricksOnly in [true, false]) {
+       test('protects $flag edits in a ${bricksOnly ? 'brick' : 'sample'} '
+diff --git a/tool/strip_sample_features.dart b/tool/strip_sample_features.dart
+index c6f6b23cf98..3afeee73c5e 100644
+--- a/tool/strip_sample_features.dart
++++ b/tool/strip_sample_features.dart
+@@ -875,6 +875,9 @@ bool _checkWorkingTree(
+               'status',
+               '--porcelain',
+               '--untracked-files=normal',
++              // Status otherwise includes sibling projects in a monorepo.
++              '--',
++              '.',
+             ]).stdout}'
+             .trimRight();
+     final changes = <String>[if (status.isNotEmpty) status];
+
+exit:0
+{
+  "url": "https://api.github.com/repos/koniz-dev/flutter-starter/issues/1214",
+  "repository_url": "https://api.github.com/repos/koniz-dev/flutter-starter",
+  "labels_url": "https://api.github.com/repos/koniz-dev/flutter-starter/issues/1214/labels{/name}",
+  "comments_url": "https://api.github.com/repos/koniz-dev/flutter-starter/issues/1214/comments",
+  "events_url": "https://api.github.com/repos/koniz-dev/flutter-starter/issues/1214/events",
+  "html_url": "https://github.com/koniz-dev/flutter-starter/issues/1214",
+  "id": 6329191775,
+  "node_id": "I_kwDOQVGyw88AAAABeT_NXw",
+  "number": 1214,
+  "title": "fix(tooling): scope strip dirty checks to the project",
+  "user": {
+    "login": "koniz-dev",
+    "id": 84920219,
+    "node_id": "MDQ6VXNlcjg0OTIwMjE5",
+    "avatar_url": "https://avatars.githubusercontent.com/u/84920219?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/koniz-dev",
+    "html_url": "https://github.com/koniz-dev",
+    "followers_url": "https://api.github.com/users/koniz-dev/followers",
+    "following_url": "https://api.github.com/users/koniz-dev/following{/other_user}",
+    "gists_url": "https://api.github.com/users/koniz-dev/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/koniz-dev/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/koniz-dev/subscriptions",
+    "organizations_url": "https://api.github.com/users/koniz-dev/orgs",
+    "repos_url": "https://api.github.com/users/koniz-dev/repos",
+    "events_url": "https://api.github.com/users/koniz-dev/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/koniz-dev/received_events",
+    "type": "User",
+    "user_view_type": "public",
+    "site_admin": false
+  },
+  "labels": [
+    {
+      "id": 11928459428,
+      "node_id": "LA_kwDOQVGyw88AAAACxv3YpA",
+      "url": "https://api.github.com/repos/koniz-dev/flutter-starter/labels/type:bug",
+      "name": "type:bug",
+      "color": "d73a4a",
+      "default": false,
+      "description": "Something that is broken relative to documented behavior",
+      "archived_at": null,
+      "archived_by": null
+    },
+    {
+      "id": 11928461064,
+      "node_id": "LA_kwDOQVGyw88AAAACxv3fCA",
+      "url": "https://api.github.com/repos/koniz-dev/flutter-starter/labels/epic:tooling-ci",
+      "name": "epic:tooling-ci",
+      "color": "5319e7",
+      "default": false,
+      "description": ".github, .githooks, scripts/, tool/, bricks/, analyzer and pubspec config",
+      "archived_at": null,
+      "archived_by": null
+    },
+    {
+      "id": 11928461575,
+      "node_id": "LA_kwDOQVGyw88AAAACxv3hBw",
+      "url": "https://api.github.com/repos/koniz-dev/flutter-starter/labels/priority:P3",
+      "name": "priority:P3",
+      "color": "0e8a16",
+      "default": false,
+      "description": "Nice to have: cosmetic, speculative, or long tail",
+      "archived_at": null,
+      "archived_by": null
+    },
+    {
+      "id": 11928461754,
+      "node_id": "LA_kwDOQVGyw88AAAACxv3hug",
+      "url": "https://api.github.com/repos/koniz-dev/flutter-starter/labels/status:in-progress",
+      "name": "status:in-progress",
+      "color": "0052cc",
+      "default": false,
+      "description": "Claimed by an assignee and being worked right now",
+      "archived_at": null,
+      "archived_by": null
+    }
+  ],
+  "state": "open",
+  "locked": false,
+  "assignees": [
+    {
+      "login": "koniz-dev",
+      "id": 84920219,
+      "node_id": "MDQ6VXNlcjg0OTIwMjE5",
+      "avatar_url": "https://avatars.githubusercontent.com/u/84920219?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/koniz-dev",
+      "html_url": "https://github.com/koniz-dev",
+      "followers_url": "https://api.github.com/users/koniz-dev/followers",
+      "following_url": "https://api.github.com/users/koniz-dev/following{/other_user}",
+      "gists_url": "https://api.github.com/users/koniz-dev/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/koniz-dev/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/koniz-dev/subscriptions",
+      "organizations_url": "https://api.github.com/users/koniz-dev/orgs",
+      "repos_url": "https://api.github.com/users/koniz-dev/repos",
+      "events_url": "https://api.github.com/users/koniz-dev/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/koniz-dev/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    }
+  ],
+  "milestone": null,
+  "comments": 0,
+  "created_at": "2026-11-11T13:11:40Z",
+  "updated_at": "2026-11-12T13:43:36Z",
+  "closed_at": null,
+  "assignee": {
+    "login": "koniz-dev",
+    "id": 84920219,
+    "node_id": "MDQ6VXNlcjg0OTIwMjE5",
+    "avatar_url": "https://avatars.githubusercontent.com/u/84920219?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/koniz-dev",
+    "html_url": "https://github.com/koniz-dev",
+    "followers_url": "https://api.github.com/users/koniz-dev/followers",
+    "following_url": "https://api.github.com/users/koniz-dev/following{/other_user}",
+    "gists_url": "https://api.github.com/users/koniz-dev/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/koniz-dev/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/koniz-dev/subscriptions",
+    "organizations_url": "https://api.github.com/users/koniz-dev/orgs",
+    "repos_url": "https://api.github.com/users/koniz-dev/repos",
+    "events_url": "https://api.github.com/users/koniz-dev/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/koniz-dev/received_events",
+    "type": "User",
+    "user_view_type": "public",
+    "site_admin": false
+  },
+  "author_association": "OWNER",
+  "issue_field_values": [
+
+  ],
+  "type": null,
+  "active_lock_reason": null,
+  "sub_issues_summary": {
+    "total": 0,
+    "completed": 0,
+    "percent_completed": 0
+  },
+  "issue_dependencies_summary": {
+    "blocked_by": 0,
+    "total_blocked_by": 0,
+    "blocking": 0,
+    "total_blocking": 0
+  },
+  "body": "Promoted from P3 audit bundle #1193. Original findings:\n\n`tool/strip_sample_features.dart` (`_checkWorkingTree`, ~875): `git status --porcelain` covers the whole repository, so in a monorepo an untracked file outside the project makes the strip refuse (`?? other_notes.txt`), leaving only `--force`. Criterion: status scoped to the project directory; a test with a dirty sibling path proceeds.\n\n## Acceptance criteria\n\n- status scoped to the project directory; a test with a dirty sibling path proceeds.\n- Required host checks and applicable workflow dispatches pass; evidence names each criterion. Parent #1193 is checked only after this issue closes.\n",
+  "closed_by": null,
+  "reactions": {
+    "url": "https://api.github.com/repos/koniz-dev/flutter-starter/issues/1214/reactions",
+    "total_count": 0,
+    "+1": 0,
+    "-1": 0,
+    "laugh": 0,
+    "hooray": 0,
+    "confused": 0,
+    "heart": 0,
+    "rocket": 0,
+    "eyes": 0
+  },
+  "timeline_url": "https://api.github.com/repos/koniz-dev/flutter-starter/issues/1214/timeline",
+  "performed_via_github_app": null,
+  "state_reason": null,
+  "pinned_comment": null
+}
+
+
+$ ['tar', '-xf', '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214-review-sdk350-template.tar', '-C', '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 staged sibling/apps/app with spaces']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter
+
+exit:0
+$ ['git', 'init', '-q']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 staged sibling
+
+exit:0
+$ ['git', 'add', '--all']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 staged sibling
+
+exit:0
+$ ['git', '-c', 'core.hooksPath=/dev/null', '-c', 'user.name=Review fixture', '-c', 'user.email=review@example.invalid', 'commit', '-qm', 'baseline']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 staged sibling
+
+exit:0
+$ ['git', 'status', '--porcelain']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 staged sibling
+
+exit:0
+$ ['git', 'add', '--', 'outside sibling ü notes.txt']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 staged sibling
+
+exit:0
+$ ['git', 'show', ':outside sibling ü notes.txt']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 staged sibling
+staged outside work
+
+exit:0
+$ git ls-files -v -z (cwd app)
+Raw entries: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214_review_sdk350_staged_sibling-ls-files.txt
+Sibling excluded: yes
+Flagged app entries: []
+$ ['/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/sdk-350/flutter/bin/dart', '--packages=/Users/nguyenanhkiet/Playground/flutter-starter/.dart_tool/package_config.json', '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 staged sibling/apps/app with spaces/tool/strip_sample_features.dart', '--apply', '--remove-tasks']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 staged sibling/apps/app with spaces
+Dropped 1 marked section(s) or line(s) from docs/README.md.
+Dropped 4 marked section(s) or line(s) from docs/architecture/design-decisions.md.
+Dropped 1 marked section(s) or line(s) from docs/api/features/auth/models.md.
+Dropped 3 marked section(s) or line(s) from README.md.
+Dropped 1 marked section(s) or line(s) from bricks/README.md.
+Dropped 1 marked section(s) or line(s) from bricks/flutter_starter_setup/README.md.
+Dropped 1 marked section(s) or line(s) from integration_test/README.md.
+Dropped 1 marked section(s) or line(s) from docs/architecture/super-starter-hub.md.
+Dropped 1 marked section(s) or line(s) from docs/architecture/contracts-map.md.
+Dropped 1 marked section(s) or line(s) from docs/guides/migration/customization-guide.md.
+Dropped 3 marked section(s) or line(s) from docs/guides/onboarding/fork-and-customize.md.
+Dropped 2 marked section(s) or line(s) from README.md.
+Dropped 4 marked section(s) or line(s) from CLAUDE.md.
+Dropped 3 marked section(s) or line(s) from tool/README.md.
+Removed tool/strip_sample_features.dart: it only serves this strip.
+Removed tool/golden: it only serves this strip.
+Removed .github/workflows/strip-smoke.yml: it only serves this strip.
+Removed test/tooling/strip_markers_test.dart: it only serves this strip.
+Removed test/tooling/strip_sample_prose_test.dart: it only serves this strip.
+Removed test/tooling/strip_rerun_test.dart: it only serves this strip.
+Removed test/tooling/strip_unknown_flags_test.dart: it only serves this strip.
+Strip complete. Run: flutter pub get && flutter analyze && flutter test
+
+exit:0
+$ ['git', 'show', ':outside sibling ü notes.txt']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 staged sibling
+staged outside work
+
+exit:0
+PASS deep nested app/path spaces; staged and unusual untracked outside bytes/index preserved.
+$ ['tar', '-xf', '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214-review-sdk350-template.tar', '-C', '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 outside assume-unchanged/apps/app with spaces']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter
+
+exit:0
+$ ['git', 'init', '-q']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 outside assume-unchanged
+
+exit:0
+$ ['git', 'add', '--all']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 outside assume-unchanged
+
+exit:0
+$ ['git', '-c', 'core.hooksPath=/dev/null', '-c', 'user.name=Review fixture', '-c', 'user.email=review@example.invalid', 'commit', '-qm', 'baseline']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 outside assume-unchanged
+
+exit:0
+$ ['git', 'status', '--porcelain']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 outside assume-unchanged
+
+exit:0
+$ ['git', 'update-index', '--assume-unchanged', 'outside sibling ü notes.txt']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 outside assume-unchanged
+
+exit:0
+$ git ls-files -v -z (cwd app)
+Raw entries: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214_review_sdk350_outside_assume-unchanged-ls-files.txt
+Sibling excluded: yes
+Flagged app entries: []
+$ ['/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/sdk-350/flutter/bin/dart', '--packages=/Users/nguyenanhkiet/Playground/flutter-starter/.dart_tool/package_config.json', '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 outside assume-unchanged/apps/app with spaces/tool/strip_sample_features.dart', '--apply', '--remove-tasks']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 outside assume-unchanged/apps/app with spaces
+Dropped 1 marked section(s) or line(s) from docs/README.md.
+Dropped 4 marked section(s) or line(s) from docs/architecture/design-decisions.md.
+Dropped 1 marked section(s) or line(s) from docs/api/features/auth/models.md.
+Dropped 3 marked section(s) or line(s) from README.md.
+Dropped 1 marked section(s) or line(s) from bricks/README.md.
+Dropped 1 marked section(s) or line(s) from bricks/flutter_starter_setup/README.md.
+Dropped 1 marked section(s) or line(s) from integration_test/README.md.
+Dropped 1 marked section(s) or line(s) from docs/architecture/super-starter-hub.md.
+Dropped 1 marked section(s) or line(s) from docs/architecture/contracts-map.md.
+Dropped 1 marked section(s) or line(s) from docs/guides/migration/customization-guide.md.
+Dropped 3 marked section(s) or line(s) from docs/guides/onboarding/fork-and-customize.md.
+Dropped 2 marked section(s) or line(s) from README.md.
+Dropped 4 marked section(s) or line(s) from CLAUDE.md.
+Dropped 3 marked section(s) or line(s) from tool/README.md.
+Removed tool/strip_sample_features.dart: it only serves this strip.
+Removed tool/golden: it only serves this strip.
+Removed .github/workflows/strip-smoke.yml: it only serves this strip.
+Removed test/tooling/strip_markers_test.dart: it only serves this strip.
+Removed test/tooling/strip_sample_prose_test.dart: it only serves this strip.
+Removed test/tooling/strip_rerun_test.dart: it only serves this strip.
+Removed test/tooling/strip_unknown_flags_test.dart: it only serves this strip.
+Strip complete. Run: flutter pub get && flutter analyze && flutter test
+
+exit:0
+PASS hidden-index outside assume-unchanged excluded; app strips successfully and outside work is preserved.
+$ ['tar', '-xf', '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214-review-sdk350-template.tar', '-C', '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 outside skip-worktree/apps/app with spaces']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter
+
+exit:0
+$ ['git', 'init', '-q']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 outside skip-worktree
+
+exit:0
+$ ['git', 'add', '--all']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 outside skip-worktree
+
+exit:0
+$ ['git', '-c', 'core.hooksPath=/dev/null', '-c', 'user.name=Review fixture', '-c', 'user.email=review@example.invalid', 'commit', '-qm', 'baseline']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 outside skip-worktree
+
+exit:0
+$ ['git', 'status', '--porcelain']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 outside skip-worktree
+
+exit:0
+$ ['git', 'update-index', '--skip-worktree', 'outside sibling ü notes.txt']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 outside skip-worktree
+
+exit:0
+$ git ls-files -v -z (cwd app)
+Raw entries: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214_review_sdk350_outside_skip-worktree-ls-files.txt
+Sibling excluded: yes
+Flagged app entries: []
+$ ['/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/sdk-350/flutter/bin/dart', '--packages=/Users/nguyenanhkiet/Playground/flutter-starter/.dart_tool/package_config.json', '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 outside skip-worktree/apps/app with spaces/tool/strip_sample_features.dart', '--apply', '--remove-tasks']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 outside skip-worktree/apps/app with spaces
+Dropped 1 marked section(s) or line(s) from docs/README.md.
+Dropped 4 marked section(s) or line(s) from docs/architecture/design-decisions.md.
+Dropped 1 marked section(s) or line(s) from docs/api/features/auth/models.md.
+Dropped 3 marked section(s) or line(s) from README.md.
+Dropped 1 marked section(s) or line(s) from bricks/README.md.
+Dropped 1 marked section(s) or line(s) from bricks/flutter_starter_setup/README.md.
+Dropped 1 marked section(s) or line(s) from integration_test/README.md.
+Dropped 1 marked section(s) or line(s) from docs/architecture/super-starter-hub.md.
+Dropped 1 marked section(s) or line(s) from docs/architecture/contracts-map.md.
+Dropped 1 marked section(s) or line(s) from docs/guides/migration/customization-guide.md.
+Dropped 3 marked section(s) or line(s) from docs/guides/onboarding/fork-and-customize.md.
+Dropped 2 marked section(s) or line(s) from README.md.
+Dropped 4 marked section(s) or line(s) from CLAUDE.md.
+Dropped 3 marked section(s) or line(s) from tool/README.md.
+Removed tool/strip_sample_features.dart: it only serves this strip.
+Removed tool/golden: it only serves this strip.
+Removed .github/workflows/strip-smoke.yml: it only serves this strip.
+Removed test/tooling/strip_markers_test.dart: it only serves this strip.
+Removed test/tooling/strip_sample_prose_test.dart: it only serves this strip.
+Removed test/tooling/strip_rerun_test.dart: it only serves this strip.
+Removed test/tooling/strip_unknown_flags_test.dart: it only serves this strip.
+Strip complete. Run: flutter pub get && flutter analyze && flutter test
+
+exit:0
+PASS hidden-index outside skip-worktree excluded; app strips successfully and outside work is preserved.
+$ ['tar', '-xf', '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214-review-sdk350-template.tar', '-C', '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 inside assume-unchanged/apps/app with spaces']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter
+
+exit:0
+$ ['git', 'init', '-q']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 inside assume-unchanged
+
+exit:0
+$ ['git', 'add', '--all']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 inside assume-unchanged
+
+exit:0
+$ ['git', '-c', 'core.hooksPath=/dev/null', '-c', 'user.name=Review fixture', '-c', 'user.email=review@example.invalid', 'commit', '-qm', 'baseline']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 inside assume-unchanged
+
+exit:0
+$ ['git', 'status', '--porcelain']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 inside assume-unchanged
+
+exit:0
+$ ['git', 'update-index', '--assume-unchanged', 'apps/app with spaces/lib/features/tasks/domain/entities/task.dart']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 inside assume-unchanged
+
+exit:0
+$ git ls-files -v -z (cwd app)
+Raw entries: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214_review_sdk350_inside_assume-unchanged-ls-files.txt
+Sibling excluded: yes
+Flagged app entries: ['h lib/features/tasks/domain/entities/task.dart']
+$ ['/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/sdk-350/flutter/bin/dart', '--packages=/Users/nguyenanhkiet/Playground/flutter-starter/.dart_tool/package_config.json', '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 inside assume-unchanged/apps/app with spaces/tool/strip_sample_features.dart', '--apply', '--remove-tasks']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 inside assume-unchanged/apps/app with spaces
+Refusing to strip an edited working tree. Nothing was deleted:
+lib/features/tasks/domain/entities/task.dart (modified tracked file)
+Commit or stash your changes first. Use --force only if you intentionally accept overwriting or deleting them.
+
+exit:2
+PASS own assume-unchanged app deletion target refuses before deletion and preserves bytes.
+$ ['tar', '-xf', '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214-review-sdk350-template.tar', '-C', '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 inside skip-worktree/apps/app with spaces']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter
+
+exit:0
+$ ['git', 'init', '-q']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 inside skip-worktree
+
+exit:0
+$ ['git', 'add', '--all']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 inside skip-worktree
+
+exit:0
+$ ['git', '-c', 'core.hooksPath=/dev/null', '-c', 'user.name=Review fixture', '-c', 'user.email=review@example.invalid', 'commit', '-qm', 'baseline']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 inside skip-worktree
+
+exit:0
+$ ['git', 'status', '--porcelain']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 inside skip-worktree
+
+exit:0
+$ ['git', 'update-index', '--skip-worktree', 'apps/app with spaces/lib/features/tasks/domain/entities/task.dart']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 inside skip-worktree
+
+exit:0
+$ git ls-files -v -z (cwd app)
+Raw entries: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214_review_sdk350_inside_skip-worktree-ls-files.txt
+Sibling excluded: yes
+Flagged app entries: ['S lib/features/tasks/domain/entities/task.dart']
+$ ['/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/sdk-350/flutter/bin/dart', '--packages=/Users/nguyenanhkiet/Playground/flutter-starter/.dart_tool/package_config.json', '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 inside skip-worktree/apps/app with spaces/tool/strip_sample_features.dart', '--apply', '--remove-tasks']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 inside skip-worktree/apps/app with spaces
+Refusing to strip an edited working tree. Nothing was deleted:
+lib/features/tasks/domain/entities/task.dart (modified tracked file)
+Commit or stash your changes first. Use --force only if you intentionally accept overwriting or deleting them.
+
+exit:2
+PASS own skip-worktree app deletion target refuses before deletion and preserves bytes.
+$ ['tar', '-xf', '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214-review-sdk350-template.tar', '-C', '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 bricks only/apps/app with spaces']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter
+
+exit:0
+$ ['git', 'init', '-q']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 bricks only
+
+exit:0
+$ ['git', 'add', '--all']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 bricks only
+
+exit:0
+$ ['git', '-c', 'core.hooksPath=/dev/null', '-c', 'user.name=Review fixture', '-c', 'user.email=review@example.invalid', 'commit', '-qm', 'baseline']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 bricks only
+
+exit:0
+$ ['git', 'status', '--porcelain']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 bricks only
+
+exit:0
+$ ['git', 'add', '--', 'outside sibling ü notes.txt']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 bricks only
+
+exit:0
+$ ['/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/sdk-350/flutter/bin/dart', '--packages=/Users/nguyenanhkiet/Playground/flutter-starter/.dart_tool/package_config.json', '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 bricks only/apps/app with spaces/tool/strip_sample_features.dart', '--apply', '--keep-samples', '--remove-bricks']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 bricks only/apps/app with spaces
+Removed bricks (--remove-bricks).
+Removed mason.yaml (--remove-bricks).
+Removed test/tooling/brick_input_rules_test.dart (--remove-bricks).
+Dropped 1 marked section(s) or line(s) from docs/README.md.
+Dropped 1 marked section(s) or line(s) from docs/guides/onboarding/repository-layout.md.
+Dropped 1 marked section(s) or line(s) from README.md.
+Dropped 1 marked section(s) or line(s) from tool/README.md.
+Bricks removed; both samples kept. Run: flutter pub get && flutter analyze && flutter test
+
+exit:0
+PASS bricks-only caller accepts unrelated sibling changes while preserving samples and sibling bytes.
+$ ['tar', '-xf', '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214-review-sdk350-template.tar', '-C', '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 old counterfactual/apps/app with spaces']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter
+
+exit:0
+$ ['git', 'init', '-q']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 old counterfactual
+
+exit:0
+$ ['git', 'add', '--all']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 old counterfactual
+
+exit:0
+$ ['git', '-c', 'core.hooksPath=/dev/null', '-c', 'user.name=Review fixture', '-c', 'user.email=review@example.invalid', 'commit', '-qm', 'baseline']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 old counterfactual
+
+exit:0
+$ ['git', 'status', '--porcelain']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 old counterfactual
+
+exit:0
+$ ['git', 'add', '--', 'outside sibling ü notes.txt']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 old counterfactual
+
+exit:0
+$ ['/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/sdk-350/flutter/bin/dart', '--packages=/Users/nguyenanhkiet/Playground/flutter-starter/.dart_tool/package_config.json', '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 old counterfactual/apps/app with spaces/tool/strip_sample_features.dart', '--apply', '--remove-tasks']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 review sdk350 old counterfactual/apps/app with spaces
+Refusing to strip an edited working tree. Nothing was deleted:
+M  "outside sibling \303\274 notes.txt"
+Commit or stash your changes first. Use --force only if you intentionally accept overwriting or deleting them.
+
+exit:2
+PASS counterfactual: original tool refuses on outside-only staged edit; no deletion. New tool succeeds for equivalent staged-sibling case.
+Independent probes complete: six positive/safety executions and one failing-old-tool counterfactual behaved as asserted. No tracked edits, issue mutations or global settings changes.
+
+STATIC SCOPE AND SAFETY REVIEW
+Production diff adds only explicit -- . pathspec to the existing porcelain status invocation. Process.runSync passes an argument vector and the same app workingDirectory; no shell parsing, root discovery, force flag, marker validation, missing-baseline refusal, overwrite hash/filter comparison, hidden-index traversal, deletion or patch logic changed. Both sample-removal and bricks-only branches call this guard.
+Nested prefix resolution remains correct: rev-parse --show-prefix is still used for HEAD:<prefix><relative>, and hash-object --path retains Git attribute/filter normalization. Empirical ls-files -v -z outputs from the app exclude both outside hidden-index siblings and contain the app's hidden deletion target. Six actual new-tool executions cover a deeply nested app with spaces, staged plus newline/unicode outside paths, both outside hidden-index flags, both own hidden-index deletion-target refusals, and the bricks-only caller. The old production tool counterfactual refuses the same outside-only staged state before deleting anything. All assertions passed with isolated SDK3.50 inherited PATH; raw commands, statuses, output and index/byte checks above and probe source are the proof.
+Fixture extraction preserves the original clean nested/CRLF setup when trackedSibling=false. The optional sibling baseline exists only in new test cases. Each new shipped test first exercises own-app refusal and byte preservation, restores the file, then checks a successful strip and unchanged sibling contents/status including staged index state. The original before log contains three failures on outside-only untracked/unstaged/staged states; the focused after log completes21 cases, including prior CRLF and hidden-index guards. The independent counterfactual additionally verifies real old-tool failure. No implementation-mirroring mock or forced strip substitutes for the behavior.
+
+HARNESS CORRECTION / EVIDENCE VALIDITY
+Initial harness selected SDK3.50 for top-level Dart but omitted inherited PATH for nested dart fix. That first run is retained only as 1214-review-first-invalid.log and is explicitly INVALID as final review. Final 1214-review-probe.py prepends isolated SDK3.50 bin to os.environ PATH before every subprocess. Its opening which/version commands record the isolated path and Dart3.14; all tool-invoked Dart subprocesses inherit it. Fresh sdk350-labelled fixtures were recreated. Only this corrected rerun is accepted.
+
+VERDICT AND LIMITATIONS
+No actionable findings against accepted653bb6725442a64eaa0f4e14abf777631e35bd8b. Root tracked files remain clean and unchanged; no issues were mutated, SDK upgraded or persistent configuration changed. No broad unrelated audit, other queue work or duplicate full suite was performed. Actual Windows execution is not claimed; argument-vector/pathspec use is portable Git behavior, with own macOS path-space/unusual-name probes. Root owns all actual CI/full-host conclusions, merge parity, postmerge QA and evidence/changelog/closure. User-requested pause must follow completion of1214.
+
+$ git diff --exit-code
+exit:0

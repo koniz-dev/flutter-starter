@@ -1,0 +1,509 @@
+Independent postmerge QA for PR1238 / issue1214
+Accepted 653bb6725442a64eaa0f4e14abf777631e35bd8b; merged f48cf28f4d3fbb14aac4f8029c40eb83f84f73fe
+Prepared publication remains root-owned. Read-only tracked root; fresh bounded scratch probes only.
+$ ['git', 'status', '--porcelain']
+
+exit:0
+$ ['git', 'rev-parse', 'HEAD', '653bb6725442a64eaa0f4e14abf777631e35bd8b^{tree}', 'f48cf28f4d3fbb14aac4f8029c40eb83f84f73fe^{tree}']
+f48cf28f4d3fbb14aac4f8029c40eb83f84f73fe
+8478bf7c6f358204bee71db9f3fe16c22ca382d7
+8478bf7c6f358204bee71db9f3fe16c22ca382d7
+
+exit:0
+$ ['git', 'diff', '--exit-code', '653bb6725442a64eaa0f4e14abf777631e35bd8b', 'f48cf28f4d3fbb14aac4f8029c40eb83f84f73fe']
+
+exit:0
+$ ['git', 'show', '-s', '--format=%H%n%P%n%B', 'f48cf28f4d3fbb14aac4f8029c40eb83f84f73fe']
+f48cf28f4d3fbb14aac4f8029c40eb83f84f73fe
+91131bf5f6c55f3ff0d634be4d49008846a6b99d
+fix(tooling): scope strip dirty checks to app paths (#1238)
+
+Refs koniz-dev/flutter-starter#1214
+
+exit:0
+Live PR metadata:
+{
+  "number": 1238,
+  "state": "closed",
+  "merged_at": "2026-11-12T14:10:46Z",
+  "merge_commit_sha": "f48cf28f4d3fbb14aac4f8029c40eb83f84f73fe"
+}
+accepted_head:653bb6725442a64eaa0f4e14abf777631e35bd8b
+Live actual accepted-head CI checks:
+[
+  {
+    "name": "Strip tasks-removed + analyze + test",
+    "state": "SUCCESS",
+    "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43231883344/job/131229037038"
+  },
+  {
+    "name": "Strip renamed-both + analyze + test",
+    "state": "SUCCESS",
+    "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43231883344/job/131229037018"
+  },
+  {
+    "name": "Strip keep-samples + analyze + test",
+    "state": "SUCCESS",
+    "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43231883344/job/131229037001"
+  },
+  {
+    "name": "Strip both-samples-removed + analyze + test",
+    "state": "SUCCESS",
+    "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43231883344/job/131229036934"
+  },
+  {
+    "name": "Strip feature-flags-removed + analyze + test",
+    "state": "SUCCESS",
+    "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43231883344/job/131229036469"
+  },
+  {
+    "name": "Quality gate",
+    "state": "SUCCESS",
+    "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43231883391/job/131229035972"
+  }
+]
+Live issue criteria/claim:
+{
+  "number": 1214,
+  "state": "open",
+  "body": "Promoted from P3 audit bundle #1193. Original findings:\n\n`tool/strip_sample_features.dart` (`_checkWorkingTree`, ~875): `git status --porcelain` covers the whole repository, so in a monorepo an untracked file outside the project makes the strip refuse (`?? other_notes.txt`), leaving only `--force`. Criterion: status scoped to the project directory; a test with a dirty sibling path proceeds.\n\n## Acceptance criteria\n\n- status scoped to the project directory; a test with a dirty sibling path proceeds.\n- Required host checks and applicable workflow dispatches pass; evidence names each criterion. Parent #1193 is checked only after this issue closes.\n"
+}
+Labels:['type:bug', 'epic:tooling-ci', 'priority:P3', 'status:in-progress']
+Assignees:['koniz-dev']
+
+Raw prepared artifact format.log:
+$ /Users/nguyenanhkiet/Playground/flutter-starter/scripts/dev/format_dart.sh --check
+
+Formatted 619 files (0 changed) in 2.13 seconds.
+exit: 0
+
+
+Raw prepared artifact analyze.log:
+$ flutter analyze
+
+Analyzing flutter-starter...                                    
+No issues found! (ran in 12.5s)
+exit: 0
+
+
+Raw prepared artifact tests.log:
+$ flutter test --concurrency=4 --timeout=5m --reporter expanded
+
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/text_literal_guard_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/text_literal_guard_test.dart: criterion 1: no string literal is passed to Text( in presentation code
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/text_literal_guard_test.dart: criterion 2: the scan itself catches a planted single-line literal
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/text_literal_guard_test.dart: criterion 2: the scan itself catches a planted multi-line literal, naming its line
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/text_literal_guard_test.dart: criterion 2: the scan itself catches words around an interpolation
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/text_literal_guard_test.dart: criterion 2: the scan itself passes a localized call and punctuation around a localized label
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/text_literal_guard_test.dart: criterion 2: the scan itself honours the allow-list comment on the line or the line above
+00:00 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/text_literal_guard_test.dart: criterion 2: the scan itself scopes to presentation code and shared widgets
+00:04 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_unknown_flags_test.dart: --apply --keep-sample --remove-bricks exits non-zero, names the flag and deletes nothing
+00:04 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_unknown_flags_test.dart: --apply --keep-sample --remove-bricks exits non-zero, names the flag and deletes nothing
+00:04 +9: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_unknown_flags_test.dart: --apply --keep-sample --remove-bricks exits non-zero, names the flag and deletes nothing
+00:04 +10: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_unknown_flags_test.dart: --apply --keep-sample --remove-bricks exits non-zero, names the flag and deletes nothing
+00:05 +11: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_unknown_flags_test.dart: --apply --keep-sample --remove-bricks exits non-zero, names the flag and deletes nothing
+00:05 +12: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_unknown_flags_test.dart: --apply --keep-sample --remove-bricks exits non-zero, names the flag and deletes nothing
+00:05 +13: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_unknown_flags_test.dart: --apply --keep-sample --remove-bricks exits non-zero, names the flag and deletes nothing
+00:05 +14: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_unknown_flags_test.dart: --apply --keep-sample --remove-bricks exits non-zero, names the flag and deletes nothing
+00:05 +15: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_unknown_flags_test.dart: --apply --keep-sample --remove-bricks exits non-zero, names the flag and deletes nothing
+00:05 +16: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_unknown_flags_test.dart: --apply --keep-sample --remove-bricks exits non-zero, names the flag and deletes nothing
+00:07 +17: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_unknown_flags_test.dart: --apply --keep-sample --remove-bricks exits non-zero, names the flag and deletes nothing
+00:08 +18: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_unknown_flags_test.dart: --apply --keep-sample --remove-bricks exits non-zero, names the flag and deletes nothing
+00:08 +19: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_unknown_flags_test.dart: --apply --keep-sample --remove-bricks exits non-zero, names the flag and deletes nothing
+00:08 +20: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_ssl_pinning_rb_test.dart: a space-separated fingerprint is refused, as the app could never match it
+00:09 +21: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_unknown_flags_test.dart: --apply --remove-taks exits non-zero, names the flag and deletes nothing
+00:09 +22: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_unknown_flags_test.dart: --apply --remove-taks exits non-zero, names the flag and deletes nothing
+00:09 +23: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_unknown_flags_test.dart: --apply --remove-taks exits non-zero, names the flag and deletes nothing
+00:09 +24: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_unknown_flags_test.dart: --apply --remove-taks exits non-zero, names the flag and deletes nothing
+00:09 +25: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_unknown_flags_test.dart: --apply --remove-taks exits non-zero, names the flag and deletes nothing
+00:09 +26: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_unknown_flags_test.dart: --apply --remove-taks exits non-zero, names the flag and deletes nothing
+00:09 +27: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_unknown_flags_test.dart: --apply --remove-taks exits non-zero, names the flag and deletes nothing
+00:09 +28: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_unknown_flags_test.dart: --apply --remove-taks exits non-zero, names the flag and deletes nothing
+00:10 +29: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_unknown_flags_test.dart: --apply --remove-taks exits non-zero, names the flag and deletes nothing
+00:10 +30: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_unknown_flags_test.dart: --apply --remove-taks exits non-zero, names the flag and deletes nothing
+00:11 +31: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_ssl_pinning_rb_test.dart: the opt-out values the app reads as false build without fingerprints
+00:12 +32: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_unknown_flags_test.dart: --apply --remove-feature-flag exits non-zero, names the flag and deletes nothing
+00:14 +33: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_unknown_flags_test.dart: --apply --remove-feature-flag exits non-zero, names the flag and deletes nothing
+00:15 +34: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_unknown_flags_test.dart: --apply --remove-feature-flag exits non-zero, names the flag and deletes nothing
+00:15 +35: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_display_name_test.dart: (setUpAll)
+00:16 +36: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_display_name_test.dart: (setUpAll)
+00:18 +37: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_display_name_test.dart: (setUpAll)
+00:19 +38: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_display_name_test.dart: (setUpAll)
+00:20 +39: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_display_name_test.dart: (setUpAll)
+00:22 +40: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_display_name_test.dart: (setUpAll)
+00:22 +41: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_display_name_test.dart: (setUpAll)
+00:22 +42: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_display_name_test.dart: (setUpAll)
+00:22 +43: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_display_name_test.dart: (setUpAll)
+00:22 +44: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_display_name_test.dart: (setUpAll)
+00:22 +45: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_display_name_test.dart: (setUpAll)
+00:22 +46: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_display_name_test.dart: (setUpAll)
+00:22 +47: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_display_name_test.dart: (setUpAll)
+00:22 +48: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_display_name_test.dart: (setUpAll)
+00:22 +49: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_display_name_test.dart: (setUpAll)
+00:22 +50: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_display_name_test.dart: (setUpAll)
+00:22 +51: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_display_name_test.dart: (setUpAll)
+00:22 +52: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_display_name_test.dart: (setUpAll)
+00:22 +53: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_display_name_test.dart: (setUpAll)
+00:22 +54: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_display_name_test.dart: (setUpAll)
+00:22 +55: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_display_name_test.dart: (setUpAll)
+00:23 +56: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_display_name_test.dart: (setUpAll)
+
+[... 9285 lines elided by scripts/test/run_acceptance.sh.
+     Full output is reproducible by re-running the command above. ...]
+
+07:30 +4355 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/main_test.dart: MyApp should configure localization delegates
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+07:30 +4356 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/lib_doc_snippets_test.dart: criterion 1: every // compile doc example in lib/ analyzes with no error or warning
+07:31 +4357 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/lib_doc_snippets_test.dart: criterion 1: every // compile doc example in lib/ analyzes with no error or warning
+07:31 +4358 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/lib_doc_snippets_test.dart: criterion 1: every // compile doc example in lib/ analyzes with no error or warning
+07:31 +4359 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/lib_doc_snippets_test.dart: criterion 1: every // compile doc example in lib/ analyzes with no error or warning
+07:31 +4360 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/lib_doc_snippets_test.dart: criterion 1: every // compile doc example in lib/ analyzes with no error or warning
+07:31 +4361 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/lib_doc_snippets_test.dart: criterion 1: every // compile doc example in lib/ analyzes with no error or warning
+07:31 +4361 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/main_test.dart: MyApp should configure supported locales
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+07:31 +4362 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/lib_doc_snippets_test.dart: criterion 1: every // compile doc example in lib/ analyzes with no error or warning
+07:31 +4363 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/lib_doc_snippets_test.dart: criterion 1: every // compile doc example in lib/ analyzes with no error or warning
+07:31 +4364 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/lib_doc_snippets_test.dart: criterion 1: every // compile doc example in lib/ analyzes with no error or warning
+07:31 +4364 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/main_test.dart: MyApp criterion 2: MaterialApp.locale follows localeStateProvider
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+07:31 +4365 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/lib_doc_snippets_test.dart: criterion 1: every // compile doc example in lib/ analyzes with no error or warning
+07:31 +4365 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/main_test.dart: MyApp should configure text direction from provider
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+07:31 +4366 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/lib_doc_snippets_test.dart: criterion 1: every // compile doc example in lib/ analyzes with no error or warning
+07:31 +4366 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/main_test.dart: MyApp should wrap content in RepaintBoundary
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+07:31 +4367 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/lib_doc_snippets_test.dart: criterion 1: every // compile doc example in lib/ analyzes with no error or warning
+07:31 +4368 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/lib_doc_snippets_test.dart: criterion 1: every // compile doc example in lib/ analyzes with no error or warning
+07:31 +4369 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/lib_doc_snippets_test.dart: criterion 1: every // compile doc example in lib/ analyzes with no error or warning
+07:32 +4370 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/lib_doc_snippets_test.dart: criterion 1: every // compile doc example in lib/ analyzes with no error or warning
+07:33 +4371 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/lib_doc_snippets_test.dart: criterion 1: every // compile doc example in lib/ analyzes with no error or warning
+07:33 +4372 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/lib_doc_snippets_test.dart: criterion 1: every // compile doc example in lib/ analyzes with no error or warning
+07:34 +4373 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/testing_guide_snippets_test.dart: criterion 1: every self-contained dart snippet in CONTRIBUTING.md analyzes with no error or warning
+07:34 +4374 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/testing_guide_snippets_test.dart: criterion 1: every self-contained dart snippet in CONTRIBUTING.md analyzes with no error or warning
+07:34 +4375 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/testing_guide_snippets_test.dart: criterion 1: every self-contained dart snippet in CONTRIBUTING.md analyzes with no error or warning
+07:34 +4376 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/testing_guide_snippets_test.dart: criterion 1: every self-contained dart snippet in CONTRIBUTING.md analyzes with no error or warning
+07:36 +4377 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/testing_guide_snippets_test.dart: criterion 1: every self-contained dart snippet in docs/architecture/overview.md analyzes with no error or warning
+07:48 +4378 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/testing_guide_snippets_test.dart: no snippet imports test/ through the package
+07:48 +4379 ~14: All tests passed!
+exit: 0
+
+
+Raw prepared artifact tree-parity.log:
+Accepted source: 653bb6725442a64eaa0f4e14abf777631e35bd8b
+Merged main: f48cf28f4d3fbb14aac4f8029c40eb83f84f73fe
+Both source trees: 8478bf7c6f358204bee71db9f3fe16c22ca382d7
+Identical: yes
+
+
+Raw prepared artifact refs.log:
+Commits in 91131bf5f6c55f3ff0d634be4d49008846a6b99d..HEAD
+  ok    f48cf28f fix(tooling): scope strip dirty checks to app paths (#1238)
+
+OK: every message links with 'Refs koniz-dev/flutter-starter#N' and closes nothing.
+
+
+Raw prepared artifact deliverable.log:
+Deliverable: HEAD carries nothing that only serves the upstream process.
+
+
+Raw prepared artifact epic-coverage.log:
+Epic coverage OK: every tracked surface maps to one epic.
+
+
+Raw 1214-before.log:
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_rerun_test.dart
+00:00 +0: a nested app allows untracked sibling edits but protects its own edits
+00:05 +0 -1: a nested app allows untracked sibling edits but protects its own edits [E]
+  Expected: <0>
+    Actual: <2>
+  exit 2
+  Refusing to strip an edited working tree. Nothing was deleted:
+  ?? sibling_notes.txt
+  Commit or stash your changes first. Use --force only if you intentionally accept overwriting or deleting them.
+  
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/tooling/strip_rerun_test.dart 386:7            main.<fn>
+  
+00:05 +0 -1: a nested app allows unstaged sibling edits but protects its own edits
+00:14 +0 -2: a nested app allows unstaged sibling edits but protects its own edits [E]
+  Expected: <0>
+    Actual: <2>
+  exit 2
+  Refusing to strip an edited working tree. Nothing was deleted:
+   M sibling_notes.txt
+  Commit or stash your changes first. Use --force only if you intentionally accept overwriting or deleting them.
+  
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/tooling/strip_rerun_test.dart 386:7            main.<fn>
+  
+00:16 +0 -2: a nested app allows staged sibling edits but protects its own edits
+00:22 +0 -3: a nested app allows staged sibling edits but protects its own edits [E]
+  Expected: <0>
+    Actual: <2>
+  exit 2
+  Refusing to strip an edited working tree. Nothing was deleted:
+  M  sibling_notes.txt
+  Commit or stash your changes first. Use --force only if you intentionally accept overwriting or deleting them.
+  
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/tooling/strip_rerun_test.dart 386:7            main.<fn>
+  
+00:23 +0 -3: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_rerun_test.dart: a nested app allows staged sibling edits but protects its own edits
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_rerun_test.dart: a nested app allows unstaged sibling edits but protects its own edits
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_rerun_test.dart: a nested app allows untracked sibling edits but protects its own edits
+
+
+Raw 1214-audit.log:
+==> env asset guard
+OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+==> generated code (skipped: AUDIT_SKIP_CODEGEN=1)
+==> format (lib test integration_test tool examples)
+Formatted 619 files (0 changed) in 2.36 seconds.
+==> flutter analyze
+Analyzing flutter-starter...                                    
+No issues found! (ran in 12.8s)
+==> flutter test
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_rerun_test.dart
+00:00 +0: (a) a git-ignored file importing the sample does not fail the strip
+00:14 +1: (b) a re-run after a partial strip completes
+00:29 +2: (c) a run from a subdirectory refuses and writes nothing
+00:39 +3: refuses unstaged edits before deleting or overwriting anything
+00:50 +4: refuses staged edits before deleting or overwriting anything
+00:55 +5: refuses untracked edits before deleting or overwriting anything
+00:59 +6: refuses skip-worktree edits before deleting or overwriting anything
+01:02 +7: refuses assume-unchanged edits before deleting or overwriting anything
+01:06 +8: refuses unrelated edits before deleting or overwriting anything
+01:11 +9: force permits an intentional overwrite of a dirty tree
+01:19 +10: clean CRLF overwrite targets do not trigger the guard
+01:26 +11: bricks-only removal also refuses a dirty tree
+01:30 +12: a missing Git baseline refuses unless force is explicit
+01:38 +13: a clean app nested in a monorepo resolves committed override paths
+01:47 +14: a nested app allows untracked sibling edits but protects its own edits
+01:55 +15: a nested app allows unstaged sibling edits but protects its own edits
+02:04 +16: a nested app allows staged sibling edits but protects its own edits
+02:14 +17: protects assume-unchanged edits in a brick deletion target
+02:19 +18: protects assume-unchanged edits in a sample deletion target
+02:25 +19: protects skip-worktree edits in a brick deletion target
+02:28 +20: protects skip-worktree edits in a sample deletion target
+02:33 +21: All tests passed!
+
+$ ['which', 'dart']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter
+/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/sdk-350/flutter/bin/dart
+
+exit:0
+$ ['/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/sdk-350/flutter/bin/dart', '--version']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter
+Dart SDK version: 3.14.0 (stable) (Wed Nov 4 16:28:39 2026 -0800) on "macos_x64"
+
+exit:0
+$ ['git', 'archive', '--format=tar', '-o', '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214-postmerge-template.tar', 'f48cf28f4d3fbb14aac4f8029c40eb83f84f73fe']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter
+
+exit:0
+$ ['tar', '-xf', '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214-postmerge-template.tar', '-C', '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 postmerge sample caller/packages/app with spaces']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter
+
+exit:0
+$ ['git', 'init', '-q']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 postmerge sample caller
+
+exit:0
+$ ['git', 'add', '--all']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 postmerge sample caller
+
+exit:0
+$ ['git', '-c', 'core.hooksPath=/dev/null', '-c', 'user.name=Review fixture', '-c', 'user.email=review@example.invalid', 'commit', '-qm', 'baseline']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 postmerge sample caller
+
+exit:0
+$ ['git', 'add', '--', 'outside-work.txt']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 postmerge sample caller
+
+exit:0
+$ ['git', 'show', ':outside-work.txt']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 postmerge sample caller
+staged outside work
+
+exit:0
+$ ['/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/sdk-350/flutter/bin/dart', '--packages=/Users/nguyenanhkiet/Playground/flutter-starter/.dart_tool/package_config.json', '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 postmerge sample caller/packages/app with spaces/tool/strip_sample_features.dart', '--apply', '--remove-tasks']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 postmerge sample caller/packages/app with spaces
+Refusing to strip an edited working tree. Nothing was deleted:
+ M "packages/app with spaces/README.md"
+Commit or stash your changes first. Use --force only if you intentionally accept overwriting or deleting them.
+
+exit:2
+
+HARNESS CORRECTION: the first bounded probe observed the expected own-app exit2 refusal on stderr, but its helper returned stdout only and the assertion inspected the wrong stream. That harness attempt is not accepted as a completed probe. Corrected source returns both streams; fresh valid-labelled fixtures rerun below. No source defect or tracked edit.
+$ ['which', 'dart']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter
+/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/sdk-350/flutter/bin/dart
+
+exit:0
+$ ['/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/sdk-350/flutter/bin/dart', '--version']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter
+Dart SDK version: 3.14.0 (stable) (Wed Nov 4 16:28:39 2026 -0800) on "macos_x64"
+
+exit:0
+$ ['git', 'archive', '--format=tar', '-o', '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214-postmerge-template.tar', 'f48cf28f4d3fbb14aac4f8029c40eb83f84f73fe']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter
+
+exit:0
+$ ['tar', '-xf', '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214-postmerge-template.tar', '-C', '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 postmerge valid sample caller/packages/app with spaces']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter
+
+exit:0
+$ ['git', 'init', '-q']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 postmerge valid sample caller
+
+exit:0
+$ ['git', 'add', '--all']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 postmerge valid sample caller
+
+exit:0
+$ ['git', '-c', 'core.hooksPath=/dev/null', '-c', 'user.name=Review fixture', '-c', 'user.email=review@example.invalid', 'commit', '-qm', 'baseline']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 postmerge valid sample caller
+
+exit:0
+$ ['git', 'add', '--', 'outside-work.txt']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 postmerge valid sample caller
+
+exit:0
+$ ['git', 'show', ':outside-work.txt']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 postmerge valid sample caller
+staged outside work
+
+exit:0
+$ ['/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/sdk-350/flutter/bin/dart', '--packages=/Users/nguyenanhkiet/Playground/flutter-starter/.dart_tool/package_config.json', '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 postmerge valid sample caller/packages/app with spaces/tool/strip_sample_features.dart', '--apply', '--remove-tasks']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 postmerge valid sample caller/packages/app with spaces
+Refusing to strip an edited working tree. Nothing was deleted:
+ M "packages/app with spaces/README.md"
+Commit or stash your changes first. Use --force only if you intentionally accept overwriting or deleting them.
+
+exit:2
+All 932 tracked app-file bytes unchanged after refusal; snapshotSHA256 306128a83fd8f7353d90477e2e9596363260cde568ba33467ab7f4167f6a9824
+$ ['/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/sdk-350/flutter/bin/dart', '--packages=/Users/nguyenanhkiet/Playground/flutter-starter/.dart_tool/package_config.json', '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 postmerge valid sample caller/packages/app with spaces/tool/strip_sample_features.dart', '--apply', '--remove-tasks']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 postmerge valid sample caller/packages/app with spaces
+Dropped 1 marked section(s) or line(s) from docs/README.md.
+Dropped 4 marked section(s) or line(s) from docs/architecture/design-decisions.md.
+Dropped 1 marked section(s) or line(s) from docs/api/features/auth/models.md.
+Dropped 3 marked section(s) or line(s) from README.md.
+Dropped 1 marked section(s) or line(s) from bricks/README.md.
+Dropped 1 marked section(s) or line(s) from bricks/flutter_starter_setup/README.md.
+Dropped 1 marked section(s) or line(s) from integration_test/README.md.
+Dropped 1 marked section(s) or line(s) from docs/architecture/super-starter-hub.md.
+Dropped 1 marked section(s) or line(s) from docs/architecture/contracts-map.md.
+Dropped 1 marked section(s) or line(s) from docs/guides/migration/customization-guide.md.
+Dropped 3 marked section(s) or line(s) from docs/guides/onboarding/fork-and-customize.md.
+Dropped 2 marked section(s) or line(s) from README.md.
+Dropped 4 marked section(s) or line(s) from CLAUDE.md.
+Dropped 3 marked section(s) or line(s) from tool/README.md.
+Removed tool/strip_sample_features.dart: it only serves this strip.
+Removed tool/golden: it only serves this strip.
+Removed .github/workflows/strip-smoke.yml: it only serves this strip.
+Removed test/tooling/strip_markers_test.dart: it only serves this strip.
+Removed test/tooling/strip_sample_prose_test.dart: it only serves this strip.
+Removed test/tooling/strip_rerun_test.dart: it only serves this strip.
+Removed test/tooling/strip_unknown_flags_test.dart: it only serves this strip.
+Strip complete. Run: flutter pub get && flutter analyze && flutter test
+
+exit:0
+$ ['git', 'show', ':outside-work.txt']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 postmerge valid sample caller
+staged outside work
+
+exit:0
+PASS merged sample caller: own tracked edit refuses before deletion; restored app strips despite staged outside work, preserving outside file/index.
+$ ['tar', '-xf', '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214-postmerge-template.tar', '-C', '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 postmerge valid bricks caller/packages/app with spaces']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter
+
+exit:0
+$ ['git', 'init', '-q']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 postmerge valid bricks caller
+
+exit:0
+$ ['git', 'add', '--all']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 postmerge valid bricks caller
+
+exit:0
+$ ['git', '-c', 'core.hooksPath=/dev/null', '-c', 'user.name=Review fixture', '-c', 'user.email=review@example.invalid', 'commit', '-qm', 'baseline']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 postmerge valid bricks caller
+
+exit:0
+$ ['git', 'update-index', '--skip-worktree', 'packages/app with spaces/bricks/README.md']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 postmerge valid bricks caller
+
+exit:0
+$ ['/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/sdk-350/flutter/bin/dart', '--packages=/Users/nguyenanhkiet/Playground/flutter-starter/.dart_tool/package_config.json', '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 postmerge valid bricks caller/packages/app with spaces/tool/strip_sample_features.dart', '--apply', '--keep-samples', '--remove-bricks']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 postmerge valid bricks caller/packages/app with spaces
+Refusing to strip an edited working tree. Nothing was deleted:
+bricks/README.md (modified tracked file)
+Commit or stash your changes first. Use --force only if you intentionally accept overwriting or deleting them.
+
+exit:2
+All 932 tracked app-file bytes unchanged after refusal; snapshotSHA256 e1752e2b4b9850ca4dfa6f748e8c06993c58bb45075413ff5ed6a3621684d022
+$ ['git', 'update-index', '--no-skip-worktree', 'packages/app with spaces/bricks/README.md']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 postmerge valid bricks caller
+
+exit:0
+$ ['/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/sdk-350/flutter/bin/dart', '--packages=/Users/nguyenanhkiet/Playground/flutter-starter/.dart_tool/package_config.json', '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 postmerge valid bricks caller/packages/app with spaces/tool/strip_sample_features.dart', '--apply', '--keep-samples', '--remove-bricks']
+cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1214 postmerge valid bricks caller/packages/app with spaces
+Removed bricks (--remove-bricks).
+Removed mason.yaml (--remove-bricks).
+Removed test/tooling/brick_input_rules_test.dart (--remove-bricks).
+Dropped 1 marked section(s) or line(s) from docs/README.md.
+Dropped 1 marked section(s) or line(s) from docs/guides/onboarding/repository-layout.md.
+Dropped 1 marked section(s) or line(s) from README.md.
+Dropped 1 marked section(s) or line(s) from tool/README.md.
+Bricks removed; both samples kept. Run: flutter pub get && flutter analyze && flutter test
+
+exit:0
+PASS merged bricks-only caller: own hidden deletion target refuses before deletion; restored app removes bricks despite untracked outside work and keeps both samples/outside bytes.
+Bounded independent merged-source execution complete: two own-data refusals and two successful strip callers, all on fresh fixtures and inheritedSDK3.50 PATH. No full-suite duplication or tracked root edits.
+
+PER-CRITERION INDEPENDENT POSTMERGE QA
+1. Project-scoped status and dirty sibling success: PASS on merged f48cf28f4d3fbb14aac4f8029c40eb83f84f73fe. Own fresh real Git fixtures are nested under packages/app with spaces. A staged sibling outside the app is preserved byte-for-byte and in the index; a dirty tracked app README first causes exit2 and preserves every one of 932 tracked app-file bytes, then restored app strips tasks with exit0. The second caller uses untracked outside notes plus a skip-worktree-marked modified app brick deletion target: exit2/no tracked bytes changed before restoration; after restoration bricks-only strip succeeds, both sample features and outside data remain. Four valid merged-source executions (two safety refusals/two successful callers), absolute SDK3.50 top-level and inherited SDK3.50 PATH for nested dart calls. The initial postprobe helper mistakenly inspected only stdout for expected stderr refusal; that attempt is marked invalid above and is not accepted. Only the fresh valid-labelled rerun is final proof; corrected source and result file are retained.
+2. Required host/actual CI and evidence: PASS for merged source/gates. Own live PR metadata verifies accepted 653bb672 and merged f48cf28f; both trees are 8478bf7c6f358204bee71db9f3fe16c22ca382d7. Six actual accepted-head checks are all SUCCESS: Quality plus all five Strip variants. No workflow/native/dependency files changed, so no additional dispatch applies. Raw host files show format/analyzer exit0 and exact complete 4,379 passed/14 skipped summary. Scoped audit completes 21 safety cases; baseline before log shows all three new sibling cases fail without the production fix. Refs/deliverable/epic-coverage artifacts are present and inspected. No full-suite repeat because accepted and merged source are identical.
+Process: live issue #1214 is OPEN, sole assignee koniz-dev, exactly status:in-progress while this phase runs. Merged squash retains Refs koniz-dev/flutter-starter#1214 and no auto-closing instruction. Publication/closing comment, maintainer changelog and parent #1193 checkbox remain root-owned; prepared E artifacts are not asserted to be published yet. No screenshots or standing goldens are used.
+
+RISK GATE / LIMITATIONS
+G3 security phase is skipped as requested by the gate: the actual two-file tool/test diff touches none of auth, storage, network, env, dependency or deploy surfaces. Adversarial filesystem/data preservation review ran premerge; own merged probes verify the same guard/caller boundaries. No broader secret audit or native/device/Windows runtime property is claimed. No tracked edits, issue mutations, SDK upgrades or persistent settings changes were performed. No unrelated issue/queue work or duplicate full suite. Source snapshots check tracked file bytes, not arbitrary filesystem ACL/xattr guarantees.
+
+FINAL VERDICT: No actionable findings on merged f48cf28f. Root may publish reviewed evidence, update changelog, close #1214 and mark its parent checkbox. Then pause as explicitly requested by the user; do not claim another issue.
+
+$ git status --porcelain
+exit:0
