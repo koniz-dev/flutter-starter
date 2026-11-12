@@ -1,0 +1,11 @@
+Issue #1236; epic:feature-tasks
+Base: 30912d93c075777d3a3d8da5b8cbb41b770d71af
+Integrated candidate: 6fbc814064a8a9be359ca4fe150b26e96d913c8a
+lib/features/tasks/presentation/screens/task_detail_screen.dart
+lib/features/tasks/presentation/screens/tasks_list_screen.dart
+lib/features/tasks/routing/tasks_routes.dart
+
+Scope commit records:
+26da8bee483670aee3d17cb7743acb4f9b9ccb2a fix(feature-tasks): migrate standalone Flutter UI libraries
+Refs koniz-dev/flutter-starter#1236
+
