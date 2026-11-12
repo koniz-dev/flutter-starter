@@ -1,0 +1,11 @@
+Verified in PR #1237.
+
+| Acceptance criterion | Result and artifact |
+|---|---|
+| Owned source uses supported standalone APIs and consistent localization types | PASS — [scope.patch](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1235/scope.patch). The complete epic:feature-flags scope diff is recorded here; individual scope commits retain their issue reference. Runtime/UI and documentation mechanisms are verified by the shared integrated acceptance and independent interop probes. |
+| Generation, fixtures and relevant scope mechanisms remain consistent | PASS — [fresh-clone.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1235/fresh-clone.log). Fresh pub get and repeated localization generation leave the accepted source completely clean. The shared 29-case guard/localization audit and all five actual Strip CI variants pass; postmerge QA independently verifies the integrated scope. |
+| Integrated host/CI gates, independent review and merged-source parity | PASS — [tree-parity.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1235/tree-parity.log). Shared full suite: 4,376 passed / 14 skipped. Format/analyzer/docs and every actual current-head CI check pass. Accepted/merged trees match; review.md links independent raw review and postmerge QA/security proof. |
+
+Format, analyzer and full suite passed: [format.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1235/format.log), [analyze.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1235/analyze.log), [tests.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1235/tests.log). All actual PR checks passed. The accepted source tree is identical to merged main: [tree-parity.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1235/tree-parity.log).
+
+Independent reviews: [review.md](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1235/review.md). Self-QA inspected the named artifacts, source assertions, refs and status labels before closing. No screenshots were collected (`--no-goldens`); no criterion rests on standing goldens or device/live-backend/store assurance.
