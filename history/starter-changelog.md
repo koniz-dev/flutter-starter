@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Breaking
 
+- Forks with custom iOS AppDelegate code must follow the UIScene lifecycle migration: conform to FlutterImplicitEngineDelegate and register plugins through the engine bridge in didInitializeImplicitFlutterEngine. Preserve custom native lifecycle behavior when merging; see docs/deployment/ios-deployment.md. Existing deployment targets and signing settings are unchanged.
+
 - Custom widgets, themes or design-token adapters using design-library types must switch their Material/Cupertino imports to material_ui/cupertino_ui so their public types match the starter. Retain the l10n.yaml header and its delegate adapters when regenerating translations; update relative imports if relocating generated output. See the standalone UI section of upgrading-this-starter.md.
 
 - **Partially persisting custom refresh callbacks must store the complete credential pair.** A callback that writes only the refresh token and returns an unpersisted access token now cancels without replay or teardown. Persist both access and refresh before returning, or mutate neither and return the access token. Ambiguous ABA states also cancel safely; see the [network callback migration](https://github.com/koniz-dev/flutter-starter/blob/main/docs/api/core/network.md).
@@ -18,6 +20,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Custom auth datasource logout signature changes.** Custom `AuthRemoteDataSource` implementations must accept the new optional `accessToken` argument on `logout` and use it as the Authorization header when their server requires it.
 
 ### Fixed
+
+- [Native configuration migrations](https://github.com/koniz-dev/flutter-starter/issues/1213): retain iOS/macOS SwiftPM integration, pinned package resolutions and CocoaPods fallback, and adopt the iOS UIScene implicit-engine plugin-registration callback. Fresh clones configure both platforms on Flutter 3.50 without changing tracked files; unsigned iOS compilation is verified.
 
 - [Flutter 3.50 compatibility](https://github.com/koniz-dev/flutter-starter/issues/1225): migrate runtime UI, tests, examples, feature generators and strip fixtures to the standalone Material/Cupertino libraries, preserve generated localization delegates through supported header adapters, and keep the architecture guard effective. Covers the coordinated scopes #1226–#1236.
 
