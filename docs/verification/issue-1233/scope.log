@@ -1,0 +1,11 @@
+Issue #1233; epic:app-shell
+Base: 30912d93c075777d3a3d8da5b8cbb41b770d71af
+Integrated candidate: 6fbc814064a8a9be359ca4fe150b26e96d913c8a
+lib/core/startup/startup_failure_app.dart
+lib/features/home/presentation/screens/home_screen.dart
+lib/main.dart
+
+Scope commit records:
+bec7ffd3fc1e05dd29db5c52b45383c88206c93d fix(app-shell): migrate standalone Flutter UI libraries
+Refs koniz-dev/flutter-starter#1233
+

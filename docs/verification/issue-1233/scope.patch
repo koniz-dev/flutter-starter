@@ -1,0 +1,61 @@
+diff --git a/lib/core/startup/startup_failure_app.dart b/lib/core/startup/startup_failure_app.dart
+index 3eda6bd7b7f..32e5ec0251c 100644
+--- a/lib/core/startup/startup_failure_app.dart
++++ b/lib/core/startup/startup_failure_app.dart
+@@ -1,6 +1,6 @@
+ import 'dart:async';
+ 
+-import 'package:flutter/material.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ /// A startup refusal caused by how the app was built - its ENVIRONMENT,
+ /// BASE_URL or SSL pinning settings - rather than by anything on the device.
+diff --git a/lib/features/home/presentation/screens/home_screen.dart b/lib/features/home/presentation/screens/home_screen.dart
+index b27eb493a33..9422529d3c4 100644
+--- a/lib/features/home/presentation/screens/home_screen.dart
++++ b/lib/features/home/presentation/screens/home_screen.dart
+@@ -1,4 +1,3 @@
+-import 'package:flutter/material.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ 
+ import 'package:flutter_starter/core/constants/ui_keys.dart';
+@@ -7,6 +6,7 @@ import 'package:flutter_starter/core/routing/navigation_extensions.dart';
+ import 'package:flutter_starter/core/routing/routes_registry.dart';
+ import 'package:flutter_starter/l10n/app_localizations.dart';
+ import 'package:flutter_starter/shared/widgets/language_switcher.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ /// Home screen after sign-in (minimal shell; extend per product).
+ ///
+diff --git a/lib/main.dart b/lib/main.dart
+index e98f0e1da6b..963a549258a 100644
+--- a/lib/main.dart
++++ b/lib/main.dart
+@@ -2,8 +2,6 @@
+ // ignore_for_file: public_member_api_docs
+ 
+ import 'package:flutter/foundation.dart' show kReleaseMode;
+-import 'package:flutter/material.dart';
+-import 'package:flutter_localizations/flutter_localizations.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ // `Override` is not in flutter_riverpod.dart's export list; misc.dart is
+ // where riverpod 3 exposes it. Needed only for createAppContainer's
+@@ -23,6 +21,7 @@ import 'package:flutter_starter/features/auth/di/auth_providers.dart';
+ import 'package:flutter_starter/features/auth/presentation/providers/auth_provider.dart';
+ import 'package:flutter_starter/l10n/app_localizations.dart';
+ import 'package:flutter_starter/shared/theme/app_theme.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ // Disables Riverpod auto-retry for EVERY provider, for the whole process
+ // lifetime - not just for startup. A container-level `Retry` is
+@@ -263,9 +262,7 @@ class MyApp extends ConsumerWidget {
+       locale: locale,
+       localizationsDelegates: const [
+         AppLocalizations.delegate,
+-        GlobalMaterialLocalizations.delegate,
+-        GlobalWidgetsLocalizations.delegate,
+-        GlobalCupertinoLocalizations.delegate,
++        ...GlobalMaterialLocalizations.delegates,
+       ],
+       supportedLocales: LocalizationService.supportedLocales,
+       builder: (context, child) {
