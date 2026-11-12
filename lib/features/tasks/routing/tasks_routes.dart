@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/routing/app_routes.dart';
 import 'package:flutter_starter/core/routing/home_destination.dart';
@@ -6,6 +5,7 @@ import 'package:flutter_starter/features/tasks/presentation/providers/tasks_prov
 import 'package:flutter_starter/features/tasks/presentation/screens/task_detail_screen.dart';
 import 'package:flutter_starter/features/tasks/presentation/screens/tasks_list_screen.dart';
 import 'package:go_router/go_router.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Builds the tasks routes (protected by the top-level auth redirect).
 ///
