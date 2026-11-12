@@ -144,13 +144,18 @@ echo "stub: changelog generation fails" >&2
 exit 1
 SH
 chmod +x "$repo/scripts/ci/"*.sh
-(cd "$repo" && git_q add -A && git_q commit -q -m "chore: stub the changelog step")
+# A previous release, so the run gets as far as the changelog step.
+(cd "$repo" && git_q add -A && git_q commit -q -m "chore: stub the changelog step" && git_q tag v1.0.0)
 mkdir -p "$WORK/bin"
 printf '#!/usr/bin/env bash\nexit 0\n' > "$WORK/bin/flutter"
 chmod +x "$WORK/bin/flutter"
 out=$(cd "$repo" && PATH="$WORK/bin:$PATH" bash scripts/ci/release.sh patch < /dev/null 2>&1); rc=$?
 status=$(cd "$repo" && git status --short)
-if [ $rc -ne 0 ]; then pass "release.sh fails when the changelog step fails"; else fail "release.sh fails when the changelog step fails"; fi
+if [ $rc -ne 0 ] && printf '%s' "$out" | grep -q "Step 4"; then
+    pass "release.sh fails when the changelog step fails"
+else
+    fail "release.sh fails when the changelog step fails (exit $rc: $(printf '%s' "$out" | tail -3 | tr '\n' ' '))"
+fi
 if [ -z "$status" ]; then
     pass "after the failure git status --short is empty"
 else
@@ -158,7 +163,7 @@ else
 fi
 branch=$(cd "$repo" && git rev-parse --abbrev-ref HEAD)
 tags=$(cd "$repo" && git tag)
-if [ "$branch" = "main" ] && [ -z "$tags" ]; then
+if [ "$branch" = "main" ] && [ "$tags" = "v1.0.0" ]; then
     pass "no release branch or tag was created"
 else
     fail "no release branch or tag was created (branch=$branch tags=$tags)"
@@ -227,6 +232,89 @@ if printf '%s' "$out" | grep -q "No deploy workflow runs on a tag yet"; then
     pass "a tags: key outside on.push is not a tag trigger"
 else
     fail "a tags: key outside on.push is not a tag trigger, got: $(printf '%s' "$out" | tail -8 | tr '\n' ' ')"
+fi
+
+# --- 7. a first release (no tag) is refused before the tests run
+# It used to run the whole suite and the analyzer, bump the version, and only
+# then refuse at the changelog step and roll back.
+repo=$(new_repo first-release)
+base=$(cd "$repo" && git rev-parse HEAD)
+commit_in "$repo" "feat: the first feature"
+: > "$WORK/flutter-calls"
+printf '#!/usr/bin/env bash\necho "$*" >> "%s"\nexit 0\n' "$WORK/flutter-calls" > "$WORK/bin/flutter"
+out=$(cd "$repo" && PATH="$WORK/bin:$PATH" bash scripts/ci/release.sh patch < /dev/null 2>&1); rc=$?
+status=$(cd "$repo" && git status --short)
+if [ $rc -ne 0 ] && [ -z "$status" ] && [ ! -s "$WORK/flutter-calls" ] \
+    && printf '%s' "$out" | grep -q 'RELEASE_CHANGELOG_SINCE=<ref> ./scripts/ci/release.sh patch'; then
+    pass "with no tag release.sh refuses before the tests and names RELEASE_CHANGELOG_SINCE"
+else
+    fail "with no tag release.sh refuses before the tests and names RELEASE_CHANGELOG_SINCE (exit $rc, flutter calls: $(tr '\n' ' ' < "$WORK/flutter-calls"), status: $status, out: $(printf '%s' "$out" | tail -3 | tr '\n' ' '))"
+fi
+out=$(cd "$repo" && RELEASE_CHANGELOG_SINCE=not-a-ref PATH="$WORK/bin:$PATH" bash scripts/ci/release.sh patch < /dev/null 2>&1); rc=$?
+if [ $rc -ne 0 ] && [ ! -s "$WORK/flutter-calls" ] && printf '%s' "$out" | grep -q "is not a commit"; then
+    pass "a RELEASE_CHANGELOG_SINCE that is not a commit is refused before the tests"
+else
+    fail "a RELEASE_CHANGELOG_SINCE that is not a commit is refused before the tests (exit $rc: $(printf '%s' "$out" | tail -3 | tr '\n' ' '))"
+fi
+out=$(cd "$repo" && printf 'n' | RELEASE_CHANGELOG_SINCE="$base" GIT_AUTHOR_NAME=test GIT_AUTHOR_EMAIL=test@example.com \
+    GIT_COMMITTER_NAME=test GIT_COMMITTER_EMAIL=test@example.com \
+    PATH="$WORK/bin:$PATH" bash scripts/ci/release.sh patch 2>&1); rc=$?
+if [ $rc -eq 0 ] && grep -q '^- the first feature$' "$repo/CHANGELOG.md" && [ -n "$(cd "$repo" && git tag -l v1.0.1)" ]; then
+    pass "with RELEASE_CHANGELOG_SINCE a first release completes"
+else
+    fail "with RELEASE_CHANGELOG_SINCE a first release completes (exit $rc: $(printf '%s' "$out" | tail -4 | tr '\n' ' '))"
+fi
+printf '#!/usr/bin/env bash\nexit 0\n' > "$WORK/bin/flutter"
+
+# --- 8. both scripts work on the repository root from any directory
+# Run from lib/, generate_changelog.sh reported success and wrote a fresh
+# lib/CHANGELOG.md, and release.sh died on a missing pubspec.yaml.
+repo=$(new_repo subdir)
+(cd "$repo" && git_q tag v1.0.0)
+commit_in "$repo" "feat: seen from a subdirectory"
+mkdir -p "$repo/lib"
+out=$(cd "$repo/lib" && bash ../scripts/ci/generate_changelog.sh 2>&1); rc=$?
+if [ $rc -eq 0 ] && [ ! -e "$repo/lib/CHANGELOG.md" ] \
+    && grep -q '^## \[1.0.0\] - ' "$repo/CHANGELOG.md" && grep -q '^- seen from a subdirectory$' "$repo/CHANGELOG.md"; then
+    pass "generate_changelog.sh from a subdirectory reads and writes the root files"
+else
+    fail "generate_changelog.sh from a subdirectory reads and writes the root files (exit $rc: $out)"
+fi
+(cd "$repo" && git_q checkout -q -- CHANGELOG.md)
+out=$(cd "$repo/lib" && printf 'n' | GIT_AUTHOR_NAME=test GIT_AUTHOR_EMAIL=test@example.com \
+    GIT_COMMITTER_NAME=test GIT_COMMITTER_EMAIL=test@example.com \
+    PATH="$WORK/bin:$PATH" bash ../scripts/ci/release.sh patch 2>&1); rc=$?
+if [ $rc -eq 0 ] && [ ! -e "$repo/lib/CHANGELOG.md" ] && grep -q '^version: 1.0.1' "$repo/pubspec.yaml" \
+    && grep -q '^## \[1.0.1\] - ' "$repo/CHANGELOG.md" && [ -n "$(cd "$repo" && git tag -l v1.0.1)" ]; then
+    pass "release.sh from a subdirectory releases the root project"
+else
+    fail "release.sh from a subdirectory releases the root project (exit $rc: $(printf '%s' "$out" | tail -4 | tr '\n' ' '))"
+fi
+
+# An exported CDPATH makes a plain `cd scripts/ci` print the directory, which
+# doubled the path the scripts computed for themselves.
+(cd "$repo" && git_q checkout -q main)
+out=$(cd "$repo" && CDPATH=".:$WORK" bash scripts/ci/generate_changelog.sh 9.9.9 2>&1); rc=$?
+if [ $rc -eq 0 ] && grep -q '^## \[9.9.9\] - ' "$repo/CHANGELOG.md"; then
+    pass "generate_changelog.sh finds the root with CDPATH exported"
+else
+    fail "generate_changelog.sh finds the root with CDPATH exported (exit $rc: $out)"
+fi
+(cd "$repo" && git_q checkout -q -- CHANGELOG.md)
+out=$(cd "$repo" && CDPATH=".:$WORK" PATH="$WORK/bin:$PATH" bash scripts/ci/release.sh patch < /dev/null 2>&1); rc=$?
+if printf '%s' "$out" | grep -q "already exists. Nothing was changed" && [ -z "$(cd "$repo" && git status --short)" ]; then
+    pass "release.sh finds the root with CDPATH exported"
+else
+    fail "release.sh finds the root with CDPATH exported (exit $rc: $(printf '%s' "$out" | tail -3 | tr '\n' ' '))"
+fi
+# Through a symlink the script's own location is not the project.
+mkdir -p "$WORK/elsewhere/a/b"
+ln -s "$repo/scripts/ci/generate_changelog.sh" "$WORK/elsewhere/a/b/gen"
+out=$(cd "$repo" && bash "$WORK/elsewhere/a/b/gen" 9.9.9 2>&1); rc=$?
+if [ $rc -ne 0 ] && printf '%s' "$out" | grep -q "is not the project root" && [ ! -e "$WORK/elsewhere/CHANGELOG.md" ]; then
+    pass "a script reached through a symlink says it is not at the project root"
+else
+    fail "a script reached through a symlink says it is not at the project root (exit $rc: $out)"
 fi
 
 # --- bump_version.sh keeps a trailing comment
