@@ -16,6 +16,10 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
+# Every path below is the repository's, wherever this is run from.
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR/../.."
+
 # Check if we're on main branch
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 if [ "$CURRENT_BRANCH" != "main" ] && [ "$CURRENT_BRANCH" != "master" ]; then
@@ -68,6 +72,22 @@ fi
 if git show-ref --verify --quiet "refs/tags/v$NEXT_VERSION"; then
     echo -e "${RED}Error: tag v$NEXT_VERSION already exists. Nothing was changed.${NC}"
     echo "Delete it (git tag -d v$NEXT_VERSION) or bump past it."
+    exit 1
+fi
+
+# The changelog step needs a starting point: the last tag reachable from
+# HEAD, or RELEASE_CHANGELOG_SINCE. Found at step 4, a first release ran the
+# whole test suite and the analyzer, bumped the version, and only then
+# refused and rolled back.
+if [ -n "${RELEASE_CHANGELOG_SINCE:-}" ]; then
+    if ! git rev-parse --verify --quiet "${RELEASE_CHANGELOG_SINCE}^{commit}" >/dev/null; then
+        echo -e "${RED}Error: RELEASE_CHANGELOG_SINCE '$RELEASE_CHANGELOG_SINCE' is not a commit. Nothing was changed.${NC}"
+        exit 1
+    fi
+elif ! git describe --tags --abbrev=0 >/dev/null 2>&1; then
+    echo -e "${RED}Error: no tag is reachable from HEAD, so the changelog has no previous release to start from. Nothing was changed.${NC}"
+    echo "For a first release, name the commit the changelog should start after:"
+    echo "  RELEASE_CHANGELOG_SINCE=<ref> ./scripts/ci/release.sh $BUMP_TYPE"
     exit 1
 fi
 
