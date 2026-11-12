@@ -18,7 +18,7 @@ Shell utilities grouped by purpose. **Platform folders** (`android/`, `ios/`, â€
 
 | Script | Purpose |
 |--------|---------|
-| [`build_all.sh`](ci/build_all.sh) | Android + iOS (macOS only) + Web build for one `ENVIRONMENT`. No `--flavor`: this project has no Gradle product flavors and configures itself through `--dart-define`. Needs `BASE_URL_STAGING` or `BASE_URL_PRODUCTION` (the API of the environment being built; there is no placeholder fallback) and `API_SSL_FINGERPRINTS` (or `ENABLE_SSL_PINNING=false`) in the environment, or it refuses before building. |
+| [`build_all.sh`](ci/build_all.sh) | Android + iOS (macOS only) + Web build for one `ENVIRONMENT`. No `--flavor`: this project has no Gradle product flavors and configures itself through `--dart-define`. Needs `BASE_URL_STAGING` or `BASE_URL_PRODUCTION` (the API of the environment being built; there is no placeholder fallback) and `API_SSL_FINGERPRINTS` (or `ENABLE_SSL_PINNING=false`) in the environment, or it refuses before building. The Android artifacts are release builds, so `android/key.properties` (release signing) must exist as well, or Gradle refuses them. |
 | [`release_base_url.sh`](ci/release_base_url.sh) | Sourced by `build_all.sh` and the manual build workflow: resolves the API base URL for a staging or production build from `BASE_URL_STAGING` / `BASE_URL_PRODUCTION`, and refuses a missing, non-https or `example.com` URL. |
 | [`ssl_pinning_defines.sh`](ci/ssl_pinning_defines.sh) | Sourced by every mobile release build: turns `API_SSL_FINGERPRINTS` / `ENABLE_SSL_PINNING` into `--dart-define` arguments, and refuses a staging or production build that has neither. |
 | [`bump_version.sh`](ci/bump_version.sh) | Bump `version:` in `pubspec.yaml`. Handles both `1.0.0` and `1.0.0+1`, validates before writing, and leaves the file untouched on any error. |
@@ -32,7 +32,8 @@ Shell utilities grouped by purpose. **Platform folders** (`android/`, `ios/`, â€
 |--------|---------|
 | [`test_coverage.sh`](test/test_coverage.sh) | Coverage reports (HTML, thresholds). |
 | [`calculate_layer_coverage.sh`](test/calculate_layer_coverage.sh) | Layer breakdown (used by CI). |
-| [`run_e2e_tests.sh`](test/run_e2e_tests.sh) | Run Patrol integration tests. |
+| [`run_e2e_tests.sh`](test/run_e2e_tests.sh) | Run Patrol integration tests, then fail unless every collected test ran and passed. |
+| [`check_patrol_summary.sh`](test/check_patrol_summary.sh) | Reads a `patrol test` log and fails on an empty run, a failed or skipped test, or fewer successes than tests. Used by `run_e2e_tests.sh` and the E2E workflow. |
 | [`release_scripts_test.sh`](test/release_scripts_test.sh) | Fixture-repo tests for `generate_changelog.sh` and `release.sh`. Needs no Flutter. Run in CI on Ubuntu and macOS by [`release-scripts.yml`](../.github/workflows/release-scripts.yml) - automatically only in the template repository, by hand (Actions tab) in a project created from it. |
 | [`format_check_test.sh`](test/format_check_test.sh) | Tests the format check the hooks and CI share. |
 | [`test_coverage.ps1`](test/test_coverage.ps1) | `test_coverage.sh` for Windows PowerShell. |

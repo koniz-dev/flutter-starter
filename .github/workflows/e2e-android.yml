@@ -70,7 +70,10 @@ jobs:
       # Patrol 4.9.0+ requires patrol_cli 4.7.0+; use the 4.9.0 CLI
       # released alongside Patrol 4.11.0. Update the local setup docs too.
       # https://patrol.leancode.co/documentation/compatibility-table
-      # Dependabot ignores patrol because these versions must move together.
+      # Dependabot is told to ignore patrol because these versions must move
+      # together, but it still moves patrol when another package's update
+      # requires it; test/tooling/dependabot_config_test.dart fails that PR
+      # until this pin moves too.
       - name: Install Patrol CLI
         run: dart pub global activate patrol_cli 4.9.0
 
@@ -88,32 +91,14 @@ jobs:
           # with "Failed: 1" concluded success until this was added.
           script: bash -o pipefail -c 'patrol test --target integration_test/app_e2e_test.dart 2>&1 | tee patrol-output.log'
 
-      # `patrol test` exits 0 on an EMPTY test set. Before the native androidTest
-      # source set existed, this job went green reporting "Total: 0" - a tick that
-      # verified nothing, which is worse than a red. Never let that recur.
-      - name: Reject an empty test run
+      # `patrol test` exits 0 on an EMPTY test set, and on one whose tests were
+      # all skipped. Before the native androidTest source set existed, this job
+      # went green reporting "Total: 0" - a tick that verified nothing, which is
+      # worse than a red. The script fails unless every collected test ran and
+      # passed; scripts/test/run_e2e_tests.sh applies the same rule locally.
+      - name: Reject an empty, failed or skipped test run
         if: always()
-        run: |
-          if [ ! -f patrol-output.log ]; then
-            echo "::error::patrol-output.log missing - the test step never produced output."
-            exit 1
-          fi
-          total="$(grep -oE 'Total: *[0-9]+' patrol-output.log | tail -1 | grep -oE '[0-9]+' || true)"
-          echo "Patrol reported test count: ${total:-<none>}"
-          if [ -z "$total" ]; then
-            echo "::error::No 'Total:' summary in patrol output; cannot confirm any test ran."
-            exit 1
-          fi
-          if [ "$total" -eq 0 ]; then
-            echo "::error::Patrol collected 0 tests. A green run here would be a false pass."
-            exit 1
-          fi
-          failed="$(grep -oE 'Failed: *[0-9]+' patrol-output.log | tail -1 | grep -oE '[0-9]+' || echo 0)"
-          if [ "$failed" -ne 0 ]; then
-            echo "::error::$failed of $total Patrol test(s) failed. See the patrol-output artifact."
-            exit 1
-          fi
-          echo "OK: $total test(s) collected and executed, 0 failed."
+        run: ./scripts/test/check_patrol_summary.sh patrol-output.log
 
       - name: Upload Patrol output
         if: always()

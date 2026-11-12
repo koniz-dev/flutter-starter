@@ -130,6 +130,8 @@ final getProductsUseCaseProvider = Provider<GetProductsUseCase>((ref) {
 
 ### Step 4: Create UI
 
+Text shown to the user is a plain string here to keep the example short. Under `lib/features/**/presentation/`, `test/tooling/text_literal_guard_test.dart` fails on a bare `Text('...')`: take the string from `context.l10n`, as in [Adding a New Feature](../../api/examples/adding-features.md).
+
 ```dart
 class ProductsScreen extends ConsumerWidget {
   @override
@@ -215,6 +217,8 @@ See [API Integration](../../api/examples/api-integration.md) for more patterns.
 ## Adding New Screens
 
 1. **Create Screen Widget**:
+   Text shown to the user is a plain string here to keep the example short. Under `lib/features/**/presentation/`, `test/tooling/text_literal_guard_test.dart` fails on a bare `Text('...')`: take the string from `context.l10n`, as in [Adding a New Feature](../../api/examples/adding-features.md).
+
    ```dart
    class MyScreen extends ConsumerWidget {
      const MyScreen({super.key});

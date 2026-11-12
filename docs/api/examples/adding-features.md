@@ -16,7 +16,7 @@ leave it out and the brick prompts for it, defaulting to `Profile`. Either way y
 
 | File | What it is |
 |---|---|
-| `lib/features/notes/domain/entities/notes.dart` | The entity (`Notes`), with an `id` to start from |
+| `lib/features/notes/domain/entities/notes.dart` | The entity (`NotesEntity`), with an `id` to start from |
 | `lib/features/notes/domain/repositories/notes_repository.dart` | The repository contract the domain depends on |
 | `lib/features/notes/domain/usecases/get_notes_by_id_usecase.dart` | One use case, `GetNotesByIdUseCase` |
 | `lib/features/notes/data/models/notes_model.dart` | JSON model mapping to the entity |
@@ -39,8 +39,8 @@ throws `UnimplementedError`.
 
 ## Step 2: Shape the domain and model
 
-Add your fields to the `Notes` entity and to `NotesModel` (its `fromJson` /
-`toJson` and its mapping to the entity), and add use cases next to
+Add your fields to `NotesEntity` and to `NotesModel` (its `fromJson` and
+its `toEntity()` mapping; add a `toJson` when you send the model), and add use cases next to
 `GetNotesByIdUseCase` as you need them. The domain layer imports nothing from
 `data/` or `presentation/`; `test/tooling/import_rules_test.dart` fails if it does.
 

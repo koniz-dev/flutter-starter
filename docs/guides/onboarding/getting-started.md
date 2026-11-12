@@ -18,6 +18,14 @@ Before you begin, ensure you have the following installed:
 > `environment:` declares the same floors. On an older SDK, step 2 below
 > (`flutter pub get`) stops with a message naming the SDK version it needs;
 > upgrade Flutter before anything else.
+>
+> **The lock follows the current stable.** `pubspec.lock` is resolved on the
+> newest stable Flutter, and a few of its entries are pinned by the SDK itself
+> (`test_api` and the like, through `flutter_test`). On an older
+> Flutter that still meets the floor, `flutter pub get` rewrites those entries
+> to that SDK's versions. That is your SDK, not a change to the project: do
+> not commit it (`git checkout pubspec.lock`), or upgrade Flutter and the
+> difference goes away.
 
 - **IDE**: Choose one of the following:
   - **VS Code** (recommended): Install Flutter and Dart extensions

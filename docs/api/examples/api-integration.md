@@ -214,6 +214,8 @@ final result = await executeWithRetry(() => loginUseCase(email, password));
 
 ### Complete Login Flow
 
+Text shown to the user is a plain string here to keep the example short. Under `lib/features/**/presentation/`, `test/tooling/text_literal_guard_test.dart` fails on a bare `Text('...')`: take the string from `context.l10n`, as in [Adding a New Feature](adding-features.md).
+
 ```dart
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/errors/failures.dart';

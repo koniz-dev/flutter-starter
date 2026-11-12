@@ -63,6 +63,10 @@ flutter pub get                    # Flutter 3.47+ (Dart 3.13+)
 flutter run                        # no BASE_URL yet: sign in with the demo account
 ```
 
+`pubspec.lock` is resolved on the current stable Flutter. On an older 3.47+
+SDK, `flutter pub get` rewrites a few SDK-pinned entries in it; that diff is
+your SDK's, not the project's, so do not commit it.
+
 To point the app at your API, copy the example environment file, set
 `BASE_URL` in it, and pass it to the build:
 

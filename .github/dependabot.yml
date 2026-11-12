@@ -56,7 +56,11 @@ updates:
       # `patrol` must move together with the `patrol_cli` version pinned in
       # .github/workflows/e2e-android.yml (see the compatibility table linked
       # there); a lone bump makes the CLI abort before any test runs. Bump
-      # both by hand.
+      # both by hand. This entry stops a bump of patrol alone, not one another
+      # package requires: Dependabot still moves patrol when an update it is
+      # making cannot resolve otherwise. test/tooling/dependabot_config_test.dart
+      # pins the patrol / patrol_cli pair and fails such a PR until the CLI
+      # pin moves with it.
       - dependency-name: patrol
       # flutter_launcher_icons 0.14.x aborts with "RangeError (length)" on a
       # palette (8-bit colormap) PNG, a common format for an optimised logo;

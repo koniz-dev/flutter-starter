@@ -1,6 +1,6 @@
 # ADR 0001: Network Boundary (De-Dio)
 
-- Status: Proposed
+- Status: Accepted (implemented: `INetworkClient` is the network boundary in use and `dio` is confined to `lib/core/network/`)
 - Date: 2026-03-27
 
 ## Context
