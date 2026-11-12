@@ -267,7 +267,7 @@ import 'package:go_router/go_router.dart';
 
 /// Path of the ${FEATURE_PASCAL} screen.
 ///
-/// Move this and [${FEATURE_CAMEL}RouteName] into \`AppRoutes\`
+/// Move this and the route name below into \`AppRoutes\`
 /// (\`lib/core/routing/app_routes.dart\`) when you register the route, so
 /// navigation uses the same constants as every other screen.
 const String ${FEATURE_CAMEL}RoutePath = '/${FEATURE_PARAM}';
@@ -275,11 +275,11 @@ const String ${FEATURE_CAMEL}RoutePath = '/${FEATURE_PARAM}';
 /// Name of the ${FEATURE_PASCAL} route.
 const String ${FEATURE_CAMEL}RouteName = '${FEATURE_PARAM}';
 
-/// Builds the ${FEATURE_PASCAL} route, reachable once signed in.
+/// Builds the route of the screen, reachable once signed in.
 ///
-/// Nothing registers it yet: add \`build${FEATURE_PASCAL}Route(ref),\` to
-/// \`buildAppRoutes\` in \`lib/core/routing/routes_registry.dart\`. A route that
-/// is not registered there is a 404.
+/// Nothing registers it yet. Add a call to this function to \`buildAppRoutes\`
+/// in \`lib/core/routing/routes_registry.dart\`: a route that is not registered
+/// there is a 404.
 GoRoute build${FEATURE_PASCAL}Route(Ref ref) {
   return GoRoute(
     path: ${FEATURE_CAMEL}RoutePath,

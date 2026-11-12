@@ -34,9 +34,9 @@ Check that the scaffold is sound before you change anything:
 flutter analyze && flutter test test/features/<name>   # here: test/features/notes
 ```
 
-The scaffold creates **no route and no data source implementation**. The next
-two steps add them; until then the screen is unreachable and loading it
-throws `UnimplementedError`.
+The scaffold **registers no route and implements no data source**. Steps 3
+and 4 do that; until then the screen is unreachable and loading it throws
+`UnimplementedError`.
 
 ## Step 2: Shape the domain and model
 
@@ -104,8 +104,8 @@ Four edits make the screen reachable once signed in. The
 2. **The route module.** The scaffold wrote
    `lib/features/notes/routing/notes_routes.dart` with two constants of its
    own (`notesRoutePath`, `notesRouteName`), so that it compiles before
-   `AppRoutes` knows the feature. Delete them and use the constants from
-   step 1, leaving:
+   `AppRoutes` knows the feature. Now that step 1 has added the constants,
+   replace the file's contents with:
 
    ```dart
    import 'package:flutter_riverpod/flutter_riverpod.dart';

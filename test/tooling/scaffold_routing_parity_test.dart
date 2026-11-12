@@ -12,69 +12,86 @@ const _brick =
     'bricks/feature_clean/__brick__/lib/features/{{feature_name}}/routing/'
     '{{feature_name}}_routes.dart';
 
-/// The brick's template with each script's own variable names filled in.
-String _templateFor({
-  required String name,
-  required String pascal,
-  required String camel,
-  required String param,
-}) =>
-    File(_brick)
-        .readAsStringSync()
-        .replaceAll('{{feature_name.paramCase()}}', param)
-        .replaceAll('{{class_name.camelCase()}}', camel)
-        .replaceAll('{{feature_name}}', name)
-        .replaceAll('{{class_name}}', pascal);
+/// The route module create_feature.sh writes, as the text between the
+/// heredoc's opening line and its closing `EOF`.
+String _shellBlock() {
+  final script = File('scripts/dev/create_feature.sh').readAsStringSync();
+  const opening =
+      r'cat > "$BASE_DIR/routing/${FEATURE_NAME}_routes.dart" <<EOF';
+  final start = script.indexOf('$opening\n');
+  expect(start, isNot(-1), reason: 'create_feature.sh writes no route module');
+  final body = start + opening.length + 1;
+  return script.substring(body, script.indexOf('\nEOF\n', body) + 1);
+}
 
 void main() {
-  test('the brick generates a route module that is not registered yet', () {
-    final template = File(_brick).readAsStringSync();
+  test('create_feature.sh writes a route module that is not registered '
+      'yet', () {
+    final block = _shellBlock();
 
-    expect(template, contains('GoRoute build{{class_name}}Route(Ref ref)'));
+    expect(block, contains(r'GoRoute build${FEATURE_PASCAL}Route(Ref ref)'));
     // Its own constants, so the slice compiles before AppRoutes knows it.
-    expect(template, contains("RoutePath = '/{{feature_name.paramCase()}}'"));
-    expect(template, isNot(contains('AppRoutes.')));
-    expect(template, isNot(contains("core/routing/app_routes.dart';")));
+    expect(block, contains(r"RoutePath = '/${FEATURE_PARAM}'"));
+    expect(block, isNot(contains('AppRoutes.')));
+    expect(block, isNot(contains("core/routing/app_routes.dart';")));
+    expect(
+      File('scripts/dev/create_feature.sh').readAsStringSync(),
+      contains(r'FEATURE_PARAM="${FEATURE_NAME//_/-}"'),
+    );
   });
 
-  test('create_feature.sh writes the same route module', () {
-    final script = File('scripts/dev/create_feature.sh').readAsStringSync();
-    final expected = _templateFor(
-      name: r'${FEATURE_NAME}',
-      pascal: r'${FEATURE_PASCAL}',
-      camel: r'${FEATURE_CAMEL}',
-      param: r'${FEATURE_PARAM}',
-      // A backtick would start a command substitution in the heredoc.
-    ).replaceAll('`', r'\`');
+  // dart format does not rewrap comments, and infos are fatal: a comment
+  // line carrying the class name overflowed 80 columns for a long name.
+  test('no comment line of the route module carries a templated name '
+      'beyond a short prefix', () {
+    final risky = [
+      for (final line in _shellBlock().split('\n'))
+        if (line.startsWith('///') &&
+            line.contains(r'${') &&
+            line.replaceAll(RegExp(r'\$\{\w+\}'), '').length > 40)
+          line,
+    ];
 
-    expect(
-      script,
-      contains(
-        'cat > "\$BASE_DIR/routing/\${FEATURE_NAME}_routes.dart" <<EOF\n'
-        '${expected}EOF\n',
-      ),
-    );
-    expect(script, contains(r'FEATURE_PARAM="${FEATURE_NAME//_/-}"'));
+    expect(risky, isEmpty);
   });
 
   test('create_feature.ps1 writes the same route module', () {
-    final script = File('scripts/dev/create_feature.ps1').readAsStringSync();
-    final expected = _templateFor(
-      name: r'${FeatureName}',
-      pascal: r'${FeaturePascal}',
-      camel: r'${FeatureCamel}',
-      param: r'${FeatureParam}',
-      // A backtick is PowerShell's escape character in a here-string.
-    ).replaceAll('`', '``');
-
+    final script = File(
+      'scripts/dev/create_feature.ps1',
+    ).readAsStringSync().replaceAll('\r\n', '\n');
+    // The shell block in PowerShell's spelling: its variable names, and a
+    // doubled backtick where the heredoc escapes one.
+    final expected = _shellBlock()
+        .replaceAll(r'${FEATURE_NAME}', r'${FeatureName}')
+        .replaceAll(r'${FEATURE_PASCAL}', r'${FeaturePascal}')
+        .replaceAll(r'${FEATURE_CAMEL}', r'${FeatureCamel}')
+        .replaceAll(r'${FEATURE_PARAM}', r'${FeatureParam}')
+        .replaceAll(r'\`', '``');
     const path =
         r'lib/features/$($FeatureName)/routing/$($FeatureName)_routes.dart';
-    const opening = 'Write-GeneratedFile "$path" @"';
 
     expect(
-      script.replaceAll('\r\n', '\n'),
-      contains('$opening\n$expected"@\n'),
+      script,
+      contains('Write-GeneratedFile "$path" @"\n$expected"@\n'),
     );
     expect(script, contains(r"$FeatureParam = $FeatureName.Replace('_', '-')"));
+  });
+
+  test('the brick template is the same route module', () {
+    final brick = File(_brick);
+    if (!brick.existsSync()) {
+      markTestSkipped('bricks/ is not in this tree');
+      return;
+    }
+    final expected = brick
+        .readAsStringSync()
+        .replaceAll('{{feature_name.paramCase()}}', r'${FEATURE_PARAM}')
+        .replaceAll('{{class_name.camelCase()}}', r'${FEATURE_CAMEL}')
+        .replaceAll('{{feature_name}}', r'${FEATURE_NAME}')
+        .replaceAll('{{class_name}}', r'${FEATURE_PASCAL}')
+        // A backtick would start a command substitution in the heredoc.
+        .replaceAll('`', r'\`');
+
+    expect(_shellBlock(), expected);
   });
 }
