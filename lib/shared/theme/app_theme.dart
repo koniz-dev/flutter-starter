@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_starter/shared/design_system/tokens/app_colors.dart';
 import 'package:flutter_starter/shared/design_system/tokens/default_design_tokens.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Application theme configuration
 class AppTheme {

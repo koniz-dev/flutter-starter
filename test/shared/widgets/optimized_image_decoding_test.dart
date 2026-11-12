@@ -1,7 +1,7 @@
 // Regression tests: images decode at the device pixel ratio.
-import 'package:flutter/material.dart';
 import 'package:flutter_starter/shared/widgets/optimized_image.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 
 Widget _atDevicePixelRatio(double ratio, Widget child) {
   return MediaQuery(

@@ -4,8 +4,6 @@
 // Colors.grey and Colors.red, below WCAG AA; it now takes theme colours that
 // the contrast suite checks.
 
-import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/localization/localization_service.dart';
 import 'package:flutter_starter/core/utils/result.dart';
@@ -16,6 +14,7 @@ import 'package:flutter_starter/features/tasks/presentation/screens/tasks_list_s
 import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:flutter_starter/shared/theme/app_theme.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../../../helpers/test_fixtures.dart';
@@ -38,9 +37,7 @@ Future<void> _pumpTasks(WidgetTester tester, {ThemeData? theme}) async {
         theme: theme,
         localizationsDelegates: const [
           AppLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
+          ...GlobalMaterialLocalizations.delegates,
         ],
         supportedLocales: LocalizationService.supportedLocales,
         home: const TasksListScreen(),

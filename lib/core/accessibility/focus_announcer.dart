@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:flutter_starter/core/localization/localization_extensions.dart';
 import 'package:flutter_starter/core/localization/localization_service.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Service for announcing focus changes to screen readers
 ///

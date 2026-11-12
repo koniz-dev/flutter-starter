@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_starter/core/constants/ui_keys.dart';
 import 'package:flutter_starter/core/routing/app_routes.dart';
 import 'package:flutter_starter/features/auth/data/datasources/auth_remote_datasource.dart';
@@ -9,6 +8,7 @@ import 'package:flutter_starter/features/auth/presentation/providers/auth_provid
 import 'package:flutter_starter/features/auth/presentation/screens/login_screen.dart';
 import 'package:flutter_starter/features/home/presentation/screens/home_screen.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../../../../helpers/signed_in_app.dart';
 

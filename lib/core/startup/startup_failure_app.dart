@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// A startup refusal caused by how the app was built - its ENVIRONMENT,
 /// BASE_URL or SSL pinning settings - rather than by anything on the device.

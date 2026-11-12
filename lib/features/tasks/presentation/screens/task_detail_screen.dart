@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/errors/failures.dart';
 import 'package:flutter_starter/core/localization/localized_formatters.dart';
@@ -10,6 +9,7 @@ import 'package:flutter_starter/features/tasks/domain/entities/task.dart';
 import 'package:flutter_starter/features/tasks/presentation/providers/tasks_provider.dart';
 import 'package:flutter_starter/features/tasks/presentation/task_failure_messages.dart';
 import 'package:flutter_starter/l10n/app_localizations.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Task detail/edit screen
 class TaskDetailScreen extends ConsumerStatefulWidget {

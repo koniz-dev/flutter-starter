@@ -1,7 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/errors/failures.dart';
 import 'package:flutter_starter/core/localization/localization_service.dart';
@@ -19,6 +17,7 @@ import 'package:flutter_starter/features/tasks/presentation/screens/task_detail_
 import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../../../helpers/test_fixtures.dart';
@@ -59,9 +58,7 @@ Widget createTestWidget({
       locale: locale,
       localizationsDelegates: const [
         AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
+        ...GlobalMaterialLocalizations.delegates,
       ],
       supportedLocales: LocalizationService.supportedLocales,
     ),
@@ -790,9 +787,7 @@ void main() {
               routerConfig: router,
               localizationsDelegates: const [
                 AppLocalizations.delegate,
-                GlobalMaterialLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-                GlobalCupertinoLocalizations.delegate,
+                ...GlobalMaterialLocalizations.delegates,
               ],
               supportedLocales: LocalizationService.supportedLocales,
             ),

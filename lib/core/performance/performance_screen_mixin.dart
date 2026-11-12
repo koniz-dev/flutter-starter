@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_starter/core/performance/i_performance_service.dart';
 import 'package:flutter_starter/core/performance/performance_attributes.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Mixin for automatic screen performance monitoring
 ///

@@ -1,7 +1,6 @@
-import 'package:flutter/material.dart';
-
 import 'package:flutter_starter/core/accessibility/accessibility_helpers.dart';
 import 'package:flutter_starter/core/localization/localization_extensions.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Accessible button widget with proper semantics and touch targets
 ///
@@ -357,7 +356,7 @@ class AccessibleProgressIndicator extends StatelessWidget {
 /// Helps manage focus for keyboard navigation and screen readers.
 ///
 /// Deliberately **not** named `FocusManager`: this library is meant to be
-/// imported alongside `package:flutter/material.dart`, which exports Flutter's
+/// imported alongside `package:material_ui/material_ui.dart`, which exports Flutter's
 /// own `FocusManager` singleton. A same-named class here makes the very common
 /// `FocusManager.instance.primaryFocus?.unfocus()` a hard compile error
 /// (`'FocusManager' is imported from both ...`) in any file that imports both.

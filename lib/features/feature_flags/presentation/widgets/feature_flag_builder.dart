@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/features/feature_flags/domain/feature_flags_manager.dart';
 import 'package:flutter_starter/features/feature_flags/presentation/providers/feature_flags_providers.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Widget builder that conditionally renders content based on feature flags
 ///

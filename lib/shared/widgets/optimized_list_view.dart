@@ -1,11 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_starter/core/localization/localization_extensions.dart';
 import 'package:flutter_starter/core/utils/pagination_helper.dart'
     show PaginationScrollExtension;
 import 'package:flutter_starter/shared/widgets/error_widget.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Optimized ListView with pagination support
 ///

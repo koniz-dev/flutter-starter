@@ -1,15 +1,15 @@
 // Regression test: no local `FocusManager` may shadow Flutter's.
 //
-// This file imports `package:flutter/material.dart` and
+// This file imports `package:material_ui/material_ui.dart` and
 // `accessibility_widgets.dart` **without a prefix** and uses
 // `FocusManager.instance`. That is the exact combination that failed to
 // compile while `accessibility_widgets.dart` declared its own
 // `class FocusManager`: `'FocusManager' is imported from both ...`. If the
 // widget is ever renamed back, this file stops compiling - the failure is the
 // assertion.
-import 'package:flutter/material.dart';
 import 'package:flutter_starter/shared/accessibility/accessibility_widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 
 void main() {
   group('accessibility_widgets does not shadow Flutter FocusManager', () {

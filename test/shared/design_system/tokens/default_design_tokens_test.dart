@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_starter/core/contracts/design_tokens_contracts.dart';
 import 'package:flutter_starter/shared/design_system/tokens/app_colors.dart';
 import 'package:flutter_starter/shared/design_system/tokens/app_typography.dart';
 import 'package:flutter_starter/shared/design_system/tokens/default_design_tokens.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 
 void main() {
   const tokens = DefaultDesignTokens();

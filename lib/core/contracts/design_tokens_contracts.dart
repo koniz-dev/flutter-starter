@@ -1,7 +1,7 @@
 // Lightweight boundary contract file; repetitive per-member docs are omitted.
 // ignore_for_file: public_member_api_docs
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Semantic design tokens contract used by theme adapters.
 abstract class AppDesignTokens {

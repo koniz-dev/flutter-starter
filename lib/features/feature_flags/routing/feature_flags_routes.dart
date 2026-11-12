@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/routing/app_routes.dart';
 import 'package:flutter_starter/core/routing/home_destination.dart';
 import 'package:flutter_starter/features/feature_flags/presentation/screens/feature_flags_debug_screen.dart';
 import 'package:go_router/go_router.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Builds the feature-flags debug route (protected by the auth redirect).
 ///

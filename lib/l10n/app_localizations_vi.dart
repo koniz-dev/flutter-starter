@@ -1,3 +1,11 @@
+// Bind the SDK generator's Global* names to standalone design-library delegates.
+// ignore: unused_import
+import '../core/localization/cupertino_localizations_delegate.dart'
+    as GlobalCupertinoLocalizations;
+// ignore: unused_import
+import '../core/localization/material_localizations_delegate.dart'
+    as GlobalMaterialLocalizations;
+
 // ignore: unused_import
 import 'package:intl/intl.dart' as intl;
 

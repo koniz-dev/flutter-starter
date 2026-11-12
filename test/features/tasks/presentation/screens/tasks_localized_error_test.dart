@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/errors/failures.dart';
 import 'package:flutter_starter/core/localization/localization_service.dart';
@@ -11,6 +9,7 @@ import 'package:flutter_starter/features/tasks/presentation/screens/task_detail_
 import 'package:flutter_starter/features/tasks/presentation/screens/tasks_list_screen.dart';
 import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../../../helpers/test_fixtures.dart';
@@ -37,9 +36,7 @@ Future<void> _pump(WidgetTester tester, Widget screen, TasksRepository repo) {
         locale: _vi,
         localizationsDelegates: const [
           AppLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
+          ...GlobalMaterialLocalizations.delegates,
         ],
         supportedLocales: LocalizationService.supportedLocales,
         home: screen,

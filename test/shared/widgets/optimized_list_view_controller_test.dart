@@ -6,9 +6,9 @@
 // The tests read ChangeNotifier.hasListeners, which is protected.
 // ignore_for_file: invalid_use_of_protected_member
 
-import 'package:flutter/material.dart';
 import 'package:flutter_starter/shared/widgets/optimized_list_view.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 
 final List<String> _items = [for (var i = 0; i < 100; i++) 'Item $i'];
 

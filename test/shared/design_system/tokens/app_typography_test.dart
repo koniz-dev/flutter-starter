@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_starter/shared/design_system/tokens/app_typography.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 
 // The fontSize/fontWeight expectations below were merged in from the duplicate
 // test/shared/theme/app_text_styles_test.dart, which imported this same

@@ -4,7 +4,6 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/logging/error_reporter_providers.dart';
@@ -14,6 +13,7 @@ import 'package:flutter_starter/core/logging/logging_providers.dart';
 import 'package:flutter_starter/core/logging/logging_service.dart';
 import 'package:flutter_starter/core/logging/uncaught_error_handlers.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 
 class _RecordingReporter implements IErrorReporter {
   final reports = <({String message, Object? error, StackTrace? stack})>[];

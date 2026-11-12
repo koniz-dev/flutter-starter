@@ -4,8 +4,6 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_starter/core/constants/ui_keys.dart';
@@ -22,6 +20,7 @@ import 'package:flutter_starter/features/auth/presentation/screens/login_screen.
 import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:flutter_starter/main.dart' show createAppContainer;
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../../../helpers/in_memory_stores.dart';
 
@@ -228,9 +227,7 @@ void main() {
           child: const MaterialApp(
             localizationsDelegates: [
               AppLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
+              ...GlobalMaterialLocalizations.delegates,
             ],
             home: LoginScreen(),
           ),
@@ -268,9 +265,7 @@ Future<ProviderContainer> _pumpApp(
         routerConfig: container.read(goRouterProvider),
         localizationsDelegates: const [
           AppLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
+          ...GlobalMaterialLocalizations.delegates,
         ],
         supportedLocales: LocalizationService.supportedLocales,
       ),

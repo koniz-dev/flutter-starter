@@ -24,8 +24,6 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/constants/app_constants.dart';
 import 'package:flutter_starter/core/di/providers.dart';
@@ -42,6 +40,7 @@ import 'package:flutter_starter/features/home/presentation/screens/home_screen.d
 import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:flutter_starter/shared/theme/app_theme.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../../helpers/in_memory_stores.dart';
 
@@ -230,9 +229,7 @@ void main() {
             routerConfig: router,
             localizationsDelegates: const [
               AppLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
+              ...GlobalMaterialLocalizations.delegates,
             ],
             supportedLocales: LocalizationService.supportedLocales,
           ),

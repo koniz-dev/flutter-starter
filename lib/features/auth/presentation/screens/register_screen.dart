@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/constants/ui_keys.dart';
 import 'package:flutter_starter/core/localization/failure_localizations.dart';
@@ -9,6 +8,7 @@ import 'package:flutter_starter/features/auth/presentation/auth_redirect.dart';
 import 'package:flutter_starter/features/auth/presentation/providers/auth_provider.dart';
 import 'package:flutter_starter/features/auth/presentation/widgets/auth_form_body.dart';
 import 'package:flutter_starter/l10n/app_localizations.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Registration screen for new user signup
 class RegisterScreen extends ConsumerStatefulWidget {

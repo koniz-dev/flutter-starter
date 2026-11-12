@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:ui';
 
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/di/providers.dart';
@@ -14,6 +13,7 @@ import 'package:flutter_starter/core/storage/storage_version.dart';
 import 'package:flutter_starter/features/auth/presentation/providers/auth_provider.dart';
 import 'package:flutter_starter/main.dart' as app;
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Regression suite: a startup failure must reach the screen.

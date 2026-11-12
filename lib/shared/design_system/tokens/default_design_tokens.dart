@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_starter/core/contracts/design_tokens_contracts.dart';
 import 'package:flutter_starter/shared/design_system/tokens/app_colors.dart';
 import 'package:flutter_starter/shared/design_system/tokens/app_typography.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Default semantic token implementation.
 ///

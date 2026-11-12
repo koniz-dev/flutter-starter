@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/constants/ui_keys.dart';
 import 'package:flutter_starter/core/errors/failures.dart';
@@ -12,6 +10,7 @@ import 'package:flutter_starter/features/auth/presentation/screens/login_screen.
 import 'package:flutter_starter/features/auth/presentation/screens/register_screen.dart';
 import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mocktail/mocktail.dart';
 
 // AuthNotifier used to store `failure.message` - the
@@ -38,9 +37,7 @@ Future<void> _pump(WidgetTester tester, Widget screen, AuthRepository repo) {
         locale: _vi,
         localizationsDelegates: const [
           AppLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
+          ...GlobalMaterialLocalizations.delegates,
         ],
         supportedLocales: LocalizationService.supportedLocales,
         home: screen,

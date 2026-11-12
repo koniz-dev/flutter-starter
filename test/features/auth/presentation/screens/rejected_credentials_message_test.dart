@@ -9,8 +9,6 @@
 // replaced, and it rejects the credentials the way the network layer does: a
 // ServerException carrying 401.
 
-import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/constants/ui_keys.dart';
 import 'package:flutter_starter/core/di/providers.dart';
@@ -27,6 +25,7 @@ import 'package:flutter_starter/features/auth/presentation/screens/login_screen.
 import 'package:flutter_starter/features/auth/presentation/screens/register_screen.dart';
 import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../../../../helpers/in_memory_stores.dart';
 
@@ -69,9 +68,7 @@ Future<void> _pump(WidgetTester tester, Widget screen, Locale locale) {
         locale: locale,
         localizationsDelegates: const [
           AppLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
+          ...GlobalMaterialLocalizations.delegates,
         ],
         supportedLocales: LocalizationService.supportedLocales,
         home: screen,

@@ -156,7 +156,9 @@ bool _domainImportsFlutterUi(String sourcePath, String uri) {
   final feature = featureOf(sourcePath);
   if (feature == null) return false;
   if (!sourcePath.startsWith('lib/features/$feature/domain/')) return false;
-  return uri.startsWith('package:flutter/') && uri != kFlutterFoundation;
+  return (uri.startsWith('package:flutter/') && uri != kFlutterFoundation) ||
+      uri.startsWith('package:material_ui/') ||
+      uri.startsWith('package:cupertino_ui/');
 }
 
 bool _crossFeatureImport(String sourcePath, String uri) {
@@ -486,6 +488,18 @@ void main() {
           'domain_imports_flutter_ui',
           reason: library,
         );
+      }
+    });
+
+    test('domain rejects standalone design libraries and their internals', () {
+      for (final uri in const [
+        'package:material_ui/material_ui.dart',
+        'package:material_ui/src/theme_data.dart',
+        'package:cupertino_ui/cupertino_ui.dart',
+        'package:cupertino_ui/src/theme.dart',
+      ]) {
+        expect(ruleFor(domainFile, uri), 'domain_imports_flutter_ui');
+        expect(ruleFor(screenFile, uri), isNull);
       }
     });
 

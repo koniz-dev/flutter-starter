@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_starter/core/routing/app_routes.dart';
 import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Product 404 shown by the router's `errorBuilder` for an unmatched location.
 ///

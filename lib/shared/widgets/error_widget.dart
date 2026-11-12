@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_starter/core/localization/localization_extensions.dart';
 import 'package:flutter_starter/shared/accessibility/accessibility_widgets.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Reusable error widget
 ///

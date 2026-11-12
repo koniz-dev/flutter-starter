@@ -13,8 +13,6 @@
 /// in the same test.
 library;
 
-import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 // `Override` is exported from misc.dart, not from flutter_riverpod.dart.
 import 'package:flutter_riverpod/misc.dart' show Override;
@@ -23,6 +21,7 @@ import 'package:flutter_starter/features/auth/di/auth_providers.dart';
 import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:flutter_starter/shared/theme/app_theme.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Default capture surface. Wider than the 800x600 test default because Ahem
 /// glyphs are far wider than real ones, so a narrow surface wraps and clips
@@ -65,9 +64,7 @@ Future<void> pumpAcceptance(
         theme: theme ?? AppTheme.lightTheme,
         localizationsDelegates: const [
           AppLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
+          ...GlobalMaterialLocalizations.delegates,
         ],
         supportedLocales: LocalizationService.supportedLocales,
         home: widget,

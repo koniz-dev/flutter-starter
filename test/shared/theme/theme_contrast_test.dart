@@ -19,13 +19,13 @@
 /// 10.5pt bold - not large text, so its 3:1 exemption does not apply.
 library;
 
-import 'package:flutter/material.dart';
 import 'package:flutter_starter/core/accessibility/accessibility_constants.dart';
 import 'package:flutter_starter/core/accessibility/accessibility_helpers.dart';
 import 'package:flutter_starter/shared/design_system/tokens/app_colors.dart';
 import 'package:flutter_starter/shared/extensions/context_extensions.dart';
 import 'package:flutter_starter/shared/theme/app_theme.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// A foreground/background pair with the floor it has to clear.
 class _Pair {

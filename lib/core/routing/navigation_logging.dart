@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_starter/core/logging/logging_service.dart';
 import 'package:go_router/go_router.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Navigator observer for logging navigation events
 ///

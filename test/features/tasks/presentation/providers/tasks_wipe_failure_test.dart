@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/di/providers.dart';
 import 'package:flutter_starter/core/logging/logging_providers.dart';
@@ -17,6 +16,7 @@ import 'package:flutter_starter/features/tasks/routing/tasks_routes.dart';
 import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../../../../helpers/in_memory_stores.dart';
 
@@ -308,7 +308,10 @@ void main() {
         UncontrolledProviderScope(
           container: container,
           child: const MaterialApp(
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            localizationsDelegates: [
+              AppLocalizations.delegate,
+              ...GlobalMaterialLocalizations.delegates,
+            ],
             supportedLocales: AppLocalizations.supportedLocales,
             home: TasksListScreen(),
           ),

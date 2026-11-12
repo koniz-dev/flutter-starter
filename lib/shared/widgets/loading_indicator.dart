@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Reusable loading indicator widget
 class LoadingIndicator extends StatelessWidget {

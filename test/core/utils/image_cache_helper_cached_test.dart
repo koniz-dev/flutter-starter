@@ -4,9 +4,9 @@
 // LateInitializationError, the completer never completed, and the call
 // reported failure only after the whole timeout.
 
-import 'package:flutter/material.dart';
 import 'package:flutter_starter/core/utils/image_cache_helper.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 
 void main() {
   testWidgets('preloading an image already in the cache succeeds at once', (

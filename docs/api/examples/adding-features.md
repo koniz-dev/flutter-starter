@@ -140,7 +140,7 @@ Four edits make the screen reachable once signed in. The
    );
    ```
 
-   That needs `package:flutter/material.dart` and
+   That needs `package:material_ui/material_ui.dart` and
    `core/routing/home_destination.dart` imported. Then add
    `notesHomeDestination,` to the list in `buildHomeDestinations`, next to the
    other features' entries (or to `_debugHomeDestinations` for a debug-only

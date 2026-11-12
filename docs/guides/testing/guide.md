@@ -314,13 +314,13 @@ void main() {
 Test widgets with Riverpod providers:
 
 ```dart
-import 'package:flutter/material.dart';
 import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_starter/features/auth/di/auth_providers.dart';
 import 'package:flutter_starter/features/auth/domain/entities/user.dart';
 import 'package:flutter_starter/features/auth/domain/usecases/login_usecase.dart';
 import 'package:flutter_starter/features/auth/presentation/screens/login_screen.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mocktail/mocktail.dart';
 
 // `test/helpers` is not part of the package: import it relatively. This

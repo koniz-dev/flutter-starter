@@ -2,21 +2,18 @@
 //
 // An empty list must not look the same whether the load succeeded with no
 // results or failed outright.
-import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_starter/core/localization/localization_service.dart';
 import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:flutter_starter/shared/widgets/optimized_list_view.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 
 Widget _wrap(Widget child, {Locale locale = const Locale('en')}) {
   return MaterialApp(
     locale: locale,
     localizationsDelegates: const [
       AppLocalizations.delegate,
-      GlobalMaterialLocalizations.delegate,
-      GlobalWidgetsLocalizations.delegate,
-      GlobalCupertinoLocalizations.delegate,
+      ...GlobalMaterialLocalizations.delegates,
     ],
     supportedLocales: LocalizationService.supportedLocales,
     home: Scaffold(body: child),

@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_starter/shared/design_system/tokens/app_colors.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Semantic typography tokens for the Design System.
 ///

@@ -1,8 +1,6 @@
 // The demo card's controls must be readable against the card in both shipped
 // themes: the fill button is the one control the offline demo flow depends on.
 
-import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_starter/core/accessibility/accessibility_constants.dart';
 import 'package:flutter_starter/core/accessibility/accessibility_helpers.dart';
 import 'package:flutter_starter/core/constants/ui_keys.dart';
@@ -11,6 +9,7 @@ import 'package:flutter_starter/features/auth/demo/demo_sign_in_card.dart';
 import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:flutter_starter/shared/theme/app_theme.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 
 void main() {
   final themes = {
@@ -27,9 +26,7 @@ void main() {
           theme: theme,
           localizationsDelegates: const [
             AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
+            ...GlobalMaterialLocalizations.delegates,
           ],
           supportedLocales: LocalizationService.supportedLocales,
           home: Scaffold(body: DemoSignInCard(onFill: () {})),

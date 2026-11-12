@@ -62,6 +62,12 @@ After modifying ARB files, generate the localization code:
 flutter gen-l10n
 ```
 
+Keep the `header` in `l10n.yaml`: it binds SDK-generated Material and Cupertino
+delegate names to the standalone UI libraries. The generated
+`AppLocalizations.localizationsDelegates` list then works with `material_ui`.
+The relative header imports survive package renaming; update them if you move
+the generated output directory. See the [UI library migration notes](../migration/upgrading-this-starter.md#standalone-ui-libraries-on-flutter-350).
+
 This command generates the `AppLocalizations` class into `lib/l10n/` (`output-localization-file: app_localizations.dart` in `l10n.yaml`), imported as `package:flutter_starter/l10n/app_localizations.dart`. The generated files are committed.
 
 ## Text Localization
@@ -71,8 +77,8 @@ This command generates the `AppLocalizations` class into `lib/l10n/` (`output-lo
 Access localized strings using `AppLocalizations`:
 
 ```dart
-import 'package:flutter/material.dart';
 import 'package:flutter_starter/l10n/app_localizations.dart';
+import 'package:material_ui/material_ui.dart';
 
 class MyWidget extends StatelessWidget {
   const MyWidget({super.key});
@@ -162,10 +168,10 @@ For context-specific translations, use different keys:
 Use `LocalizedFormatters` for date formatting:
 
 ```dart
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/localization/localization_providers.dart';
 import 'package:flutter_starter/core/localization/localized_formatters.dart';
+import 'package:material_ui/material_ui.dart';
 
 class MyWidget extends ConsumerWidget {
   const MyWidget({super.key});
@@ -295,9 +301,9 @@ assets/
 
 **Usage:**
 ```dart
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/localization/localization_providers.dart';
+import 'package:material_ui/material_ui.dart';
 
 class LocalizedImage extends ConsumerWidget {
   const LocalizedImage({required this.imagePath, super.key});
@@ -333,8 +339,8 @@ assets/
 The app includes a ready-to-use language switcher:
 
 ```dart
-import 'package:flutter/material.dart';
 import 'package:flutter_starter/shared/widgets/language_switcher.dart';
+import 'package:material_ui/material_ui.dart';
 
 // As an icon button in an AppBar
 AppBar buildAppBar() => AppBar(actions: const [LanguageSwitcher()]);
@@ -354,9 +360,9 @@ Future<void> openLanguageSelection(BuildContext context) {
 ### Programmatic Language Switching
 
 ```dart
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/localization/localization_providers.dart';
+import 'package:material_ui/material_ui.dart';
 
 class MyWidget extends ConsumerWidget {
   const MyWidget({super.key});
@@ -393,9 +399,9 @@ final languageCode = locale.languageCode; // 'en', 'es', 'ar'
 RTL is automatically handled for Arabic and other RTL languages:
 
 ```dart
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/localization/localization_providers.dart';
+import 'package:material_ui/material_ui.dart';
 
 class MyWidget extends ConsumerWidget {
   const MyWidget({required this.child, super.key});
@@ -519,11 +525,11 @@ Text(LocalizedFormatters.formatDate(date, locale: locale));
 ### Complete Example: Localized Form
 
 ```dart
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/localization/localization_providers.dart';
 import 'package:flutter_starter/core/localization/localized_formatters.dart';
 import 'package:flutter_starter/l10n/app_localizations.dart';
+import 'package:material_ui/material_ui.dart';
 
 class LocalizedFormExample extends ConsumerStatefulWidget {
   const LocalizedFormExample({super.key});
@@ -616,10 +622,10 @@ class _LocalizedFormExampleState extends ConsumerState<LocalizedFormExample> {
 ### Example: Currency Display
 
 ```dart
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/localization/localization_providers.dart';
 import 'package:flutter_starter/core/localization/localized_formatters.dart';
+import 'package:material_ui/material_ui.dart';
 
 class PriceDisplay extends ConsumerWidget {
   const PriceDisplay({
@@ -653,8 +659,8 @@ class PriceDisplay extends ConsumerWidget {
 ### Example: Pluralized Messages
 
 ```dart
-import 'package:flutter/material.dart';
 import 'package:flutter_starter/l10n/app_localizations.dart';
+import 'package:material_ui/material_ui.dart';
 
 class ItemList extends StatelessWidget {
   const ItemList({required this.items, super.key});

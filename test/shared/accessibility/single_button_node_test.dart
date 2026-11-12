@@ -1,13 +1,12 @@
 import 'dart:ui' show Tristate;
 
-import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/features/home/presentation/screens/home_screen.dart';
 import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:flutter_starter/shared/accessibility/accessibility_widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 
 // AccessibleButton and AccessibleIconButton used to wrap a Material button -
 // which makes its own button node - in a second
@@ -36,9 +35,7 @@ Future<void> _pump(WidgetTester tester, Widget child) {
     MaterialApp(
       localizationsDelegates: const [
         AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
+        ...GlobalMaterialLocalizations.delegates,
       ],
       supportedLocales: AppLocalizations.supportedLocales,
       home: Scaffold(body: Center(child: child)),
@@ -177,9 +174,7 @@ void main() {
         child: MaterialApp(
           localizationsDelegates: [
             AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
+            ...GlobalMaterialLocalizations.delegates,
           ],
           supportedLocales: AppLocalizations.supportedLocales,
           home: HomeScreen(),

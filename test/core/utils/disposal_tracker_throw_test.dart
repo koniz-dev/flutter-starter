@@ -2,9 +2,9 @@
 // first that threw: the rest were never disposed and super.dispose() never
 // ran.
 
-import 'package:flutter/material.dart';
 import 'package:flutter_starter/core/utils/memory_helper.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 
 final List<String> _log = [];
 
