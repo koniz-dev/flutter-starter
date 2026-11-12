@@ -1,0 +1,11 @@
+Issue #1232; epic:core-routing
+Base: 30912d93c075777d3a3d8da5b8cbb41b770d71af
+Integrated candidate: 6fbc814064a8a9be359ca4fe150b26e96d913c8a
+lib/core/routing/navigation_extensions.dart
+lib/core/routing/navigation_logging.dart
+lib/core/routing/route_not_found_screen.dart
+
+Scope commit records:
+94f0e69364fc3a52f33bbf60644b248295ed1ca5 fix(core-routing): migrate standalone Flutter UI libraries
+Refs koniz-dev/flutter-starter#1232
+

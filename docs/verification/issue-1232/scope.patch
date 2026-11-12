@@ -1,0 +1,39 @@
+diff --git a/lib/core/routing/navigation_extensions.dart b/lib/core/routing/navigation_extensions.dart
+index 2c8d784dbcf..f5fa62227ec 100644
+--- a/lib/core/routing/navigation_extensions.dart
++++ b/lib/core/routing/navigation_extensions.dart
+@@ -1,8 +1,8 @@
+ import 'dart:async';
+ 
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/core/routing/app_routes.dart';
+ import 'package:go_router/go_router.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ /// Navigation extensions for GoRouter
+ ///
+diff --git a/lib/core/routing/navigation_logging.dart b/lib/core/routing/navigation_logging.dart
+index 894042fb748..30ee9d30d40 100644
+--- a/lib/core/routing/navigation_logging.dart
++++ b/lib/core/routing/navigation_logging.dart
+@@ -1,6 +1,6 @@
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/core/logging/logging_service.dart';
+ import 'package:go_router/go_router.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ /// Navigator observer for logging navigation events
+ ///
+diff --git a/lib/core/routing/route_not_found_screen.dart b/lib/core/routing/route_not_found_screen.dart
+index 16c9dbc9142..f510071d77e 100644
+--- a/lib/core/routing/route_not_found_screen.dart
++++ b/lib/core/routing/route_not_found_screen.dart
+@@ -1,7 +1,7 @@
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/core/routing/app_routes.dart';
+ import 'package:flutter_starter/l10n/app_localizations.dart';
+ import 'package:go_router/go_router.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ /// Product 404 shown by the router's `errorBuilder` for an unmatched location.
+ ///
