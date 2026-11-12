@@ -19,7 +19,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Custom auth datasource logout signature changes.** Custom `AuthRemoteDataSource` implementations must accept the new optional `accessToken` argument on `logout` and use it as the Authorization header when their server requires it.
 
+- **Staging and production builds need your API URL.** `scripts/ci/build_all.sh` and the manual `build.yml` workflow no longer fall back to `https://api.example.com`. Set `BASE_URL_STAGING` / `BASE_URL_PRODUCTION` in the environment (for `build.yml`: its `base_url` input, or a repository variable or secret of those names). A missing, non-https or `example.com` URL is refused before anything is built; copy `scripts/ci/release_base_url.sh` together with the updated script and workflow.
+
+- **Android builds on Flutter 3.50 need the newer toolchain.** Flutter 3.50 refuses Android Gradle Plugin below 9.1.1 and Kotlin below 2.4.10. Copy the three versions: Gradle 9.5.0 in `android/gradle/wrapper/gradle-wrapper.properties`, AGP 9.3.1 and Kotlin 2.4.20 in `android/settings.gradle.kts`. `tool/check_android_toolchain.dart` now enforces these floors; they also build on Flutter 3.47.
+
+- **Dependency floors moved after v4.0.0.** `patrol` ^4.11.0 needs `patrol_cli` 4.9.0 (reinstall the CLI); `equatable` ^3.0.0 removes `EquatableMixin`, so write `with Equatable` where your code said `with EquatableMixin`; `go_router` ^18.1.3 and the code generators (`build_runner` 2.17.1, `build` 5.0.0) are routine: run `flutter pub get` and regenerate.
+
 ### Fixed
+
+- **Scripts smoke stays green in a stripped project.** After a sample strip or `--remove-bricks`, the setup-brick and manual-rename jobs skip the steps that need Mason or the strip tool, with a notice, instead of failing on files the strip removed.
+
+- **The feature brick refuses to overwrite an existing feature.** `mason make feature_clean` for a name that already has `lib/features/<name>` or `test/features/<name>` now stops before writing anything, as `create_feature.sh` does. It used to prompt file by file, or fail part-way with no terminal.
+
+- **Release scripts work from any directory and check history first.** `generate_changelog.sh` and `release.sh` operate on the repository root wherever they are run from (the changelog script used to write a stray `CHANGELOG.md` into the current directory). On a first release with no tag, `release.sh` refuses before running the tests and names `RELEASE_CHANGELOG_SINCE=<ref>`.
 
 - [Monorepo sample stripping](https://github.com/koniz-dev/flutter-starter/issues/1214): scope the Git dirty check to the app directory so untracked, unstaged or staged sibling edits no longer require force. Preserve protections for app edits, normalized overwrite targets and hidden index changes; real monorepo fixtures verify sibling contents and Git state remain unchanged.
 
