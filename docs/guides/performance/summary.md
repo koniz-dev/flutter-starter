@@ -221,6 +221,9 @@ imageCache.maximumSizeBytes = 100 << 20; // 100 MB
    ```bash
    BASE_URL_PRODUCTION=https://... API_SSL_FINGERPRINTS=... ./scripts/ci/build_all.sh --analyze-size
    ```
+   These are release builds, so Android also needs release signing:
+   `android/key.properties` must exist, or the Gradle build refuses. See
+   [Android deployment](../../deployment/android-deployment.md).
 
 ---
 

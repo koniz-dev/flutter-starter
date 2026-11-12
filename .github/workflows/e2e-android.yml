@@ -70,7 +70,10 @@ jobs:
       # Patrol 4.9.0+ requires patrol_cli 4.7.0+; use the 4.9.0 CLI
       # released alongside Patrol 4.11.0. Update the local setup docs too.
       # https://patrol.leancode.co/documentation/compatibility-table
-      # Dependabot ignores patrol because these versions must move together.
+      # Dependabot is told to ignore patrol because these versions must move
+      # together, but it still moves patrol when another package's update
+      # requires it; test/tooling/dependabot_config_test.dart fails that PR
+      # until this pin moves too.
       - name: Install Patrol CLI
         run: dart pub global activate patrol_cli 4.9.0
 

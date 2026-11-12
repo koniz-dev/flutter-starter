@@ -139,9 +139,10 @@ not *no Flutter import at all*. The domain entities
 `lib/features/auth/domain/entities/user.dart:1`) each import
 `package:flutter/foundation.dart` for `@immutable`, a compile-time annotation
 re-exported from `package:meta` that contributes nothing at runtime. Those
-lines are the only Flutter imports anywhere under
-`lib/features/*/domain/`; use cases and repository interfaces are
-framework-free. This guide states what the code does - it previously claimed
+lines, and the same import for the same annotation in
+`lib/features/feature_flags/domain/feature_flags_manager.dart`, are the only
+Flutter imports anywhere under `lib/features/*/domain/`; use cases and
+repository interfaces are framework-free. This guide states what the code does - it previously claimed
 an absolute purity the code has never had.
 
 #### 3. Data Layer

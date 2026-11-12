@@ -25,7 +25,7 @@ flowchart LR
   REPOIMPL --> RDS[Data<br/>Remote data source]
   REPOIMPL --> LDS[Data<br/>Local data source]
 
-  RDS --> APIC[Core<br/>ApiClient (Dio facade)]
+  RDS --> APIC["Core<br/>ApiClient (Dio facade)"]
   APIC --> NET[Core<br/>DioNetworkClient]
   NET --> API[(Backend API)]
 
@@ -70,28 +70,33 @@ New to the architecture? Start here:
 
 ## Architecture Layers
 
+Arrows point from a layer to what it depends on. Presentation and data both
+depend on the domain; the domain depends on neither, and
+`test/tooling/import_rules_test.dart` fails if it imports them.
+
 ```
 ┌─────────────────────────────────────┐
 │   Presentation Layer (UI)           │
-│  - Screens, Widgets, Providers     │
+│  - Screens, Widgets, Providers      │
 │  - State Management (Riverpod)      │
 └──────────────┬──────────────────────┘
-               │
+               │ depends on
 ┌──────────────▼──────────────────────┐
 │      Domain Layer                   │
-│  - Entities, Use Cases, Repositories │
-│  - Business Logic (Framework-free)   │
-└──────────────┬──────────────────────┘
-               │
-┌──────────────▼──────────────────────┐
+│  - Entities, Use Cases,             │
+│    Repository interfaces            │
+│  - Business Logic (Framework-free)  │
+└──────────────▲──────────────────────┘
+               │ depends on
+┌──────────────┴──────────────────────┐
 │      Data Layer                     │
-│  - Models, Data Sources, Repository  │
-│  - Implementations                   │
+│  - Models, Data Sources,            │
+│    Repository implementations       │
 └──────────────┬──────────────────────┘
-               │
+               │ depends on
 ┌──────────────▼──────────────────────┐
 │      Core Layer                     │
-│  - Network, Storage, Config, Utils   │
+│  - Network, Storage, Config, Utils  │
 └─────────────────────────────────────┘
 ```
 

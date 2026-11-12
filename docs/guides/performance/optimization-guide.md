@@ -237,7 +237,8 @@ await loader.load();
 **New Script:** `scripts/ci/build_all.sh`
 
 ```bash
-# Run build size analysis (a release build: it needs your fingerprints)
+# Run build size analysis (a release build: it needs your API URL, your
+# fingerprints, and release signing in android/key.properties)
 BASE_URL_PRODUCTION=https://... API_SSL_FINGERPRINTS=... ./scripts/ci/build_all.sh production --analyze-size
 ```
 

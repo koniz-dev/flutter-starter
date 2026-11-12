@@ -35,8 +35,7 @@ be wired** - type `AppTheme._tokens` on the abstraction - and
 **`IAuthController` is to be removed**, with `AuthStateSnapshot`,
 `ControllerStateSnapshot` and `authControllerProvider`. Both rows stay here
 describing the tree as it is until those changes land; the ADR says what they
-are becoming. Neither is filed yet, and the ADR names the epic and the exact
-edit for each.
+are becoming; the ADR names the area and the exact edit for each.
 
 Two rows that used to sit here were answered by deletion rather than by wiring.
 `AppNavigator` went - the contract, its adapter
