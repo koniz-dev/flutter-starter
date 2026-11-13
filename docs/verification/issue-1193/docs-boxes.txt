@@ -1,0 +1,59 @@
+# Documentation boxes of #1193 on main at a78bdd605ea: each claim checked against the tree.
+
+## design-decisions.md: DateFormatter row and AuthState constructor
+docs/architecture/design-decisions.md:253:  AuthState build() => const AuthState();
+docs/architecture/design-decisions.md:1275:| `DateFormatter` | yes, the ISO 8601 pair | `formatIso8601` / `parseIso8601` persist `created_at` and `updated_at` in the tasks sample's model. The display 
+callers of the display pair (formatDate / formatDateTime) in lib: none. The one textual match is a doc comment in lib/core/network/interceptors/cache_interceptor.dart:113 saying the pair must not be used there.
+
+## architecture README: quoted Mermaid label, data depends on domain
+docs/architecture/README.md:28:  RDS --> APIC["Core<br/>ApiClient (Dio facade)"]
+docs/architecture/README.md:40:- **Contracts live in Domain/Core**: UI depends on providers, providers depend on use cases, use cases depend on repository contracts, and implementations live in Data/C
+docs/architecture/README.md:73:Arrows point from a layer to what it depends on. Presentation and data both
+docs/architecture/README.md:74:depend on the domain; the domain depends on neither, and
+docs/architecture/README.md:83:               │ depends on
+docs/architecture/README.md:90:               │ depends on
+docs/architecture/README.md:96:               │ depends on
+
+## adding-features.md names what the brick generates
+docs/api/examples/adding-features.md:19:| `lib/features/notes/domain/entities/notes.dart` | The entity (`NotesEntity`), with an `id` to start from |
+docs/api/examples/adding-features.md:43:Add your fields to `NotesEntity` and to `NotesModel` (its `fromJson` and
+bricks/feature_clean/__brick__/lib/features/{{feature_name}}/domain/entities/{{feature_name}}.dart:4:final class {{class_name}}Entity extends Equatable {
+
+## models.md: TaskModel extends its entity
+docs/api/features/auth/models.md:79:(`TaskModel` extends its entity too; its `toEntity()` returns itself and
+lib/features/tasks/data/models/task_model.dart:50:class TaskModel extends Task {
+
+## text-literal guard notes
+docs/api/examples/api-integration.md:1
+docs/api/features/auth/providers.md:1
+docs/guides/accessibility/guide.md:1
+docs/guides/accessibility/quick-reference.md:1
+docs/guides/features/common-tasks.md:2
+
+## build_all signing precondition
+docs/guides/performance/optimization-guide.md:241:# fingerprints, and release signing in android/key.properties)
+docs/guides/performance/summary.md:225:   `android/key.properties` must exist, or the Gradle build refuses. See
+scripts/README.md:21:| [`build_all.sh`](ci/build_all.sh) | Android + iOS (macOS only) + Web build for one `ENVIRONMENT`.
+
+## ADR status
+docs/architecture/adr/0001-network-boundary.md:3:- Status: Accepted (implemented: `INetworkClient` is the netw
+docs/architecture/adr/0002-storage-boundary.md:3:- Status: Accepted (implemented: `IKeyValueStore` and `IToken
+docs/architecture/adr/0003-navigation-boundary.md:3:- Status: Accepted
+docs/architecture/adr/0004-theme-token-boundary.md:3:- Status: Accepted (implemented: `AppTheme` is typed on `
+docs/architecture/adr/0005-state-boundary.md:3:- Status: **Superseded** by
+docs/architecture/adr/0006-contract-status-and-slice-shape.md:3:- Status: Accepted
+
+## network.md: retry-count wording gone
+0 matches
+
+## overview.md: second foundation import named
+docs/architecture/overview.md:143:`lib/features/feature_flags/domain/feature_flags_manager.dart`, are the only
+
+## Dependabot / patrol comments
+.github/dependabot.yml:60:      # package requires: Dependabot still moves patrol when an update it is
+.github/dependabot.yml:61:      # making cannot resolve otherwise. test/tooling/dependabot_config_test.dart
+.github/workflows/e2e-android.yml:74:      # together, but it still moves patrol when another package's update
+docs/deployment/summary.md:17:- **Dependency updates:** [`.github/dependabot.yml`](../../.github/dependabot.yml) opens weekly PRs for pub pa
+
+## docs checks
+OK: documentation checks passed.

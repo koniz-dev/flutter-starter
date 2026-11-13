@@ -1,0 +1,17 @@
+# PR #1243 for issue #1217
+fix(tooling): refuse to generate a feature over existing paths
+https://github.com/koniz-dev/flutter-starter/pull/1243
+merged 2026-11-12T16:47:58Z as 133edfee11b
+
+## checks on the merged head
+SUCCESS  Docs check  https://github.com/koniz-dev/flutter-starter/actions/runs/43259834743/job/131327819507
+SUCCESS  Quality gate  https://github.com/koniz-dev/flutter-starter/actions/runs/43259834907/job/131327822524
+SUCCESS  Strip both-samples-removed + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43259834498/job/131327820980
+SUCCESS  Strip feature-flags-removed + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43259834498/job/131327820069
+SUCCESS  Strip keep-samples + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43259834498/job/131327819576
+SUCCESS  Strip renamed-both + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43259834498/job/131327820113
+SUCCESS  Strip tasks-removed + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43259834498/job/131327820189
+
+## manual run
+
+scripts-smoke.yml job=all (setup-brick and manual-rename generate brick_probe with the new pre_gen): success - https://github.com/koniz-dev/flutter-starter/actions/runs/43322884647

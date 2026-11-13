@@ -1,0 +1,24 @@
+# PR #1239 for issue #1215
+fix(ci): require a base URL before staging and production builds
+https://github.com/koniz-dev/flutter-starter/pull/1239
+merged 2026-11-12T16:47:44Z as 8a234aedec6
+
+## checks on the merged head
+SUCCESS  Action pins  https://github.com/koniz-dev/flutter-starter/actions/runs/43259669216/job/131327251093
+SUCCESS  Android on JDK 25 (toolchain floor + debug build)  https://github.com/koniz-dev/flutter-starter/actions/runs/43259669176/job/131327244693
+SUCCESS  Docs check  https://github.com/koniz-dev/flutter-starter/actions/runs/43259669409/job/131327245601
+SUCCESS  Quality gate  https://github.com/koniz-dev/flutter-starter/actions/runs/43259669188/job/131327244221
+SUCCESS  Strip both-samples-removed + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43259669168/job/131327253603
+SUCCESS  Strip feature-flags-removed + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43259669168/job/131327253019
+SUCCESS  Strip keep-samples + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43259669168/job/131327253382
+SUCCESS  Strip renamed-both + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43259669168/job/131327253244
+SUCCESS  Strip tasks-removed + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43259669168/job/131327253376
+SUCCESS  Workflow lint  https://github.com/koniz-dev/flutter-starter/actions/runs/43259669216/job/131327250808
+
+## manual runs (workflows that do not run on a PR)
+
+build.yml, platform web, no base_url: refused before building ('no API base URL for staging') - https://github.com/koniz-dev/flutter-starter/actions/runs/43322898750
+
+build.yml, platform android, base_url=https://api.build-smoke.invalid: Build Android success - https://github.com/koniz-dev/flutter-starter/actions/runs/43322954253
+
+scripts-smoke.yml job=all (build_all.sh staging with the throwaway URL): success - https://github.com/koniz-dev/flutter-starter/actions/runs/43322884647

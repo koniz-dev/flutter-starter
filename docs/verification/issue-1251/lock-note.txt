@@ -1,0 +1,23 @@
+# main at bfef2761a36. Option 2: the floor stays at 3.47 and the docs name the lock rewrite.
+
+pubspec.yaml environment: 8:  sdk: ^3.13.0;9:  flutter: '>=3.47.0';
+
+## README.md
+66:`pubspec.lock` is resolved on the current stable Flutter. On an older 3.47+
+67:SDK, `flutter pub get` rewrites a few SDK-pinned entries in it; that diff is
+
+## CONTRIBUTING.md
+22:- Flutter SDK **>=3.47.0**. `pubspec.lock` is resolved on the current stable; on an older Flutter, `flutter pub get` rewrites its SDK-pinned entries (`test_api` and the like). Do not commit that change (`git checkout 
+
+## docs/guides/onboarding/getting-started.md
+22:> **The lock follows the current stable.** `pubspec.lock` is resolved on the
+25:> Flutter that still meets the floor, `flutter pub get` rewrites those entries
+
+## CLAUDE.md
+26:the lock was resolved on (the declared floor is 3.47), `flutter pub get`
+27:rewrites the SDK-pinned lock entries (`test_api` and the like) to that SDK's
+
+## the rewrite itself, on this machine (Flutter 3.47.0, after flutter pub get)
+test_api: 0.7.14 in the committed lock -> 0.7.12 after 'flutter pub get' on 3.47.0 (git diff pubspec.lock, restored afterwards)
+
+00:00 +6: All tests passed!

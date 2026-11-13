@@ -1,0 +1,14 @@
+# main at bfef2761a36.
+
+$ git grep -n "IAuthController\|AuthStateSnapshot\|ControllerStateSnapshot\|authControllerProvider\|RiverpodAuthStateSnapshot" -- lib test tool bricks examples integration_test
+exit=1 (1 = no match)
+
+$ the same names under docs/ (ADR history and contracts-map prose only)
+docs/architecture/adr/0005-state-boundary.md:4
+docs/architecture/adr/0006-contract-status-and-slice-shape.md:11
+docs/architecture/contracts-map.md:2
+
+## ADR 0006 follow-up table
+248:| ~~Remove `IAuthController`~~ | auth slice | **Done.** `IAuthController`, `AuthStateSnapshot` and `ControllerStateSnapshot` are gone from `lib/core/contracts/state_boundary_contracts.dart`, as ar
+249:| Wire `AppDesignTokens` | design system | Type `AppTheme._tokens` on `AppDesignTokens` (`lib/shared/theme/app_theme.dart`); update the contracts-map.md row from "No production consumer" to "Live"
+250:| Teach the brick `routing/` | tooling | Add `routing/{{feature_name}}_routes.dart` to `bricks/feature_clean/__brick__`, matching the auth slice |

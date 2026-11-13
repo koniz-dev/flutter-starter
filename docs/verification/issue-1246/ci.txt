@@ -1,0 +1,13 @@
+# PR #1256 for issue #1246
+refactor(auth): remove IAuthController and its snapshot types
+https://github.com/koniz-dev/flutter-starter/pull/1256
+merged 2026-11-12T23:22:25Z as bfef2761a36
+
+## checks on the merged head
+SUCCESS  Docs check  https://github.com/koniz-dev/flutter-starter/actions/runs/43326127908/job/131558917418
+SUCCESS  Quality gate  https://github.com/koniz-dev/flutter-starter/actions/runs/43326127903/job/131558917494
+SUCCESS  Strip both-samples-removed + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43326127853/job/131558917481
+SUCCESS  Strip feature-flags-removed + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43326127853/job/131558917404
+SUCCESS  Strip keep-samples + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43326127853/job/131558917004
+SUCCESS  Strip renamed-both + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43326127853/job/131558917372
+SUCCESS  Strip tasks-removed + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43326127853/job/131558917402

@@ -1,0 +1,23 @@
+# PR #1254 for issue #1250
+fix(ci): build Android on the current stable every week
+https://github.com/koniz-dev/flutter-starter/pull/1254
+merged 2026-11-12T22:57:13Z as 6eb193ccd7c
+
+## checks on the merged head
+SUCCESS  .github/dependabot.yml  https://dependabot-api.githubapp.com
+SUCCESS  Action pins  https://github.com/koniz-dev/flutter-starter/actions/runs/43321633296/job/131543484301
+SUCCESS  Android on JDK 25 (toolchain floor + debug build)  https://github.com/koniz-dev/flutter-starter/actions/runs/43321633285/job/131543483651
+SUCCESS  Docs check  https://github.com/koniz-dev/flutter-starter/actions/runs/43321633434/job/131543484591
+SUCCESS  Quality gate  https://github.com/koniz-dev/flutter-starter/actions/runs/43321633008/job/131543482579
+SUCCESS  Strip both-samples-removed + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43321633023/job/131543483160
+SUCCESS  Strip feature-flags-removed + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43321633023/job/131543483196
+SUCCESS  Strip keep-samples + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43321633023/job/131543482657
+SUCCESS  Strip renamed-both + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43321633023/job/131543483202
+SUCCESS  Strip tasks-removed + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43321633023/job/131543483244
+SUCCESS  Workflow lint  https://github.com/koniz-dev/flutter-starter/actions/runs/43321633296/job/131543483858
+
+## manual runs on the branch
+
+build.yml platform android: 'Android on JDK 25 (toolchain floor + debug build)' success - https://github.com/koniz-dev/flutter-starter/actions/runs/43322954253
+
+The first scheduled run is due Monday 04:30 UTC (scheduled runs here start hours late); it cannot be shown before then.

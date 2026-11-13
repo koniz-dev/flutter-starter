@@ -1,0 +1,8 @@
+# main at 133edfee11b.
+
+## bricks/feature_clean/hooks from 81444221dec (before the fix)
+00:32 +64 -1: feature_clean existing feature pre_gen refuses an existing feature and writes nothing [E]
+00:32 +64 -1: Some tests failed.
+
+## main, unmodified
+00:32 +65: All tests passed!

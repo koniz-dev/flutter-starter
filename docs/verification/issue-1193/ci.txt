@@ -1,0 +1,15 @@
+# PR #1249 for issue #1193
+docs: close the documentation findings of the 2026-11-09 audit
+https://github.com/koniz-dev/flutter-starter/pull/1249
+merged 2026-11-12T17:31:53Z as ca28fa6efff
+
+## checks on the merged head
+SUCCESS  Action pins  https://github.com/koniz-dev/flutter-starter/actions/runs/43268682962/job/131359041888
+SUCCESS  Docs check  https://github.com/koniz-dev/flutter-starter/actions/runs/43268682902/job/131359040809
+SUCCESS  Quality gate  https://github.com/koniz-dev/flutter-starter/actions/runs/43268682823/job/131359039450
+SUCCESS  Strip both-samples-removed + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43268682624/job/131359039919
+SUCCESS  Strip feature-flags-removed + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43268682624/job/131359039940
+SUCCESS  Strip keep-samples + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43268682624/job/131359039680
+SUCCESS  Strip renamed-both + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43268682624/job/131359039772
+SUCCESS  Strip tasks-removed + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43268682624/job/131359039719
+SUCCESS  Workflow lint  https://github.com/koniz-dev/flutter-starter/actions/runs/43268682962/job/131359041403

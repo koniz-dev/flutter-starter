@@ -1,0 +1,17 @@
+# PR #1244 for issue #1218
+fix(release): anchor the release scripts and check changelog history first
+https://github.com/koniz-dev/flutter-starter/pull/1244
+merged 2026-11-12T17:29:43Z as 79f14b42aa0
+
+## checks on the merged head
+SUCCESS  Docs check  https://github.com/koniz-dev/flutter-starter/actions/runs/43263676282/job/131341413219
+SUCCESS  Quality gate  https://github.com/koniz-dev/flutter-starter/actions/runs/43263676369/job/131341385565
+SUCCESS  Strip both-samples-removed + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43263676045/job/131341385228
+SUCCESS  Strip feature-flags-removed + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43263676045/job/131341385439
+SUCCESS  Strip keep-samples + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43263676045/job/131341385206
+SUCCESS  Strip renamed-both + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43263676045/job/131341385172
+SUCCESS  Strip tasks-removed + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43263676045/job/131341385255
+SUCCESS  release scripts (macos-latest)  https://github.com/koniz-dev/flutter-starter/actions/runs/43263676005/job/131359558670
+SUCCESS  release scripts (ubuntu-latest)  https://github.com/koniz-dev/flutter-starter/actions/runs/43263676005/job/131359561439
+
+The Release scripts workflow ran on this PR: ubuntu-latest and macos-latest (bash 3.2) both success.

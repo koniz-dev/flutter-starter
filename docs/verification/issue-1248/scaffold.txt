@@ -1,0 +1,63 @@
+# branch feat/1248-scaffold-routing at 4bb78bf33e3; mason_cli mason_cli 0.1.4 • command-line interface.
+
+## notes
+$ ls lib/features/notes/routing
+notes_routes.dart
+$ flutter analyze (infos fatal) on the script output
+No issues found! (ran in 2.9s)
+$ dart format --set-exit-if-changed
+Formatted 11 files (0 changed) in 0.05 seconds.
+$ flutter test
+00:00 +4: All tests passed!
+$ diff -r <create_feature.sh output> <mason make feature_clean output>   (lib and test)
+identical
+
+## user_notification_preferences
+$ ls lib/features/user_notification_preferences/routing
+user_notification_preferences_routes.dart
+$ flutter analyze (infos fatal) on the script output
+No issues found! (ran in 2.4s)
+$ dart format --set-exit-if-changed
+Formatted 11 files (0 changed) in 0.05 seconds.
+$ flutter test
+00:00 +4: All tests passed!
+$ diff -r <create_feature.sh output> <mason make feature_clean output>   (lib and test)
+identical
+
+## the generated route module (notes)
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_starter/features/notes/presentation/screens/notes_screen.dart';
+import 'package:go_router/go_router.dart';
+
+/// Path of the Notes screen.
+///
+/// Move this and the route name below into `AppRoutes`
+/// (`lib/core/routing/app_routes.dart`) when you register the route, so
+/// navigation uses the same constants as every other screen.
+const String notesRoutePath = '/notes';
+
+/// Name of the Notes route.
+const String notesRouteName = 'notes';
+
+/// Builds the route of the screen, reachable once signed in.
+///
+/// Nothing registers it yet. Add a call to this function to `buildAppRoutes`
+/// in `lib/core/routing/routes_registry.dart`: a route that is not registered
+/// there is a 404.
+GoRoute buildNotesRoute(Ref ref) {
+  return GoRoute(
+    path: notesRoutePath,
+    name: notesRouteName,
+    builder: (context, state) =>
+        NotesScreen(id: state.uri.queryParameters['id'] ?? '1'),
+  );
+}
+
+## parity test, and with bricks/ removed
+00:00 +4: All tests passed!
+  bricks/ is not in this tree
+00:00 +3 ~1: All tests passed!
+
+## a one-character drift in create_feature.ps1
+00:00 +2 -1: create_feature.ps1 writes the same route module [E]
+00:00 +3 -1: Some tests failed.

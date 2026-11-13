@@ -1,0 +1,21 @@
+# main at 133edfee11b.
+
+## android/ from 81444221dec (before the fix): the floor check and its tests
+Android Gradle Plugin: 9.1.0 (floor 9.3.1)
+Kotlin: 2.4.0 (floor 2.4.20)
+Gradle 9.3.1 is below the floor 9.5.0 that Flutter stable supports
+Android Gradle Plugin 9.1.0 is below the floor 9.3.1 that Flutter stable supports
+Kotlin 2.4.0 is below the floor 2.4.20 that Flutter stable supports
+
+3 toolchain problem(s).
+exit=1
+00:00 +7 -1: criterion 2: passes on the real android/ files [E]
+00:00 +7 -1: Some tests failed.
+
+## main, unmodified
+Android Gradle Plugin: 9.3.1 (floor 9.3.1)
+Kotlin: 2.4.20 (floor 2.4.20)
+
+OK: the Android toolchain meets every floor.
+exit=0
+00:00 +14: All tests passed!

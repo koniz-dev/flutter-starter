@@ -1,0 +1,18 @@
+# PR #1242 for issue #1216
+fix(ci): skip Mason and strip steps in scripts-smoke once their files are gone
+https://github.com/koniz-dev/flutter-starter/pull/1242
+merged 2026-11-12T16:47:51Z as 68f6c18085d
+
+## checks on the merged head
+SUCCESS  Action pins  https://github.com/koniz-dev/flutter-starter/actions/runs/43259682565/job/131327291945
+SUCCESS  Quality gate  https://github.com/koniz-dev/flutter-starter/actions/runs/43259682544/job/131327469331
+SUCCESS  Strip both-samples-removed + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43259682403/job/131327293210
+SUCCESS  Strip feature-flags-removed + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43259682403/job/131327293351
+SUCCESS  Strip keep-samples + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43259682403/job/131327293507
+SUCCESS  Strip renamed-both + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43259682403/job/131327293509
+SUCCESS  Strip tasks-removed + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43259682403/job/131327292657
+SUCCESS  Workflow lint  https://github.com/koniz-dev/flutter-starter/actions/runs/43259682565/job/131327291397
+
+## manual run
+
+scripts-smoke.yml job=all in the template (every guarded step runs, the template backstop does not fire): 4 jobs success - https://github.com/koniz-dev/flutter-starter/actions/runs/43322884647

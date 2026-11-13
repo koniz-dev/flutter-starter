@@ -1,0 +1,13 @@
+# PR #1258 for issue #1247
+refactor(theme): type AppTheme on the AppDesignTokens contract
+https://github.com/koniz-dev/flutter-starter/pull/1258
+merged 2026-11-12T23:51:40Z as 8771cef1ae4
+
+## checks on the merged head
+SUCCESS  Docs check  https://github.com/koniz-dev/flutter-starter/actions/runs/43329733366/job/131571138226
+SUCCESS  Quality gate  https://github.com/koniz-dev/flutter-starter/actions/runs/43329733362/job/131571136954
+SUCCESS  Strip both-samples-removed + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43329733361/job/131571137824
+SUCCESS  Strip feature-flags-removed + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43329733361/job/131571137983
+SUCCESS  Strip keep-samples + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43329733361/job/131571137570
+SUCCESS  Strip renamed-both + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43329733361/job/131571137840
+SUCCESS  Strip tasks-removed + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43329733361/job/131571137930

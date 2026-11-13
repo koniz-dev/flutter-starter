@@ -1,0 +1,16 @@
+# main at 133edfee11b. New tests with the fix reverted, then on main unmodified.
+
+## scripts/ci/build_all.sh and .github/workflows/build.yml from 81444221dec (before the fix)
+00:01 +7 -1: build_all.sh refuses before calling flutter when the URL is unset [E]
+00:01 +7 -2: no build script or workflow carries a placeholder base URL [E]
+00:01 +7 -3: every build.yml build resolves its URL through the helper [E]
+00:01 +7 -3: Some tests failed.
+
+## main, unmodified
+00:07 +29: All tests passed!
+
+## build_all.sh staging with BASE_URL_STAGING unset (stub flutter on PATH; flutter.log must not exist)
+Error: no API base URL for staging. Set BASE_URL_STAGING to your API
+(https://...): there is no placeholder fallback.
+exit=1
+flutter was never called

@@ -1,0 +1,36 @@
+# branch fix/1219-patrol-skipped-guard at 8cd8353abd0
+
+## The check on real E2E job logs (gh run view <id> --log, timestamps stripped)
+run 43253820686:
+  Patrol reported: total=2 successful=2 failed=0 skipped=0
+  OK: 2 test(s) collected, all executed and passed.
+  exit=0
+run 42619405068:
+  Patrol reported: total=0 successful=0 failed=0 skipped=0
+  Error: Patrol collected 0 tests. A green run here would be a false pass.
+  exit=1
+run 32970921492:
+  Patrol reported: total=2 successful=0 failed=1 skipped=1
+  Error: 1 of 2 Patrol test(s) failed. See the Patrol output.
+  exit=1
+run 32869023061:
+  Patrol reported: total=<none> successful=<none> failed=<none> skipped=<none>
+  Error: No 'Total:' summary in patrol output; cannot confirm any test ran.
+  exit=1
+
+## A run whose two tests were both skipped (the passing log with its summary rewritten)
+  Patrol reported: total=2 successful=0 failed=0 skipped=2
+  Error: 2 of 2 Patrol test(s) were skipped; a skipped test verified nothing.
+  exit=1
+
+## run_e2e_tests.sh with a stub patrol that prints an all-skipped summary and exits 0
+  Skipped: 2
+  Patrol reported: total=2 successful=0 failed=0 skipped=2
+  Error: 2 of 2 Patrol test(s) were skipped; a skipped test verified nothing.
+  exit=1
+the same stub against run_e2e_tests.sh from 81444221dec:
+  [0;32m✅ E2E tests complete![0m
+  exit=0
+
+## tests
+00:00 +11: All tests passed!

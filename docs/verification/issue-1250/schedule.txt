@@ -1,0 +1,15 @@
+# main at bfef2761a36.
+
+## .github/workflows/build.yml from 81444221dec (before): the schedule test
+00:00 +0 -1: the Android floor job runs on a weekly schedule [E]
+00:00 +0 -2: only the floor job runs on the schedule, and only in the template [E]
+00:00 +0 -2: Some tests failed.
+
+## main, unmodified
+00:00 +6: All tests passed!
+
+## the trigger and the guard
+19:  schedule:
+20-    - cron: '30 4 * * 1' # weekly (Mon 04:30 UTC), after e2e-android.yml's slot
+21-  pull_request:
+86:      (github.event_name == 'schedule' && github.event.repository.is_template) ||

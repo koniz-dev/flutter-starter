@@ -1,0 +1,17 @@
+# PR #1257 for issue #1248
+feat(tooling): generate a routing file with every scaffolded feature
+https://github.com/koniz-dev/flutter-starter/pull/1257
+merged 2026-11-13T00:08:56Z as a78bdd605ea
+
+## checks on the merged head
+SUCCESS  Docs check  https://github.com/koniz-dev/flutter-starter/actions/runs/43333264536/job/131582965360
+SUCCESS  Quality gate  https://github.com/koniz-dev/flutter-starter/actions/runs/43333264473/job/131582965167
+SUCCESS  Strip both-samples-removed + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43333264474/job/131582965538
+SUCCESS  Strip feature-flags-removed + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43333264474/job/131582965471
+SUCCESS  Strip keep-samples + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43333264474/job/131582965241
+SUCCESS  Strip renamed-both + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43333264474/job/131582965405
+SUCCESS  Strip tasks-removed + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43333264474/job/131582965425
+
+## manual runs
+
+scripts-smoke.yml job=all on the branch (Windows scaffold-parity compares create_feature.sh with create_feature.ps1; setup-brick and manual-rename generate after a rename): success - https://github.com/koniz-dev/flutter-starter/actions/runs/43328233585 (first commit) and https://github.com/koniz-dev/flutter-starter/actions/runs/43330924586 (review fixes)

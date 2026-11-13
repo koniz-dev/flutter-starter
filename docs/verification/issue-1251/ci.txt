@@ -1,0 +1,13 @@
+# PR #1255 for issue #1251
+docs: say the committed lock follows the current stable
+https://github.com/koniz-dev/flutter-starter/pull/1255
+merged 2026-11-12T17:57:24Z as 1aaecec1b2f
+
+## checks on the merged head
+SUCCESS  Docs check  https://github.com/koniz-dev/flutter-starter/actions/runs/43273556112/job/131375838033
+SUCCESS  Quality gate  https://github.com/koniz-dev/flutter-starter/actions/runs/43273556221/job/131375838925
+SUCCESS  Strip both-samples-removed + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43273556283/job/131375839246
+SUCCESS  Strip feature-flags-removed + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43273556283/job/131375839296
+SUCCESS  Strip keep-samples + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43273556283/job/131375838650
+SUCCESS  Strip renamed-both + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43273556283/job/131375839338
+SUCCESS  Strip tasks-removed + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43273556283/job/131375839313

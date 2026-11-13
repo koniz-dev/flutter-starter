@@ -1,0 +1,19 @@
+# PR #1245 for issue #1219
+fix(e2e): reject Patrol runs with skipped tests
+https://github.com/koniz-dev/flutter-starter/pull/1245
+merged 2026-11-12T17:57:19Z as ebf47072275
+
+## checks on the merged head
+SUCCESS  Action pins  https://github.com/koniz-dev/flutter-starter/actions/runs/43267426157/job/131354653742
+SUCCESS  Docs check  https://github.com/koniz-dev/flutter-starter/actions/runs/43267426797/job/131354654194
+SUCCESS  Quality gate  https://github.com/koniz-dev/flutter-starter/actions/runs/43267425673/job/131354649816
+SUCCESS  Strip both-samples-removed + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43267426850/job/131354656576
+SUCCESS  Strip feature-flags-removed + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43267426850/job/131354656530
+SUCCESS  Strip keep-samples + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43267426850/job/131354656104
+SUCCESS  Strip renamed-both + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43267426850/job/131354656798
+SUCCESS  Strip tasks-removed + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43267426850/job/131354658199
+SUCCESS  Workflow lint  https://github.com/koniz-dev/flutter-starter/actions/runs/43267426157/job/131354653560
+
+## manual run
+
+e2e-android.yml on the branch head, using scripts/test/check_patrol_summary.sh: 'Patrol reported: total=2 successful=2 failed=0 skipped=0', success - https://github.com/koniz-dev/flutter-starter/actions/runs/43268686679

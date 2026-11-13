@@ -1,0 +1,16 @@
+# main at bfef2761a36.
+$ grep -n "on-conflict" .github/workflows/scripts-smoke.yml   (only the flutter_starter_setup step keeps it)
+258:            --on-conflict overwrite
+
+$ grep -n -A2 "mason make feature_clean" .github/workflows/scripts-smoke.yml
+280:          # `mason make feature_clean` is documented after setup; its templates
+281-          # must name the new package too.
+282-          if grep -rl "package:flutter_starter/" bricks/feature_clean; then
+--
+323:          mason make feature_clean --feature_name brick_probe \
+324-            --class_name BrickProbe --include_tests true
+325-          flutter analyze lib/features/brick_probe test/features/brick_probe
+--
+466:          mason make feature_clean --feature_name brick_probe \
+467-            --class_name BrickProbe --include_tests true
+468-          flutter analyze lib/features/brick_probe test/features/brick_probe

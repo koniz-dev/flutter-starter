@@ -1,0 +1,13 @@
+# PR #1241 for issue #1240
+fix(android): raise the toolchain to Flutter 3.50's floors
+https://github.com/koniz-dev/flutter-starter/pull/1241
+merged 2026-11-12T16:31:33Z as db01032cb02
+
+## checks on the merged head
+SUCCESS  Android on JDK 25 (toolchain floor + debug build)  https://github.com/koniz-dev/flutter-starter/actions/runs/43251617567/job/131298625940
+SUCCESS  Quality gate  https://github.com/koniz-dev/flutter-starter/actions/runs/43251617014/job/131298624831
+SUCCESS  Strip both-samples-removed + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43251617288/job/131298655123
+SUCCESS  Strip feature-flags-removed + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43251617288/job/131298654735
+SUCCESS  Strip keep-samples + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43251617288/job/131298656022
+SUCCESS  Strip renamed-both + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43251617288/job/131298655241
+SUCCESS  Strip tasks-removed + analyze + test  https://github.com/koniz-dev/flutter-starter/actions/runs/43251617288/job/131298654908

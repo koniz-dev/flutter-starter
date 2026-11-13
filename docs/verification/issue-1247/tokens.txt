@@ -1,0 +1,25 @@
+# main at 8771cef1ae4.
+
+## lib/shared/theme/app_theme.dart from bfef2761a36 (before): the token-substitution test
+test/shared/theme/app_theme_tokens_test.dart:57:28: Error: Member not found: 'AppTheme.light'.
+test/shared/theme/app_theme_tokens_test.dart:74:28: Error: Member not found: 'AppTheme.dark'.
+test/shared/theme/app_theme_tokens_test.dart:92:42: Error: Member not found: 'AppTheme.light'.
+test/shared/theme/app_theme_tokens_test.dart:93:41: Error: Member not found: 'AppTheme.dark'.
+00:00 +0 -1: loading test/shared/theme/app_theme_tokens_test.dart [E]
+  Compilation failed for testPath=test/shared/theme/app_theme_tokens_test.dart: test/shared/theme/app_theme_tokens_test.dart:57:28: Error: Member not found: 'AppTheme.lig
+
+## main, unmodified: the new test, the contrast tests and the rest of test/shared
+00:26 +343: All tests passed!
+
+## acceptance goldens: unchanged by the change, and passing
+$ git diff --stat bfef2761a36 HEAD -- test/acceptance/goldens   (empty = no golden changed)
+00:09 +13: All tests passed!
+
+$ grep -n "AppDesignTokens" lib/shared/theme/app_theme.dart
+13:  /// bind your own [AppDesignTokens] here, or build a theme from one with
+15:  static const AppDesignTokens _tokens = DefaultDesignTokens();
+30:  static ThemeData light(AppDesignTokens tokens) {
+95:  static ThemeData dark(AppDesignTokens tokens) {
+
+## contracts-map row
+65:| `AppDesignTokens` | **Live** | `DefaultDesignTokens` (`lib/shared/design_system/tokens/default_design_tokens.dart`)

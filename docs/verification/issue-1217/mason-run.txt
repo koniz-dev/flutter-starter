@@ -1,0 +1,17 @@
+# main at 133edfee11b, mason_cli mason_cli 0.1.4 • command-line interface
+mason 0.1.3 • core templating engine.
+
+$ mason make feature_clean --feature_name auth --class_name Auth --include_tests true </dev/null
+lib/features/auth or test/features/auth already exists; refusing to overwrite
+An exception occurred while executing hook: bricks/feature_clean/hooks/pre_gen.dart.
+Error: Invalid argument(s): feature_clean: nothing was generated.
+exit=64
+$ git status --short -- lib test   (empty: nothing was written)
+
+$ mason make feature_clean --feature_name probe_x --class_name ProbeX --include_tests true </dev/null
+  created lib/features/probe_x/presentation/providers/probe_x_provider.dart
+  created lib/features/probe_x/presentation/screens/probe_x_screen.dart
+exit=0
+$ git status --short -- lib test
+?? lib/features/probe_x/
+?? test/features/probe_x/

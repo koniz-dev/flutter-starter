@@ -1,0 +1,9 @@
+# Local build on Flutter 3.47.0 (the declared SDK floor) with Gradle 9.5.0, AGP 9.3.1, Kotlin 2.4.20: flutter build apk --debug
+✓ Built build/app/outputs/flutter-apk/app-debug.apk
+exit 0
+
+# CI on Flutter stable 3.50.0
+PR #1241 check 'Android on JDK 25 (toolchain floor + debug build)': success
+build.yml dispatch on the branch (release APK, JDK 17): https://github.com/koniz-dev/flutter-starter/actions/runs/43251643411 - Build Android: success
+e2e-android.yml dispatch on the branch: https://github.com/koniz-dev/flutter-starter/actions/runs/43253820686 - Total: 2, Successful: 2, Failed: 0, Skipped: 0
+Failing run on main's previous toolchain: https://github.com/koniz-dev/flutter-starter/actions/runs/43247385746 (AGP 9.1.0 below Flutter's minimum 9.1.1)
