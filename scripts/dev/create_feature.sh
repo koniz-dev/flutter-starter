@@ -38,6 +38,9 @@ FEATURE_PASCAL=$(echo "$FEATURE_NAME" | awk -F_ '{for(i=1;i<=NF;i++){$i=toupper(
 # PascalCase -> camelCase (TestFeature -> testFeature)
 FEATURE_CAMEL="$(tr '[:upper:]' '[:lower:]' <<< "${FEATURE_PASCAL:0:1}")${FEATURE_PASCAL:1}"
 
+# snake_case -> kebab-case for the URL (test_feature -> test-feature)
+FEATURE_PARAM="${FEATURE_NAME//_/-}"
+
 echo "Creating feature: $FEATURE_NAME"
 
 mkdir -p \
@@ -50,6 +53,7 @@ mkdir -p \
     "$BASE_DIR/domain/usecases" \
     "$BASE_DIR/presentation/providers" \
     "$BASE_DIR/presentation/screens" \
+    "$BASE_DIR/routing" \
     "$TEST_DIR"
 
 cat > "$BASE_DIR/domain/entities/${FEATURE_NAME}.dart" <<EOF
@@ -253,6 +257,36 @@ class ${FEATURE_PASCAL}Screen extends ConsumerWidget {
       ),
     );
   }
+}
+EOF
+
+cat > "$BASE_DIR/routing/${FEATURE_NAME}_routes.dart" <<EOF
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_starter/features/${FEATURE_NAME}/presentation/screens/${FEATURE_NAME}_screen.dart';
+import 'package:go_router/go_router.dart';
+
+/// Path of the ${FEATURE_PASCAL} screen.
+///
+/// Move this and the route name below into \`AppRoutes\`
+/// (\`lib/core/routing/app_routes.dart\`) when you register the route, so
+/// navigation uses the same constants as every other screen.
+const String ${FEATURE_CAMEL}RoutePath = '/${FEATURE_PARAM}';
+
+/// Name of the ${FEATURE_PASCAL} route.
+const String ${FEATURE_CAMEL}RouteName = '${FEATURE_PARAM}';
+
+/// Builds the route of the screen, reachable once signed in.
+///
+/// Nothing registers it yet. Add a call to this function to \`buildAppRoutes\`
+/// in \`lib/core/routing/routes_registry.dart\`: a route that is not registered
+/// there is a 404.
+GoRoute build${FEATURE_PASCAL}Route(Ref ref) {
+  return GoRoute(
+    path: ${FEATURE_CAMEL}RoutePath,
+    name: ${FEATURE_CAMEL}RouteName,
+    builder: (context, state) =>
+        ${FEATURE_PASCAL}Screen(id: state.uri.queryParameters['id'] ?? '1'),
+  );
 }
 EOF
 
