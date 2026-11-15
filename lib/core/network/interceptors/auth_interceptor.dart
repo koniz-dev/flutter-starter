@@ -503,6 +503,13 @@ class AuthInterceptor extends Interceptor {
         _reject(handler, _selectionChanged(err));
         return;
       }
+      // A certified snapshot may describe an empty vault. A signed-out 401
+      // must not start refresh (or turn an anonymous request into a session).
+      final accessToken = beforeRefresh.token;
+      if (accessToken == null || accessToken.isEmpty) {
+        _reject(handler, err);
+        return;
+      }
       final result = await _refreshToken();
 
       if (!_sessionGeneration.isCurrent(generation)) {

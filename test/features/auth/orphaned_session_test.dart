@@ -59,9 +59,24 @@ void main() {
         return true;
       });
       final tokens = SecureTokenStore(service);
+      var refreshCalls = 0;
       final container = ProviderContainer(
         overrides: [
-          ...authModuleOverrides,
+          // Production auth ports, with a counting wrapper around the real
+          // refresher so demo transport cannot hide an attempted refresh.
+          tokenRefresherProvider.overrideWith(
+            (ref) => () {
+              refreshCalls++;
+              return ref.read(authRepositoryProvider).refreshToken();
+            },
+          ),
+          sessionTerminationSinkProvider.overrideWith(
+            RiverpodSessionTerminationSink.new,
+          ),
+          signOutProvider.overrideWith(
+            (ref) =>
+                () => ref.read(authNotifierProvider.notifier).logout(),
+          ),
           storageServiceProvider.overrideWithValue(storage),
           tokenStoreProvider.overrideWithValue(tokens),
         ],
@@ -87,6 +102,7 @@ void main() {
         throwsA(anything),
       );
       expect(adapter.requests, hasLength(1));
+      expect(refreshCalls, 0);
       expect(adapter.requests.single.headers['Authorization'], isNull);
       expect(
         adapter.requests.where((request) => request.path.contains('refresh')),

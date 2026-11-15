@@ -311,6 +311,12 @@ void main() {
         expect(firstError, isA<DioException>());
         expect((firstError! as DioException).error, isA<StateError>());
 
+        // The failed refresh signs out. Start another credentialed session
+        // so the next 401 exercises the refresh guard again, rather than the
+        // signed-out fast path.
+        tokenStore
+          ..accessToken = 'next-access-token'
+          ..refreshToken = 'next-refresh-token';
         // Criterion 2: the next 401 still completes rather than hanging.
         final secondError = await _within(_settle(dio.get<dynamic>('/tasks')));
         expect(secondError, isA<DioException>());
