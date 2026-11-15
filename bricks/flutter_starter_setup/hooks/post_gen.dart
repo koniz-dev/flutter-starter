@@ -266,13 +266,15 @@ Future<void> _renameDartPackage(
   logger.info('Rewrote $brickFiles feature_clean brick template(s)');
 
   final pubspec = File('$rootPath/pubspec.yaml');
-  var yaml = await pubspec.readAsString();
-  yaml = yaml.replaceFirstMapped(
+  final before = await pubspec.readAsString();
+  final yaml = before.replaceFirstMapped(
     RegExp(r'^name:\s*flutter_starter\s*$', multiLine: true),
     (_) => 'name: $packageName',
   );
-  await pubspec.writeAsString(yaml);
-  logger.info('Renamed Dart package to $packageName');
+  if (yaml != before) {
+    await pubspec.writeAsString(yaml);
+    logger.info('Renamed Dart package to $packageName');
+  }
 }
 
 Future<void> _patchAndroidGradle(String rootPath, String applicationId) async {
@@ -399,14 +401,16 @@ Future<void> _patchIosBundleIds(
     logger.warn('iOS project.pbxproj not found; skip bundle id patch.');
     return;
   }
-  var s = await file.readAsString();
-  s = s.replaceAll(
+  final before = await file.readAsString();
+  var s = before.replaceAll(
     'com.example.flutterStarter.RunnerTests',
     '$iosBundleId.RunnerTests',
   );
   s = s.replaceAll('com.example.flutterStarter', iosBundleId);
-  await file.writeAsString(s);
-  logger.info('Updated iOS PRODUCT_BUNDLE_IDENTIFIER to $iosBundleId');
+  if (s != before) {
+    await file.writeAsString(s);
+    logger.info('Updated iOS PRODUCT_BUNDLE_IDENTIFIER to $iosBundleId');
+  }
 }
 
 /// Rewrites the `patrol:` block in pubspec.yaml.
