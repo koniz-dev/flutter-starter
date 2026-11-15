@@ -1,0 +1,99 @@
+2026-11-15T15:57:15.4736078Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/utils/image_cache_helper_redaction_test.dart: without a context, the error path prints no secret
+2026-11-15T15:57:16.1706671Z ##[endgroup]
+2026-11-15T15:57:16.1707036Z 
+2026-11-15T15:57:16.1715369Z 🎉 4505 tests passed, 16 skipped.
+2026-11-15T15:57:16.3427020Z Test order seed: 661017752
+2026-11-15T15:57:16.3465941Z ##[group]Run # Actions runs bash with -e: without set +e a failing check exits
+2026-11-15T15:57:16.3466498Z # Actions runs bash with -e: without set +e a failing check exits
+2026-11-15T15:57:16.3466858Z # here, before the summary line and the annotation below.
+2026-11-15T15:57:16.3467130Z set +e
+2026-11-15T15:57:16.3467414Z ./scripts/test/test_coverage.sh --no-test --min="$COVERAGE_MIN_TOTAL" \
+2026-11-15T15:57:16.3467947Z   | tee "$RUNNER_TEMP/coverage.log"
+2026-11-15T15:57:16.3468294Z status=${PIPESTATUS[0]}
+2026-11-15T15:57:16.3468520Z set -e
+2026-11-15T15:57:16.3468859Z total=$(grep -oE 'Coverage: [0-9.]+%' "$RUNNER_TEMP/coverage.log" | grep -oE '[0-9.]+%' || true)
+2026-11-15T15:57:16.3469405Z echo "- Line coverage: \`${total:-unknown}\` (minimum \`${COVERAGE_MIN_TOTAL}%\`)" >> "$GITHUB_STEP_SUMMARY"
+2026-11-15T15:57:16.3469821Z if [ "$status" -ne 0 ]; then
+2026-11-15T15:57:16.3470393Z   echo "::error title=Coverage below minimum::Line coverage ${total:-unknown} is below ${COVERAGE_MIN_TOTAL}%. Add tests, or lower COVERAGE_MIN_TOTAL in ci.yml with a reason."
+2026-11-15T15:57:16.3470943Z fi
+2026-11-15T15:57:16.3471141Z exit "$status"
+2026-11-15T15:57:16.3515613Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-15T15:57:16.3515910Z env:
+2026-11-15T15:57:16.3516169Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.50.0-x64/flutter
+2026-11-15T15:57:16.3516486Z   PUB_CACHE: /home/runner/.pub-cache
+2026-11-15T15:57:16.3516717Z   COVERAGE_MIN_TOTAL: 94
+2026-11-15T15:57:16.3516919Z ##[endgroup]
+2026-11-15T15:57:16.3622608Z Skipping tests (using existing coverage data)
+2026-11-15T15:57:16.3622945Z 
+2026-11-15T15:57:16.3623124Z ✓ Tests completed
+2026-11-15T15:57:16.3623333Z 
+2026-11-15T15:57:16.3673082Z Calculating coverage...
+2026-11-15T15:57:16.3761407Z Coverage Statistics:
+2026-11-15T15:57:16.3761780Z   Total lines: 5493
+2026-11-15T15:57:16.3762050Z   Covered lines: 5311
+2026-11-15T15:57:16.3762251Z   Coverage: 96.69%
+2026-11-15T15:57:16.3762354Z 
+2026-11-15T15:57:16.3778179Z ✓ Coverage 96.69% meets minimum threshold of 94%
+2026-11-15T15:57:16.3778515Z 
+2026-11-15T15:57:16.3778699Z Coverage report complete!
+2026-11-15T15:57:16.3836356Z ##[group]Run dirty=$(git status --porcelain --untracked-files=no)
+2026-11-15T15:57:16.3836788Z dirty=$(git status --porcelain --untracked-files=no)
+2026-11-15T15:57:16.3837091Z if [ -n "$dirty" ]; then
+2026-11-15T15:57:16.3837310Z   echo "$dirty"
+2026-11-15T15:57:16.3837516Z   git diff --stat
+2026-11-15T15:57:16.3838288Z   echo "::error title=pub get / analyze / test changed tracked files::Run flutter pub get on main with this stable and commit the result (usually pubspec.lock or analysis_options.yaml)."
+2026-11-15T15:57:16.3839095Z   echo "- **Tracked files changed by pub get / analyze / test:**" >> "$GITHUB_STEP_SUMMARY"
+2026-11-15T15:57:16.3839540Z   # sed prefixes every line; ${dirty//...} cannot anchor at each line start.
+2026-11-15T15:57:16.3839892Z   # shellcheck disable=SC2001
+2026-11-15T15:57:16.3840183Z   echo "$dirty" | sed 's/^/  - /' >> "$GITHUB_STEP_SUMMARY"
+2026-11-15T15:57:16.3840480Z   exit 1
+2026-11-15T15:57:16.3840662Z fi
+2026-11-15T15:57:16.3840856Z echo "No tracked file changed."
+2026-11-15T15:57:16.3885127Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-15T15:57:16.3885416Z env:
+2026-11-15T15:57:16.3885679Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.50.0-x64/flutter
+2026-11-15T15:57:16.3885995Z   PUB_CACHE: /home/runner/.pub-cache
+2026-11-15T15:57:16.3886224Z ##[endgroup]
+2026-11-15T15:57:16.4000160Z No tracked file changed.
+2026-11-15T15:57:16.4121336Z Post job cleanup.
+2026-11-15T15:57:16.4124594Z ##[start-action display=Cache pub dependencies;id=__d59e3613-8e67-41dc-bdf8-94470f173ae0.cache-pub]
+2026-11-15T15:57:16.5384857Z Post job cleanup.
+2026-11-15T15:57:16.6458620Z Cache hit occurred on the primary key flutter-pub-linux-stable-3.50.0-x64-ab2912035e160d9cad6306df307576da6128ebdb-3a059eac5ec38b730824a69464ccd728b60eeb6b7cbd7a89114311ece5ab8ecb, not saving cache.
+2026-11-15T15:57:16.6531262Z ##[end-action id=__d59e3613-8e67-41dc-bdf8-94470f173ae0.cache-pub;outcome=success;conclusion=success;duration_ms=240]
+2026-11-15T15:57:16.6533504Z ##[start-action display=Cache Flutter;id=__d59e3613-8e67-41dc-bdf8-94470f173ae0.cache-flutter]
+2026-11-15T15:57:16.6565376Z Post job cleanup.
+2026-11-15T15:57:16.7588999Z Cache hit occurred on the primary key flutter-linux-stable-3.50.0-x64-ab2912035e160d9cad6306df307576da6128ebdb, not saving cache.
+2026-11-15T15:57:16.7653798Z ##[end-action id=__d59e3613-8e67-41dc-bdf8-94470f173ae0.cache-flutter;outcome=success;conclusion=success;duration_ms=111]
+2026-11-15T15:57:16.7733820Z Post job cleanup.
+2026-11-15T15:57:16.8437083Z [command]/usr/bin/git version
+2026-11-15T15:57:16.8507028Z git version 2.56.1
+2026-11-15T15:57:16.8536705Z Temporarily overriding HOME='/home/runner/work/_temp/048b8611-26e5-4309-afa3-186d89c381e4' before making global git config changes
+2026-11-15T15:57:16.8538118Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-15T15:57:16.8541301Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/flutter-starter/flutter-starter
+2026-11-15T15:57:16.8571992Z Removing SSH command configuration
+2026-11-15T15:57:16.8577649Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-15T15:57:16.8619717Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-15T15:57:16.8882665Z Removing HTTP extra header
+2026-11-15T15:57:16.8888467Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-15T15:57:16.8942674Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-15T15:57:16.9206917Z Removing includeIf entries pointing to credentials config files
+2026-11-15T15:57:16.9230300Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-15T15:57:16.9241129Z includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git.path
+2026-11-15T15:57:16.9242090Z includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git/worktrees/*.path
+2026-11-15T15:57:16.9242944Z includeif.gitdir:/github/workspace/.git.path
+2026-11-15T15:57:16.9243448Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-11-15T15:57:16.9249152Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git.path
+2026-11-15T15:57:16.9271358Z /home/runner/work/_temp/git-credentials-0488d38d-9aca-4df7-8107-40d3e1ca59c9.config
+2026-11-15T15:57:16.9279527Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-0488d38d\-9aca\-4df7\-8107\-40d3e1ca59c9\.config
+2026-11-15T15:57:16.9312285Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git/worktrees/*.path
+2026-11-15T15:57:16.9333234Z /home/runner/work/_temp/git-credentials-0488d38d-9aca-4df7-8107-40d3e1ca59c9.config
+2026-11-15T15:57:16.9342098Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-0488d38d\-9aca\-4df7\-8107\-40d3e1ca59c9\.config
+2026-11-15T15:57:16.9371147Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-11-15T15:57:16.9391678Z /github/runner_temp/git-credentials-0488d38d-9aca-4df7-8107-40d3e1ca59c9.config
+2026-11-15T15:57:16.9397349Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-0488d38d\-9aca\-4df7\-8107\-40d3e1ca59c9\.config
+2026-11-15T15:57:16.9425807Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-11-15T15:57:16.9446342Z /github/runner_temp/git-credentials-0488d38d-9aca-4df7-8107-40d3e1ca59c9.config
+2026-11-15T15:57:16.9451823Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-0488d38d\-9aca\-4df7\-8107\-40d3e1ca59c9\.config
+2026-11-15T15:57:16.9481600Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-15T15:57:16.9715908Z Removing credentials config '/home/runner/work/_temp/git-credentials-0488d38d-9aca-4df7-8107-40d3e1ca59c9.config'
+2026-11-15T15:57:16.9871548Z Cleaning up orphan processes

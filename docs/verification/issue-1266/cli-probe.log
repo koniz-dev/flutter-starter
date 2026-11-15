@@ -1,0 +1,54 @@
+$ git init -q
+
+exit: 0
+$ git add -- [... enumerated 951 file paths]
+
+exit: 0
+$ git -c user.name=Test -c user.email=test@example.invalid -c commit.gpgsign=false -c core.hooksPath=/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1266-cli-scratch-nbrorec8/no-hooks commit -qm initial fixture
+
+exit: 0
+Initial fixture source-tree parity: e2b0abefaecedfdc97a5885370efbd3a482df07e
+$ dart --packages=/Users/nguyenanhkiet/.pub-cache/global_packages/mason_cli/.dart_tool/package_config.json /Users/nguyenanhkiet/.pub-cache/hosted/pub.dev/mason_cli-0.1.4/bin/mason.dart get
+⠋ Getting bricks...
+✓ Got bricks (34.4s)
+
+exit: 0
+$ dart --packages=/Users/nguyenanhkiet/.pub-cache/global_packages/mason_cli/.dart_tool/package_config.json /Users/nguyenanhkiet/.pub-cache/hosted/pub.dev/mason_cli-0.1.4/bin/mason.dart make flutter_starter_setup --package_name acme_shop --application_id io.acme.shop.app --ios_bundle_id io.acme.shop.app --app_display_name Acme Shop --strip_sample_features false --include_tasks_sample true --include_feature_flags_sample true --on-conflict overwrite
+⠋ Making flutter_starter_setup...
+✓ Generated 1 file. (44ms)
+  created _mason_hook_only.md
+Removed _mason_hook_only.md
+Rewrote 9 feature_clean brick template(s)
+Renamed Dart package to acme_shop
+Applied "Acme Shop" to 17 Dart/ARB file(s)
+Moved MainActivity to match io.acme.shop.app
+Moved MainActivityTest to match io.acme.shop.app
+Updated iOS PRODUCT_BUNDLE_IDENTIFIER to io.acme.shop.app
+Updated patrol config to io.acme.shop.app
+Rewrote identifiers in 21 platform file(s)
+Re-sorted imports and reformatted lib, test, integration_test, tool, examples, docs
+Setup complete. Next: flutter analyze && flutter test
+
+exit: 0
+$ git add -u
+
+exit: 0
+$ git add -- android/app/src/androidTest/java/io/acme/shop/app/MainActivityTest.java android/app/src/main/kotlin/io/acme/shop/app/MainActivity.kt
+
+exit: 0
+$ git -c user.name=Test -c user.email=test@example.invalid -c commit.gpgsign=false -c core.hooksPath=/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1266-cli-scratch-nbrorec8/no-hooks commit -qm first complete setup
+
+exit: 0
+$ git status --porcelain
+
+exit: 0
+$ dart --packages=/Users/nguyenanhkiet/.pub-cache/global_packages/mason_cli/.dart_tool/package_config.json /Users/nguyenanhkiet/.pub-cache/hosted/pub.dev/mason_cli-0.1.4/bin/mason.dart make flutter_starter_setup --package_name zeta_two --application_id org.zeta.two --ios_bundle_id org.zeta.two --app_display_name Zeta Two --strip_sample_features false --include_tasks_sample true --include_feature_flags_sample true --on-conflict overwrite
+This project is already customized (pubspec.yaml package name, android/app/build.gradle.kts, ios/Runner.xcodeproj/project.pbxproj, macos/Runner/Configs/AppInfo.xcconfig, linux/CMakeLists.txt). The setup brick only renames an unrenamed starter. To change an id again, follow docs/guides/onboarding/fork-and-customize.md, Option B (Manual), adapting the old identifiers to your current values. Nothing was changed.
+An exception occurred while executing hook: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1266-cli-scratch-nbrorec8/bricks/flutter_starter_setup/hooks/pre_gen.dart.
+Error: Bad state: flutter_starter_setup: nothing was changed.
+
+exit: 64
+$ git status --porcelain
+
+exit: 0
+PASS: actual Mason first setup completed; second setup refused before generation; git status empty; no false completion messages.

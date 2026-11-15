@@ -1,0 +1,17 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1266-old-log_test.dart
+00:00 +0: package and iOS rename logs describe actual changes only
+00:10 +0 -1: package and iOS rename logs describe actual changes only [E]
+  Expected: not contains 'Renamed'
+    Actual: 'Rewrote 0 feature_clean brick template(s)\n'
+              'Renamed Dart package to flutter_starter\n'
+              'Updated iOS PRODUCT_BUNDLE_IDENTIFIER to com.example.flutterStarter\n'
+              ''
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  .git/codex-issue-work/1266-old-log_test.dart 48:7   main.<fn>
+  
+00:10 +0 -1: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1266-old-log_test.dart: package and iOS rename logs describe actual changes only

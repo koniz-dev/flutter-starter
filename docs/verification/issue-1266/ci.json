@@ -1,0 +1,57 @@
+[
+  {
+    "name": "build_all.sh (${{ inputs.environment }})",
+    "state": "SKIPPED",
+    "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43731844337/job/132865930829"
+  },
+  {
+    "name": "fork-and-customize Option B (my_app, My App) + analyze + test + scaffold",
+    "state": "SKIPPED",
+    "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43731844337/job/132865883577"
+  },
+  {
+    "name": "create_feature.sh == create_feature.ps1 (Windows)",
+    "state": "SKIPPED",
+    "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43731844337/job/132865883320"
+  },
+  {
+    "name": "mason make flutter_starter_setup (acme_shop) + analyze + test",
+    "state": "SUCCESS",
+    "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43731844337/job/132865882065"
+  },
+  {
+    "name": "Strip tasks-removed + analyze + test",
+    "state": "SUCCESS",
+    "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43731788761/job/132865716915"
+  },
+  {
+    "name": "Strip renamed-both + analyze + test",
+    "state": "SUCCESS",
+    "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43731788761/job/132865716853"
+  },
+  {
+    "name": "Strip both-samples-removed + analyze + test",
+    "state": "SUCCESS",
+    "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43731788761/job/132865716824"
+  },
+  {
+    "name": "Strip feature-flags-removed + analyze + test",
+    "state": "SUCCESS",
+    "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43731788761/job/132865716717"
+  },
+  {
+    "name": "Strip keep-samples + analyze + test",
+    "state": "SUCCESS",
+    "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43731788761/job/132865716492"
+  },
+  {
+    "name": "Quality gate",
+    "state": "SUCCESS",
+    "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43731788799/job/132865705986"
+  },
+  {
+    "name": "Docs check",
+    "state": "SUCCESS",
+    "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43731788752/job/132865632222"
+  }
+]

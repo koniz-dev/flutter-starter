@@ -1,0 +1,86 @@
+==> env asset guard
+OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+==> generated code (skipped: AUDIT_SKIP_CODEGEN=1)
+==> format (lib test integration_test tool examples)
+Formatted 634 files (0 changed) in 2.92 seconds.
+==> flutter analyze
+Analyzing flutter-starter...                                    
+No issues found! (ran in 18.7s)
+==> flutter test
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:00 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:00 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:00 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:00 +9: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:00 +10: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:00 +11: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:00 +12: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:00 +13: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:00 +14: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:00 +15: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:00 +16: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:00 +17: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:00 +18: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:00 +19: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:00 +20: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:00 +21: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:00 +22: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:00 +23: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:00 +24: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:00 +25: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:00 +26: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:00 +27: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:00 +28: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:00 +29: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:00 +30: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:01 +31: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:01 +32: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:01 +33: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:01 +34: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:01 +35: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:01 +36: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:01 +37: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:01 +38: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:01 +39: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:01 +40: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:01 +41: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:01 +42: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:01 +43: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:01 +44: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:01 +45: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:01 +46: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:01 +47: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:01 +48: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:01 +49: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:01 +50: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:38 +51: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:38 +52: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:38 +53: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:38 +54: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:38 +55: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:38 +56: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:38 +57: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:38 +58: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:38 +59: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/brick_input_rules_test.dart: pre_gen refuses a dependency name before anything is written
+00:40 +60: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/brick_input_rules_test.dart: pre_gen refuses a dependency name before anything is written
+00:40 +61: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/brick_input_rules_test.dart: pre_gen refuses a dependency name before anything is written
+00:40 +62: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/brick_input_rules_test.dart: pre_gen refuses a dependency name before anything is written
+00:40 +63: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/brick_input_rules_test.dart: pre_gen refuses a dependency name before anything is written
+00:40 +64: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/brick_input_rules_test.dart: pre_gen refuses a dependency name before anything is written
+00:56 +65: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks renamed project before writing
+00:56 +66: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks renamed project before writing
+00:56 +67: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks renamed project before writing
+00:56 +68: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks renamed project before writing
+00:56 +69: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks renamed project before writing
+00:56 +70: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks renamed project before writing
+00:56 +71: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks renamed project before writing
+00:56 +72: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/brick_input_rules_test.dart: feature_clean existing feature pre_gen refuses an existing feature and writes nothing
+01:16 +73: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks android-only project before writing
+01:16 +74: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks ios-only project before writing
+01:31 +75: All tests passed!

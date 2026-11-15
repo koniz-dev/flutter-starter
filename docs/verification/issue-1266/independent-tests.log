@@ -1,0 +1,52 @@
+CASE removed-platforms: exit=0, all-file-hashes-unchanged=True
+
+CASE macos-custom: exit=255, all-file-hashes-unchanged=True
+This project is already customized (macos/Runner/Configs/AppInfo.xcconfig). The setup brick only renames an unrenamed starter. To change an id again, follow docs/guides/onboarding/fork-and-customize.md, Option B (Manual), adapting the old identifiers to your current values. Nothing was changed.
+Unhandled exception:
+Bad state: flutter_starter_setup: nothing was changed.
+#0      run (file:///Users/nguyenanhkiet/Playground/flutter-starter/bricks/flutter_starter_setup/hooks/pre_gen.dart:28:5)
+#1      main (file:///Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1266-review-65hu8j7f/macos-custom/probe.dart:4:21)
+#2      _delayEntrypointInvocation.<anonymous closure> (dart:isolate-patch/isolate_patch.dart:313:19)
+#3      _RawReceivePort._handleMessage (dart:isolate-patch/isolate_patch.dart:192:12)
+
+CASE linux-custom: exit=255, all-file-hashes-unchanged=True
+This project is already customized (linux/CMakeLists.txt). The setup brick only renames an unrenamed starter. To change an id again, follow docs/guides/onboarding/fork-and-customize.md, Option B (Manual), adapting the old identifiers to your current values. Nothing was changed.
+Unhandled exception:
+Bad state: flutter_starter_setup: nothing was changed.
+#0      run (file:///Users/nguyenanhkiet/Playground/flutter-starter/bricks/flutter_starter_setup/hooks/pre_gen.dart:28:5)
+#1      main (file:///Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1266-review-65hu8j7f/linux-custom/probe.dart:4:21)
+#2      _delayEntrypointInvocation.<anonymous closure> (dart:isolate-patch/isolate_patch.dart:313:19)
+#3      _RawReceivePort._handleMessage (dart:isolate-patch/isolate_patch.dart:192:12)
+
+CASE missing-root: exit=255, all-file-hashes-unchanged=True
+Run flutter_starter_setup from the starter project root (pubspec.yaml is missing).
+Unhandled exception:
+Bad state: flutter_starter_setup: nothing was changed.
+#0      run (file:///Users/nguyenanhkiet/Playground/flutter-starter/bricks/flutter_starter_setup/hooks/pre_gen.dart:28:5)
+#1      main (file:///Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1266-review-65hu8j7f/missing-root/probe.dart:4:21)
+#2      _delayEntrypointInvocation.<anonymous closure> (dart:isolate-patch/isolate_patch.dart:313:19)
+#3      _RawReceivePort._handleMessage (dart:isolate-patch/isolate_patch.dart:192:12)
+
+CASE invalid-custom: exit=255, all-file-hashes-unchanged=True
+package_name "bad-name" must be lowercase letters, digits and underscores, starting with a letter (for example my_app)
+Unhandled exception:
+Invalid argument(s): flutter_starter_setup: invalid input, nothing was changed.
+#0      run (file:///Users/nguyenanhkiet/Playground/flutter-starter/bricks/flutter_starter_setup/hooks/pre_gen.dart:20:5)
+#1      main (file:///Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1266-review-65hu8j7f/invalid-custom/probe.dart:4:21)
+#2      _delayEntrypointInvocation.<anonymous closure> (dart:isolate-patch/isolate_patch.dart:313:19)
+#3      _RawReceivePort._handleMessage (dart:isolate-patch/isolate_patch.dart:192:12)
+
+CASE nested-monorepo-output: exit=0, all-file-hashes-unchanged=True
+
+CASE baseline-renamed: exit=0, all-file-hashes-unchanged=True
+
+CASE no-op-logs-accepted: exit=0
+Rewrote 0 feature_clean brick template(s)
+
+CASE no-op-logs-baseline: exit=0
+Rewrote 0 feature_clean brick template(s)
+Renamed Dart package to zeta_two
+Updated iOS PRODUCT_BUNDLE_IDENTIFIER to org.zeta.two
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_log_test.dart
+00:00 +0: package and iOS rename logs describe actual changes only
+00:46 +1: All tests passed!

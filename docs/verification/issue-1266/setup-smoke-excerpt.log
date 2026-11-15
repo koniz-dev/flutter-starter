@@ -1,0 +1,72 @@
+Selected command/result lines and final40 lines from decoded GitHub job 132865882065; not an unabridged transcript.
+
+2026-11-15T15:47:56.6384537Z ##[group]Runner Image Provisioner
+2026-11-15T15:47:56.6395631Z ##[group]Runner Image
+2026-11-15T15:47:57.8713974Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+2026-11-15T15:47:59.1898717Z ##[group]Run subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2
+2026-11-15T15:47:59.2092920Z ##[group]Run chmod +x "$GITHUB_ACTION_PATH/setup.sh"
+2026-11-15T15:47:59.2391121Z ##[group]Run $GITHUB_ACTION_PATH/setup.sh -p \
+2026-11-15T15:47:59.4149831Z ##[group]Run actions/cache@v5
+2026-11-15T15:48:19.2393393Z ##[group]Run actions/cache@v5
+2026-11-15T15:48:23.1676230Z ##[group]Run $GITHUB_ACTION_PATH/setup.sh \
+2026-11-15T15:48:23.7082619Z ##[group]Run dart pub global activate mason_cli
+2026-11-15T15:48:28.8467542Z ##[group]Run set -euo pipefail
+2026-11-15T15:48:28.8470326Z [36;1m  --app_display_name "Acme Shop" \[0m
+2026-11-15T15:48:38.2419299Z Renamed Dart package to acme_shop
+2026-11-15T15:48:38.4100741Z Applied "Acme Shop" to 17 Dart/ARB file(s)
+2026-11-15T15:48:38.4190115Z Updated iOS PRODUCT_BUNDLE_IDENTIFIER to com.acme.shop
+2026-11-15T15:49:37.4675721Z Setup complete. Next: flutter analyze && flutter test
+2026-11-15T15:49:37.6689102Z ##[group]Run set -euo pipefail
+2026-11-15T15:49:37.7423386Z ##[group]Run set -euo pipefail
+2026-11-15T15:49:37.8788376Z ##[group]Run set -euo pipefail
+2026-11-15T15:49:44.7002307Z No issues found! (ran in 4.3s)
+2026-11-15T15:56:12.9134873Z 🎉 4495 tests passed, 22 skipped.
+2026-11-15T15:56:13.1456581Z ##[group]Run set -euo pipefail
+2026-11-15T15:56:21.5155340Z No issues found! (ran in 1.3s)
+2026-11-15T15:56:25.1047738Z 🎉 4 tests passed.
+2026-11-15T15:56:25.2982354Z ##[group]Run set -euo pipefail
+2026-11-15T15:56:25.2983524Z [36;1mgrep -n "title: 'Acme Shop'," lib/main.dart[0m
+2026-11-15T15:56:45.7365458Z 258:      title: 'Acme Shop',
+2026-11-15T15:56:49.9126608Z No issues found! (ran in 2.5s)
+2026-11-15T16:01:35.5485757Z 🎉 3831 tests passed, 24 skipped.
+
+Final40 lines:
+2026-11-15T16:01:36.0844857Z Cache hit occurred on the primary key flutter-pub-linux-stable-3.50.0-x64-ab2912035e160d9cad6306df307576da6128ebdb-3a059eac5ec38b730824a69464ccd728b60eeb6b7cbd7a89114311ece5ab8ecb, not saving cache.
+2026-11-15T16:01:36.0918820Z ##[end-action id=__6288619e-1758-4590-a184-620e0565db9a.cache-pub;outcome=success;conclusion=success;duration_ms=337]
+2026-11-15T16:01:36.0921697Z ##[start-action display=Cache Flutter;id=__6288619e-1758-4590-a184-620e0565db9a.cache-flutter]
+2026-11-15T16:01:36.0960261Z Post job cleanup.
+2026-11-15T16:01:36.2299712Z Cache hit occurred on the primary key flutter-linux-stable-3.50.0-x64-ab2912035e160d9cad6306df307576da6128ebdb, not saving cache.
+2026-11-15T16:01:36.2370471Z ##[end-action id=__6288619e-1758-4590-a184-620e0565db9a.cache-flutter;outcome=success;conclusion=success;duration_ms=144]
+2026-11-15T16:01:36.2445528Z Post job cleanup.
+2026-11-15T16:01:36.3306320Z [command]/usr/bin/git version
+2026-11-15T16:01:36.3387790Z git version 2.56.1
+2026-11-15T16:01:36.3431714Z Temporarily overriding HOME='/home/runner/work/_temp/1c98e1bc-91c5-4669-8755-a6f9d401d885' before making global git config changes
+2026-11-15T16:01:36.3433593Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-15T16:01:36.3437342Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/flutter-starter/flutter-starter
+2026-11-15T16:01:36.3478760Z Removing SSH command configuration
+2026-11-15T16:01:36.3485671Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-15T16:01:36.3526392Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-15T16:01:36.3872951Z Removing HTTP extra header
+2026-11-15T16:01:36.3879514Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-15T16:01:36.3942561Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-15T16:01:36.4250705Z Removing includeIf entries pointing to credentials config files
+2026-11-15T16:01:36.4257354Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-15T16:01:36.4287730Z includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git.path
+2026-11-15T16:01:36.4288957Z includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git/worktrees/*.path
+2026-11-15T16:01:36.4290318Z includeif.gitdir:/github/workspace/.git.path
+2026-11-15T16:01:36.4291240Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-11-15T16:01:36.4313031Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git.path
+2026-11-15T16:01:36.4341865Z /home/runner/work/_temp/git-credentials-92d48059-00fd-4da9-9ae9-8bd07f58e104.config
+2026-11-15T16:01:36.4353870Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-92d48059\-00fd\-4da9\-9ae9\-8bd07f58e104\.config
+2026-11-15T16:01:36.4398426Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git/worktrees/*.path
+2026-11-15T16:01:36.4426861Z /home/runner/work/_temp/git-credentials-92d48059-00fd-4da9-9ae9-8bd07f58e104.config
+2026-11-15T16:01:36.4437565Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-92d48059\-00fd\-4da9\-9ae9\-8bd07f58e104\.config
+2026-11-15T16:01:36.4472723Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-11-15T16:01:36.4497609Z /github/runner_temp/git-credentials-92d48059-00fd-4da9-9ae9-8bd07f58e104.config
+2026-11-15T16:01:36.4505122Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-92d48059\-00fd\-4da9\-9ae9\-8bd07f58e104\.config
+2026-11-15T16:01:36.4538569Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-11-15T16:01:36.4561673Z /github/runner_temp/git-credentials-92d48059-00fd-4da9-9ae9-8bd07f58e104.config
+2026-11-15T16:01:36.4569961Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-92d48059\-00fd\-4da9\-9ae9\-8bd07f58e104\.config
+2026-11-15T16:01:36.4604284Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-15T16:01:36.4883102Z Removing credentials config '/home/runner/work/_temp/git-credentials-92d48059-00fd-4da9-9ae9-8bd07f58e104.config'
+2026-11-15T16:01:36.5048218Z Cleaning up orphan processes

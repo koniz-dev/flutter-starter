@@ -1,0 +1,7 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:16 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:17 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks renamed project before writing
+00:36 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks android-only project before writing
+00:50 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks ios-only project before writing
+01:02 +5: All tests passed!
