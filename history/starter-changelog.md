@@ -29,6 +29,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- [Fastlane Play Store metadata](https://github.com/koniz-dev/flutter-starter/issues/1267): replace unsupported whatsnew_directory with an absolute metadata_path root and verify all five upload calls against documented Supply options. Correct root-shell commands, per-lane credential guidance, app/store changelog separation and automatic IPA build troubleshooting.
+
 - [One-time setup brick](https://github.com/koniz-dev/flutter-starter/issues/1266): reject already customized package/platform identifiers before Mason writes files and direct later id changes to the manual guide. Avoid false package/iOS rename logs for unchanged values and preserve pubspec line endings; first-run setup and repeated-run refusal are verified.
 
 - [Guarded deploy template API URLs](https://github.com/koniz-dev/flutter-starter/issues/1265): all five commented Android/iOS/Web deploy builds accept repository-variable URLs with a secret fallback and reject missing, non-HTTPS or placeholder URLs before invoking Flutter. Group Android keystore writes for workflow lint and deploy build/web to Vercel.
