@@ -83,9 +83,9 @@ class HomeScreen extends ConsumerWidget {
 
 /// Signs out once per tap: disabled until the sign-out it started settles.
 ///
-/// The user stays on home while the logout call is in flight, so without the
-/// guard a second tap sends the same refresh token again, and a server that
-/// rejects the replay surfaces an error for a sign-out that worked.
+/// Guard repeated taps before the router removes Home. The pending remote
+/// call can finish after this button is disposed, so its completion only
+/// updates local state while mounted.
 class _SignOutButton extends ConsumerStatefulWidget {
   const _SignOutButton();
 
