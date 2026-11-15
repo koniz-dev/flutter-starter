@@ -1,0 +1,161 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_header_isolation_test.dart
+00:00 +0: X-Api-Key bypasses cache reads and writes across credentials
+00:00 +0 -1: X-Api-Key bypasses cache reads and writes across credentials [E]
+  Expected: {'hit': 2}
+    Actual: {'hit': 1}
+     Which: at location ['hit'] is <1> instead of <2>
+  
+  package:matcher                                          expect
+  package:flutter_test/src/widget_tester.dart 473:18       expect
+  test/core/network/cache_header_isolation_test.dart 80:9  main.<fn>
+  
+00:00 +0 -1: X-Auth-Token bypasses cache reads and writes across credentials
+00:00 +0 -2: X-Auth-Token bypasses cache reads and writes across credentials [E]
+  Expected: {'hit': 2}
+    Actual: {'hit': 1}
+     Which: at location ['hit'] is <1> instead of <2>
+  
+  package:matcher                                          expect
+  package:flutter_test/src/widget_tester.dart 473:18       expect
+  test/core/network/cache_header_isolation_test.dart 80:9  main.<fn>
+  
+00:00 +0 -2: Proxy-Authorization bypasses cache reads and writes across credentials
+00:00 +0 -3: Proxy-Authorization bypasses cache reads and writes across credentials [E]
+  Expected: {'hit': 2}
+    Actual: {'hit': 1}
+     Which: at location ['hit'] is <1> instead of <2>
+  
+  package:matcher                                          expect
+  package:flutter_test/src/widget_tester.dart 473:18       expect
+  test/core/network/cache_header_isolation_test.dart 80:9  main.<fn>
+  
+00:00 +0 -3: Cookie bypasses cache reads and writes across credentials
+00:00 +1 -3: Set-Cookie bypasses cache reads and writes across credentials
+00:00 +1 -4: Set-Cookie bypasses cache reads and writes across credentials [E]
+  Expected: {'hit': 2}
+    Actual: {'hit': 1}
+     Which: at location ['hit'] is <1> instead of <2>
+  
+  package:matcher                                          expect
+  package:flutter_test/src/widget_tester.dart 473:18       expect
+  test/core/network/cache_header_isolation_test.dart 80:9  main.<fn>
+  
+00:00 +1 -4: Api-Key bypasses cache reads and writes across credentials
+00:00 +1 -5: Api-Key bypasses cache reads and writes across credentials [E]
+  Expected: {'hit': 2}
+    Actual: {'hit': 1}
+     Which: at location ['hit'] is <1> instead of <2>
+  
+  package:matcher                                          expect
+  package:flutter_test/src/widget_tester.dart 473:18       expect
+  test/core/network/cache_header_isolation_test.dart 80:9  main.<fn>
+  
+00:00 +1 -5: X-Refresh-Token bypasses cache reads and writes across credentials
+00:00 +1 -6: X-Refresh-Token bypasses cache reads and writes across credentials [E]
+  Expected: {'hit': 2}
+    Actual: {'hit': 1}
+     Which: at location ['hit'] is <1> instead of <2>
+  
+  package:matcher                                          expect
+  package:flutter_test/src/widget_tester.dart 473:18       expect
+  test/core/network/cache_header_isolation_test.dart 80:9  main.<fn>
+  
+00:00 +1 -6: X-Csrf-Token bypasses cache reads and writes across credentials
+00:00 +1 -7: X-Csrf-Token bypasses cache reads and writes across credentials [E]
+  Expected: {'hit': 2}
+    Actual: {'hit': 1}
+     Which: at location ['hit'] is <1> instead of <2>
+  
+  package:matcher                                          expect
+  package:flutter_test/src/widget_tester.dart 473:18       expect
+  test/core/network/cache_header_isolation_test.dart 80:9  main.<fn>
+  
+00:00 +1 -7: x_CUSTOM_session_key bypasses cache reads and writes across credentials
+00:00 +1 -8: x_CUSTOM_session_key bypasses cache reads and writes across credentials [E]
+  Expected: {'hit': 2}
+    Actual: {'hit': 1}
+     Which: at location ['hit'] is <1> instead of <2>
+  
+  package:matcher                                          expect
+  package:flutter_test/src/widget_tester.dart 473:18       expect
+  test/core/network/cache_header_isolation_test.dart 80:9  main.<fn>
+  
+00:00 +1 -8: sensitive headers cannot read or replace an anonymous cached body
+00:00 +1 -9: sensitive headers cannot read or replace an anonymous cached body [E]
+  Expected: {'hit': 2}
+    Actual: {'hit': 1}
+     Which: at location ['hit'] is <1> instead of <2>
+  
+  package:matcher                                          expect
+  package:flutter_test/src/widget_tester.dart 473:18       expect
+  test/core/network/cache_header_isolation_test.dart 97:7  main.<fn>
+  
+00:00 +1 -9: Vary [X-Api-Key] is not represented by the URL key and is not stored
+00:00 +1 -10: Vary [X-Api-Key] is not represented by the URL key and is not stored [E]
+  Expected: {'hit': 2}
+    Actual: {'hit': 1}
+     Which: at location ['hit'] is <1> instead of <2>
+  
+  package:matcher                                           expect
+  package:flutter_test/src/widget_tester.dart 473:18        expect
+  test/core/network/cache_header_isolation_test.dart 119:9  main.<fn>
+  
+00:00 +1 -10: Vary [Accept-Language] is not represented by the URL key and is not stored
+00:00 +1 -11: Vary [Accept-Language] is not represented by the URL key and is not stored [E]
+  Expected: {'hit': 2}
+    Actual: {'hit': 1}
+     Which: at location ['hit'] is <1> instead of <2>
+  
+  package:matcher                                           expect
+  package:flutter_test/src/widget_tester.dart 473:18        expect
+  test/core/network/cache_header_isolation_test.dart 119:9  main.<fn>
+  
+00:00 +1 -11: Vary [*] is not represented by the URL key and is not stored
+00:00 +1 -12: Vary [*] is not represented by the URL key and is not stored [E]
+  Expected: {'hit': 2}
+    Actual: {'hit': 1}
+     Which: at location ['hit'] is <1> instead of <2>
+  
+  package:matcher                                           expect
+  package:flutter_test/src/widget_tester.dart 473:18        expect
+  test/core/network/cache_header_isolation_test.dart 119:9  main.<fn>
+  
+00:00 +1 -12: Vary [Accept-Encoding, X-Region] is not represented by the URL key and is not stored
+00:00 +1 -13: Vary [Accept-Encoding, X-Region] is not represented by the URL key and is not stored [E]
+  Expected: {'hit': 2}
+    Actual: {'hit': 1}
+     Which: at location ['hit'] is <1> instead of <2>
+  
+  package:matcher                                           expect
+  package:flutter_test/src/widget_tester.dart 473:18        expect
+  test/core/network/cache_header_isolation_test.dart 119:9  main.<fn>
+  
+00:00 +1 -13: Vary [  ACCEPT  , X-Region] is not represented by the URL key and is not stored
+00:00 +1 -14: Vary [  ACCEPT  , X-Region] is not represented by the URL key and is not stored [E]
+  Expected: {'hit': 2}
+    Actual: {'hit': 1}
+     Which: at location ['hit'] is <1> instead of <2>
+  
+  package:matcher                                           expect
+  package:flutter_test/src/widget_tester.dart 473:18        expect
+  test/core/network/cache_header_isolation_test.dart 119:9  main.<fn>
+  
+00:00 +1 -14: anonymous GETs without Vary still reuse the cached body
+00:00 +2 -14: upgrade purges bodies admitted by the former header policy
+00:00 +2 -15: upgrade purges bodies admitted by the former header policy [E]
+  Expected: {'hit': 1}
+    Actual: {'data': {'private': 'old-user'}, 'headers': {}}
+     Which: has different length and is missing map key 'hit'
+  
+  package:matcher                                           expect
+  package:flutter_test/src/widget_tester.dart 473:18        expect
+  test/core/network/cache_header_isolation_test.dart 153:5  main.<fn>
+  
+00:00 +2 -15: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_header_isolation_test.dart: Api-Key bypasses cache reads and writes across credentials
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_header_isolation_test.dart: Proxy-Authorization bypasses cache reads and writes across credentials
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_header_isolation_test.dart: Set-Cookie bypasses cache reads and writes across credentials
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_header_isolation_test.dart: Vary [  ACCEPT  , X-Region] is not represented by the URL key and is not stored
+  ... and 11 more

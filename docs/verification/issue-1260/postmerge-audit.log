@@ -1,0 +1,72 @@
+==> env asset guard
+OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+==> generated code (skipped: AUDIT_SKIP_CODEGEN=1)
+==> format (lib test integration_test tool examples)
+Formatted 627 files (0 changed) in 2.38 seconds.
+==> flutter analyze
+Analyzing flutter-starter...                                    
+No issues found! (ran in 10.4s)
+==> flutter test
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_header_isolation_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_header_isolation_test.dart: X-Api-Key bypasses cache reads and writes across credentials
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_header_isolation_test.dart: X-Api-Key bypasses cache reads and writes across credentials
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_header_isolation_test.dart: X-Api-Key bypasses cache reads and writes across credentials
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_header_isolation_test.dart: X-Api-Key bypasses cache reads and writes across credentials
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_rule_version_test.dart: a purge that fails runs again on the next request
+Cache legacy purge error: Exception: storage busy
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_header_isolation_test.dart: Authorization bypasses cache reads and writes across credentials
+00:00 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_header_isolation_test.dart: Authorization bypasses cache reads and writes across credentials
+00:00 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_header_isolation_test.dart: X-Auth-Token bypasses cache reads and writes across credentials
+00:00 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_header_isolation_test.dart: Proxy-Authorization bypasses cache reads and writes across credentials
+00:00 +9: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onRequest should return cached response when available and valid
+00:00 +10: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onRequest should return cached response when available and valid
+00:00 +11: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onRequest should return cached response when available and valid
+00:00 +12: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onRequest should return cached response when available and valid
+00:00 +13: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onRequest should return cached response when available and valid
+00:00 +14: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onRequest should return cached response when available and valid
+00:00 +15: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onRequest should return cached response when available and valid
+00:00 +16: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_header_isolation_test.dart: sensitive headers cannot read or replace an anonymous cached body
+00:00 +17: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_header_isolation_test.dart: sensitive headers cannot read or replace an anonymous cached body
+00:00 +18: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_header_isolation_test.dart: sensitive headers cannot read or replace an anonymous cached body
+00:00 +19: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_header_isolation_test.dart: sensitive headers cannot read or replace an anonymous cached body
+00:00 +20: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onRequest should bypass cache when authorization header is present
+00:00 +21: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_header_isolation_test.dart: Vary [X-Api-Key] is not represented by the URL key and is not stored
+00:00 +22: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_header_isolation_test.dart: Vary [X-Api-Key] is not represented by the URL key and is not stored
+00:00 +23: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_header_isolation_test.dart: Vary [X-Api-Key] is not represented by the URL key and is not stored
+00:00 +24: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onRequest should return null when timestamp is not found
+00:00 +25: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_header_isolation_test.dart: Vary [Accept-Language] is not represented by the URL key and is not stored
+00:00 +26: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onRequest should remove expired cache when too stale
+00:00 +27: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_header_isolation_test.dart: Vary [*] is not represented by the URL key and is not stored
+00:00 +28: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_header_isolation_test.dart: Vary [*] is not represented by the URL key and is not stored
+00:00 +29: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onResponse should cache successful GET response
+00:00 +30: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_header_isolation_test.dart: Vary [Accept-Encoding, X-Region] is not represented by the URL key and is not stored
+00:00 +31: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_header_isolation_test.dart: Vary [Accept-Encoding, X-Region] is not represented by the URL key and is not stored
+00:00 +32: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onResponse should not cache non-200 responses
+00:00 +33: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_header_isolation_test.dart: Vary [  ACCEPT  , X-Region] is not represented by the URL key and is not stored
+00:00 +34: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_header_isolation_test.dart: Vary [  ACCEPT  , X-Region] is not represented by the URL key and is not stored
+00:00 +35: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onResponse should handle cache write errors gracefully
+Cache write error: Exception: Storage error
+00:00 +36: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onResponse should handle cache write errors gracefully
+00:00 +37: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_header_isolation_test.dart: upgrade purges bodies admitted by the former header policy
+00:00 +38: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_header_isolation_test.dart: upgrade purges bodies admitted by the former header policy
+00:00 +39: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_header_isolation_test.dart: upgrade purges bodies admitted by the former header policy
+00:00 +40: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor _shouldBypassCache should bypass cache for no-store header
+00:00 +41: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_header_isolation_test.dart: an unindexed legacy body is not replayed (sibling: false)
+00:00 +42: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_header_isolation_test.dart: an unindexed legacy body is not replayed (sibling: false)
+00:00 +43: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor _shouldBypassCache should bypass cache for cookie header
+00:00 +44: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_header_isolation_test.dart: an unindexed legacy body is not replayed (sibling: true)
+00:00 +45: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor cache key lookup should generate cache key from URI and query parameters
+00:00 +46: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_header_isolation_test.dart: a refused upgrade purge cannot replay old data and retries later
+00:00 +47: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_header_isolation_test.dart: a refused upgrade purge cannot replay old data and retries later
+00:00 +48: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_header_isolation_test.dart: a refused upgrade purge cannot replay old data and retries later
+Cache legacy purge error: Bad state: Cache purge deletion refused
+00:00 +49: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_header_isolation_test.dart: a refused upgrade purge cannot replay old data and retries later
+Cache legacy purge error: Bad state: Cache purge deletion refused
+00:00 +50: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_header_isolation_test.dart: a refused upgrade purge cannot replay old data and retries later
+00:00 +51: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_header_isolation_test.dart: a refused upgrade purge cannot replay old data and retries later
+00:00 +52: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor credential-aware bypass still caches while signed out
+00:00 +53: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_header_isolation_test.dart: a refused replacement write cannot admit an orphaned private body
+00:00 +54: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor credential-aware bypass fails closed when the token store throws
+Cache credential check error: Bad state: keychain down
+00:00 +55: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_header_isolation_test.dart: a Vary response evicts a previously cached body at its URL
+00:00 +56: All tests passed!
