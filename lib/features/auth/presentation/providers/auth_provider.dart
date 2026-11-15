@@ -139,8 +139,11 @@ class AuthNotifier extends _$AuthNotifier {
   /// tears the local session down unconditionally, so a failure (the server
   /// was not told, or a local step failed) does not keep the user signed in.
   /// The failure message is still surfaced.
+  /// Drop the running session before awaiting revocation too: the repository
+  /// clears local credentials first, and a slow server must not keep private
+  /// screens mounted while those credentials are already gone.
   Future<void> logout() async {
-    state = state.copyWith(isLoading: true, error: null, failure: null);
+    state = const AuthState(isLoading: true);
 
     final logoutUseCase = ref.read(logoutUseCaseProvider);
     final result = await logoutUseCase();
