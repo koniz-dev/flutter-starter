@@ -215,14 +215,16 @@ class ApiLoggingInterceptor extends Interceptor {
   };
 
   /// The version of the key rules below ([_sensitiveKeyFragments],
-  /// [_sensitiveKeysExact], [_sensitiveQueryOnlyKeys]).
+  /// [_sensitiveKeysExact], [_sensitiveQueryOnlyKeys], [_sensitiveHeaderKeys]).
   ///
   /// `CacheInterceptor` stores it, and drops every cached response when it
   /// changes: a response cached before a key joined the rules was cached for
   /// a URL that now names a secret, and is never read or evicted again.
-  /// Bump it with every change to those sets;
+  /// Version 3 also rejects sensitive request headers and header-dependent
+  /// Vary responses from the URL-only cache. Bump it when cache admission
+  /// becomes stricter or any of these sets changes;
   /// `cache_rule_version_test.dart` fails until you do.
-  static const int sensitiveKeyRuleVersion = 2;
+  static const int sensitiveKeyRuleVersion = 3;
 
   /// The key rules as one comparable string, for the version test.
   @visibleForTesting
@@ -230,6 +232,7 @@ class ApiLoggingInterceptor extends Interceptor {
     (_sensitiveKeyFragments.toList()..sort()).join(','),
     (_sensitiveKeysExact.toList()..sort()).join(','),
     (_sensitiveQueryOnlyKeys.toList()..sort()).join(','),
+    (_sensitiveHeaderKeys.toList()..sort()).join(','),
   ].join('|');
 
   /// Keys that name a secret in URL parameters only, matched exactly.
@@ -394,15 +397,17 @@ class ApiLoggingInterceptor extends Interceptor {
       isSensitiveKey(key) ||
       _sensitiveQueryOnlyKeys.contains(_normalizeKey(key));
 
+  /// Whether a header names credentials; shared with plaintext cache bypass.
+  static bool isSensitiveHeaderKey(String key) =>
+      _sensitiveHeaderKeys.contains(key.trim().toLowerCase()) ||
+      isSensitiveKey(key);
+
   /// Sanitize headers to remove sensitive information
   Map<String, dynamic> _sanitizeHeaders(Map<String, dynamic> headers) {
     final sanitized = <String, dynamic>{};
 
     for (final entry in headers.entries) {
-      final key = entry.key.trim();
-      sanitized[entry.key] =
-          _sensitiveHeaderKeys.contains(key.toLowerCase()) ||
-              isSensitiveKey(key)
+      sanitized[entry.key] = isSensitiveHeaderKey(entry.key)
           ? _redacted
           : entry.value;
     }

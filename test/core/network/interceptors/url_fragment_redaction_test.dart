@@ -98,7 +98,10 @@ void main() {
         storage.values.keys.where((key) => key.startsWith('http_cache_')),
         isEmpty,
       );
-      expect(storage.values['cache_rule_version'], 2);
+      expect(
+        storage.values['cache_rule_version'],
+        ApiLoggingInterceptor.sensitiveKeyRuleVersion,
+      );
     },
   );
 }

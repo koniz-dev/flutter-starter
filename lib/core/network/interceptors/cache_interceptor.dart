@@ -54,7 +54,8 @@ class CacheConfig {
 ///
 /// Only **unauthenticated** `GET` responses with status 200, for a request
 /// whose query carries no key that [ApiLoggingInterceptor.isSensitiveQueryKey]
-/// treats as a secret. Before touching
+/// treats as a secret, and whose headers contain no key matched by
+/// [ApiLoggingInterceptor.isSensitiveHeaderKey]. Before touching
 /// the cache - on read and on write - the interceptor asks the [ITokenStore]
 /// whether a session credential exists. If one does, the request neither
 /// reads from nor writes to the cache and goes straight to the network.
@@ -81,6 +82,8 @@ class CacheConfig {
 /// `no-cache` allows storing only if every reuse is revalidated, and this
 /// cache serves a fresh entry without asking the network, so it does not
 /// store one at all.
+/// Any nonempty `Vary` field also prevents storage: the URL-only key covers
+/// no request headers, so it cannot distinguish the requested variants.
 ///
 /// The `Set-Cookie` rule has **no effect on Flutter web**. Browsers never
 /// expose `Set-Cookie` to script (the Fetch spec lists it as a forbidden
@@ -93,8 +96,9 @@ class CacheConfig {
 ///
 /// In [StorageService], i.e. `shared_preferences` - plaintext, readable on a
 /// rooted or jailbroken device and included in unencrypted device backups.
-/// That is acceptable only because nothing authenticated ever lands there. Do
-/// not relax the credential check without moving to encrypted storage.
+/// Requests identified by the shared credential rule never land there. Custom
+/// credential names must match that rule or explicitly bypass caching. Do not
+/// relax the credential check without moving to encrypted storage.
 ///
 /// Keys are a SHA-256 of the request URL ([cacheKeyFor]), never the URL
 /// itself, so a token in a query string is not written to disk as part of a
@@ -179,16 +183,13 @@ class CacheInterceptor extends Interceptor implements IHttpResponseCache {
   /// HTTP methods that should be cached
   static const List<String> _cacheableMethods = ['GET'];
 
-  /// Headers that should not be cached
-  static const List<String> _noCacheHeaders = ['authorization', 'cookie'];
-
   /// A key written by [cacheKeyFor]; anything else under [_cacheKeyPrefix] in
   /// the index is a verbatim-URL key from before keys were hashed.
   static final RegExp _hashedKey = RegExp(r'^http_cache_[0-9a-f]{64}$');
 
   /// The one-off removal of verbatim-URL entries and of entries cached under
   /// an older key rule; see [_purgeLegacyEntries].
-  Future<void>? _legacyPurge;
+  Future<bool>? _legacyPurge;
 
   /// The [ApiLoggingInterceptor.sensitiveKeyRuleVersion] the stored entries
   /// were cached under, written with the first entry and removed by
@@ -208,7 +209,9 @@ class CacheInterceptor extends Interceptor implements IHttpResponseCache {
     // First, and whether or not caching is on: entries an earlier version
     // stored under a verbatim URL can hold a query-string secret, and with
     // caching disabled nothing else would ever touch them again.
-    await _purgeLegacyEntries();
+    if (!await _purgeLegacyEntries()) {
+      return super.onRequest(options, handler);
+    }
 
     // Only cache GET requests
     if (!_cacheConfig.enableCache ||
@@ -289,7 +292,9 @@ class CacheInterceptor extends Interceptor implements IHttpResponseCache {
       return super.onResponse(response, handler);
     }
 
-    await _purgeLegacyEntries();
+    if (!await _purgeLegacyEntries()) {
+      return super.onResponse(response, handler);
+    }
 
     // The server refused storage: drop whatever an earlier response left
     // under this URL too, or it would keep being served, fresh and then as a
@@ -330,10 +335,8 @@ class CacheInterceptor extends Interceptor implements IHttpResponseCache {
 
     // Secondary guard: a credential the caller attached directly to the
     // request is visible here regardless of interceptor order.
-    for (final header in _noCacheHeaders) {
-      if (options.headers.containsKey(header)) {
-        return true;
-      }
+    if (options.headers.keys.any(ApiLoggingInterceptor.isSensitiveHeaderKey)) {
+      return true;
     }
 
     // Primary guard: never touch the cache while a session credential exists.
@@ -375,7 +378,7 @@ class CacheInterceptor extends Interceptor implements IHttpResponseCache {
 
   /// Whether the server marked [response] as not for this cache: a
   /// `Cache-Control` of `no-store`, `private` or `no-cache`, a
-  /// `Pragma: no-cache`, or a `Set-Cookie`.
+  /// `Pragma: no-cache`, a `Set-Cookie`, or any nonempty `Vary` field.
   static bool _responseForbidsStorage(Response<dynamic> response) {
     List<String> directives(String header) =>
         (response.headers[header] ?? const <String>[])
@@ -385,6 +388,13 @@ class CacheInterceptor extends Interceptor implements IHttpResponseCache {
     const refusing = {'no-store', 'private', 'no-cache'};
     if (directives('cache-control').any(refusing.contains)) return true;
     if (directives('pragma').contains('no-cache')) return true;
+    // Every request-header field is outside this cache's URL-only key.
+    // This includes Vary: *, multiple lines and mixed-case field names.
+    if ((response.headers['vary'] ?? const <String>[])
+        .expand((value) => value.split(','))
+        .any((field) => field.trim().isNotEmpty)) {
+      return true;
+    }
     return response.headers['set-cookie']?.isNotEmpty ?? false;
   }
 
@@ -407,8 +417,8 @@ class CacheInterceptor extends Interceptor implements IHttpResponseCache {
   ///   URL is hashed, so which entries those are cannot be told; the cache is
   ///   disposable, and all of it goes.
   ///
-  /// A purge that fails is forgotten, so the next request tries again.
-  Future<void> _purgeLegacyEntries() {
+  /// A failed purge disables cache use and is retried on the next request.
+  Future<bool> _purgeLegacyEntries() {
     return _legacyPurge ??=
         _serializedIndexUpdate(() async {
           final index = await _readIndex();
@@ -422,34 +432,53 @@ class CacheInterceptor extends Interceptor implements IHttpResponseCache {
               ? index
               : index.where((key) => !_hashedKey.hasMatch(key)).toList();
           for (final cacheKey in stale) {
-            await _storageService.remove(cacheKey);
-            await _storageService.remove('$_timestampKeyPrefix$cacheKey');
+            if (!await _storageService.remove(cacheKey) ||
+                !await _storageService.remove(
+                  '$_timestampKeyPrefix$cacheKey',
+                )) {
+              throw StateError('Cache purge deletion refused');
+            }
           }
           if (stale.isNotEmpty) {
             final kept = index.where((key) => !stale.contains(key)).toList();
             if (kept.isEmpty) {
-              await _storageService.remove(_indexKey);
+              if (!await _storageService.remove(_indexKey)) {
+                throw StateError('Cache purge index removal refused');
+              }
             } else {
-              await _storageService.setStringList(_indexKey, kept);
+              if (!await _storageService.setStringList(_indexKey, kept)) {
+                throw StateError('Cache purge index update refused');
+              }
             }
           }
           if (ruleChanged) {
-            await _storageService.setInt(
+            if (!await _storageService.setInt(
               _ruleVersionKey,
               ApiLoggingInterceptor.sensitiveKeyRuleVersion,
-            );
+            )) {
+              throw StateError('Cache purge version update refused');
+            }
           }
-        }).catchError((Object e) {
+        }).then((_) => true).catchError((Object e) {
           _legacyPurge = null;
           if (AppConfig.isDebugMode) {
             debugPrint('Cache legacy purge error: $e');
           }
+          return false;
         });
   }
 
   /// Gets cached response if available and not expired
   Future<Map<String, dynamic>?> _getCachedResponse(String cacheKey) async {
     try {
+      // A former write may have stored the body before its index update
+      // failed. A policy upgrade cannot enumerate or certify that orphan.
+      // Only indexed bodies admitted by the current policy may be reused.
+      if (!(await _readIndex()).contains(cacheKey) ||
+          await _storageService.getInt(_ruleVersionKey) !=
+              ApiLoggingInterceptor.sensitiveKeyRuleVersion) {
+        return null;
+      }
       final cachedData = await _storageService.getString(cacheKey);
       if (cachedData == null) return null;
 
@@ -487,7 +516,7 @@ class CacheInterceptor extends Interceptor implements IHttpResponseCache {
         'headers': <String, List<String>>{},
         'stale': stale,
       };
-    } on Exception catch (e) {
+    } on Object catch (e) {
       if (AppConfig.isDebugMode) {
         debugPrint('Cache read error: $e');
       }
