@@ -46,9 +46,11 @@ staging or production build - add `ssl_fingerprints:<list>` or set
 
 ### Android Deployment
 
+Run these commands from the repository root. Fastlane discovers
+`fastlane/Fastfile`; the iOS examples below use a subshell in `ios/`.
+
 #### Build App Bundle
 ```bash
-cd fastlane
 fastlane android build_bundle environment:production
 ```
 
@@ -152,8 +154,10 @@ Options:
 2. Set `json_key_data_raw` in `Appfile` (the JSON itself, for CI/CD)
 3. Set `SUPPLY_JSON_KEY` (a path) or `SUPPLY_JSON_KEY_DATA` (the JSON) in the
    environment - `upload_to_play_store` reads both by itself. To use another
-   variable such as `GOOGLE_PLAY_SERVICE_ACCOUNT_JSON`, uncomment the
-   `json_key_data:` line in `fastlane/Fastfile`
+   variable such as `GOOGLE_PLAY_SERVICE_ACCOUNT_JSON`, add
+   `json_key_data: ENV["GOOGLE_PLAY_SERVICE_ACCOUNT_JSON"]` to each
+   `upload_to_play_store` call used by your lanes. The commented example in
+   `upload_internal` shows this option; the other lanes need it added too.
 
 ### App Store Connect
 
@@ -218,14 +222,23 @@ which the shell build paths use.
 
 ## 📝 Changelog
 
-Update changelog at:
-- Android: `fastlane/metadata/android/en-US/changelogs/default.txt`
-- iOS: Uses the same file or App Store Connect metadata
+Android release notes live in
+`fastlane/metadata/android/<locale>/changelogs/<version-code>.txt`, with
+`default.txt` as the fallback when no version-specific file exists. The shipped
+English fallback is `fastlane/metadata/android/en-US/changelogs/default.txt`.
+Supply reads notes separately from listing metadata: the lanes' existing
+`skip_upload_metadata: true` does not skip changelogs.
 
-Or use the script:
+By default, iOS uploads use `skip_metadata: true` and do not read the Android notes.
+Enter release notes in App Store Connect, or configure a separate iOS metadata
+upload for your app.
+
+This script updates the repository-root `CHANGELOG.md` for your app:
 ```bash
 ./scripts/ci/generate_changelog.sh 1.0.0
 ```
+It does not populate either store's release notes. Adapt the content into the
+Android locale files or App Store Connect separately.
 
 ## 🔗 Integration with CI/CD
 
@@ -260,8 +273,9 @@ See [Deployment Documentation](../docs/deployment/) for CI/CD setup.
 - Or set `FASTLANE_TEAM_ID` environment variable
 
 **Error: "Could not find IPA"**
-- Ensure Flutter build completed successfully
-- Check that `flutter build ipa` ran before fastlane
+- The build/upload lanes run `flutter build ipa` themselves.
+- Inspect their Flutter/Xcode export output under `build/ios/ipa/` and the path
+  reported by the lane; resolve build/export errors before retrying the upload.
 
 **Error: "Code signing failed"**
 - Ensure Xcode signing is configured correctly
