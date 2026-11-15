@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart';
 import 'package:flutter_starter/core/network/interceptors/cache_interceptor.dart';
 import 'package:flutter_starter/core/storage/storage_service.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -47,6 +48,15 @@ void main() {
     late MockStorageService mockStorageService;
     late RequestOptions requestOptions;
 
+    // Seed admission metadata as well as the body for readable-cache cases.
+    void admit(String key) {
+      when(() => mockStorageService.getStringList('http_cache_index'))
+          .thenAnswer((_) async => [key]);
+      when(
+        () => mockStorageService.getInt('cache_rule_version'),
+      ).thenAnswer((_) async => ApiLoggingInterceptor.sensitiveKeyRuleVersion);
+    }
+
     setUp(() {
       mockStorageService = MockStorageService();
       interceptor = CacheInterceptor(storageService: mockStorageService);
@@ -85,6 +95,7 @@ void main() {
         // Arrange
         final handler = TestRequestInterceptorHandler();
         final cacheKey = CacheInterceptor.cacheKeyFor(requestOptions);
+        admit(cacheKey);
         final timestampKey = 'http_cache_timestamp_$cacheKey';
         const cachedData = '{"key": "value"}';
         final timestamp = DateTime.now().subtract(const Duration(minutes: 30));
@@ -199,6 +210,7 @@ void main() {
         // Arrange
         final handler = TestRequestInterceptorHandler();
         final cacheKey = CacheInterceptor.cacheKeyFor(requestOptions);
+        admit(cacheKey);
 
         when(
           () => mockStorageService.getString(cacheKey),
@@ -215,6 +227,7 @@ void main() {
         // Arrange
         final handler = TestRequestInterceptorHandler();
         final cacheKey = CacheInterceptor.cacheKeyFor(requestOptions);
+        admit(cacheKey);
         final timestampKey = 'http_cache_timestamp_$cacheKey';
         const cachedData = '{"key": "value"}';
 
@@ -236,6 +249,7 @@ void main() {
         // Arrange
         final handler = TestRequestInterceptorHandler();
         final cacheKey = CacheInterceptor.cacheKeyFor(requestOptions);
+        admit(cacheKey);
         final timestampKey = 'http_cache_timestamp_$cacheKey';
         const cachedData = '{"key": "value"}';
         final oldTimestamp = DateTime.now().subtract(
@@ -269,6 +283,7 @@ void main() {
         // Arrange
         final handler = TestRequestInterceptorHandler();
         final cacheKey = CacheInterceptor.cacheKeyFor(requestOptions);
+        admit(cacheKey);
         final timestampKey = 'http_cache_timestamp_$cacheKey';
         const cachedData = '{"key": "value"}';
         // Older than maxAge (1 hour) but within maxStale (7 days)
@@ -489,6 +504,8 @@ void main() {
           method: 'GET',
           queryParameters: {'page': '1'},
         );
+
+        admit(CacheInterceptor.cacheKeyFor(options));
 
         // Mock all getString calls to return null
         when(

@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_starter/core/config/app_config.dart';
+import 'package:flutter_starter/core/constants/api_endpoints.dart';
 import 'package:flutter_starter/core/network/api_client.dart';
 import 'package:flutter_starter/core/network/interceptors/auth_interceptor.dart';
 import 'package:flutter_starter/core/network/interceptors/cache_interceptor.dart';
@@ -22,6 +23,17 @@ class _RejectDeletionStorage extends InMemoryStorage {
   Future<bool> remove(String key) async {
     if (reject && key.startsWith('http_cache_')) return false;
     return await super.remove(key);
+  }
+}
+
+class _RejectBodyWriteStorage extends InMemoryStorage {
+  @override
+  Future<bool> setString(String key, String value) async {
+    if (key.startsWith('http_cache_') &&
+        !key.startsWith('http_cache_timestamp_')) {
+      return false;
+    }
+    return await super.setString(key, value);
   }
 }
 
@@ -68,7 +80,10 @@ void main() {
 
   String seedPreviousPolicy() {
     final key = CacheInterceptor.cacheKeyFor(
-      RequestOptions(path: '/profile', baseUrl: AppConfig.baseUrl),
+      RequestOptions(
+        path: '/profile',
+        baseUrl: AppConfig.baseUrl + ApiEndpoints.apiVersion,
+      ),
     );
     storage.values
       ..[key] = jsonEncode({'private': 'old-user'})
@@ -173,7 +188,10 @@ void main() {
         storage.values.remove('http_cache_index');
         if (hasSibling) {
           final sibling = CacheInterceptor.cacheKeyFor(
-            RequestOptions(path: '/other', baseUrl: AppConfig.baseUrl),
+            RequestOptions(
+              path: '/other',
+              baseUrl: AppConfig.baseUrl + ApiEndpoints.apiVersion,
+            ),
           );
           storage.values
             ..['http_cache_index'] = [sibling]
@@ -205,6 +223,22 @@ void main() {
       expect((await client.get('/profile')).data, {'hit': 2});
       expect(transport.hits, 2);
       expect(storage.values.values.join(), isNot(contains('old-user')));
+    },
+  );
+
+  test(
+    'a refused replacement write cannot admit an orphaned private body',
+    () async {
+      storage = _RejectBodyWriteStorage();
+      final key = seedPreviousPolicy();
+      storage.values.remove('http_cache_index');
+      final client = build();
+      expect((await client.get('/profile')).data, {'hit': 1});
+      expect((await client.get('/profile')).data, {'hit': 2});
+      expect(transport.hits, 2);
+      expect(storage.values[key], contains('old-user'));
+      expect(storage.values['http_cache_index'], isNull);
+      expect(storage.values['cache_rule_version'], 2);
     },
   );
 

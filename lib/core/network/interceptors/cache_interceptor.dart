@@ -534,16 +534,18 @@ class CacheInterceptor extends Interceptor implements IHttpResponseCache {
       final jsonData = JsonHelper.encode(data);
       if (jsonData == null) return;
 
-      await _storageService.setString(cacheKey, jsonData);
+      if (!await _storageService.setString(cacheKey, jsonData)) return;
 
       final timestampKey = '$_timestampKeyPrefix$cacheKey';
-      await _storageService.setString(
+      if (!await _storageService.setString(
         timestampKey,
         DateFormatter.formatIso8601(DateTime.now()),
-      );
+      )) {
+        return;
+      }
 
       await _addToIndex(cacheKey);
-    } on Exception catch (e) {
+    } on Object catch (e) {
       if (AppConfig.isDebugMode) {
         debugPrint('Cache write error: $e');
       }
