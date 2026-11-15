@@ -228,6 +228,7 @@ Future<void> _renameDartPackage(
   String packageName,
   Logger logger,
 ) async {
+  if (packageName == 'flutter_starter') return;
   const oldImport = 'package:flutter_starter/';
   final newImport = 'package:$packageName/';
   // `examples/` is analysed and formatted with the rest (see CLAUDE.md), and
@@ -268,8 +269,8 @@ Future<void> _renameDartPackage(
   final pubspec = File('$rootPath/pubspec.yaml');
   final before = await pubspec.readAsString();
   final yaml = before.replaceFirstMapped(
-    RegExp(r'^name:\s*flutter_starter\s*$', multiLine: true),
-    (_) => 'name: $packageName',
+    RegExp(r'^name:[ \t]*flutter_starter[ \t]*(\r?)$', multiLine: true),
+    (match) => 'name: $packageName${match[1]}',
   );
   if (yaml != before) {
     await pubspec.writeAsString(yaml);
