@@ -119,6 +119,8 @@ void main() {
           status: 503,
           expected: lookupAppLocalizations(const Locale('en')).failureServer,
         );
+        expect(find.text(_messages['en']!.rejected), findsNothing);
+        expect(find.text(_messages['en']!.limited), findsNothing);
       },
     );
   }
