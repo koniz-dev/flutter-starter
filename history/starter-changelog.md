@@ -29,6 +29,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- [Localized HTTP rejection messages](https://github.com/koniz-dev/flutter-starter/issues/1261): distinguish request rejection (including 400/409) and rate limiting (429) from server outages on login and registration in English, Spanish, Vietnamese and Arabic. Preserve existing failure types, refresh/retry behavior, typed client errors and 5xx messages.
+
 - [HTTP cache credential isolation](https://github.com/koniz-dev/flutter-starter/issues/1260): share sensitive-header detection with logging, bypass credentialed requests, refuse header-dependent Vary responses and purge indexed legacy cache entries. Ignore unindexed or uncertified bodies and require successful body/timestamp writes before cache admission; anonymous caching remains enabled.
 
 - [Orphaned auth sessions](https://github.com/koniz-dev/flutter-starter/issues/1259): remove persisted credentials and per-session HTTP cache when the cached user cannot be restored, prevent stale restores from deleting a newer session, and skip 401 refresh when the credential snapshot has no access token.
