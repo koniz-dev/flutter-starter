@@ -29,6 +29,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- [One-time setup brick](https://github.com/koniz-dev/flutter-starter/issues/1266): reject already customized package/platform identifiers before Mason writes files and direct later id changes to the manual guide. Avoid false package/iOS rename logs for unchanged values and preserve pubspec line endings; first-run setup and repeated-run refusal are verified.
+
 - [Guarded deploy template API URLs](https://github.com/koniz-dev/flutter-starter/issues/1265): all five commented Android/iOS/Web deploy builds accept repository-variable URLs with a secret fallback and reject missing, non-HTTPS or placeholder URLs before invoking Flutter. Group Android keystore writes for workflow lint and deploy build/web to Vercel.
 
 - [Safe core customization guidance](https://github.com/koniz-dev/flutter-starter/issues/1264): replace incomplete localization and secure-storage deletion recipes with load-bearing module guidance, keeping one locale or migrating credential consumers deliberately. Correct the description of pub outdated.
