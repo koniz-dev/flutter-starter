@@ -1,0 +1,121 @@
+==> env asset guard
+OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+==> generated code (build_runner build -d)
+Generated code matches its sources.
+==> format (lib test integration_test tool examples)
+Formatted 630 files (0 changed) in 1.70 seconds.
+==> flutter analyze
+Analyzing flutter-starter...                                    
+No issues found! (ran in 4.6s)
+==> flutter test
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/manual_logout_session_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/manual_logout_session_test.dart: sign-out leaves Home while the remote logout is held forever
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/manual_logout_session_test.dart: sign-out leaves Home while the remote logout is held forever
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/manual_logout_session_test.dart: sign-out leaves Home while the remote logout is held forever
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/manual_logout_session_test.dart: sign-out leaves Home while the remote logout is held forever
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/manual_logout_session_test.dart: sign-out leaves Home while the remote logout is held forever
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/manual_logout_session_test.dart: sign-out leaves Home while the remote logout is held forever
+00:00 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/manual_logout_session_test.dart: sign-out leaves Home while the remote logout is held forever
+00:00 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/manual_logout_session_test.dart: sign-out leaves Home while the remote logout is held forever
+00:00 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/manual_logout_session_test.dart: sign-out leaves Home while the remote logout is held forever
+00:00 +9: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/manual_logout_session_test.dart: sign-out leaves Home while the remote logout is held forever
+00:00 +10: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/manual_logout_session_test.dart: sign-out leaves Home while the remote logout is held forever
+00:00 +11: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/manual_logout_session_test.dart: sign-out leaves Home while the remote logout is held forever
+00:00 +12: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/manual_logout_session_test.dart: sign-out leaves Home while the remote logout is held forever
+00:00 +13: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/manual_logout_session_test.dart: sign-out leaves Home while the remote logout is held forever
+00:00 +14: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/manual_logout_session_test.dart: sign-out leaves Home while the remote logout is held forever
+00:00 +15: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/manual_logout_session_test.dart: sign-out leaves Home while the remote logout is held forever
+00:00 +16: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/manual_logout_session_test.dart: sign-out leaves Home while the remote logout is held forever
+00:00 +17: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/manual_logout_session_test.dart: sign-out leaves Home while the remote logout is held forever
+00:00 +18: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/manual_logout_session_test.dart: sign-out leaves Home while the remote logout is held forever
+00:00 +19: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/manual_logout_session_test.dart: sign-out leaves Home while the remote logout is held forever
+00:00 +20: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/manual_logout_session_test.dart: sign-out leaves Home while the remote logout is held forever
+00:00 +21: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/manual_logout_session_test.dart: sign-out leaves Home while the remote logout is held forever
+00:00 +22: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/manual_logout_session_test.dart: sign-out leaves Home while the remote logout is held forever
+00:00 +23: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/manual_logout_session_test.dart: sign-out leaves Home while the remote logout is held forever
+00:00 +24: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/manual_logout_session_test.dart: sign-out leaves Home while the remote logout is held forever
+00:00 +25: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/manual_logout_session_test.dart: sign-out leaves Home while the remote logout is held forever
+00:00 +26: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/manual_logout_session_test.dart: sign-out leaves Home while the remote logout is held forever
+00:00 +27: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/manual_logout_session_test.dart: sign-out leaves Home while the remote logout is held forever
+00:00 +28: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/manual_logout_session_test.dart: sign-out leaves Home while the remote logout is held forever
+00:00 +29: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/manual_logout_session_test.dart: sign-out leaves Home while the remote logout is held forever
+00:00 +30: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/manual_logout_session_test.dart: sign-out leaves Home while the remote logout is held forever
+00:00 +31: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/manual_logout_session_test.dart: sign-out leaves Home while the remote logout is held forever
+00:00 +32: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/manual_logout_session_test.dart: sign-out leaves Home while the remote logout is held forever
+00:00 +33: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/manual_logout_session_test.dart: sign-out leaves Home while the remote logout is held forever
+00:00 +34: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/manual_logout_session_test.dart: sign-out leaves Home while the remote logout is held forever
+00:00 +35: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/manual_logout_session_test.dart: sign-out leaves Home while the remote logout is held forever
+00:00 +36: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/manual_logout_session_test.dart: sign-out leaves Home while the remote logout is held forever
+00:00 +37: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/manual_logout_session_test.dart: sign-out leaves Home while the remote logout is held forever
+00:00 +38: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/manual_logout_session_test.dart: sign-out leaves Home while the remote logout is held forever
+00:00 +39: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/manual_logout_session_test.dart: sign-out leaves Home while the remote logout is held forever
+00:00 +40: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/manual_logout_session_test.dart: sign-out leaves Home while the remote logout is held forever
+00:00 +40: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/forced_logout_session_test.dart: forced logout drops the in-memory session a 401 whose refresh fails clears AuthState.user
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.debug (package:flutter_starter/core/logging/logging_service.dart:182:13)
+│ #1   ApiLoggingInterceptor.onRequest (package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart:47:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 API Request: GET /users/me | Context: {"method":"GET","path":"/users/me","baseUrl":"http://localhost:3000/v1","headers":{"Content-Type":"application/json","Accept":"application/json","Authorization":"***REDACTED***"}}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+[... 191 lines elided ...]
+00:04 +59: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/session_restore_test.dart: cold start requires a token, not just a cached user an unreadable token store lands on /login without throwing
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:05 +60: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/session_restore_test.dart: cold start requires a token, not just a cached user a token store throwing an Error lands on /login without throwing
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:05 +61: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/session_restore_test.dart: cold start requires a token, not just a cached user a cached user with a readable token still lands on /
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:05 +62: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/session_restore_test.dart: deep link survives the login round trip bounce to /login carries the destination, and returns to it
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home","previousRouteName":"login","previousRoutePath":"login"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Removed | Context: {"routeName":"login","routePath":"login"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:05 +63: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/session_restore_test.dart: deep link survives the login round trip an off-site redirect target is ignored
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home","previousRouteName":"login","previousRoutePath":"login"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Removed | Context: {"routeName":"login","routePath":"login"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:05 +64: All tests passed!

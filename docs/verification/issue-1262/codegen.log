@@ -1,0 +1,17 @@
+  compiling builders/aot
+  38s compiling builders/aot
+W These options have been removed and were ignored: --delete-conflicting-outputs
+  0s riverpod_generator on 620 inputs; integration_test/app_e2e_test.dart
+  1s riverpod_generator on 620 inputs: 1 no-op; spent 1s sdk; lib/core/accessibility/accessibility_constants.dart
+  6s riverpod_generator on 620 inputs: 53 no-op; spent 4s analyzing, 1s sdk; lib/core/performance/i_performance_service.dart
+  11s riverpod_generator on 620 inputs: 1 output, 62 no-op; spent 8s analyzing, 2s resolving, 1s sdk; lib/core/routing/app_routes.dart
+  11s riverpod_generator on 620 inputs: 5 output, 615 no-op; spent 8s analyzing, 2s resolving, 1s sdk
+  0s freezed on 620 inputs; integration_test/app_e2e_test.dart
+  0s freezed on 620 inputs: 1 output, 619 no-op
+  0s json_serializable on 1240 inputs; integration_test/app_e2e_test.dart
+  0s json_serializable on 1240 inputs: 55 skipped, 56 no-op; lib/core/performance/performance.freezed.dart
+  4s json_serializable on 1240 inputs: 382 skipped, 2 output, 383 no-op; spent 3s analyzing; test/docs/session_token_examples_test.freezed.dart
+  4s json_serializable on 1240 inputs: 619 skipped, 2 output, 619 no-op; spent 3s analyzing
+  0s source_gen:combining_builder on 1240 inputs; integration_test/app_e2e_test.dart
+  0s source_gen:combining_builder on 1240 inputs: 619 skipped, 7 output, 614 no-op
+  Built with build_runner/aot in 55s; wrote 15 outputs.

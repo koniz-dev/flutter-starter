@@ -1,0 +1,4 @@
+Commits in e2e848b51354c0beee82c4f3d984d25d9ca539fb..HEAD
+  ok    6699ce7f fix(auth): leave the signed-in shell before remote logout settles (#1272)
+
+OK: every message links with 'Refs koniz-dev/flutter-starter#N' and closes nothing.
