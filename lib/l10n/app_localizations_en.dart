@@ -492,6 +492,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get failureStorage => 'Couldn\'t read or save data on this device.';
 
   @override
+  String get failureRequestRejected =>
+      'The request was rejected. Please check your information.';
+
+  @override
+  String get failureRateLimited =>
+      'Too many requests. Please wait before trying again.';
+
+  @override
   String get failureServer =>
       'Something went wrong on the server. Please try again later.';
 

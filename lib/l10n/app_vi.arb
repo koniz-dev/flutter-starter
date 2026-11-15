@@ -385,6 +385,8 @@
   "failureNotFound": "Không tìm thấy nội dung bạn cần.",
   "failureValidation": "Một số thông tin không hợp lệ. Vui lòng kiểm tra và thử lại.",
   "failureStorage": "Không thể đọc hoặc lưu dữ liệu trên thiết bị này.",
+  "failureRequestRejected": "Yêu cầu bị từ chối. Vui lòng kiểm tra thông tin.",
+  "failureRateLimited": "Có quá nhiều yêu cầu. Vui lòng chờ trước khi thử lại.",
   "failureServer": "Đã xảy ra lỗi ở máy chủ. Vui lòng thử lại sau.",
   "failureUnknown": "Đã xảy ra lỗi. Vui lòng thử lại.",
   "signOut": "Đăng xuất",

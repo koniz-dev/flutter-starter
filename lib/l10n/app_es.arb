@@ -194,6 +194,8 @@
   "failureNotFound": "No encontramos lo que buscabas.",
   "failureValidation": "Parte de la información no es válida. Revísala e inténtalo de nuevo.",
   "failureStorage": "No se pudieron leer ni guardar datos en este dispositivo.",
+  "failureRequestRejected": "La solicitud fue rechazada. Revisa la información.",
+  "failureRateLimited": "Demasiadas solicitudes. Espera antes de volver a intentarlo.",
   "failureServer": "Algo salió mal en el servidor. Inténtalo de nuevo más tarde.",
   "failureUnknown": "Algo salió mal. Inténtalo de nuevo.",
   "signOut": "Cerrar sesión",

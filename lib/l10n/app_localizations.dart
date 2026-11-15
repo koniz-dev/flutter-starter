@@ -800,6 +800,18 @@ abstract class AppLocalizations {
   /// **'Couldn\'t read or save data on this device.'**
   String get failureStorage;
 
+  /// Shown for an HTTP client rejection such as 400 or 409; ask the user to check the request, not retry a server outage
+  ///
+  /// In en, this message translates to:
+  /// **'The request was rejected. Please check your information.'**
+  String get failureRequestRejected;
+
+  /// Shown for HTTP 429; ask the user to wait before trying again
+  ///
+  /// In en, this message translates to:
+  /// **'Too many requests. Please wait before trying again.'**
+  String get failureRateLimited;
+
   /// Failure message shown to the user. Used for a server-side failure
   ///
   /// In en, this message translates to:

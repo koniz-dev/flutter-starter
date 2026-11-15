@@ -528,6 +528,14 @@ class AppLocalizationsAr extends AppLocalizations {
   String get failureStorage => 'تعذّرت قراءة البيانات أو حفظها على هذا الجهاز.';
 
   @override
+  String get failureRequestRejected =>
+      'تم رفض الطلب. يرجى التحقق من المعلومات.';
+
+  @override
+  String get failureRateLimited =>
+      'طلبات كثيرة جدًا. يرجى الانتظار قبل المحاولة مرة أخرى.';
+
+  @override
   String get failureServer => 'حدث خطأ في الخادم. يرجى المحاولة لاحقًا.';
 
   @override
