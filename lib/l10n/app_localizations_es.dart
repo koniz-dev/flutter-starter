@@ -502,6 +502,14 @@ class AppLocalizationsEs extends AppLocalizations {
       'No se pudieron leer ni guardar datos en este dispositivo.';
 
   @override
+  String get failureRequestRejected =>
+      'La solicitud fue rechazada. Revisa la información.';
+
+  @override
+  String get failureRateLimited =>
+      'Demasiadas solicitudes. Espera antes de volver a intentarlo.';
+
+  @override
   String get failureServer =>
       'Algo salió mal en el servidor. Inténtalo de nuevo más tarde.';
 

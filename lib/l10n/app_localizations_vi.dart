@@ -485,6 +485,14 @@ class AppLocalizationsVi extends AppLocalizations {
       'Không thể đọc hoặc lưu dữ liệu trên thiết bị này.';
 
   @override
+  String get failureRequestRejected =>
+      'Yêu cầu bị từ chối. Vui lòng kiểm tra thông tin.';
+
+  @override
+  String get failureRateLimited =>
+      'Có quá nhiều yêu cầu. Vui lòng chờ trước khi thử lại.';
+
+  @override
   String get failureServer => 'Đã xảy ra lỗi ở máy chủ. Vui lòng thử lại sau.';
 
   @override

@@ -138,8 +138,8 @@ void main() {
         File('lib/l10n/app_en.arb').readAsStringSync(),
       ) as Map<String, dynamic>;
       final keys = template.keys.where((k) => k.startsWith('failure'));
-      // 13 since failureInvalidCredentials.
-      expect(keys, hasLength(13));
+      // Includes request rejection and rate limiting as well as server errors.
+      expect(keys, hasLength(15));
 
       for (final lang in ['es', 'ar', 'vi']) {
         final arb = jsonDecode(

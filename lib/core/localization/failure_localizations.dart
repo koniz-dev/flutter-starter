@@ -21,9 +21,10 @@ abstract final class FailureCodes {
 /// the ARB pipeline, so a Vietnamese or Arabic user saw English transport
 /// text.
 ///
-/// This never returns [Failure.message]. It maps the stable [Failure.code]
-/// values the app itself produces, then falls back to the [Failure] subtype,
-/// then to a generic message. Codes a backend invents are deliberately not
+/// This never returns [Failure.message]. HTTP client-error statuses select
+/// rejection or throttling text first, then stable [Failure.code] values the
+/// app itself produces, the [Failure] subtype, and a generic message.
+/// Codes a backend invents are deliberately not
 /// mapped here: add an entry when your API documents one.
 ///
 /// ```dart
@@ -32,6 +33,14 @@ abstract final class FailureCodes {
 extension FailureLocalizations on Failure {
   /// This failure's user-facing message in the language of [l10n].
   String localizedMessage(AppLocalizations l10n) {
+    // Retain ServerFailure's transport/domain contract for retry and refresh,
+    // but never let a backend code disguise rejection/throttling as an outage.
+    if (this case ServerFailure(:final statusCode)) {
+      if (statusCode == 429) return l10n.failureRateLimited;
+      if (statusCode != null && statusCode >= 400 && statusCode < 500) {
+        return l10n.failureRequestRejected;
+      }
+    }
     switch (code) {
       case FailureCodes.invalidCredentials:
         return l10n.failureInvalidCredentials;
