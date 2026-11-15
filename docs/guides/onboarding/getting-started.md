@@ -198,7 +198,9 @@ particular API. Check two things before the first sign-in:
   | Login | `POST /auth/login` | `email`, `password` | `user`, `token`, `refresh_token` |
   | Register | `POST /auth/register` | `email`, `password`, `name` | `user`, `token`, `refresh_token` |
   | Refresh | `POST /auth/refresh` | `refresh_token` | `user`, `token`, `refresh_token` |
-  | Logout | `POST /auth/logout` | none | ignored |
+  | Logout | `POST /auth/logout` | `refresh_token` when stored | ignored |
+
+  Logout also sends `Authorization: Bearer <access_token>` when an access token is available. The refresh-token body is omitted when none was stored; the captured credentials let the server revoke the session after local cleanup.
 
   `user` is an object with a string `id`, `email`, and optional `name` and
   `avatar_url`. The full contract, with an example body, is the

@@ -214,14 +214,15 @@ final result = await executeWithRetry(() => loginUseCase(email, password));
 
 ### Complete Login Flow
 
-Text shown to the user is a plain string here to keep the example short. Under `lib/features/**/presentation/`, `test/tooling/text_literal_guard_test.dart` fails on a bare `Text('...')`: take the string from `context.l10n`, as in [Adding a New Feature](adding-features.md).
+Use the notifier for UI sign-in. The use case alone persists credentials but does not publish the user to `authNotifierProvider`; the router reads that published session through `sessionStatusProvider`.
+
+Labels and the required-field prompt are plain strings here to keep the example short; authentication failures use the shared localizer. Under `lib/features/**/presentation/`, `test/tooling/text_literal_guard_test.dart` fails on a bare `Text('...')`: take the string from `context.l10n`, as in [Adding a New Feature](adding-features.md).
 
 ```dart
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_starter/core/errors/failures.dart';
-import 'package:flutter_starter/core/routing/navigation_extensions.dart';
-import 'package:flutter_starter/core/utils/result.dart';
-import 'package:flutter_starter/features/auth/di/auth_providers.dart';
+import 'package:flutter_starter/core/localization/failure_localizations.dart';
+import 'package:flutter_starter/features/auth/presentation/providers/auth_provider.dart';
+import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:flutter_starter/shared/extensions/context_extensions.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -235,7 +236,6 @@ class LoginScreen extends ConsumerStatefulWidget {
 class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  bool _isLoading = false;
 
   Future<void> _handleLogin() async {
     final email = _emailController.text.trim();
@@ -246,35 +246,29 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       return;
     }
 
-    setState(() => _isLoading = true);
-
-    final loginUseCase = ref.read(loginUseCaseProvider);
-    final result = await loginUseCase(email, password);
+    await ref.read(authNotifierProvider.notifier).login(email, password);
     if (!mounted) return;
 
-    setState(() => _isLoading = false);
+    final failure = ref.read(authNotifierProvider).failure;
+    if (failure != null) {
+      context.showErrorSnackBar(
+        failure.localizedMessage(AppLocalizations.of(context)!),
+      );
+    }
+    // The router observes the published user and redirects on success,
+    // including a preserved deep-link destination. Do not force Home here.
+  }
 
-    result.when(
-      success: (user) {
-        context.showSuccessSnackBar('Welcome back, ${user.name ?? user.email}!');
-        context.goToHome();
-      },
-      failureCallback: (failure) {
-        String errorMessage;
-        if (failure is AuthFailure) {
-          errorMessage = 'Invalid email or password';
-        } else if (failure is NetworkFailure) {
-          errorMessage = 'Network error. Please check your connection.';
-        } else {
-          errorMessage = failure.message;
-        }
-        context.showErrorSnackBar(errorMessage);
-      },
-    );
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final authState = ref.watch(authNotifierProvider);
     return Scaffold(
       appBar: AppBar(title: const Text('Login')),
       body: Padding(
@@ -294,8 +288,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             ),
             const SizedBox(height: 24),
             ElevatedButton(
-              onPressed: _isLoading ? null : _handleLogin,
-              child: _isLoading
+              onPressed: authState.isLoading ? null : _handleLogin,
+              child: authState.isLoading
                   ? const CircularProgressIndicator()
                   : const Text('Login'),
             ),
@@ -360,23 +354,21 @@ The `AuthInterceptor` automatically handles token refresh on 401 errors. No manu
 ### Manual Token Refresh
 
 ```dart
-Future<void> _refreshToken() async {
-  final refreshUseCase = ref.read(refreshTokenUseCaseProvider);
-  final result = await refreshUseCase();
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_starter/core/di/providers.dart' show signOutProvider;
+import 'package:flutter_starter/core/utils/result.dart';
+import 'package:flutter_starter/features/auth/di/auth_providers.dart';
+import 'package:flutter_starter/features/auth/domain/auth_error_codes.dart';
 
-  result.when(
-    success: (_) {
-      // Token refreshed successfully
-      // AuthInterceptor will use the new token automatically
-      print('Token refreshed successfully');
-    },
-    failureCallback: (failure) {
-      // Token refresh failed, logout user
-      if (failure is AuthFailure) {
-        _handleLogout();
-      }
-    },
-  );
+Future<Result<String>> refreshSession(WidgetRef ref) async {
+  final result = await ref.read(refreshTokenUseCaseProvider)();
+  if (result.failureOrNull?.code == AuthErrorCodes.refreshTokenExpired) {
+    await ref.read(signOutProvider)();
+  }
+  // Success has already persisted the token pair in the repository.
+  // SESSION_TERMINATED belongs to an ended attempt: never clear a newer
+  // session for it. The caller can render/retry other failures separately.
+  return result;
 }
 ```
 

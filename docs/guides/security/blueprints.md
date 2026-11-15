@@ -8,21 +8,22 @@ Code in this file is **not** checked into the starter. Use it as a copy-paste st
 
 ### Step 1: Session manager
 
+Keep the core manager independent of feature implementations: inject the sign-out action instead of importing `AuthRepository`. The action supplied below updates the visible session and delegates to repository cleanup/revocation.
+
 ```dart
 // Blueprint: lib/core/security/session_manager.dart (add this file yourself)
 import 'dart:async';
 import 'package:flutter_starter/core/contracts/storage_contracts.dart';
-import 'package:flutter_starter/features/auth/domain/repositories/auth_repository.dart';
 
 /// Manages user session timeout and activity tracking
 class SessionManager {
   SessionManager({
     required this.tokenStore,
-    required this.authRepository,
+    required this.signOut,
   });
 
   final ITokenStore tokenStore;
-  final AuthRepository authRepository;
+  final Future<void> Function() signOut;
 
   Timer? _sessionTimer;
   static const Duration sessionTimeout = Duration(hours: 24);
@@ -55,7 +56,7 @@ class SessionManager {
     } on Object {
       // An unreadable credential must not skip the logout attempt.
     }
-    await authRepository.logout();
+    await signOut();
   }
 
   Duration? getTimeUntilTimeout() {
@@ -73,46 +74,55 @@ class SessionManager {
 
 ### Step 2: App lifecycle (illustrative)
 
+Wrap the existing app **inside its configured provider scope** (`UncontrolledProviderScope` in the default bootstrap) with `SessionActivityTracker(child: const MyApp())`; retain the current router and localization setup. The default app scope already binds `signOutProvider` through `authModuleOverrides`. Wire other activity events to `onUserActivity` as your timeout policy requires; this wrapper shows the lifecycle hook.
+
 ```dart
-// Illustrative only — this starter uses ConsumerWidget + go_router; adapt DI.
+// Blueprint: lib/features/auth/presentation/widgets/session_activity_tracker.dart
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_starter/core/di/providers.dart';
 import 'package:flutter_starter/core/security/session_manager.dart';
 import 'package:material_ui/material_ui.dart';
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+class SessionActivityTracker extends ConsumerStatefulWidget {
+  const SessionActivityTracker({required this.child, super.key});
+
+  final Widget child;
 
   @override
-  State<MyApp> createState() => _MyAppState();
+  ConsumerState<SessionActivityTracker> createState() =>
+      _SessionActivityTrackerState();
 }
 
-class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
-  SessionManager? _sessionManager;
+class _SessionActivityTrackerState extends ConsumerState<SessionActivityTracker>
+    with WidgetsBindingObserver {
+  late final SessionManager _sessionManager;
 
   @override
   void initState() {
     super.initState();
+    _sessionManager = SessionManager(
+      tokenStore: ref.read(tokenStoreProvider),
+      signOut: ref.read(signOutProvider),
+    )..initialize();
     WidgetsBinding.instance.addObserver(this);
-    // Wire your own ProviderContainer / ref to build SessionManager
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    _sessionManager?.dispose();
+    _sessionManager.dispose();
     super.dispose();
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      _sessionManager?.onUserActivity();
+      _sessionManager.onUserActivity();
     }
   }
 
   @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(/* … */);
-  }
+  Widget build(BuildContext context) => widget.child;
 }
 ```
 
