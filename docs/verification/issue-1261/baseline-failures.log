@@ -1,0 +1,121 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_http_rejection_test.dart
+00:00 +0: en login 400 explains rejection or waiting instead of a server outage
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: exactly one matching candidate
+  Actual: _TextWidgetFinder:<Found 0 widgets with text "The request was rejected. Please check your
+information.": []>
+   Which: means none were found but one was expected
+
+When the exception was thrown, this was the stack:
+#4      _submitRejected (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_http_rejection_test.dart:85:3)
+<asynchronous suspension>
+#5      main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_http_rejection_test.dart:97:11)
+<asynchronous suspension>
+#6      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#7      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1968:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_http_rejection_test.dart line 85
+The test description was:
+  en login 400 explains rejection or waiting instead of a server outage
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:02 +0 -1: en login 400 explains rejection or waiting instead of a server outage [E]
+  Test failed. See exception logs above.
+  The test description was: en login 400 explains rejection or waiting instead of a server outage
+  
+00:02 +0 -1: en login 409 explains rejection or waiting instead of a server outage
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: exactly one matching candidate
+  Actual: _TextWidgetFinder:<Found 0 widgets with text "The request was rejected. Please check your
+information.": []>
+   Which: means none were found but one was expected
+
+When the exception was thrown, this was the stack:
+#4      _submitRejected (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_http_rejection_test.dart:85:3)
+<asynchronous suspension>
+#5      main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_http_rejection_test.dart:97:11)
+<asynchronous suspension>
+#6      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#7      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1968:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_http_rejection_test.dart line 85
+The test description was:
+  en login 409 explains rejection or waiting instead of a server outage
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:02 +0 -2: en login 409 explains rejection or waiting instead of a server outage [E]
+  Test failed. See exception logs above.
+  The test description was: en login 409 explains rejection or waiting instead of a server outage
+  
+00:02 +0 -2: en login 429 explains rejection or waiting instead of a server outage
+[... 587 lines elided ...]
+When the exception was thrown, this was the stack:
+#4      _submitRejected (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_http_rejection_test.dart:85:3)
+<asynchronous suspension>
+#5      main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_http_rejection_test.dart:97:11)
+<asynchronous suspension>
+#6      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#7      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1968:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_http_rejection_test.dart line 85
+The test description was:
+  ar register 409 explains rejection or waiting instead of a server outage
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:07 +0 -23: ar register 409 explains rejection or waiting instead of a server outage [E]
+  Test failed. See exception logs above.
+  The test description was: ar register 409 explains rejection or waiting instead of a server outage
+  
+00:07 +0 -23: ar register 429 explains rejection or waiting instead of a server outage
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: exactly one matching candidate
+  Actual: _TextWidgetFinder:<Found 0 widgets with text "طلبات كثيرة جدًا. يرجى الانتظار قبل المحاولة
+مرة أخرى.": []>
+   Which: means none were found but one was expected
+
+When the exception was thrown, this was the stack:
+#4      _submitRejected (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_http_rejection_test.dart:85:3)
+<asynchronous suspension>
+#5      main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_http_rejection_test.dart:97:11)
+<asynchronous suspension>
+#6      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#7      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1968:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_http_rejection_test.dart line 85
+The test description was:
+  ar register 429 explains rejection or waiting instead of a server outage
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:07 +0 -24: ar register 429 explains rejection or waiting instead of a server outage [E]
+  Test failed. See exception logs above.
+  The test description was: ar register 429 explains rejection or waiting instead of a server outage
+  
+00:07 +0 -24: 503 login still shows server failure
+00:08 +1 -24: 503 register still shows server failure
+00:08 +2 -24: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_http_rejection_test.dart: ar login 400 explains rejection or waiting instead of a server outage
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_http_rejection_test.dart: ar login 409 explains rejection or waiting instead of a server outage
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_http_rejection_test.dart: ar login 429 explains rejection or waiting instead of a server outage
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_http_rejection_test.dart: ar register 400 explains rejection or waiting instead of a server outage
+  ... and 20 more

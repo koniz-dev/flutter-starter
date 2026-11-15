@@ -1,0 +1,417 @@
+diff --git a/lib/core/localization/failure_localizations.dart b/lib/core/localization/failure_localizations.dart
+index 9b2ff6b7aac..74e041a92c4 100644
+--- a/lib/core/localization/failure_localizations.dart
++++ b/lib/core/localization/failure_localizations.dart
+@@ -21,9 +21,10 @@ abstract final class FailureCodes {
+ /// the ARB pipeline, so a Vietnamese or Arabic user saw English transport
+ /// text.
+ ///
+-/// This never returns [Failure.message]. It maps the stable [Failure.code]
+-/// values the app itself produces, then falls back to the [Failure] subtype,
+-/// then to a generic message. Codes a backend invents are deliberately not
++/// This never returns [Failure.message]. HTTP client-error statuses select
++/// rejection or throttling text first, then stable [Failure.code] values the
++/// app itself produces, the [Failure] subtype, and a generic message.
++/// Codes a backend invents are deliberately not
+ /// mapped here: add an entry when your API documents one.
+ ///
+ /// ```dart
+@@ -32,6 +33,14 @@ abstract final class FailureCodes {
+ extension FailureLocalizations on Failure {
+   /// This failure's user-facing message in the language of [l10n].
+   String localizedMessage(AppLocalizations l10n) {
++    // Retain ServerFailure's transport/domain contract for retry and refresh,
++    // but never let a backend code disguise rejection/throttling as an outage.
++    if (this case ServerFailure(:final statusCode)) {
++      if (statusCode == 429) return l10n.failureRateLimited;
++      if (statusCode != null && statusCode >= 400 && statusCode < 500) {
++        return l10n.failureRequestRejected;
++      }
++    }
+     switch (code) {
+       case FailureCodes.invalidCredentials:
+         return l10n.failureInvalidCredentials;
+diff --git a/lib/l10n/app_ar.arb b/lib/l10n/app_ar.arb
+index f41ba0ad190..f345c8760c4 100644
+--- a/lib/l10n/app_ar.arb
++++ b/lib/l10n/app_ar.arb
+@@ -194,6 +194,8 @@
+   "failureNotFound": "لم نتمكن من العثور على ما تبحث عنه.",
+   "failureValidation": "بعض المعلومات غير صالحة. يرجى التحقق منها والمحاولة مرة أخرى.",
+   "failureStorage": "تعذّرت قراءة البيانات أو حفظها على هذا الجهاز.",
++  "failureRequestRejected": "تم رفض الطلب. يرجى التحقق من المعلومات.",
++  "failureRateLimited": "طلبات كثيرة جدًا. يرجى الانتظار قبل المحاولة مرة أخرى.",
+   "failureServer": "حدث خطأ في الخادم. يرجى المحاولة لاحقًا.",
+   "failureUnknown": "حدث خطأ ما. يرجى المحاولة مرة أخرى.",
+   "signOut": "تسجيل الخروج",
+diff --git a/lib/l10n/app_en.arb b/lib/l10n/app_en.arb
+index 47f28a6a33f..2cfe746b9e0 100644
+--- a/lib/l10n/app_en.arb
++++ b/lib/l10n/app_en.arb
+@@ -575,6 +575,14 @@
+   "@failureStorage": {
+     "description": "Failure message shown to the user. Used when on-device storage fails"
+   },
++  "failureRequestRejected": "The request was rejected. Please check your information.",
++  "@failureRequestRejected": {
++    "description": "Shown for an HTTP client rejection such as 400 or 409; ask the user to check the request, not retry a server outage"
++  },
++  "failureRateLimited": "Too many requests. Please wait before trying again.",
++  "@failureRateLimited": {
++    "description": "Shown for HTTP 429; ask the user to wait before trying again"
++  },
+   "failureServer": "Something went wrong on the server. Please try again later.",
+   "@failureServer": {
+     "description": "Failure message shown to the user. Used for a server-side failure"
+diff --git a/lib/l10n/app_es.arb b/lib/l10n/app_es.arb
+index 2e38891db50..fa78ac99d49 100644
+--- a/lib/l10n/app_es.arb
++++ b/lib/l10n/app_es.arb
+@@ -194,6 +194,8 @@
+   "failureNotFound": "No encontramos lo que buscabas.",
+   "failureValidation": "Parte de la información no es válida. Revísala e inténtalo de nuevo.",
+   "failureStorage": "No se pudieron leer ni guardar datos en este dispositivo.",
++  "failureRequestRejected": "La solicitud fue rechazada. Revisa la información.",
++  "failureRateLimited": "Demasiadas solicitudes. Espera antes de volver a intentarlo.",
+   "failureServer": "Algo salió mal en el servidor. Inténtalo de nuevo más tarde.",
+   "failureUnknown": "Algo salió mal. Inténtalo de nuevo.",
+   "signOut": "Cerrar sesión",
+diff --git a/lib/l10n/app_localizations.dart b/lib/l10n/app_localizations.dart
+index bc16eb99bd9..8405d9ca9c5 100644
+--- a/lib/l10n/app_localizations.dart
++++ b/lib/l10n/app_localizations.dart
+@@ -800,6 +800,18 @@ abstract class AppLocalizations {
+   /// **'Couldn\'t read or save data on this device.'**
+   String get failureStorage;
+ 
++  /// Shown for an HTTP client rejection such as 400 or 409; ask the user to check the request, not retry a server outage
++  ///
++  /// In en, this message translates to:
++  /// **'The request was rejected. Please check your information.'**
++  String get failureRequestRejected;
++
++  /// Shown for HTTP 429; ask the user to wait before trying again
++  ///
++  /// In en, this message translates to:
++  /// **'Too many requests. Please wait before trying again.'**
++  String get failureRateLimited;
++
+   /// Failure message shown to the user. Used for a server-side failure
+   ///
+   /// In en, this message translates to:
+diff --git a/lib/l10n/app_localizations_ar.dart b/lib/l10n/app_localizations_ar.dart
+index 3da8f283a7e..e9ebf92e01e 100644
+--- a/lib/l10n/app_localizations_ar.dart
++++ b/lib/l10n/app_localizations_ar.dart
+@@ -527,6 +527,14 @@ class AppLocalizationsAr extends AppLocalizations {
+   @override
+   String get failureStorage => 'تعذّرت قراءة البيانات أو حفظها على هذا الجهاز.';
+ 
++  @override
++  String get failureRequestRejected =>
++      'تم رفض الطلب. يرجى التحقق من المعلومات.';
++
++  @override
++  String get failureRateLimited =>
++      'طلبات كثيرة جدًا. يرجى الانتظار قبل المحاولة مرة أخرى.';
++
+   @override
+   String get failureServer => 'حدث خطأ في الخادم. يرجى المحاولة لاحقًا.';
+ 
+diff --git a/lib/l10n/app_localizations_en.dart b/lib/l10n/app_localizations_en.dart
+index f4cd78146e7..f3dd8edc8d7 100644
+--- a/lib/l10n/app_localizations_en.dart
++++ b/lib/l10n/app_localizations_en.dart
+@@ -491,6 +491,14 @@ class AppLocalizationsEn extends AppLocalizations {
+   @override
+   String get failureStorage => 'Couldn\'t read or save data on this device.';
+ 
++  @override
++  String get failureRequestRejected =>
++      'The request was rejected. Please check your information.';
++
++  @override
++  String get failureRateLimited =>
++      'Too many requests. Please wait before trying again.';
++
+   @override
+   String get failureServer =>
+       'Something went wrong on the server. Please try again later.';
+diff --git a/lib/l10n/app_localizations_es.dart b/lib/l10n/app_localizations_es.dart
+index be3e2ceb19f..41c325ef7ed 100644
+--- a/lib/l10n/app_localizations_es.dart
++++ b/lib/l10n/app_localizations_es.dart
+@@ -501,6 +501,14 @@ class AppLocalizationsEs extends AppLocalizations {
+   String get failureStorage =>
+       'No se pudieron leer ni guardar datos en este dispositivo.';
+ 
++  @override
++  String get failureRequestRejected =>
++      'La solicitud fue rechazada. Revisa la información.';
++
++  @override
++  String get failureRateLimited =>
++      'Demasiadas solicitudes. Espera antes de volver a intentarlo.';
++
+   @override
+   String get failureServer =>
+       'Algo salió mal en el servidor. Inténtalo de nuevo más tarde.';
+diff --git a/lib/l10n/app_localizations_vi.dart b/lib/l10n/app_localizations_vi.dart
+index e875d1e9851..6537b897073 100644
+--- a/lib/l10n/app_localizations_vi.dart
++++ b/lib/l10n/app_localizations_vi.dart
+@@ -484,6 +484,14 @@ class AppLocalizationsVi extends AppLocalizations {
+   String get failureStorage =>
+       'Không thể đọc hoặc lưu dữ liệu trên thiết bị này.';
+ 
++  @override
++  String get failureRequestRejected =>
++      'Yêu cầu bị từ chối. Vui lòng kiểm tra thông tin.';
++
++  @override
++  String get failureRateLimited =>
++      'Có quá nhiều yêu cầu. Vui lòng chờ trước khi thử lại.';
++
+   @override
+   String get failureServer => 'Đã xảy ra lỗi ở máy chủ. Vui lòng thử lại sau.';
+ 
+diff --git a/lib/l10n/app_vi.arb b/lib/l10n/app_vi.arb
+index 08ef7fa961a..aa225d324a2 100644
+--- a/lib/l10n/app_vi.arb
++++ b/lib/l10n/app_vi.arb
+@@ -385,6 +385,8 @@
+   "failureNotFound": "Không tìm thấy nội dung bạn cần.",
+   "failureValidation": "Một số thông tin không hợp lệ. Vui lòng kiểm tra và thử lại.",
+   "failureStorage": "Không thể đọc hoặc lưu dữ liệu trên thiết bị này.",
++  "failureRequestRejected": "Yêu cầu bị từ chối. Vui lòng kiểm tra thông tin.",
++  "failureRateLimited": "Có quá nhiều yêu cầu. Vui lòng chờ trước khi thử lại.",
+   "failureServer": "Đã xảy ra lỗi ở máy chủ. Vui lòng thử lại sau.",
+   "failureUnknown": "Đã xảy ra lỗi. Vui lòng thử lại.",
+   "signOut": "Đăng xuất",
+diff --git a/test/core/localization/failure_localizations_test.dart b/test/core/localization/failure_localizations_test.dart
+index fecfbf8830c..2a3826b3bc9 100644
+--- a/test/core/localization/failure_localizations_test.dart
++++ b/test/core/localization/failure_localizations_test.dart
+@@ -138,8 +138,8 @@ void main() {
+         File('lib/l10n/app_en.arb').readAsStringSync(),
+       ) as Map<String, dynamic>;
+       final keys = template.keys.where((k) => k.startsWith('failure'));
+-      // 13 since failureInvalidCredentials.
+-      expect(keys, hasLength(13));
++      // Includes request rejection and rate limiting as well as server errors.
++      expect(keys, hasLength(15));
+ 
+       for (final lang in ['es', 'ar', 'vi']) {
+         final arb = jsonDecode(
+diff --git a/test/core/localization/http_failure_localizations_test.dart b/test/core/localization/http_failure_localizations_test.dart
+new file mode 100644
+index 00000000000..2787275189c
+--- /dev/null
++++ b/test/core/localization/http_failure_localizations_test.dart
+@@ -0,0 +1,73 @@
++import 'package:dio/dio.dart';
++import 'package:flutter/widgets.dart';
++import 'package:flutter_starter/core/errors/dio_exception_mapper.dart';
++import 'package:flutter_starter/core/errors/exception_to_failure_mapper.dart';
++import 'package:flutter_starter/core/errors/failures.dart';
++import 'package:flutter_starter/core/localization/failure_localizations.dart';
++import 'package:flutter_starter/l10n/app_localizations.dart';
++import 'package:flutter_test/flutter_test.dart';
++
++Failure _fromStatus(int status) {
++  final request = RequestOptions(path: '/auth/register');
++  return ExceptionToFailureMapper.map(
++    DioExceptionMapper.map(
++      DioException(
++        requestOptions: request,
++        type: DioExceptionType.badResponse,
++        response: Response<dynamic>(
++          requestOptions: request,
++          statusCode: status,
++          data: {'message': 'private backend detail'},
++        ),
++      ),
++    ),
++  );
++}
++
++void main() {
++  for (final language in ['en', 'es', 'vi', 'ar']) {
++    final l10n = lookupAppLocalizations(Locale(language));
++    test(
++      '$language preserves HTTP status and separates rejection, '
++      'waiting and outage',
++      () {
++        for (final status in [400, 405, 409, 410, 415, 418]) {
++          final failure = _fromStatus(status);
++          // Preserve the transport/domain contract; only presentation changes.
++          expect(failure, isA<ServerFailure>());
++          expect((failure as ServerFailure).statusCode, status);
++          expect(failure.localizedMessage(l10n), l10n.failureRequestRejected);
++        }
++        final limited = _fromStatus(429);
++        expect((limited as ServerFailure).statusCode, 429);
++        expect(limited.localizedMessage(l10n), l10n.failureRateLimited);
++        // Backend-supplied codes cannot override an authoritative HTTP status.
++        expect(
++          const ServerFailure(
++            'backend',
++            statusCode: 429,
++            code: 'CONNECTION_ERROR',
++          ).localizedMessage(l10n),
++          l10n.failureRateLimited,
++        );
++        for (final status in [500, 502, 503]) {
++          expect(
++            _fromStatus(status).localizedMessage(l10n),
++            l10n.failureServer,
++          );
++        }
++        expect(
++          const ServerFailure('unknown').localizedMessage(l10n),
++          l10n.failureServer,
++        );
++      },
++    );
++
++    test('$language keeps existing typed client-error messages', () {
++      expect(_fromStatus(401).localizedMessage(l10n), l10n.failureAuth);
++      expect(_fromStatus(403).localizedMessage(l10n), l10n.failurePermission);
++      expect(_fromStatus(404).localizedMessage(l10n), l10n.failureNotFound);
++      expect(_fromStatus(422).localizedMessage(l10n), l10n.failureValidation);
++    });
++  }
++}
+diff --git a/test/features/auth/presentation/screens/auth_http_rejection_test.dart b/test/features/auth/presentation/screens/auth_http_rejection_test.dart
+new file mode 100644
+index 00000000000..f18e2db23e9
+--- /dev/null
++++ b/test/features/auth/presentation/screens/auth_http_rejection_test.dart
+@@ -0,0 +1,127 @@
++import 'package:flutter_riverpod/flutter_riverpod.dart';
++import 'package:flutter_starter/core/constants/ui_keys.dart';
++import 'package:flutter_starter/core/errors/exceptions.dart';
++import 'package:flutter_starter/core/localization/localization_service.dart';
++import 'package:flutter_starter/features/auth/data/datasources/auth_local_datasource.dart';
++import 'package:flutter_starter/features/auth/data/datasources/auth_remote_datasource.dart';
++import 'package:flutter_starter/features/auth/data/repositories/auth_repository_impl.dart';
++import 'package:flutter_starter/features/auth/di/auth_providers.dart';
++import 'package:flutter_starter/features/auth/presentation/screens/login_screen.dart';
++import 'package:flutter_starter/features/auth/presentation/screens/register_screen.dart';
++import 'package:flutter_starter/l10n/app_localizations.dart';
++import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
++import 'package:mocktail/mocktail.dart';
++
++class _Remote extends Mock implements AuthRemoteDataSource {}
++
++class _Local extends Mock implements AuthLocalDataSource {}
++
++const _messages = <String, ({String rejected, String limited})>{
++  'en': (
++    rejected: 'The request was rejected. Please check your information.',
++    limited: 'Too many requests. Please wait before trying again.',
++  ),
++  'es': (
++    rejected: 'La solicitud fue rechazada. Revisa la información.',
++    limited: 'Demasiadas solicitudes. Espera antes de volver a intentarlo.',
++  ),
++  'vi': (
++    rejected: 'Yêu cầu bị từ chối. Vui lòng kiểm tra thông tin.',
++    limited: 'Có quá nhiều yêu cầu. Vui lòng chờ trước khi thử lại.',
++  ),
++  'ar': (
++    rejected: 'تم رفض الطلب. يرجى التحقق من المعلومات.',
++    limited: 'طلبات كثيرة جدًا. يرجى الانتظار قبل المحاولة مرة أخرى.',
++  ),
++};
++
++Future<void> _submitRejected(
++  WidgetTester tester, {
++  required bool register,
++  required String language,
++  required int status,
++  required String expected,
++}) async {
++  final remote = _Remote();
++  final error = ServerException('raw backend detail', statusCode: status);
++  when(() => remote.login(any(), any())).thenThrow(error);
++  when(() => remote.register(any(), any(), any())).thenThrow(error);
++  final repository = AuthRepositoryImpl(
++    remoteDataSource: remote,
++    localDataSource: _Local(),
++  );
++  await tester.pumpWidget(
++    ProviderScope(
++      overrides: [authRepositoryProvider.overrideWithValue(repository)],
++      child: MaterialApp(
++        locale: Locale(language),
++        localizationsDelegates: const [
++          AppLocalizations.delegate,
++          ...GlobalMaterialLocalizations.delegates,
++        ],
++        supportedLocales: LocalizationService.supportedLocales,
++        home: register ? const RegisterScreen() : const LoginScreen(),
++      ),
++    ),
++  );
++  final fields = find.byType(TextFormField);
++  if (register) await tester.enterText(fields.at(0), 'New User');
++  await tester.enterText(fields.at(register ? 1 : 0), 'a@example.com');
++  await tester.enterText(fields.at(register ? 2 : 1), 'password123');
++  final submit = find.byKey(
++    register ? UiKeys.registerSubmit : UiKeys.loginSubmit,
++  );
++  await tester.ensureVisible(submit);
++  await tester.tap(submit);
++  await tester.pumpAndSettle();
++
++  if (register) {
++    verify(() => remote.register('a@example.com', 'password123', 'New User'))
++        .called(1);
++  } else {
++    verify(() => remote.login('a@example.com', 'password123')).called(1);
++  }
++  expect(find.text(expected), findsOneWidget);
++  expect(find.textContaining('raw backend detail'), findsNothing);
++}
++
++void main() {
++  for (final MapEntry(key: language, value: messages) in _messages.entries) {
++    for (final register in [false, true]) {
++      for (final status in [400, 409, 429]) {
++        testWidgets('$language ${register ? 'register' : 'login'} $status '
++            'explains rejection or waiting instead of a server outage', (
++          tester,
++        ) async {
++          await _submitRejected(
++            tester,
++            register: register,
++            language: language,
++            status: status,
++            expected: status == 429 ? messages.limited : messages.rejected,
++          );
++          final l10n = lookupAppLocalizations(Locale(language));
++          expect(find.text(l10n.failureServer), findsNothing);
++        });
++      }
++    }
++  }
++
++  for (final register in [false, true]) {
++    testWidgets(
++      '503 ${register ? 'register' : 'login'} still shows server failure',
++      (tester) async {
++        await _submitRejected(
++          tester,
++          register: register,
++          language: 'en',
++          status: 503,
++          expected: lookupAppLocalizations(const Locale('en')).failureServer,
++        );
++        expect(find.text(_messages['en']!.rejected), findsNothing);
++        expect(find.text(_messages['en']!.limited), findsNothing);
++      },
++    );
++  }
++}

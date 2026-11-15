@@ -1,0 +1,121 @@
+==> env asset guard
+OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+==> generated code (skipped: AUDIT_SKIP_CODEGEN=1)
+==> format (lib test integration_test tool examples)
+Formatted 629 files (0 changed) in 1.82 seconds.
+==> flutter analyze
+Analyzing flutter-starter...                                    
+No issues found! (ran in 4.6s)
+==> flutter test
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/http_failure_localizations_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/http_failure_localizations_test.dart: en preserves HTTP status and separates rejection, waiting and outage
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/http_failure_localizations_test.dart: en keeps existing typed client-error messages
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/http_failure_localizations_test.dart: es preserves HTTP status and separates rejection, waiting and outage
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/http_failure_localizations_test.dart: es keeps existing typed client-error messages
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/http_failure_localizations_test.dart: vi preserves HTTP status and separates rejection, waiting and outage
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/http_failure_localizations_test.dart: vi keeps existing typed client-error messages
+00:00 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/http_failure_localizations_test.dart: ar preserves HTTP status and separates rejection, waiting and outage
+00:00 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/http_failure_localizations_test.dart: ar keeps existing typed client-error messages
+00:00 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: SupportedLocale should have all expected locales
+00:00 +9: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: SupportedLocale should return correct display names
+00:00 +10: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: SupportedLocale fromLanguageCode should return correct locale for valid language codes
+00:00 +11: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: SupportedLocale fromLanguageCode should return null for invalid language code
+00:00 +12: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: SupportedLocale fromLanguageCode should return null for null language code
+00:00 +13: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: SupportedLocale fromLanguageCode should be case sensitive
+00:00 +14: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: SupportedLocale fromLocaleString should return correct locale for valid locale strings
+00:00 +15: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: SupportedLocale fromLocaleString should return correct locale for language code only
+00:00 +16: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: SupportedLocale fromLocaleString should return null for invalid locale string
+00:00 +17: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: SupportedLocale fromLocaleString should return null for null locale string
+00:00 +18: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: SupportedLocale fromLocaleString should return null for empty locale string
+00:00 +19: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: SupportedLocale fromLocaleString should handle locale strings with multiple underscores
+00:00 +20: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: SupportedLocale fromLocaleString should handle locale string with only underscore
+00:00 +21: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: LocalizationService defaultLocale should return English locale as default
+00:00 +22: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: LocalizationService supportedLocales should return all supported locales
+00:00 +23: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: LocalizationService getCurrentLocale should return default locale when storage is empty
+00:00 +24: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: LocalizationService getCurrentLocale should return stored locale when valid
+00:00 +25: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: LocalizationService getCurrentLocale should return default locale when stored locale is invalid
+00:00 +26: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: LocalizationService getCurrentLocale should return default locale when storage throws exception
+00:00 +27: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: LocalizationService getCurrentLocale should handle all supported locales
+00:00 +28: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: LocalizationService setCurrentLocale should save locale to storage successfully
+00:00 +29: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: LocalizationService setCurrentLocale should return false when storage save fails
+00:00 +30: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: LocalizationService setCurrentLocale should return false when storage throws exception
+00:00 +31: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: LocalizationService setCurrentLocale should save language code for all supported locales
+00:00 +32: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: LocalizationService isRTL should return true for RTL languages
+00:00 +33: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: LocalizationService isRTL should return false for LTR languages
+00:00 +34: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: LocalizationService isRTL should check language code only, not country
+00:00 +35: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: LocalizationService getTextDirection should return RTL for RTL languages
+00:00 +36: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: LocalizationService getTextDirection should return LTR for LTR languages
+00:00 +37: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: LocalizationService Edge Cases should handle getCurrentLocale with empty string
+00:00 +38: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: LocalizationService Edge Cases should handle setCurrentLocale with unsupported locale
+00:00 +39: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: LocalizationService Edge Cases should handle multiple locale changes
+00:00 +40: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: LocalizationService Edge Cases should handle getCurrentLocale with whitespace language code
+00:00 +41: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: LocalizationService Edge Cases should handle getCurrentLocale with numeric language code
+00:01 +42: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localized_formatters_test.dart: LocalizedFormatters formatDate should format date with default format
+00:01 +43: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localized_formatters_test.dart: LocalizedFormatters formatDate should format date with custom format
+00:01 +44: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localized_formatters_test.dart: LocalizedFormatters formatTime should format time with default format
+00:01 +45: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localized_formatters_test.dart: LocalizedFormatters formatTime should format time with custom format
+00:01 +46: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localized_formatters_test.dart: LocalizedFormatters formatDateTime should format date and time with default format
+00:01 +47: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localized_formatters_test.dart: LocalizedFormatters formatDateTime should format date and time with custom format
+00:01 +48: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localized_formatters_test.dart: LocalizedFormatters formatNumber should format number with default decimal digits
+00:01 +49: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localized_formatters_test.dart: LocalizedFormatters formatNumber should format number with custom decimal digits
+[... 274 lines elided ...]
+00:12 +296: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/errors/failures_test.dart: ValidationFailure should create ValidationFailure with message and code
+00:12 +297: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/errors/dio_exception_mapper_test.dart: DioExceptionMapper Error Message Extraction Edge Cases should handle empty nested error object
+00:12 +298: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/errors/failures_test.dart: ValidationFailure should extend Failure
+00:12 +299: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/errors/dio_exception_mapper_test.dart: DioExceptionMapper Error Message Extraction Edge Cases should handle null message in connectionTimeout
+00:12 +300: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/errors/failures_test.dart: AuthFailure should create AuthFailure with message
+00:12 +301: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/errors/dio_exception_mapper_test.dart: DioExceptionMapper Error Message Extraction Edge Cases should handle null message in sendTimeout
+00:12 +302: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/errors/failures_test.dart: AuthFailure should create AuthFailure with message and code
+00:12 +303: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/errors/dio_exception_mapper_test.dart: DioExceptionMapper Error Message Extraction Edge Cases should handle null message in receiveTimeout
+00:12 +304: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/errors/failures_test.dart: AuthFailure should extend Failure
+00:12 +305: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/errors/dio_exception_mapper_test.dart: DioExceptionMapper Error Message Extraction Edge Cases should handle null message in cancel
+00:12 +306: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/errors/failures_test.dart: PermissionFailure should create PermissionFailure with message
+00:12 +307: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/errors/dio_exception_mapper_test.dart: DioExceptionMapper Error Message Extraction Edge Cases should handle null message in connectionError
+00:12 +308: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/errors/dio_exception_mapper_test.dart: DioExceptionMapper Error Message Extraction Edge Cases should handle null message in connectionError
+00:12 +309: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/errors/failures_test.dart: PermissionFailure should extend Failure
+00:12 +310: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/errors/dio_exception_mapper_test.dart: DioExceptionMapper Error Message Extraction Edge Cases should handle null message in badCertificate
+00:12 +311: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/errors/failures_test.dart: UnknownFailure should create UnknownFailure with message
+00:12 +312: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/errors/dio_exception_mapper_test.dart: DioExceptionMapper bodies with non-String fields criterion 1: a NestJS-style list message maps to a 400 with the items joined
+00:12 +313: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/errors/dio_exception_mapper_test.dart: DioExceptionMapper bodies with non-String fields criterion 1: a NestJS-style list message maps to a 400 with the items joined
+00:12 +314: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/errors/dio_exception_mapper_test.dart: DioExceptionMapper bodies with non-String fields criterion 1: a NestJS-style list message maps to a 400 with the items joined
+00:12 +315: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/errors/dio_exception_mapper_test.dart: DioExceptionMapper bodies with non-String fields criterion 1: a NestJS-style list message maps to a 400 with the items joined
+00:12 +316: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/errors/failures_test.dart: Equality Tests failures with different messages should not be equal
+00:12 +317: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/errors/dio_exception_mapper_test.dart: DioExceptionMapper bodies with non-String fields criterion 2: an int or num code is kept as text
+00:12 +318: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/errors/dio_exception_mapper_test.dart: DioExceptionMapper bodies with non-String fields criterion 2: an int or num code is kept as text
+00:12 +319: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/errors/failures_test.dart: Equality Tests failures with null code should be equal
+00:12 +320: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/errors/dio_exception_mapper_test.dart: DioExceptionMapper bodies with non-String fields criterion 3: non-String values in any message or code field never throw
+00:12 +321: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/errors/dio_exception_mapper_test.dart: DioExceptionMapper bodies with non-String fields criterion 3: non-String values in any message or code field never throw
+00:12 +322: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/errors/dio_exception_mapper_test.dart: DioExceptionMapper bodies with non-String fields criterion 3: non-String values in any message or code field never throw
+00:12 +323: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/errors/failures_test.dart: Edge Cases failures should handle long messages
+00:12 +324: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/errors/dio_exception_mapper_test.dart: DioExceptionMapper bodies with non-String fields criterion 4: a nested error.code is read alongside error.message
+00:12 +325: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/errors/failures_test.dart: Edge Cases all failure types should extend Failure
+00:12 +326: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/errors/dio_exception_mapper_test.dart: DioExceptionMapper bodies with non-String fields an empty list message falls back to the status message
+00:13 +327: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_http_rejection_test.dart: en login 400 explains rejection or waiting instead of a server outage
+00:18 +328: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_localized_error_test.dart: criterion 2: LoginScreen in vi renders the localized CONNECTION_ERROR message, not the transport text
+00:19 +329: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_localized_error_test.dart: criterion 2: LoginScreen in vi renders the localized CONNECTION_ERROR message, not the transport text
+00:20 +330: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_localized_error_test.dart: criterion 2: LoginScreen in vi renders the localized CONNECTION_ERROR message, not the transport text
+00:20 +331: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_localized_error_test.dart: criterion 2: LoginScreen in vi renders the localized CONNECTION_ERROR message, not the transport text
+00:21 +332: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_localized_error_test.dart: criterion 2: LoginScreen in vi renders the localized CONNECTION_ERROR message, not the transport text
+00:21 +333: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_http_rejection_test.dart: en register 429 explains rejection or waiting instead of a server outage
+00:21 +334: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_localized_error_test.dart: RegisterScreen in vi renders it the same way
+00:21 +335: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_http_rejection_test.dart: es login 400 explains rejection or waiting instead of a server outage
+00:21 +336: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_http_rejection_test.dart: es login 409 explains rejection or waiting instead of a server outage
+00:22 +337: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_http_rejection_test.dart: es login 429 explains rejection or waiting instead of a server outage
+00:22 +338: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_http_rejection_test.dart: es register 400 explains rejection or waiting instead of a server outage
+00:22 +339: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_http_rejection_test.dart: es register 409 explains rejection or waiting instead of a server outage
+00:22 +340: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_http_rejection_test.dart: es register 429 explains rejection or waiting instead of a server outage
+00:22 +341: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_http_rejection_test.dart: vi login 400 explains rejection or waiting instead of a server outage
+00:23 +342: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_http_rejection_test.dart: vi login 409 explains rejection or waiting instead of a server outage
+00:23 +343: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_http_rejection_test.dart: vi login 429 explains rejection or waiting instead of a server outage
+00:23 +344: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_http_rejection_test.dart: vi register 400 explains rejection or waiting instead of a server outage
+00:23 +345: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_http_rejection_test.dart: vi register 409 explains rejection or waiting instead of a server outage
+00:23 +346: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_http_rejection_test.dart: vi register 429 explains rejection or waiting instead of a server outage
+00:24 +347: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_http_rejection_test.dart: ar login 400 explains rejection or waiting instead of a server outage
+00:24 +348: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_http_rejection_test.dart: ar login 409 explains rejection or waiting instead of a server outage
+00:24 +349: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_http_rejection_test.dart: ar login 429 explains rejection or waiting instead of a server outage
+00:24 +350: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_http_rejection_test.dart: ar register 400 explains rejection or waiting instead of a server outage
+00:24 +351: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_http_rejection_test.dart: ar register 409 explains rejection or waiting instead of a server outage
+00:24 +352: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_http_rejection_test.dart: ar register 429 explains rejection or waiting instead of a server outage
+00:25 +353: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_http_rejection_test.dart: 503 login still shows server failure
+00:25 +354: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_http_rejection_test.dart: 503 register still shows server failure
+00:25 +355: All tests passed!
