@@ -1,0 +1,29 @@
+==> env asset guard
+OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+==> generated code (skipped: AUDIT_SKIP_CODEGEN=1)
+==> format (lib test integration_test tool examples)
+Formatted 632 files (0 changed) in 2.08 seconds.
+==> flutter analyze
+Analyzing flutter-starter...                                    
+No issues found! (ran in 6.4s)
+==> flutter test
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/release_base_url_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/release_base_url_test.dart: the URL comes from the variable named after the environment
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/deploy_upload_examples_test.dart: iOS upload receives private JSON with PEM content
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/deploy_upload_examples_test.dart: iOS upload receives private JSON with PEM content
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/deploy_upload_examples_test.dart: iOS upload receives private JSON with PEM content
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/release_builds_pass_pinning_test.dart: the scan finds the release builds it should
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/release_base_url_test.dart: the example.com placeholder is refused in every spelling
+00:00 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/release_base_url_test.dart: the example.com placeholder is refused in every spelling
+00:00 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/release_builds_pass_pinning_test.dart: every mobile release build carries the pinning defines
+00:00 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/release_base_url_test.dart: a host that only resembles the placeholder is accepted
+00:00 +9: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/release_base_url_test.dart: a host that only resembles the placeholder is accepted
+00:00 +10: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/release_builds_pass_pinning_test.dart: ssl_pinning_defines.sh validates what the app parses a fingerprint, trimmed or colon-separated, is accepted
+00:00 +11: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/release_base_url_test.dart: a URL that is not absolute https is refused
+00:00 +12: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/release_base_url_test.dart: a URL that is not absolute https is refused
+00:00 +13: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/release_builds_pass_pinning_test.dart: ssl_pinning_defines.sh validates what the app parses a fingerprint with a line break inside is refused
+00:00 +14: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/release_builds_pass_pinning_test.dart: ssl_pinning_defines.sh validates what the app parses a fingerprint with a line break inside is refused
+00:00 +15: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/release_base_url_test.dart: build_all.sh refuses before calling flutter when the URL is unset
+00:00 +16: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/release_base_url_test.dart: no build script or workflow carries a placeholder base URL
+00:00 +17: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/release_base_url_test.dart: every build.yml build resolves its URL through the helper
+00:00 +18: All tests passed!

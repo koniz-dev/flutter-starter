@@ -1,0 +1,197 @@
+name: Deploy iOS
+
+# ========================================================================
+# Workflow Triggers Configuration
+# ========================================================================
+# This is a starter template, so triggers are commented out by default.
+# Uncomment and configure according to your deployment strategy, or run
+#   dart scripts/dev/setup_ci.dart --deploy-trigger=tags    (Option 1)
+#   dart scripts/dev/setup_ci.dart --deploy-trigger=branch  (Option 2)
+# Options 1 and 2 are alternatives: enabling both deploys on every push to
+# main as well as on tags.
+#
+# Option 1: Deploy on version tags
+#   push:
+#     tags:
+#       - 'v*.*.*'  # Deploy when version tag is pushed (e.g., v1.0.0)
+#
+# Option 2: Deploy on branch push
+#   push:
+#     branches: [ main ]  # Deploy when pushing to main branch
+#
+# Option 3: Manual trigger only (workflow_dispatch)
+#   - Keep push triggers commented
+#   - Use GitHub Actions UI to trigger manually
+# ========================================================================
+on:
+  # push:
+  #   tags:
+  #     - 'v*.*.*'  # Uncomment to deploy on version tags
+  #   branches: [ main ]  # Uncomment to deploy on branch push
+  workflow_dispatch:  # Allows manual trigger from GitHub Actions UI
+    inputs:
+      environment:
+        description: 'Environment to deploy'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+          - staging
+          - production
+
+# Least privilege: the deploy steps talk to
+# their store or host with their own secrets, not GITHUB_TOKEN, so the token
+# only needs to read the repository. When you enable a step that comments on
+# PRs or creates GitHub deployments with GITHUB_TOKEN - the Firebase
+# `repoToken` or Vercel `github-token` examples below - grant that scope on
+# that job (for example `pull-requests: write`), not here.
+permissions:
+  contents: read
+
+# One deploy per environment at a time, and never cancelled part-way: a
+# half-finished store upload or hosting release is worse than a queued one.
+concurrency:
+  group: ${{ github.workflow }}-${{ inputs.environment || github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy to App Store
+    runs-on: macos-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Install CocoaPods
+        run: |
+          cd ios
+          pod install
+
+      - name: Setup Xcode
+        uses: maxim-lobanov/setup-xcode@ed7a3b1fda3918c0306d1b724322adc0b8cc0a90 # v1.7.0
+        with:
+          xcode-version: latest-stable
+
+      - name: Determine environment
+        id: env
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "environment=${{ github.event.inputs.environment }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "environment=production" >> "$GITHUB_OUTPUT"
+          fi
+
+      # Runs on the tree that is about to be built, which is the whole point:
+      # a `.env` declared as an asset ships inside the artifact. The guard
+      # already runs in
+      # scripts/dev/audit_template.sh and, via
+      # test/tooling/check_env_assets_test.dart, in `flutter test` - but neither
+      # of those is this path. A Flutter asset list is not build-mode scoped, so
+      # a `.env` declared here ships inside the artifact this job publishes, and
+      # a tree that never reached CI (a local pubspec edit, a file written by an
+      # earlier step) was never checked at all. It sits after every step that
+      # writes into the working tree and before the build, so it sees what the
+      # build will see.
+      - name: Guard against a bundled secrets file
+        run: dart run tool/check_env_assets.dart
+
+      - name: Setup App Store Connect API Key
+        env:
+          APP_STORE_CONNECT_API_KEY_BASE64: ${{ secrets.APP_STORE_CONNECT_API_KEY_BASE64 }}
+          APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+        run: |
+          # deliver expects the API-key JSON format, including PEM content.
+          python3 - <<'PY'
+          import base64, json, os
+          path = os.path.join(os.environ["RUNNER_TEMP"], "app-store-connect-api.json")
+          encoded = "".join(os.environ["APP_STORE_CONNECT_API_KEY_BASE64"].split())
+          key = base64.b64decode(encoded, validate=True).decode()
+          descriptor = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
+          os.chmod(path, 0o600)
+          with os.fdopen(descriptor, "w") as output:
+              json.dump({"key_id": os.environ["APP_STORE_CONNECT_KEY_ID"],
+                         "issuer_id": os.environ["APP_STORE_CONNECT_ISSUER_ID"],
+                         "key": key}, output)
+          PY
+
+      - name: Setup certificates and profiles
+        env:
+          APPLE_CERTIFICATE_BASE64: ${{ secrets.APPLE_CERTIFICATE_BASE64 }}
+          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+        run: |
+          # Create keychain
+          security create-keychain -p "" build.keychain
+          security default-keychain -s build.keychain
+          security unlock-keychain -p "" build.keychain
+          security set-keychain-settings -t 3600 -u build.keychain
+
+          # Import certificate
+          echo "$APPLE_CERTIFICATE_BASE64" | base64 -d > certificate.p12
+          security import certificate.p12 -k build.keychain -P "$APPLE_CERTIFICATE_PASSWORD" -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "" build.keychain
+
+          # Install fastlane
+          sudo gem install fastlane
+
+      - name: Build IPA
+        env:
+          BASE_URL_STAGING: ${{ vars.BASE_URL_STAGING || secrets.BASE_URL_STAGING }}
+          BASE_URL_PRODUCTION: ${{ vars.BASE_URL_PRODUCTION || secrets.BASE_URL_PRODUCTION }}
+          API_SSL_FINGERPRINTS: ${{ vars.API_SSL_FINGERPRINTS }}
+          APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          ENV="${{ steps.env.outputs.environment }}"
+          . scripts/ci/release_base_url.sh
+          release_base_url "$ENV" || exit 1
+          
+          # Refuses an empty API_SSL_FINGERPRINTS unless ENABLE_SSL_PINNING
+          # is false: a release with pinning on and nothing to pin refuses
+          # to start. env: above reads the fingerprints from the repository
+          # variable; set ENABLE_SSL_PINNING: 'false' there to ship unpinned.
+          . scripts/ci/ssl_pinning_defines.sh
+          ssl_pinning_defines "$ENV" || exit 1
+
+          flutter build ipa \
+            --release \
+            --dart-define=ENVIRONMENT="$ENV" \
+            --dart-define=BASE_URL="$BASE_URL" \
+            ${SSL_PINNING_DEFINES[@]+"${SSL_PINNING_DEFINES[@]}"}
+
+      - name: Upload to App Store Connect
+        env:
+          APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          cd ios
+          fastlane deliver \
+            --ipa "../build/ios/ipa/Runner.ipa" \
+            --skip_screenshots \
+            --skip_metadata \
+            --force \
+            --api_key_path "$RUNNER_TEMP/app-store-connect-api.json"
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: ios-ipa
+          path: build/ios/ipa/*.ipa
+          # A run that built nothing must fail, not go green with zero
+          # artifacts.
+          if-no-files-found: error

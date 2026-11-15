@@ -1,0 +1,70 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/deploy_base_url_test.dart
+00:00 +0: all five commented deploy builds are exercised
+00:00 +1: .github/workflows/deploy-android.yml:deploy refuses invalid URLs before invoking flutter
+00:00 +2: .github/workflows/deploy-ios.yml:deploy refuses invalid URLs before invoking flutter
+00:01 +3: .github/workflows/deploy-web.yml:deploy-firebase refuses invalid URLs before invoking flutter
+00:01 +4: .github/workflows/deploy-web.yml:deploy-netlify refuses invalid URLs before invoking flutter
+00:02 +5: .github/workflows/deploy-web.yml:deploy-vercel refuses invalid URLs before invoking flutter
+00:02 +6: Vercel deploys the built web directory
+00:02 +7: All tests passed!
+
+POSTMERGE EVIDENCE INSPECTION
+format.log $ /Users/nguyenanhkiet/Playground/flutter-starter/scripts/dev/format_dart.sh --check
+
+Formatted 632 files (0 changed) in 2.35 seconds.
+exit: 0
+analyze.log 
+Analyzing flutter-starter...                                    
+No issues found! (ran in 8.6s)
+exit: 0
+tests.log 09:04 +4499 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/testing_guide_snippets_test.dart: criterion 1: every self-contained dart snippet in docs/architecture/overview.md analyzes with no error or warning
+09:17 +4500 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/testing_guide_snippets_test.dart: no snippet imports test/ through the package
+09:17 +4501 ~14: All tests passed!
+exit: 0
+Draft artifact exists: baseline-failures.log bytes 3676
+Draft artifact exists: local-audit.log bytes 5984
+Draft artifact exists: scope.patch bytes 12997
+Draft artifact exists: acceptance-runner.sh bytes 6283
+Draft artifact exists: actionlint-baseline.log bytes 217
+Draft artifact exists: actionlint.log bytes 215
+Draft artifact exists: uncommented-deploy-android.yml bytes 7021
+Draft artifact exists: uncommented-deploy-ios.yml bytes 8329
+Draft artifact exists: uncommented-deploy-web.yml bytes 12478
+Draft artifact exists: independent-review.md bytes 4048
+Draft artifact exists: independent-tests.log bytes 16626
+Draft artifact exists: root-inspection.md bytes 2452
+Draft artifact exists: quality-final-tail.log bytes 9720
+Criterion mapping: All five commented deploy builds resolve variable/secret URLs through the shared guard and refuse unsafe URLs before build -> local-audit.log
+Criterion mapping: All commented steps in all three deploy workflows pass actionlint, with grouped keystore writes -> actionlint.log
+Criterion mapping: The Vercel template deploys build/web -> local-audit.log
+Root inspection: # Root inspection of deploy-template URL validation
+
+Reviewed accepted HEAD b5837782c4fef116cf4e57a21888cac8aeb3ada2 against base a03d07d3b1246665549919163e3d8785cf929009. Four-file change: three dormant deploy templates and the executable regression test.
+
+All five build steps now read BASE_URL_STAGING and BASE_URL_PRODUCTION from repository variables with secret fallback, resolve the existing chosen ENV through the same release_base_url helper as build.yml, and refuse before any Flutter invocation. Mobile pinning still resolves after the URL guard. URLs travel through step environment variables and quoted shell expansion rather than direct expression interpolation inside a shell assignment. No live endpoint or credential was introduced; tests use synthetic .test URLs and disabled pinning only in the local fixture.
+
+Read every new test assertion. The test enables real YAML steps, evaluates only their known Actions contexts, copies the actual release/pinning scripts, and executes Bash against a recording Flutter stub. It verifies both staging and production, missing/http/example.com refusal with no call, variable-only and secret-only acceptance, variable precedence and exact compile-time environment/URL. One discovery control ensures exactly five distinct builds were found. Vercel's actual parsed deployment step must use build/web.
+
+Before editing workflows, the exact regression produced one discovery PASS and six failures: all five empty-URL commands returned exit0, plus Vercel's root directory mismatch. Original expanded Android workflow also reproduces SC2129. Fixed fully uncommented Android/iOS/Web workflows pass actionlint with no findings; expanded fixtures, command and exit0 are preserved. Keystore properties use one redirected group; the base64 write is unchanged. Root focused audit passes30 tests, including existing URL/pinning/upload examples and assertionless-test guard, with format/analyzer clean.
+
+This verifies the starter mechanisms and dormant template syntax. No store build, signing, backend request or actual deployment was run. Full host completion, actual CI scope and independent reviewer output are recorded separately when available.
+
+Accepted-head full host runner: format632 files unchanged, analyzer no issues, all4,501 tests pass with14 intentional golden skips (exit0). Read the actual completion summaries and independently persisted review/raw probes. No source edit followed acceptance.
+
+Current CI: [{"name": "Quality gate", "state": "SUCCESS", "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43729387550/job/132858255151"}, {"name": "Workflow lint", "state": "SUCCESS", "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43729387568/job/132858254925"}, {"name": "Strip keep-samples + analyze + test", "state": "SUCCESS", "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43729387495/job/132858254745"}, {"name": "Strip renamed-both + analyze + test", "state": "SUCCESS", "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43729387495/job/132858254730"}, {"name": "Strip both-samples-removed + analyze + test", "state": "SUCCESS", "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43729387495/job/132858254692"}, {"name": "Action pins", "state": "SUCCESS", "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43729387568/job/132858254667"}, {"name": "Strip tasks-removed + analyze + test", "state": "SUCCESS", "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43729387495/job/132858254648"}, {"name": "Strip feature-flags-removed + analyze + test", "state": "SUCCESS", "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43729387495/job/132858254494"}]
+
+Quality completion: 2026-11-15T15:32:15.0381561Z 🎉 4500 tests passed, 16 skipped.
+Quality completion: 2026-11-15T15:32:15.2182180Z Test order seed: 20862662
+Quality completion: 2026-11-15T15:32:15.2247285Z total=$(grep -oE 'Coverage: [0-9.]+%' "$RUNNER_TEMP/coverage.log" | grep -oE '[0-9.]+%' || true)
+Quality completion: 2026-11-15T15:32:15.2579894Z   Coverage: 96.69%
+Quality completion: 2026-11-15T15:32:15.2598011Z ✓ Coverage 96.69% meets minimum threshold of 94%
+Quality completion: 2026-11-15T15:32:15.2670166Z echo "No tracked file changed."
+Quality completion: 2026-11-15T15:32:15.2851557Z No tracked file changed.
+Tree parity exit: 0
+Tracked status: 
+Commits in HEAD^..HEAD
+  ok    dbea2426 fix(ci): validate API URLs in deploy templates (#1276)
+
+OK: every message links with 'Refs koniz-dev/flutter-starter#N' and closes nothing.
+{"assignees":[{"id":"MDQ6VXNlcjg0OTIwMjE5","login":"koniz-dev","name":"Nguyễn Anh Kiệt","databaseId":84920219}],"labels":[{"id":"LA_kwDOQVGyw88AAAACxv3YpA","name":"type:bug","description":"Something that is broken relative to documented behavior","color":"d73a4a"},{"id":"LA_kwDOQVGyw88AAAACxv3fCA","name":"epic:tooling-ci","description":".github, .githooks, scripts/, tool/, bricks/, analyzer and pubspec config","color":"5319e7"},{"id":"LA_kwDOQVGyw88AAAACxv3gpg","name":"priority:P2","description":"Normal queue: real but not blocking","color":"fbca04"},{"id":"LA_kwDOQVGyw88AAAACxv3hug","name":"status:in-progress","description":"Claimed by an assignee and being worked right now","color":"0052cc"}],"state":"OPEN","title":"fix(ci): the commented deploy build steps publish with an empty BASE_URL when the secret is missing"}
+{"headRefOid":"b5837782c4fef116cf4e57a21888cac8aeb3ada2","mergeCommit":{"oid":"dbea2426a5866533d01a06bb7dc1c73e821b1c8a"},"state":"MERGED","statusCheckRollup":[{"__typename":"CheckRun","completedAt":"2026-11-15T15:21:33Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/koniz-dev/flutter-starter/actions/runs/43729387568/job/132858254667","name":"Action pins","startedAt":"2026-11-15T15:21:06Z","status":"COMPLETED","workflowName":"Action pins"},{"__typename":"CheckRun","completedAt":"2026-11-15T15:32:19Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/koniz-dev/flutter-starter/actions/runs/43729387550/job/132858255151","name":"Quality gate","startedAt":"2026-11-15T15:21:07Z","status":"COMPLETED","workflowName":"CI"},{"__typename":"CheckRun","completedAt":"2026-11-15T15:26:57Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/koniz-dev/flutter-starter/actions/runs/43729387495/job/132858254692","name":"Strip both-samples-removed + analyze + test","startedAt":"2026-11-15T15:21:06Z","status":"COMPLETED","workflowName":"Strip smoke"},{"__typename":"CheckRun","completedAt":"2026-11-15T15:26:23Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/koniz-dev/flutter-starter/actions/runs/43729387495/job/132858254648","name":"Strip tasks-removed + analyze + test","startedAt":"2026-11-15T15:21:06Z","status":"COMPLETED","workflowName":"Strip smoke"},{"__typename":"CheckRun","completedAt":"2026-11-15T15:26:34Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/koniz-dev/flutter-starter/actions/runs/43729387495/job/132858254494","name":"Strip feature-flags-removed + analyze + test","startedAt":"2026-11-15T15:21:06Z","status":"COMPLETED","workflowName":"Strip smoke"},{"__typename":"CheckRun","completedAt":"2026-11-15T15:27:13Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/koniz-dev/flutter-starter/actions/runs/43729387495/job/132858254730","name":"Strip renamed-both + analyze + test","startedAt":"2026-11-15T15:21:06Z","status":"COMPLETED","workflowName":"Strip smoke"},{"__typename":"CheckRun","completedAt":"2026-11-15T15:27:22Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/koniz-dev/flutter-starter/actions/runs/43729387495/job/132858254745","name":"Strip keep-samples + analyze + test","startedAt":"2026-11-15T15:21:06Z","status":"COMPLETED","workflowName":"Strip smoke"},{"__typename":"CheckRun","completedAt":"2026-11-15T15:21:10Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/koniz-dev/flutter-starter/actions/runs/43729387568/job/132858254925","name":"Workflow lint","startedAt":"2026-11-15T15:21:06Z","status":"COMPLETED","workflowName":"Action pins"}]}

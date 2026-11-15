@@ -1,0 +1,3 @@
+$ actionlint -oneline .git/codex-issue-work/1265-uncommented-fixed/deploy-android.yml .git/codex-issue-work/1265-uncommented-fixed/deploy-ios.yml .git/codex-issue-work/1265-uncommented-fixed/deploy-web.yml
+
+exit: 0

@@ -1,0 +1,1 @@
+.git/codex-issue-work/1265-uncommented-baseline/deploy-android.yml:87:9: shellcheck reported issue in this script: SC2129:style:3:1: Consider using { cmd1; cmd2; } >> file instead of individual redirects [shellcheck]

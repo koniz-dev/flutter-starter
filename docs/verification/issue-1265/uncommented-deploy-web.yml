@@ -1,0 +1,304 @@
+name: Deploy Web
+
+# ========================================================================
+# Workflow Triggers Configuration
+# ========================================================================
+# This is a starter template, so triggers are commented out by default.
+# Uncomment and configure according to your deployment strategy, or run
+#   dart scripts/dev/setup_ci.dart --deploy-trigger=tags    (Option 1)
+#   dart scripts/dev/setup_ci.dart --deploy-trigger=branch  (Option 2)
+# Options 1 and 2 are alternatives: enabling both deploys on every push to
+# main as well as on tags.
+#
+# Option 1: Deploy on version tags
+#   push:
+#     tags:
+#       - 'v*.*.*'  # Deploy when version tag is pushed (e.g., v1.0.0)
+#
+# Option 2: Deploy on branch push
+#   push:
+#     branches: [ main ]  # Deploy when pushing to main branch
+#
+# Option 3: Manual trigger only (workflow_dispatch)
+#   - Keep push triggers commented
+#   - Use GitHub Actions UI to trigger manually
+# ========================================================================
+on:
+  # push:
+  #   branches: [ main ]  # Uncomment to deploy on branch push
+  #   tags:
+  #     - 'v*.*.*'  # Uncomment to deploy on version tags
+  workflow_dispatch:  # Allows manual trigger from GitHub Actions UI
+    inputs:
+      environment:
+        description: 'Environment to deploy'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+          - staging
+          - production
+      platform:
+        description: 'Hosting platform'
+        required: true
+        default: 'firebase'
+        type: choice
+        options:
+          - firebase
+          - netlify
+          - vercel
+
+# Least privilege: the deploy steps talk to
+# their store or host with their own secrets, not GITHUB_TOKEN, so the token
+# only needs to read the repository. When you enable a step that comments on
+# PRs or creates GitHub deployments with GITHUB_TOKEN - the Firebase
+# `repoToken` or Vercel `github-token` examples below - grant that scope on
+# that job (for example `pull-requests: write`), not here.
+permissions:
+  contents: read
+
+# One deploy per environment at a time, and never cancelled part-way: a
+# half-finished store upload or hosting release is worse than a queued one.
+concurrency:
+  group: ${{ github.workflow }}-${{ inputs.environment || github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  deploy-firebase:
+    name: Deploy to Firebase
+    runs-on: ubuntu-latest
+    if: github.event.inputs.platform == 'firebase' || (github.event.inputs.platform == '' && github.event_name == 'push')
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Determine environment
+        id: env
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "environment=${{ github.event.inputs.environment }}" >> "$GITHUB_OUTPUT"
+          elif [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+            echo "environment=production" >> "$GITHUB_OUTPUT"
+          else
+            echo "environment=production" >> "$GITHUB_OUTPUT"
+          fi
+
+      # Runs on the tree that is about to be built, which is the whole point:
+      # a `.env` declared as an asset ships inside the artifact. The guard
+      # already runs in
+      # scripts/dev/audit_template.sh and, via
+      # test/tooling/check_env_assets_test.dart, in `flutter test` - but neither
+      # of those is this path. A Flutter asset list is not build-mode scoped, so
+      # a `.env` declared here ships inside the artifact this job publishes, and
+      # a tree that never reached CI (a local pubspec edit, a file written by an
+      # earlier step) was never checked at all. It sits after every step that
+      # writes into the working tree and before the build, so it sees what the
+      # build will see.
+      - name: Guard against a bundled secrets file
+        run: dart run tool/check_env_assets.dart
+
+      - name: Build Web
+        env:
+          BASE_URL_STAGING: ${{ vars.BASE_URL_STAGING || secrets.BASE_URL_STAGING }}
+          BASE_URL_PRODUCTION: ${{ vars.BASE_URL_PRODUCTION || secrets.BASE_URL_PRODUCTION }}
+        run: |
+          ENV="${{ steps.env.outputs.environment }}"
+          . scripts/ci/release_base_url.sh
+          release_base_url "$ENV" || exit 1
+          
+          flutter build web \
+            --release \
+            --dart-define=ENVIRONMENT="$ENV" \
+            --dart-define=BASE_URL="$BASE_URL"
+
+      # A run that built nothing must fail, not go green with zero artifacts
+      # while the build step above is still commented out.
+      - name: Upload web build
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: web-firebase
+          path: build/web/
+          if-no-files-found: error
+
+      - name: Setup Firebase
+        uses: FirebaseExtended/action-hosting-deploy@500ac625ca2dd40cbd15f7659af953801858032a # v0.11.0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}'
+          projectId: '${{ secrets.FIREBASE_PROJECT_ID }}'
+          channelId: live
+          target: ${{ steps.env.outputs.environment }}
+
+      # Delete this step once the build and deploy steps above are uncommented
+      # and their secrets are set. Until then this job deploys nothing, and a
+      # green run titled "Deploy to Firebase" would say it had.
+      - name: Fail while nothing is deployed
+        run: |
+          echo "::error::The build and deploy steps of this job ship commented out, so nothing was deployed. Uncomment them, set the secrets, then delete this step."
+          exit 1
+
+  deploy-netlify:
+    name: Deploy to Netlify
+    runs-on: ubuntu-latest
+    if: github.event.inputs.platform == 'netlify'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Determine environment
+        id: env
+        run: |
+          echo "environment=${{ github.event.inputs.environment }}" >> "$GITHUB_OUTPUT"
+
+      # Runs on the tree that is about to be built, which is the whole point:
+      # a `.env` declared as an asset ships inside the artifact. The guard
+      # already runs in
+      # scripts/dev/audit_template.sh and, via
+      # test/tooling/check_env_assets_test.dart, in `flutter test` - but neither
+      # of those is this path. A Flutter asset list is not build-mode scoped, so
+      # a `.env` declared here ships inside the artifact this job publishes, and
+      # a tree that never reached CI (a local pubspec edit, a file written by an
+      # earlier step) was never checked at all. It sits after every step that
+      # writes into the working tree and before the build, so it sees what the
+      # build will see.
+      - name: Guard against a bundled secrets file
+        run: dart run tool/check_env_assets.dart
+
+      - name: Build Web
+        env:
+          BASE_URL_STAGING: ${{ vars.BASE_URL_STAGING || secrets.BASE_URL_STAGING }}
+          BASE_URL_PRODUCTION: ${{ vars.BASE_URL_PRODUCTION || secrets.BASE_URL_PRODUCTION }}
+        run: |
+          ENV="${{ steps.env.outputs.environment }}"
+          . scripts/ci/release_base_url.sh
+          release_base_url "$ENV" || exit 1
+          
+          flutter build web \
+            --release \
+            --dart-define=ENVIRONMENT="$ENV" \
+            --dart-define=BASE_URL="$BASE_URL"
+
+      # A run that built nothing must fail, not go green with zero artifacts
+      # while the build step above is still commented out.
+      - name: Upload web build
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: web-netlify
+          path: build/web/
+          if-no-files-found: error
+
+      - name: Deploy to Netlify
+        uses: nwtgck/actions-netlify@5da65c9f74c7961c5501a3ba329b8d0912f39c03 # v2.0.0
+        with:
+          publish-dir: './build/web'
+          production-branch: main
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          deploy-message: "Deploy from GitHub Actions"
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+
+      # Delete this step once the build and deploy steps above are uncommented
+      # and their secrets are set. Until then this job deploys nothing, and a
+      # green run titled "Deploy to Netlify" would say it had.
+      - name: Fail while nothing is deployed
+        run: |
+          echo "::error::The build and deploy steps of this job ship commented out, so nothing was deployed. Uncomment them, set the secrets, then delete this step."
+          exit 1
+
+  deploy-vercel:
+    name: Deploy to Vercel
+    runs-on: ubuntu-latest
+    if: github.event.inputs.platform == 'vercel'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Determine environment
+        id: env
+        run: |
+          echo "environment=${{ github.event.inputs.environment }}" >> "$GITHUB_OUTPUT"
+
+      # Runs on the tree that is about to be built, which is the whole point:
+      # a `.env` declared as an asset ships inside the artifact. The guard
+      # already runs in
+      # scripts/dev/audit_template.sh and, via
+      # test/tooling/check_env_assets_test.dart, in `flutter test` - but neither
+      # of those is this path. A Flutter asset list is not build-mode scoped, so
+      # a `.env` declared here ships inside the artifact this job publishes, and
+      # a tree that never reached CI (a local pubspec edit, a file written by an
+      # earlier step) was never checked at all. It sits after every step that
+      # writes into the working tree and before the build, so it sees what the
+      # build will see.
+      - name: Guard against a bundled secrets file
+        run: dart run tool/check_env_assets.dart
+
+      - name: Build Web
+        env:
+          BASE_URL_STAGING: ${{ vars.BASE_URL_STAGING || secrets.BASE_URL_STAGING }}
+          BASE_URL_PRODUCTION: ${{ vars.BASE_URL_PRODUCTION || secrets.BASE_URL_PRODUCTION }}
+        run: |
+          ENV="${{ steps.env.outputs.environment }}"
+          . scripts/ci/release_base_url.sh
+          release_base_url "$ENV" || exit 1
+          
+          flutter build web \
+            --release \
+            --dart-define=ENVIRONMENT="$ENV" \
+            --dart-define=BASE_URL="$BASE_URL"
+
+      # A run that built nothing must fail, not go green with zero artifacts
+      # while the build step above is still commented out.
+      - name: Upload web build
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: web-vercel
+          path: build/web/
+          if-no-files-found: error
+
+      - name: Deploy to Vercel
+        uses: amondnet/vercel-action@16e87c0a08142b0d0d33b76aeaf20823c381b9b9 # v25.2.0
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: '--prod'
+          working-directory: build/web
+
+      # Delete this step once the build and deploy steps above are uncommented
+      # and their secrets are set. Until then this job deploys nothing, and a
+      # green run titled "Deploy to Vercel" would say it had.
+      - name: Fail while nothing is deployed
+        run: |
+          echo "::error::The build and deploy steps of this job ship commented out, so nothing was deployed. Uncomment them, set the secrets, then delete this step."
+          exit 1

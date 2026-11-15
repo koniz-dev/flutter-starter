@@ -1,0 +1,168 @@
+name: Deploy Android
+
+# ========================================================================
+# Workflow Triggers Configuration
+# ========================================================================
+# This is a starter template, so triggers are commented out by default.
+# Uncomment and configure according to your deployment strategy, or run
+#   dart scripts/dev/setup_ci.dart --deploy-trigger=tags    (Option 1)
+#   dart scripts/dev/setup_ci.dart --deploy-trigger=branch  (Option 2)
+# Options 1 and 2 are alternatives: enabling both deploys on every push to
+# main as well as on tags.
+#
+# Option 1: Deploy on version tags
+#   push:
+#     tags:
+#       - 'v*.*.*'  # Deploy when version tag is pushed (e.g., v1.0.0)
+#
+# Option 2: Deploy on branch push
+#   push:
+#     branches: [ main ]  # Deploy when pushing to main branch
+#
+# Option 3: Manual trigger only (workflow_dispatch)
+#   - Keep push triggers commented
+#   - Use GitHub Actions UI to trigger manually
+# ========================================================================
+on:
+  # push:
+  #   tags:
+  #     - 'v*.*.*'  # Uncomment to deploy on version tags
+  #   branches: [ main ]  # Uncomment to deploy on branch push
+  workflow_dispatch:  # Allows manual trigger from GitHub Actions UI
+    inputs:
+      environment:
+        description: 'Environment to deploy'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+          - staging
+          - production
+
+# Least privilege: the deploy steps talk to
+# their store or host with their own secrets, not GITHUB_TOKEN, so the token
+# only needs to read the repository. When you enable a step that comments on
+# PRs or creates GitHub deployments with GITHUB_TOKEN - the Firebase
+# `repoToken` or Vercel `github-token` examples below - grant that scope on
+# that job (for example `pull-requests: write`), not here.
+permissions:
+  contents: read
+
+# One deploy per environment at a time, and never cancelled part-way: a
+# half-finished store upload or hosting release is worse than a queued one.
+concurrency:
+  group: ${{ github.workflow }}-${{ inputs.environment || github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy to Play Store
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Setup Java
+        uses: actions/setup-java@77dd5b2ce225ea11469928ac317850245a74ae78 # v6.2.0
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Setup Android keystore
+        env:
+          KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          echo "$KEYSTORE_BASE64" | base64 -d > android/upload-keystore.jks
+          {
+            echo "storePassword=$KEYSTORE_PASSWORD"
+            echo "keyPassword=$KEY_PASSWORD"
+            echo "keyAlias=$KEY_ALIAS"
+            echo "storeFile=upload-keystore.jks"
+          } > android/key.properties
+
+      - name: Determine environment
+        id: env
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "environment=${{ github.event.inputs.environment }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "environment=production" >> "$GITHUB_OUTPUT"
+          fi
+
+      # Runs on the tree that is about to be built, which is the whole point:
+      # a `.env` declared as an asset ships inside the artifact. The guard
+      # already runs in
+      # scripts/dev/audit_template.sh and, via
+      # test/tooling/check_env_assets_test.dart, in `flutter test` - but neither
+      # of those is this path. A Flutter asset list is not build-mode scoped, so
+      # a `.env` declared here ships inside the artifact this job publishes, and
+      # a tree that never reached CI (a local pubspec edit, a file written by an
+      # earlier step) was never checked at all. It sits after every step that
+      # writes into the working tree and before the build, so it sees what the
+      # build will see.
+      - name: Guard against a bundled secrets file
+        run: dart run tool/check_env_assets.dart
+
+      - name: Build App Bundle
+        env:
+          BASE_URL_STAGING: ${{ vars.BASE_URL_STAGING || secrets.BASE_URL_STAGING }}
+          BASE_URL_PRODUCTION: ${{ vars.BASE_URL_PRODUCTION || secrets.BASE_URL_PRODUCTION }}
+          API_SSL_FINGERPRINTS: ${{ vars.API_SSL_FINGERPRINTS }}
+        run: |
+          ENV="${{ steps.env.outputs.environment }}"
+          . scripts/ci/release_base_url.sh
+          release_base_url "$ENV" || exit 1
+          
+          # Refuses an empty API_SSL_FINGERPRINTS unless ENABLE_SSL_PINNING
+          # is false: a release with pinning on and nothing to pin refuses
+          # to start. env: above reads the fingerprints from the repository
+          # variable; set ENABLE_SSL_PINNING: 'false' there to ship unpinned.
+          . scripts/ci/ssl_pinning_defines.sh
+          ssl_pinning_defines "$ENV" || exit 1
+
+          flutter build appbundle \
+            --release \
+            --dart-define=ENVIRONMENT="$ENV" \
+            --dart-define=BASE_URL="$BASE_URL" \
+            ${SSL_PINNING_DEFINES[@]+"${SSL_PINNING_DEFINES[@]}"}
+
+      - name: Stage Google Play release notes
+        run: |
+          mkdir -p distribution/whatsnew
+          cp fastlane/metadata/android/en-US/changelogs/default.txt distribution/whatsnew/whatsnew-en-US
+          # Add whatsnew-<BCP-47-locale> for each additional translation.
+
+      - name: Setup Google Play
+        uses: r0adkll/upload-google-play@e738b9dd8f2476ea806d921b64aacd24f34515a5 # v1.1.5
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
+          packageName: com.example.flutter_starter
+          # Flavorless layout. `${ENV}` is a shell variable and is NOT
+          # expanded inside `with:`, so the path is literal.
+          releaseFiles: build/app/outputs/bundle/release/app-release.aab
+          track: ${{ steps.env.outputs.environment == 'production' && 'production' || 'internal' }}
+          status: completed
+          inAppUpdatePriority: 2
+          whatsNewDirectory: distribution/whatsnew
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: android-bundle
+          path: build/app/outputs/bundle/**/*.aab
+          # A run that built nothing must fail, not go green with zero
+          # artifacts while the build steps above are still commented out.
+          if-no-files-found: error

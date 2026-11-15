@@ -1,0 +1,42 @@
+[
+  {
+    "name": "Quality gate",
+    "state": "SUCCESS",
+    "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43729387550/job/132858255151"
+  },
+  {
+    "name": "Workflow lint",
+    "state": "SUCCESS",
+    "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43729387568/job/132858254925"
+  },
+  {
+    "name": "Strip keep-samples + analyze + test",
+    "state": "SUCCESS",
+    "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43729387495/job/132858254745"
+  },
+  {
+    "name": "Strip renamed-both + analyze + test",
+    "state": "SUCCESS",
+    "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43729387495/job/132858254730"
+  },
+  {
+    "name": "Strip both-samples-removed + analyze + test",
+    "state": "SUCCESS",
+    "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43729387495/job/132858254692"
+  },
+  {
+    "name": "Action pins",
+    "state": "SUCCESS",
+    "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43729387568/job/132858254667"
+  },
+  {
+    "name": "Strip tasks-removed + analyze + test",
+    "state": "SUCCESS",
+    "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43729387495/job/132858254648"
+  },
+  {
+    "name": "Strip feature-flags-removed + analyze + test",
+    "state": "SUCCESS",
+    "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43729387495/job/132858254494"
+  }
+]

@@ -1,0 +1,74 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/deploy_base_url_test.dart
+00:00 +0: all five commented deploy builds are exercised
+00:00 +1: .github/workflows/deploy-android.yml:deploy refuses invalid URLs before invoking flutter
+00:00 +1 -1: .github/workflows/deploy-android.yml:deploy refuses invalid URLs before invoking flutter [E]
+  Expected: not <0>
+    Actual: <0>
+  staging/
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/tooling/deploy_base_url_test.dart 132:13       main.<fn>
+  
+00:00 +1 -1: .github/workflows/deploy-ios.yml:deploy refuses invalid URLs before invoking flutter
+00:01 +1 -2: .github/workflows/deploy-ios.yml:deploy refuses invalid URLs before invoking flutter [E]
+  Expected: not <0>
+    Actual: <0>
+  staging/
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/tooling/deploy_base_url_test.dart 132:13       main.<fn>
+  
+00:01 +1 -2: .github/workflows/deploy-web.yml:deploy-firebase refuses invalid URLs before invoking flutter
+00:01 +1 -3: .github/workflows/deploy-web.yml:deploy-firebase refuses invalid URLs before invoking flutter [E]
+  Expected: not <0>
+    Actual: <0>
+  staging/
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/tooling/deploy_base_url_test.dart 132:13       main.<fn>
+  
+00:01 +1 -3: .github/workflows/deploy-web.yml:deploy-netlify refuses invalid URLs before invoking flutter
+00:02 +1 -4: .github/workflows/deploy-web.yml:deploy-netlify refuses invalid URLs before invoking flutter [E]
+  Expected: not <0>
+    Actual: <0>
+  staging/
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/tooling/deploy_base_url_test.dart 132:13       main.<fn>
+  
+00:02 +1 -4: .github/workflows/deploy-web.yml:deploy-vercel refuses invalid URLs before invoking flutter
+00:03 +1 -5: .github/workflows/deploy-web.yml:deploy-vercel refuses invalid URLs before invoking flutter [E]
+  Expected: not <0>
+    Actual: <0>
+  staging/
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/tooling/deploy_base_url_test.dart 132:13       main.<fn>
+  
+00:03 +1 -5: Vercel deploys the built web directory
+00:03 +1 -6: Vercel deploys the built web directory [E]
+  Expected: 'build/web'
+    Actual: './'
+     Which: is different.
+            Expected: build/web
+              Actual: ./
+                      ^
+             Differ at offset 0
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/tooling/deploy_base_url_test.dart 178:5        main.<fn>
+  
+00:03 +1 -6: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/deploy_base_url_test.dart: .github/workflows/deploy-android.yml:deploy refuses invalid URLs before invoking flutter
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/deploy_base_url_test.dart: .github/workflows/deploy-ios.yml:deploy refuses invalid URLs before invoking flutter
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/deploy_base_url_test.dart: .github/workflows/deploy-web.yml:deploy-firebase refuses invalid URLs before invoking flutter
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/deploy_base_url_test.dart: .github/workflows/deploy-web.yml:deploy-netlify refuses invalid URLs before invoking flutter
+  ... and 2 more
