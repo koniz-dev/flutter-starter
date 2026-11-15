@@ -1,0 +1,10 @@
+Verified in PR #1269.
+
+| Acceptance criterion | Result and artifact |
+|---|---|
+| Missing or unreadable cached user evicts both tokens; subsequent request has no bearer and a 401 invokes no refresh | PASS — [local-audit.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1259/local-audit.log). Real provider graph, local datasource and SecureTokenStore cover absent cache, malformed JSON, invalid generated user fields and wrong preference type. They assert persisted token removal, no outgoing Authorization, zero refresher callbacks and no refresh transport. All four orphan cases failed on original source with retained access token. Null/empty interceptor snapshots also have direct no-refresh/no-replay coverage; generation/teardown tests protect new sign-ins and refresh responses. |
+| Valid token plus cached user preserves restoration behavior | PASS — [local-audit.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1259/local-audit.log). Real secure-store control retains user and both credentials; existing router/session restore and credentialed refresh/replay tests pass. |
+
+Format, analyzer and full suite passed: [format.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1259/format.log), [analyze.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1259/analyze.log), [tests.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1259/tests.log). All actual PR checks passed. The accepted source tree is identical to merged main: [tree-parity.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1259/tree-parity.log).
+
+Independent reviews: [review.md](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1259/review.md). Self-QA inspected the named artifacts, source assertions, refs and status labels before closing. No screenshots were collected (`--no-goldens`); no criterion rests on standing goldens or device/live-backend/store assurance.

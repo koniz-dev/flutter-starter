@@ -1,0 +1,415 @@
+diff --git a/lib/core/network/interceptors/auth_interceptor.dart b/lib/core/network/interceptors/auth_interceptor.dart
+index 4d2981fe2ab..80d85f981c8 100644
+--- a/lib/core/network/interceptors/auth_interceptor.dart
++++ b/lib/core/network/interceptors/auth_interceptor.dart
+@@ -503,6 +503,13 @@ class AuthInterceptor extends Interceptor {
+         _reject(handler, _selectionChanged(err));
+         return;
+       }
++      // A certified snapshot may describe an empty vault. A signed-out 401
++      // must not start refresh (or turn an anonymous request into a session).
++      final accessToken = beforeRefresh.token;
++      if (accessToken == null || accessToken.isEmpty) {
++        _reject(handler, err);
++        return;
++      }
+       final result = await _refreshToken();
+ 
+       if (!_sessionGeneration.isCurrent(generation)) {
+diff --git a/lib/features/auth/data/repositories/auth_repository_impl.dart b/lib/features/auth/data/repositories/auth_repository_impl.dart
+index 005a4d5f088..2527bb57f57 100644
+--- a/lib/features/auth/data/repositories/auth_repository_impl.dart
++++ b/lib/features/auth/data/repositories/auth_repository_impl.dart
+@@ -256,17 +256,68 @@ class AuthRepositoryImpl implements AuthRepository {
+   /// "present and non-empty" - see [isAuthenticated].
+   @override
+   Future<Result<User?>> getCurrentUser() async {
++    final generation = sessionGeneration.current;
+     try {
+       final token = await localDataSource.getToken();
++      if (!sessionGeneration.isCurrent(generation)) {
++        return const ResultFailure(_signInSessionEnded);
++      }
+       if (token == null || token.isEmpty) {
+         return const Success(null);
+       }
+-      return Success(await localDataSource.getCachedUser());
+-    } on AppException catch (e) {
+-      return ResultFailure(ExceptionToFailureMapper.map(e));
+-    } on Exception catch (e) {
+-      return ResultFailure(ExceptionToFailureMapper.map(e));
++      final User? user;
++      try {
++        user = await localDataSource.getCachedUser();
++      } on Object catch (error) {
++        // Generated JSON casts can throw Error, not just Exception. Neither
++        // case may leave bearer credentials behind a signed-out restore.
++        return await _discardUnrestorableSession(generation, readError: error);
++      }
++      if (!sessionGeneration.isCurrent(generation)) {
++        return const ResultFailure(_signInSessionEnded);
++      }
++      if (user == null) return await _discardUnrestorableSession(generation);
++      return Success(user);
++    } on Object catch (error) {
++      return ResultFailure(_asFailure(error));
++    }
++  }
++
++  /// Evicts an orphaned credential set without waiting on a remote logout.
++  ///
++  /// Register before invalidating, as logout does: in-flight refreshes become
++  /// stale immediately, and the next sign-in waits for every local removal.
++  /// A stale restore must never remove a newer sign-in's credentials.
++  Future<Result<User?>> _discardUnrestorableSession(
++    int generation, {
++    Object? readError,
++  }) async {
++    if (!sessionGeneration.isCurrent(generation)) {
++      return const ResultFailure(_signInSessionEnded);
++    }
++    final done = Completer<void>();
++    sessionGeneration
++      ..trackTeardown(done.future)
++      ..invalidate();
++    Object? cleanupError;
++    try {
++      try {
++        await localDataSource.clearCache();
++      } on Object catch (error) {
++        cleanupError = error;
++      }
++      try {
++        await httpCache?.clearCache();
++      } on Object catch (error) {
++        cleanupError ??= error;
++      }
++    } finally {
++      done.complete();
+     }
++    final error = cleanupError ?? readError;
++    return error == null
++        ? const Success(null)
++        : ResultFailure(_asFailure(error));
+   }
+ 
+   /// Whether a usable session is present on this device.
+diff --git a/test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart b/test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart
+index cb927d24fbc..a17c932e2c3 100644
+--- a/test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart
++++ b/test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart
+@@ -311,6 +311,12 @@ void main() {
+         expect(firstError, isA<DioException>());
+         expect((firstError! as DioException).error, isA<StateError>());
+ 
++        // The failed refresh signs out. Start another credentialed session
++        // so the next 401 exercises the refresh guard again, rather than the
++        // signed-out fast path.
++        tokenStore
++          ..accessToken = 'next-access-token'
++          ..refreshToken = 'next-refresh-token';
+         // Criterion 2: the next 401 still completes rather than hanging.
+         final secondError = await _within(_settle(dio.get<dynamic>('/tasks')));
+         expect(secondError, isA<DioException>());
+diff --git a/test/core/network/interceptors/auth_interceptor_test.dart b/test/core/network/interceptors/auth_interceptor_test.dart
+index 1dc4483cc07..a4662283b46 100644
+--- a/test/core/network/interceptors/auth_interceptor_test.dart
++++ b/test/core/network/interceptors/auth_interceptor_test.dart
+@@ -69,7 +69,7 @@ void main() {
+ 
+     setUp(() {
+       mockSecureStorage = MockSecureStorageService();
+-      storedValues = <String, String>{};
++      storedValues = <String, String>{AppConstants.tokenKey: 'existing-token'};
+       when(() => mockSecureStorage.getStringOrThrow(any())).thenAnswer(
+         (call) async => storedValues[call.positionalArguments[0] as String],
+       );
+@@ -144,6 +144,21 @@ void main() {
+         handler = MockErrorInterceptorHandler();
+       });
+ 
++      for (final token in <String?>[null, '']) {
++        test('a 401 with ${token == null ? 'missing' : 'empty'} access token '
++            'does not refresh or replay', () async {
++          if (token == null) {
++            storedValues.remove(AppConstants.tokenKey);
++          } else {
++            storedValues[AppConstants.tokenKey] = token;
++          }
++          await interceptor.onError(dioException, handler);
++          verifyNever(() => mockAuthRepository.refreshToken());
++          expect(retryAdapter.hits, 0);
++          verify(() => handler.next(dioException)).called(1);
++        });
++      }
++
+       test('should exclude auth endpoints from token refresh', () async {
+         final loginException = DioException(
+           requestOptions: RequestOptions(path: ApiEndpoints.login),
+diff --git a/test/features/auth/data/repositories/auth_repository_impl_test.dart b/test/features/auth/data/repositories/auth_repository_impl_test.dart
+index 3617e4d49f8..e84a07ce0a8 100644
+--- a/test/features/auth/data/repositories/auth_repository_impl_test.dart
++++ b/test/features/auth/data/repositories/auth_repository_impl_test.dart
+@@ -1,3 +1,5 @@
++import 'dart:async';
++
+ import 'package:dio/dio.dart';
+ import 'package:flutter_starter/core/contracts/network_contracts.dart';
+ import 'package:flutter_starter/core/errors/exceptions.dart';
+@@ -78,6 +80,7 @@ void main() {
+     setUp(() {
+       mockRemoteDataSource = MockAuthRemoteDataSource();
+       mockLocalDataSource = MockAuthLocalDataSource();
++      when(() => mockLocalDataSource.clearCache()).thenAnswer((_) async {});
+       repository = AuthRepositoryImpl(
+         remoteDataSource: mockRemoteDataSource,
+         localDataSource: mockLocalDataSource,
+@@ -662,6 +665,87 @@ void main() {
+     });
+ 
+     group('getCurrentUser', () {
++      test('a stale restore cannot erase a newer session', () async {
++        final read = Completer<UserModel?>();
++        final entered = Completer<void>();
++        when(() => mockLocalDataSource.getToken())
++            .thenAnswer((_) async => 'old');
++        when(() => mockLocalDataSource.getCachedUser()).thenAnswer((_) {
++          entered.complete();
++          return read.future;
++        });
++        final restoring = repository.getCurrentUser();
++        await entered.future;
++        repository.sessionGeneration.invalidate();
++        read.complete(null);
++        expect((await restoring).isFailure, isTrue);
++        verifyNever(() => mockLocalDataSource.clearCache());
++      });
++
++      test(
++        'sign-in waits for orphan cleanup before writing a new session',
++        () async {
++          final entered = Completer<void>();
++          final release = Completer<void>();
++          when(() => mockLocalDataSource.getToken())
++              .thenAnswer((_) async => 'old');
++          when(() => mockLocalDataSource.getCachedUser())
++              .thenAnswer((_) async => null);
++          when(() => mockLocalDataSource.clearCache()).thenAnswer((_) {
++            entered.complete();
++            return release.future;
++          });
++          const user = UserModel(id: 'new', email: 'new@example.com');
++          when(() => mockRemoteDataSource.login(any(), any())).thenAnswer(
++            (_) async =>
++                const AuthResponseModel(user: user, token: 'new-token'),
++          );
++          when(() => mockLocalDataSource.cacheUser(any()))
++              .thenAnswer((_) async {});
++          when(() => mockLocalDataSource.cacheToken(any()))
++              .thenAnswer((_) async {});
++          final restoring = repository.getCurrentUser();
++          await entered.future;
++          final signingIn = repository.login('new@example.com', 'password');
++          await Future<void>.delayed(Duration.zero);
++          verifyNever(() => mockRemoteDataSource.login(any(), any()));
++          verifyNever(() => mockLocalDataSource.cacheToken(any()));
++          release.complete();
++          expect((await restoring).isSuccess, isTrue);
++          expect((await signingIn).dataOrNull?.id, 'new');
++          verify(() => mockLocalDataSource.cacheToken('new-token')).called(1);
++        },
++      );
++
++      test(
++        'a failed local eviction still clears HTTP cache and reports failure',
++        () async {
++          final cache = _RecordingHttpCache();
++          final repo = AuthRepositoryImpl(
++            remoteDataSource: mockRemoteDataSource,
++            localDataSource: mockLocalDataSource,
++            httpCache: cache,
++          );
++          when(() => mockLocalDataSource.getToken())
++              .thenAnswer((_) async => 'old');
++          when(() => mockLocalDataSource.getCachedUser())
++              .thenAnswer((_) async => null);
++          when(() => mockLocalDataSource.clearCache())
++              .thenThrow(const CacheException('locked'));
++          expect(
++            (await repo.getCurrentUser()).failureOrNull,
++            isA<CacheFailure>(),
++          );
++          expect(cache.clearCalls, 1);
++          verifyNever(
++            () => mockRemoteDataSource.logout(
++              refreshToken: any(named: 'refreshToken'),
++              accessToken: any(named: 'accessToken'),
++            ),
++          );
++        },
++      );
++
+       test('should return User when a token and a cached user exist', () async {
+         // Arrange
+         const userModel = UserModel(
+diff --git a/test/features/auth/integration/token_refresh_flow_test.dart b/test/features/auth/integration/token_refresh_flow_test.dart
+index 62ae4d2defd..fab633633b9 100644
+--- a/test/features/auth/integration/token_refresh_flow_test.dart
++++ b/test/features/auth/integration/token_refresh_flow_test.dart
+@@ -78,7 +78,9 @@ void main() {
+     setUp(() {
+       mockAuthRepository = createMockAuthRepository();
+       mockSecureStorage = createMockSecureStorageService();
+-      final values = <String, String>{};
++      final values = <String, String>{
++        AppConstants.tokenKey: 'expired-access-token',
++      };
+       when(() => mockSecureStorage.getStringOrThrow(any())).thenAnswer(
+         (call) async => values[call.positionalArguments[0] as String],
+       );
+diff --git a/test/features/auth/orphaned_session_test.dart b/test/features/auth/orphaned_session_test.dart
+new file mode 100644
+index 00000000000..4a57a360285
+--- /dev/null
++++ b/test/features/auth/orphaned_session_test.dart
+@@ -0,0 +1,113 @@
++import 'dart:convert';
++import 'dart:typed_data';
++
++import 'package:dio/dio.dart';
++import 'package:flutter_riverpod/flutter_riverpod.dart';
++import 'package:flutter_starter/core/constants/app_constants.dart';
++import 'package:flutter_starter/core/di/providers.dart';
++import 'package:flutter_starter/core/storage/adapters/secure_token_store.dart';
++import 'package:flutter_starter/core/storage/secure_storage_service.dart';
++import 'package:flutter_starter/features/auth/di/auth_providers.dart';
++import 'package:flutter_starter/features/auth/presentation/providers/auth_provider.dart';
++import 'package:flutter_test/flutter_test.dart';
++import 'package:mocktail/mocktail.dart';
++
++import '../../helpers/in_memory_stores.dart';
++
++class _SecureService extends Mock implements SecureStorageService {}
++
++class _Unauthorized implements HttpClientAdapter {
++  final requests = <RequestOptions>[];
++
++  @override
++  Future<ResponseBody> fetch(
++    RequestOptions options,
++    Stream<Uint8List>? requestStream,
++    Future<void>? cancelFuture,
++  ) async {
++    requests.add(options);
++    return ResponseBody.fromString('{}', 401);
++  }
++
++  @override
++  void close({bool force = false}) {}
++}
++
++void main() {
++  for (final entry in <String, Object?>{
++    'missing': null,
++    'invalid JSON': '{broken',
++    'invalid user fields': jsonEncode({'id': 7, 'email': 'a@example.com'}),
++    'wrong preference type': 7,
++    'valid': jsonEncode({'id': 'user-1', 'email': 'a@example.com'}),
++  }.entries) {
++    test('restore handles ${entry.key} user cache', () async {
++      final storage = InMemoryStorage();
++      if (entry.value != null) {
++        storage.values[AppConstants.userDataKey] = entry.value;
++      }
++      final vault = <String, String>{
++        AppConstants.tokenKey: 'orphan-access',
++        AppConstants.refreshTokenKey: 'orphan-refresh',
++      };
++      final service = _SecureService();
++      when(() => service.getStringOrThrow(any())).thenAnswer(
++        (call) async => vault[call.positionalArguments[0]],
++      );
++      when(() => service.remove(any())).thenAnswer((call) async {
++        vault.remove(call.positionalArguments[0]);
++        return true;
++      });
++      final tokens = SecureTokenStore(service);
++      var refreshCalls = 0;
++      final container = ProviderContainer(
++        overrides: [
++          // Production auth ports, with a counting wrapper around the real
++          // refresher so demo transport cannot hide an attempted refresh.
++          tokenRefresherProvider.overrideWith(
++            (ref) => () {
++              refreshCalls++;
++              return ref.read(authRepositoryProvider).refreshToken();
++            },
++          ),
++          sessionTerminationSinkProvider.overrideWith(
++            RiverpodSessionTerminationSink.new,
++          ),
++          signOutProvider.overrideWith(
++            (ref) =>
++                () => ref.read(authNotifierProvider.notifier).logout(),
++          ),
++          storageServiceProvider.overrideWithValue(storage),
++          tokenStoreProvider.overrideWithValue(tokens),
++        ],
++      );
++      addTearDown(container.dispose);
++      await container.read(authNotifierProvider.notifier).restoreSession();
++      if (entry.key == 'valid') {
++        expect(container.read(authNotifierProvider).user?.id, 'user-1');
++        expect(await tokens.getAccessToken(), 'orphan-access');
++        expect(await tokens.getRefreshToken(), 'orphan-refresh');
++        return;
++      }
++      expect(container.read(authNotifierProvider).user, isNull);
++      expect(await tokens.getAccessToken(), isNull);
++      expect(await tokens.getRefreshToken(), isNull);
++      expect(storage.values.containsKey(AppConstants.userDataKey), isFalse);
++
++      final adapter = _Unauthorized();
++      final client = container.read(apiClientProvider);
++      client.dio.httpClientAdapter = adapter;
++      await expectLater(
++        client.get('/users/me').timeout(const Duration(seconds: 5)),
++        throwsA(anything),
++      );
++      expect(adapter.requests, hasLength(1));
++      expect(refreshCalls, 0);
++      expect(adapter.requests.single.headers['Authorization'], isNull);
++      expect(
++        adapter.requests.where((request) => request.path.contains('refresh')),
++        isEmpty,
++      );
++    });
++  }
++}
+diff --git a/test/features/auth/session_restore_test.dart b/test/features/auth/session_restore_test.dart
+index 5bbfe1f8c17..2927004c75c 100644
+--- a/test/features/auth/session_restore_test.dart
++++ b/test/features/auth/session_restore_test.dart
+@@ -22,6 +22,8 @@ import 'package:go_router/go_router.dart';
+ import 'package:material_ui/material_ui.dart';
+ import 'package:mocktail/mocktail.dart';
+ 
++import '../../helpers/in_memory_stores.dart';
++
+ /// Regression tests: the persisted session used to never be read back, so
+ /// every cold start redirected a returning user to `/login`.
+ ///
+@@ -254,9 +256,13 @@ void main() {
+       // corrupt blob below to be reached at all.
+       final tokenStore = _MockTokenStore();
+       when(tokenStore.getAccessToken).thenAnswer((_) async => 'valid-token');
++      when(tokenStore.clearAllTokens).thenAnswer((_) async {});
++      when(() => store.remove(AppConstants.userDataKey))
++          .thenAnswer((_) async => true);
+ 
+       container = ProviderContainer(
+         overrides: [
++          storageServiceProvider.overrideWithValue(InMemoryStorage()),
+           keyValueStoreProvider.overrideWithValue(store),
+           tokenStoreProvider.overrideWithValue(tokenStore),
+         ],

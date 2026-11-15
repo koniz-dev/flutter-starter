@@ -1,0 +1,44 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/orphaned_session_test.dart
+00:00 +0: restore evicts credentials with missing user cache
+00:00 +0 -1: restore evicts credentials with missing user cache [E]
+  Expected: null
+    Actual: 'orphan-access'
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/features/auth/orphaned_session_test.dart 72:7  main.<fn>
+  
+00:00 +0 -1: restore evicts credentials with invalid JSON user cache
+00:00 +0 -2: restore evicts credentials with invalid JSON user cache [E]
+  Expected: null
+    Actual: 'orphan-access'
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/features/auth/orphaned_session_test.dart 72:7  main.<fn>
+  
+00:00 +0 -2: restore evicts credentials with invalid user fields user cache
+00:00 +0 -3: restore evicts credentials with invalid user fields user cache [E]
+  Expected: null
+    Actual: 'orphan-access'
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/features/auth/orphaned_session_test.dart 72:7  main.<fn>
+  
+00:00 +0 -3: restore evicts credentials with wrong preference type user cache
+00:00 +0 -4: restore evicts credentials with wrong preference type user cache [E]
+  Expected: null
+    Actual: 'orphan-access'
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/features/auth/orphaned_session_test.dart 72:7  main.<fn>
+  
+00:00 +0 -4: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/orphaned_session_test.dart: restore evicts credentials with invalid JSON user cache
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/orphaned_session_test.dart: restore evicts credentials with invalid user fields user cache
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/orphaned_session_test.dart: restore evicts credentials with missing user cache
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/orphaned_session_test.dart: restore evicts credentials with wrong preference type user cache
