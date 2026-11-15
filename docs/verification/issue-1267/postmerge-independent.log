@@ -1,0 +1,141 @@
+$ ['git', 'rev-parse', 'HEAD']
+a7372ac0f3445e9a1627048d52d742c8196cbc05
+EXIT 0
+$ ['git', 'diff', '--exit-code', 'c35ee6ade3333d7d23537045f3f3af8a14dd6496', 'HEAD', '--', 'fastlane/Fastfile', 'fastlane/README.md', 'test/tooling/fastlane_supply_options_test.dart']
+EXIT 0
+$ ['git', 'show', '-s', '--format=%B', 'HEAD']
+fix(fastlane): use supported Play Store metadata option (#1278)
+
+Refs koniz-dev/flutter-starter#1267
+EXIT 0
+$ ['../flutter-starter-maintainers/scripts/check_issue_refs.sh', '--range', 'HEAD^..HEAD']
+Commits in HEAD^..HEAD
+  ok    a7372ac0 fix(fastlane): use supported Play Store metadata option (#1278)
+
+OK: every message links with 'Refs koniz-dev/flutter-starter#N' and closes nothing.
+EXIT 0
+$ ['gh', 'issue', 'view', '1267', '--json', 'number,state,assignees,labels']
+{"assignees":[{"id":"MDQ6VXNlcjg0OTIwMjE5","login":"koniz-dev","name":"Nguyễn Anh Kiệt","databaseId":84920219}],"labels":[{"id":"LA_kwDOQVGyw88AAAACxv3YpA","name":"type:bug","description":"Something that is broken relative to documented behavior","color":"d73a4a"},{"id":"LA_kwDOQVGyw88AAAACxv3gpg","name":"priority:P2","description":"Normal queue: real but not blocking","color":"fbca04"},{"id":"LA_kwDOQVGyw88AAAACxv3hug","name":"status:in-progress","description":"Claimed by an assignee and being worked right now","color":"0052cc"},{"id":"LA_kwDOQVGyw88AAAAC4UvnPg","name":"epic:platform-release","description":"android/ ios/ macos/ linux/ windows/ web/ fastlane/: native and release surfaces","color":"5319e7"}],"number":1267,"state":"OPEN"}
+EXIT 0
+$ ['/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/sdk-350/flutter/bin/flutter', 'test', '--no-pub', 'test/tooling/fastlane_supply_options_test.dart', '--reporter', 'expanded']
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_supply_options_test.dart
+00:00 +0: (setUpAll)
+00:02 +0: every Play upload call uses documented supply options
+00:02 +1: the generic upload points supply at the Android metadata root
+00:02 +2: (tearDownAll)
+00:02 +2: All tests passed!
+EXIT 0
+
+INSPECTED /Users/nguyenanhkiet/Playground/flutter-starter-evidence/docs/verification/issue-1267/format.log
+$ /Users/nguyenanhkiet/Playground/flutter-starter/scripts/dev/format_dart.sh --check
+
+Formatted 635 files (0 changed) in 5.27 seconds.
+exit: 0
+
+INSPECTED /Users/nguyenanhkiet/Playground/flutter-starter-evidence/docs/verification/issue-1267/analyze.log
+$ flutter analyze
+
+Analyzing flutter-starter...                                    
+No issues found! (ran in 8.2s)
+exit: 0
+
+INSPECTED /Users/nguyenanhkiet/Playground/flutter-starter-evidence/docs/verification/issue-1267/tests.log
+09:51 +4504 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/testing_guide_snippets_test.dart: criterion 1: every self-contained dart snippet in CONTRIBUTING.md analyzes with no error or warning
+09:51 +4505 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/testing_guide_snippets_test.dart: criterion 1: every self-contained dart snippet in CONTRIBUTING.md analyzes with no error or warning
+09:54 +4506 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/testing_guide_snippets_test.dart: criterion 1: every self-contained dart snippet in docs/architecture/overview.md analyzes with no error or warning
+10:01 +4507 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/testing_guide_snippets_test.dart: no snippet imports test/ through the package
+10:01 +4508 ~14: All tests passed!
+exit: 0
+
+CI snapshot [{"name": "Strip tasks-removed + analyze + test", "state": "SUCCESS", "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43734078688/job/132872700719"}, {"name": "Strip keep-samples + analyze + test", "state": "SUCCESS", "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43734078688/job/132872700717"}, {"name": "Strip feature-flags-removed + analyze + test", "state": "SUCCESS", "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43734078688/job/132872700706"}, {"name": "Strip both-samples-removed + analyze + test", "state": "SUCCESS", "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43734078688/job/132872700656"}, {"name": "Quality gate", "state": "SUCCESS", "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43734078768/job/132872700595"}, {"name": "Strip renamed-both + analyze + test", "state": "SUCCESS", "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43734078688/job/132872700430"}, {"name": "Docs check", "state": "SUCCESS", "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43734078595/job/132872700294"}]
+2026-11-15T16:23:59.2280275Z 🎉 4507 tests passed, 16 skipped.
+2026-11-15T16:23:59.4853183Z   Coverage: 96.69%
+2026-11-15T16:23:59.4872530Z ✓ Coverage 96.69% meets minimum threshold of 94%
+2026-11-15T16:23:59.4946839Z   echo "- **Tracked files changed by pub get / analyze / test:**" >> "$GITHUB_STEP_SUMMARY"
+$ ['git', 'diff', '8d0e63cf0d6b73fd3c285cc889932a07c77eafde', 'HEAD', '--', 'fastlane/Fastfile', 'fastlane/README.md']
+diff --git a/fastlane/Fastfile b/fastlane/Fastfile
+index fa3fa5b4bc6..67e2480c0c5 100644
+--- a/fastlane/Fastfile
++++ b/fastlane/Fastfile
+@@ -249,7 +249,7 @@ platform :android do
+       skip_upload_metadata: true,
+       skip_upload_images: true,
+       skip_upload_screenshots: true,
+-      whatsnew_directory: "fastlane/metadata/android/en-US/changelogs"
++      metadata_path: File.expand_path("metadata/android", __dir__)
+     )
+ 
+     UI.success("Successfully uploaded to Google Play Store (#{track} track)!")
+diff --git a/fastlane/README.md b/fastlane/README.md
+index b8dc8c17b94..77787f2b3f1 100644
+--- a/fastlane/README.md
++++ b/fastlane/README.md
+@@ -46,9 +46,11 @@ staging or production build - add `ssl_fingerprints:<list>` or set
+ 
+ ### Android Deployment
+ 
++Run these commands from the repository root. Fastlane discovers
++`fastlane/Fastfile`; the iOS examples below use a subshell in `ios/`.
++
+ #### Build App Bundle
+ ```bash
+-cd fastlane
+ fastlane android build_bundle environment:production
+ ```
+ 
+@@ -152,8 +154,10 @@ Options:
+ 2. Set `json_key_data_raw` in `Appfile` (the JSON itself, for CI/CD)
+ 3. Set `SUPPLY_JSON_KEY` (a path) or `SUPPLY_JSON_KEY_DATA` (the JSON) in the
+    environment - `upload_to_play_store` reads both by itself. To use another
+-   variable such as `GOOGLE_PLAY_SERVICE_ACCOUNT_JSON`, uncomment the
+-   `json_key_data:` line in `fastlane/Fastfile`
++   variable such as `GOOGLE_PLAY_SERVICE_ACCOUNT_JSON`, add
++   `json_key_data: ENV["GOOGLE_PLAY_SERVICE_ACCOUNT_JSON"]` to each
++   `upload_to_play_store` call used by your lanes. The commented example in
++   `upload_internal` shows this option; the other lanes need it added too.
+ 
+ ### App Store Connect
+ 
+@@ -218,14 +222,23 @@ which the shell build paths use.
+ 
+ ## 📝 Changelog
+ 
+-Update changelog at:
+-- Android: `fastlane/metadata/android/en-US/changelogs/default.txt`
+-- iOS: Uses the same file or App Store Connect metadata
++Android release notes live in
++`fastlane/metadata/android/<locale>/changelogs/<version-code>.txt`, with
++`default.txt` as the fallback when no version-specific file exists. The shipped
++English fallback is `fastlane/metadata/android/en-US/changelogs/default.txt`.
++Supply reads notes separately from listing metadata: the lanes' existing
++`skip_upload_metadata: true` does not skip changelogs.
++
++By default, iOS uploads use `skip_metadata: true` and do not read the Android notes.
++Enter release notes in App Store Connect, or configure a separate iOS metadata
++upload for your app.
+ 
+-Or use the script:
++This script updates the repository-root `CHANGELOG.md` for your app:
+ ```bash
+ ./scripts/ci/generate_changelog.sh 1.0.0
+ ```
++It does not populate either store's release notes. Adapt the content into the
++Android locale files or App Store Connect separately.
+ 
+ ## 🔗 Integration with CI/CD
+ 
+@@ -260,8 +273,9 @@ See [Deployment Documentation](../docs/deployment/) for CI/CD setup.
+ - Or set `FASTLANE_TEAM_ID` environment variable
+ 
+ **Error: "Could not find IPA"**
+-- Ensure Flutter build completed successfully
+-- Check that `flutter build ipa` ran before fastlane
++- The build/upload lanes run `flutter build ipa` themselves.
++- Inspect their Flutter/Xcode export output under `build/ios/ipa/` and the path
++  reported by the lane; resolve build/export errors before retrying the upload.
+ 
+ **Error: "Code signing failed"**
+ - Ensure Xcode signing is configured correctly
+EXIT 0
+$ ['git', 'status', '--short']
+EXIT 0

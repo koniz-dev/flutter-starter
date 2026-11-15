@@ -1,0 +1,194 @@
+diff --git a/fastlane/Fastfile b/fastlane/Fastfile
+index fa3fa5b4bc6..67e2480c0c5 100644
+--- a/fastlane/Fastfile
++++ b/fastlane/Fastfile
+@@ -249,7 +249,7 @@ platform :android do
+       skip_upload_metadata: true,
+       skip_upload_images: true,
+       skip_upload_screenshots: true,
+-      whatsnew_directory: "fastlane/metadata/android/en-US/changelogs"
++      metadata_path: File.expand_path("metadata/android", __dir__)
+     )
+ 
+     UI.success("Successfully uploaded to Google Play Store (#{track} track)!")
+diff --git a/fastlane/README.md b/fastlane/README.md
+index b8dc8c17b94..77787f2b3f1 100644
+--- a/fastlane/README.md
++++ b/fastlane/README.md
+@@ -46,9 +46,11 @@ staging or production build - add `ssl_fingerprints:<list>` or set
+ 
+ ### Android Deployment
+ 
++Run these commands from the repository root. Fastlane discovers
++`fastlane/Fastfile`; the iOS examples below use a subshell in `ios/`.
++
+ #### Build App Bundle
+ ```bash
+-cd fastlane
+ fastlane android build_bundle environment:production
+ ```
+ 
+@@ -152,8 +154,10 @@ Options:
+ 2. Set `json_key_data_raw` in `Appfile` (the JSON itself, for CI/CD)
+ 3. Set `SUPPLY_JSON_KEY` (a path) or `SUPPLY_JSON_KEY_DATA` (the JSON) in the
+    environment - `upload_to_play_store` reads both by itself. To use another
+-   variable such as `GOOGLE_PLAY_SERVICE_ACCOUNT_JSON`, uncomment the
+-   `json_key_data:` line in `fastlane/Fastfile`
++   variable such as `GOOGLE_PLAY_SERVICE_ACCOUNT_JSON`, add
++   `json_key_data: ENV["GOOGLE_PLAY_SERVICE_ACCOUNT_JSON"]` to each
++   `upload_to_play_store` call used by your lanes. The commented example in
++   `upload_internal` shows this option; the other lanes need it added too.
+ 
+ ### App Store Connect
+ 
+@@ -218,14 +222,23 @@ which the shell build paths use.
+ 
+ ## 📝 Changelog
+ 
+-Update changelog at:
+-- Android: `fastlane/metadata/android/en-US/changelogs/default.txt`
+-- iOS: Uses the same file or App Store Connect metadata
++Android release notes live in
++`fastlane/metadata/android/<locale>/changelogs/<version-code>.txt`, with
++`default.txt` as the fallback when no version-specific file exists. The shipped
++English fallback is `fastlane/metadata/android/en-US/changelogs/default.txt`.
++Supply reads notes separately from listing metadata: the lanes' existing
++`skip_upload_metadata: true` does not skip changelogs.
++
++By default, iOS uploads use `skip_metadata: true` and do not read the Android notes.
++Enter release notes in App Store Connect, or configure a separate iOS metadata
++upload for your app.
+ 
+-Or use the script:
++This script updates the repository-root `CHANGELOG.md` for your app:
+ ```bash
+ ./scripts/ci/generate_changelog.sh 1.0.0
+ ```
++It does not populate either store's release notes. Adapt the content into the
++Android locale files or App Store Connect separately.
+ 
+ ## 🔗 Integration with CI/CD
+ 
+@@ -260,8 +273,9 @@ See [Deployment Documentation](../docs/deployment/) for CI/CD setup.
+ - Or set `FASTLANE_TEAM_ID` environment variable
+ 
+ **Error: "Could not find IPA"**
+-- Ensure Flutter build completed successfully
+-- Check that `flutter build ipa` ran before fastlane
++- The build/upload lanes run `flutter build ipa` themselves.
++- Inspect their Flutter/Xcode export output under `build/ios/ipa/` and the path
++  reported by the lane; resolve build/export errors before retrying the upload.
+ 
+ **Error: "Code signing failed"**
+ - Ensure Xcode signing is configured correctly
+diff --git a/test/tooling/fastlane_supply_options_test.dart b/test/tooling/fastlane_supply_options_test.dart
+new file mode 100644
+index 00000000000..90364aff6bb
+--- /dev/null
++++ b/test/tooling/fastlane_supply_options_test.dart
+@@ -0,0 +1,105 @@
++@TestOn('!windows')
++library;
++
++import 'dart:convert';
++import 'dart:io';
++
++import 'package:flutter_test/flutter_test.dart';
++
++// Options used by these lanes and their credential examples; extend this
++// reviewed list when adding a documented option. Verified 2026-11-15:
++// https://docs.fastlane.tools/actions/upload_to_play_store/#parameters
++const _supplyOptions = {
++  'package_name',
++  'release_status',
++  'track',
++  'metadata_path',
++  'json_key',
++  'json_key_data',
++  'aab',
++  'skip_upload_apk',
++  'skip_upload_aab',
++  'skip_upload_metadata',
++  'skip_upload_changelogs',
++  'skip_upload_images',
++  'skip_upload_screenshots',
++};
++
++// Evaluate the real lane bodies, recording action arguments while builds and
++// uploads are inert. Registering every lane does not execute its block.
++const _captureUploads = r'''
++require 'json'
++$lanes = {}
++$uploads = []
++def default_platform(*) end
++def platform(*) yield end
++def desc(*) end
++def lane(name, &body) $lanes[name] = body end
++def build_bundle(**options) 'fixture.aab' end
++def upload_to_play_store(**options) $uploads << options end
++module UI
++  def self.success(*) end
++end
++load ARGV.fetch(0)
++$lanes.each do |name, body|
++  next unless name.to_s.start_with?('upload')
++  body.call(environment: 'production', base_url: 'https://api.release.test',
++            track: 'beta', ssl_pinning: 'false')
++end
++puts JSON.generate($uploads)
++''';
++
++void main() {
++  final hasRuby = () {
++    try {
++      return Process.runSync('ruby', ['--version']).exitCode == 0;
++    } on ProcessException {
++      return false;
++    }
++  }();
++  final skip = hasRuby ? null : 'Ruby is not installed';
++  late List<Map<String, dynamic>> uploads;
++
++  setUpAll(() async {
++    if (!hasRuby) return;
++    final result = await Process.run('ruby', [
++      '-e',
++      _captureUploads,
++      File('fastlane/Fastfile').absolute.path,
++    ]);
++    expect(result.exitCode, 0, reason: '${result.stdout}\n${result.stderr}');
++    uploads = (jsonDecode('${result.stdout}') as List<dynamic>)
++        .map(
++          (entry) => Map<String, dynamic>.from(entry as Map<dynamic, dynamic>),
++        )
++        .toList();
++  });
++
++  test('every Play upload call uses documented supply options', () {
++    final calls = RegExp(r'\bupload_to_play_store\s*\(')
++        .allMatches(File('fastlane/Fastfile').readAsStringSync())
++        .length;
++    expect(calls, 5);
++    expect(uploads, hasLength(calls));
++    for (final upload in uploads) {
++      expect(upload.keys.toSet().difference(_supplyOptions), isEmpty);
++      expect(upload['aab'], 'fixture.aab');
++      expect(upload['package_name'], isNotEmpty);
++    }
++  }, skip: skip);
++
++  test('the generic upload points supply at the Android metadata root', () {
++    final metadataUploads = uploads.where(
++      (u) => u.containsKey('metadata_path'),
++    );
++    expect(metadataUploads, hasLength(1));
++    final upload = metadataUploads.single;
++    expect(
++      upload['metadata_path'],
++      Directory('fastlane/metadata/android').absolute.path,
++    );
++    expect(upload['skip_upload_metadata'], isTrue);
++    // Supply treats changelogs separately from listing metadata.
++    expect(upload['skip_upload_changelogs'], isNot(true));
++  }, skip: skip);
++}

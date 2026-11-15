@@ -1,0 +1,10 @@
+Verified in PR #1278.
+
+| Acceptance criterion | Result and artifact |
+|---|---|
+| Every Play upload call uses documented Supply options | PASS — [local-audit.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1267/local-audit.log). Execute all five actual upload lane bodies with inert build/upload actions and check every supplied key against reviewed official options. Original generic call fails for whatsnew_directory. Corrected metadata_path names the Android metadata root; independent Ruby2.6/4 cwd/space-path probes confirm action-readable absolute location and note fallback behavior. |
+| All four README statements match the Fastfiles and changelog script | PASS — [root-inspection.md](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1267/root-inspection.md). Commands keep repository-root context, custom JSON overrides are added per used lane, app CHANGELOG is separate from localized store notes/default iOS metadata skipping, and IPA build/export is performed by the lanes. Source and actual shell/metadata probes were inspected; no live store verification is claimed. |
+
+Format, analyzer and full suite passed: [format.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1267/format.log), [analyze.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1267/analyze.log), [tests.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1267/tests.log). All actual PR checks passed. The accepted source tree is identical to merged main: [tree-parity.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1267/tree-parity.log).
+
+Independent reviews: [review.md](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1267/review.md). Self-QA inspected the named artifacts, source assertions, refs and status labels before closing. No screenshots were collected (`--no-goldens`); no criterion rests on standing goldens or device/live-backend/store assurance.

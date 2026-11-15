@@ -1,0 +1,27 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1267-old-supply_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: every Play upload call uses documented supply options
+00:00 +0 -1: every Play upload call uses documented supply options [E]
+  Expected: empty
+    Actual: Set:['whatsnew_directory']
+  
+  package:matcher                                       expect
+  package:flutter_test/src/widget_tester.dart 473:18    expect
+  .git/codex-issue-work/1267-old-supply_test.dart 85:7  main.<fn>
+  
+00:00 +0 -1: the generic upload points supply at the Android metadata root
+00:00 +0 -2: the generic upload points supply at the Android metadata root [E]
+  Expected: an object with length of <1>
+    Actual: WhereIterable<Map<String, dynamic>>:[]
+     Which: has length of <0>
+  
+  package:matcher                                       expect
+  package:flutter_test/src/widget_tester.dart 473:18    expect
+  .git/codex-issue-work/1267-old-supply_test.dart 95:5  main.<fn>
+  
+00:00 +0 -2: (tearDownAll)
+00:00 +0 -2: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1267-old-supply_test.dart: every Play upload call uses documented supply options
+  /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1267-old-supply_test.dart: the generic upload points supply at the Android metadata root

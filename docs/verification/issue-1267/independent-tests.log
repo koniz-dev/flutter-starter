@@ -1,0 +1,306 @@
+$ ['git', 'rev-parse', 'HEAD']
+c35ee6ade3333d7d23537045f3f3af8a14dd6496
+EXIT 0 (expected 0)
+$ ['ruby', '--version']
+ruby 4.0.6 (2026-07-14 revision 03b6d3f889) +PRISM [x86_64-darwin23]
+EXIT 0 (expected 0)
+$ ['ruby', '-c', 'fastlane/Fastfile']
+Syntax OK
+EXIT 0 (expected 0)
+$ ['ruby', '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1267-review-capture.rb', '/Users/nguyenanhkiet/Playground/flutter-starter/fastlane/Fastfile']
+[{"aab":"fixture.aab","track":"beta","package_name":"com.example.flutter_starter","skip_upload_apk":true,"skip_upload_aab":false,"skip_upload_metadata":true,"skip_upload_images":true,"skip_upload_screenshots":true},{"aab":"fixture.aab","track":"alpha","package_name":"com.example.flutter_starter","skip_upload_apk":true,"skip_upload_aab":false,"skip_upload_metadata":true,"skip_upload_images":true,"skip_upload_screenshots":true},{"aab":"fixture.aab","track":"beta","package_name":"com.example.flutter_starter","skip_upload_apk":true,"skip_upload_aab":false,"skip_upload_metadata":true,"skip_upload_images":true,"skip_upload_screenshots":true},{"aab":"fixture.aab","track":"production","package_name":"com.example.flutter_starter","skip_upload_apk":true,"skip_upload_aab":false,"skip_upload_metadata":true,"skip_upload_images":true,"skip_upload_screenshots":true,"release_status":"completed"},{"aab":"fixture.aab","track":"beta","package_name":"com.example.flutter_starter","skip_upload_apk":true,"skip_upload_aab":false,"skip_upload_metadata":true,"skip_upload_images":true,"skip_upload_screenshots":true,"metadata_path":"/Users/nguyenanhkiet/Playground/flutter-starter/fastlane/metadata/android"}]
+EXIT 0 (expected 0)
+$ ['ruby', '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1267-review-relative-eval.rb', '/Users/nguyenanhkiet/Playground/flutter-starter']
+PASS relative-filename eval, fastlane lane cwd then action cwd: /Users/nguyenanhkiet/Playground/flutter-starter/fastlane/metadata/android
+[
+  {
+    "aab": "fixture.aab",
+    "track": "internal",
+    "package_name": "com.example.flutter_starter",
+    "skip_upload_apk": true,
+    "skip_upload_aab": false,
+    "skip_upload_metadata": true,
+    "skip_upload_images": true,
+    "skip_upload_screenshots": true
+  },
+  {
+    "aab": "fixture.aab",
+    "track": "alpha",
+    "package_name": "com.example.flutter_starter",
+    "skip_upload_apk": true,
+    "skip_upload_aab": false,
+    "skip_upload_metadata": true,
+    "skip_upload_images": true,
+    "skip_upload_screenshots": true
+  },
+  {
+    "aab": "fixture.aab",
+    "track": "beta",
+    "package_name": "com.example.flutter_starter",
+    "skip_upload_apk": true,
+    "skip_upload_aab": false,
+    "skip_upload_metadata": true,
+    "skip_upload_images": true,
+    "skip_upload_screenshots": true
+  },
+  {
+    "aab": "fixture.aab",
+    "track": "production",
+    "package_name": "com.example.flutter_starter",
+    "skip_upload_apk": true,
+    "skip_upload_aab": false,
+    "skip_upload_metadata": true,
+    "skip_upload_images": true,
+    "skip_upload_screenshots": true,
+    "release_status": "completed"
+  },
+  {
+    "aab": "fixture.aab",
+    "track": "production",
+    "package_name": "com.example.flutter_starter",
+    "skip_upload_apk": true,
+    "skip_upload_aab": false,
+    "skip_upload_metadata": true,
+    "skip_upload_images": true,
+    "skip_upload_screenshots": true,
+    "metadata_path": "/Users/nguyenanhkiet/Playground/flutter-starter/fastlane/metadata/android"
+  }
+]
+EXIT 0 (expected 0)
+$ ['/usr/bin/ruby', '--version']
+ruby 2.6.10p210 (2022-04-12 revision 67958) [universal.x86_64-darwin24]
+EXIT 0 (expected 0)
+$ ['/usr/bin/ruby', '-c', 'fastlane/Fastfile']
+Syntax OK
+EXIT 0 (expected 0)
+$ ['/usr/bin/ruby', '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1267-review-capture.rb', '/Users/nguyenanhkiet/Playground/flutter-starter/fastlane/Fastfile']
+[{"aab":"fixture.aab","track":"beta","package_name":"com.example.flutter_starter","skip_upload_apk":true,"skip_upload_aab":false,"skip_upload_metadata":true,"skip_upload_images":true,"skip_upload_screenshots":true},{"aab":"fixture.aab","track":"alpha","package_name":"com.example.flutter_starter","skip_upload_apk":true,"skip_upload_aab":false,"skip_upload_metadata":true,"skip_upload_images":true,"skip_upload_screenshots":true},{"aab":"fixture.aab","track":"beta","package_name":"com.example.flutter_starter","skip_upload_apk":true,"skip_upload_aab":false,"skip_upload_metadata":true,"skip_upload_images":true,"skip_upload_screenshots":true},{"aab":"fixture.aab","track":"production","package_name":"com.example.flutter_starter","skip_upload_apk":true,"skip_upload_aab":false,"skip_upload_metadata":true,"skip_upload_images":true,"skip_upload_screenshots":true,"release_status":"completed"},{"aab":"fixture.aab","track":"beta","package_name":"com.example.flutter_starter","skip_upload_apk":true,"skip_upload_aab":false,"skip_upload_metadata":true,"skip_upload_images":true,"skip_upload_screenshots":true,"metadata_path":"/Users/nguyenanhkiet/Playground/flutter-starter/fastlane/metadata/android"}]
+EXIT 0 (expected 0)
+$ ['/usr/bin/ruby', '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1267-review-relative-eval.rb', '/Users/nguyenanhkiet/Playground/flutter-starter']
+PASS relative-filename eval, fastlane lane cwd then action cwd: /Users/nguyenanhkiet/Playground/flutter-starter/fastlane/metadata/android
+[
+  {
+    "aab": "fixture.aab",
+    "track": "internal",
+    "package_name": "com.example.flutter_starter",
+    "skip_upload_apk": true,
+    "skip_upload_aab": false,
+    "skip_upload_metadata": true,
+    "skip_upload_images": true,
+    "skip_upload_screenshots": true
+  },
+  {
+    "aab": "fixture.aab",
+    "track": "alpha",
+    "package_name": "com.example.flutter_starter",
+    "skip_upload_apk": true,
+    "skip_upload_aab": false,
+    "skip_upload_metadata": true,
+    "skip_upload_images": true,
+    "skip_upload_screenshots": true
+  },
+  {
+    "aab": "fixture.aab",
+    "track": "beta",
+    "package_name": "com.example.flutter_starter",
+    "skip_upload_apk": true,
+    "skip_upload_aab": false,
+    "skip_upload_metadata": true,
+    "skip_upload_images": true,
+    "skip_upload_screenshots": true
+  },
+  {
+    "aab": "fixture.aab",
+    "track": "production",
+    "package_name": "com.example.flutter_starter",
+    "skip_upload_apk": true,
+    "skip_upload_aab": false,
+    "skip_upload_metadata": true,
+    "skip_upload_images": true,
+    "skip_upload_screenshots": true,
+    "release_status": "completed"
+  },
+  {
+    "aab": "fixture.aab",
+    "track": "production",
+    "package_name": "com.example.flutter_starter",
+    "skip_upload_apk": true,
+    "skip_upload_aab": false,
+    "skip_upload_metadata": true,
+    "skip_upload_images": true,
+    "skip_upload_screenshots": true,
+    "metadata_path": "/Users/nguyenanhkiet/Playground/flutter-starter/fastlane/metadata/android"
+  }
+]
+EXIT 0 (expected 0)
+$ ['ruby', '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1267-review-relative-eval.rb', '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1267 adopter space qrr96hj3']
+PASS relative-filename eval, fastlane lane cwd then action cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1267 adopter space qrr96hj3/fastlane/metadata/android
+[
+  {
+    "aab": "fixture.aab",
+    "track": "internal",
+    "package_name": "com.example.flutter_starter",
+    "skip_upload_apk": true,
+    "skip_upload_aab": false,
+    "skip_upload_metadata": true,
+    "skip_upload_images": true,
+    "skip_upload_screenshots": true
+  },
+  {
+    "aab": "fixture.aab",
+    "track": "alpha",
+    "package_name": "com.example.flutter_starter",
+    "skip_upload_apk": true,
+    "skip_upload_aab": false,
+    "skip_upload_metadata": true,
+    "skip_upload_images": true,
+    "skip_upload_screenshots": true
+  },
+  {
+    "aab": "fixture.aab",
+    "track": "beta",
+    "package_name": "com.example.flutter_starter",
+    "skip_upload_apk": true,
+    "skip_upload_aab": false,
+    "skip_upload_metadata": true,
+    "skip_upload_images": true,
+    "skip_upload_screenshots": true
+  },
+  {
+    "aab": "fixture.aab",
+    "track": "production",
+    "package_name": "com.example.flutter_starter",
+    "skip_upload_apk": true,
+    "skip_upload_aab": false,
+    "skip_upload_metadata": true,
+    "skip_upload_images": true,
+    "skip_upload_screenshots": true,
+    "release_status": "completed"
+  },
+  {
+    "aab": "fixture.aab",
+    "track": "production",
+    "package_name": "com.example.flutter_starter",
+    "skip_upload_apk": true,
+    "skip_upload_aab": false,
+    "skip_upload_metadata": true,
+    "skip_upload_images": true,
+    "skip_upload_screenshots": true,
+    "metadata_path": "/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1267 adopter space qrr96hj3/fastlane/metadata/android"
+  }
+]
+EXIT 0 (expected 0)
+$ ['/usr/bin/ruby', '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1267-review-relative-eval.rb', '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1267 adopter space qrr96hj3']
+PASS relative-filename eval, fastlane lane cwd then action cwd: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1267 adopter space qrr96hj3/fastlane/metadata/android
+[
+  {
+    "aab": "fixture.aab",
+    "track": "internal",
+    "package_name": "com.example.flutter_starter",
+    "skip_upload_apk": true,
+    "skip_upload_aab": false,
+    "skip_upload_metadata": true,
+    "skip_upload_images": true,
+    "skip_upload_screenshots": true
+  },
+  {
+    "aab": "fixture.aab",
+    "track": "alpha",
+    "package_name": "com.example.flutter_starter",
+    "skip_upload_apk": true,
+    "skip_upload_aab": false,
+    "skip_upload_metadata": true,
+    "skip_upload_images": true,
+    "skip_upload_screenshots": true
+  },
+  {
+    "aab": "fixture.aab",
+    "track": "beta",
+    "package_name": "com.example.flutter_starter",
+    "skip_upload_apk": true,
+    "skip_upload_aab": false,
+    "skip_upload_metadata": true,
+    "skip_upload_images": true,
+    "skip_upload_screenshots": true
+  },
+  {
+    "aab": "fixture.aab",
+    "track": "production",
+    "package_name": "com.example.flutter_starter",
+    "skip_upload_apk": true,
+    "skip_upload_aab": false,
+    "skip_upload_metadata": true,
+    "skip_upload_images": true,
+    "skip_upload_screenshots": true,
+    "release_status": "completed"
+  },
+  {
+    "aab": "fixture.aab",
+    "track": "production",
+    "package_name": "com.example.flutter_starter",
+    "skip_upload_apk": true,
+    "skip_upload_aab": false,
+    "skip_upload_metadata": true,
+    "skip_upload_images": true,
+    "skip_upload_screenshots": true,
+    "metadata_path": "/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1267 adopter space qrr96hj3/fastlane/metadata/android"
+  }
+]
+EXIT 0 (expected 0)
+$ ['ruby', '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1267-review-relative-eval.rb', '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1267 adopter space qrr96hj3']
+/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1267-review-relative-eval.rb:28:in 'block in <main>': unknown supply keys: [:whatsnew_directory] (RuntimeError)
+	from /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1267-review-relative-eval.rb:26:in 'Array#each'
+	from /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1267-review-relative-eval.rb:26:in '<main>'
+EXIT 1 (expected 1)
+$ ['/bin/bash', '--version']
+GNU bash, version 3.2.57(1)-release (x86_64-apple-darwin24)
+Copyright (C) 2007 Free Software Foundation, Inc.
+EXIT 0 (expected 0)
+$ ['/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/sdk-350/flutter/bin/flutter', 'test', '--no-pub', 'test/tooling/fastlane_supply_options_test.dart', 'test/tooling/fastlane_artifact_paths_test.dart', 'test/tooling/fastlane_pinning_test.dart', 'test/tooling/fastlane_release_environment_test.dart', '--reporter', 'expanded']
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_supply_options_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_supply_options_test.dart: (setUpAll)
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_supply_options_test.dart: (setUpAll)
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_supply_options_test.dart: (setUpAll)
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_supply_options_test.dart: (setUpAll)
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_supply_options_test.dart: (setUpAll)
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_supply_options_test.dart: (setUpAll)
+00:00 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_supply_options_test.dart: (setUpAll)
+00:00 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_supply_options_test.dart: (setUpAll)
+00:00 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_supply_options_test.dart: (setUpAll)
+00:00 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_supply_options_test.dart: every Play upload call uses documented supply options
+00:00 +9: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_supply_options_test.dart: the generic upload points supply at the Android metadata root
+00:00 +10: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_supply_options_test.dart: (tearDownAll)
+00:04 +10: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_release_environment_test.dart: only staging and production pass, trimmed and lowercased
+00:05 +11: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_release_environment_test.dart: a lane base URL must be set and not the example.com placeholder
+00:07 +12: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_release_environment_test.dart: resolved environment chooses its URL with both variables set
+00:08 +13: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_release_environment_test.dart: every lane in fastlane/Fastfile validates its base URL
+00:08 +14: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_release_environment_test.dart: every lane in fastlane/Fastfile validates its environment
+00:08 +15: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_release_environment_test.dart: get_version in fastlane/Fastfile reads "1.2.3" as 1.2.3 1
+00:08 +16: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_release_environment_test.dart: get_version in fastlane/Fastfile reads "1.2.3+45" as 1.2.3 45
+00:08 +17: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_release_environment_test.dart: get_version in fastlane/Fastfile reads "1.2.3+45 # bumped" as 1.2.3 45
+00:08 +18: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_release_environment_test.dart: get_version in fastlane/Fastfile reads "1.0.0-beta+7" as no match
+00:08 +19: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_release_environment_test.dart: every lane in ios/fastlane/Fastfile validates its base URL
+00:08 +20: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_release_environment_test.dart: every lane in ios/fastlane/Fastfile validates its environment
+00:08 +21: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_release_environment_test.dart: get_version in ios/fastlane/Fastfile reads "1.2.3" as 1.2.3 1
+00:08 +22: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_release_environment_test.dart: get_version in ios/fastlane/Fastfile reads "1.2.3+45" as 1.2.3 45
+00:08 +23: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_release_environment_test.dart: get_version in ios/fastlane/Fastfile reads "1.2.3+45 # bumped" as 1.2.3 45
+00:09 +24: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_release_environment_test.dart: get_version in ios/fastlane/Fastfile reads "1.0.0-beta+7" as no match
+00:09 +25: All tests passed!
+EXIT 0 (expected 0)
+$ ['git', 'diff', '--check']
+EXIT 0 (expected 0)
+$ ['git', 'status', '--short']
+EXIT 0 (expected 0)
+PASS primary-source options.rb validation: 13 test allowlist keys defined, whatsnew_directory absent. Source https://raw.githubusercontent.com/fastlane/fastlane/master/supply/lib/supply/options.rb
+$ ['ruby', '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1267-review-release-notes.rb']
+PASS executing upstream upload_changelog method inertly: version-specific file overrides fallback
+EXIT 0
+$ ['/usr/bin/ruby', '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1267-review-release-notes.rb']
+PASS executing upstream upload_changelog method inertly: version-specific file overrides fallback
+EXIT 0
+$ ['ruby', '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1267-review-capture.rb', '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/tmpvdok90g8/fastlane/Fastfile']
+[{"aab":"fixture.aab","track":"beta","package_name":"com.example.flutter_starter","skip_upload_apk":true,"skip_upload_aab":false,"skip_upload_metadata":true,"skip_upload_images":true,"skip_upload_screenshots":true},{"aab":"fixture.aab","track":"alpha","package_name":"com.example.flutter_starter","skip_upload_apk":true,"skip_upload_aab":false,"skip_upload_metadata":true,"skip_upload_images":true,"skip_upload_screenshots":true},{"aab":"fixture.aab","track":"beta","package_name":"com.example.flutter_starter","skip_upload_apk":true,"skip_upload_aab":false,"skip_upload_metadata":true,"skip_upload_images":true,"skip_upload_screenshots":true},{"aab":"fixture.aab","track":"production","package_name":"com.example.flutter_starter","skip_upload_apk":true,"skip_upload_aab":false,"skip_upload_metadata":true,"skip_upload_images":true,"skip_upload_screenshots":true,"release_status":"completed"},{"aab":"fixture.aab","track":"beta","package_name":"com.example.flutter_starter","skip_upload_apk":true,"skip_upload_aab":false,"skip_upload_metadata":true,"skip_upload_images":true,"skip_upload_screenshots":true,"whatsnew_directory":"fastlane/metadata/android/en-US/changelogs"}]
+EXIT 0
+PASS independent base negative controls for BOTH test predicates: undocumented key present; metadata_path call-count 0, expected 1
+$ ['/bin/bash', '-c', '(cd ios && test -f fastlane/Fastfile); test -f fastlane/Fastfile; test -f scripts/ci/generate_changelog.sh']
+EXIT 0
