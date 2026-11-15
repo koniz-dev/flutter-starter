@@ -29,6 +29,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- [Orphaned auth sessions](https://github.com/koniz-dev/flutter-starter/issues/1259): remove persisted credentials and per-session HTTP cache when the cached user cannot be restored, prevent stale restores from deleting a newer session, and skip 401 refresh when the credential snapshot has no access token.
+
 - **A Patrol run with skipped tests is no longer green.** The E2E workflow and `scripts/test/run_e2e_tests.sh` both run `scripts/test/check_patrol_summary.sh`, which passes only when every collected test ran and passed (`Total` not 0, `Failed` and `Skipped` 0, `Successful` equal to `Total`). The local script used to exit 0 on an empty or fully skipped run. Copy the new script together with the workflow.
 
 - **The Android build on the current stable is checked every week.** `build.yml`'s "Android on JDK 25" job also runs on a weekly schedule in the template repository, so a Flutter stable that raises its Gradle, AGP or Kotlin floors turns a run red. A repository created from the template skips it; `docs/deployment/summary.md` says how to enable it there.
