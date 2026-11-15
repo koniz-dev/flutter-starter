@@ -22,6 +22,8 @@ import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:mocktail/mocktail.dart';
 
+import '../../helpers/in_memory_stores.dart';
+
 /// Regression tests: the persisted session used to never be read back, so
 /// every cold start redirected a returning user to `/login`.
 ///
@@ -254,9 +256,13 @@ void main() {
       // corrupt blob below to be reached at all.
       final tokenStore = _MockTokenStore();
       when(tokenStore.getAccessToken).thenAnswer((_) async => 'valid-token');
+      when(tokenStore.clearAllTokens).thenAnswer((_) async {});
+      when(() => store.remove(AppConstants.userDataKey))
+          .thenAnswer((_) async => true);
 
       container = ProviderContainer(
         overrides: [
+          storageServiceProvider.overrideWithValue(InMemoryStorage()),
           keyValueStoreProvider.overrideWithValue(store),
           tokenStoreProvider.overrideWithValue(tokenStore),
         ],

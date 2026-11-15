@@ -78,7 +78,9 @@ void main() {
     setUp(() {
       mockAuthRepository = createMockAuthRepository();
       mockSecureStorage = createMockSecureStorageService();
-      final values = <String, String>{};
+      final values = <String, String>{
+        AppConstants.tokenKey: 'expired-access-token',
+      };
       when(() => mockSecureStorage.getStringOrThrow(any())).thenAnswer(
         (call) async => values[call.positionalArguments[0] as String],
       );

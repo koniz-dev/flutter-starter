@@ -69,7 +69,7 @@ void main() {
 
     setUp(() {
       mockSecureStorage = MockSecureStorageService();
-      storedValues = <String, String>{};
+      storedValues = <String, String>{AppConstants.tokenKey: 'existing-token'};
       when(() => mockSecureStorage.getStringOrThrow(any())).thenAnswer(
         (call) async => storedValues[call.positionalArguments[0] as String],
       );
@@ -143,6 +143,21 @@ void main() {
         );
         handler = MockErrorInterceptorHandler();
       });
+
+      for (final token in <String?>[null, '']) {
+        test('a 401 with ${token == null ? 'missing' : 'empty'} access token '
+            'does not refresh or replay', () async {
+          if (token == null) {
+            storedValues.remove(AppConstants.tokenKey);
+          } else {
+            storedValues[AppConstants.tokenKey] = token;
+          }
+          await interceptor.onError(dioException, handler);
+          verifyNever(() => mockAuthRepository.refreshToken());
+          expect(retryAdapter.hits, 0);
+          verify(() => handler.next(dioException)).called(1);
+        });
+      }
 
       test('should exclude auth endpoints from token refresh', () async {
         final loginException = DioException(

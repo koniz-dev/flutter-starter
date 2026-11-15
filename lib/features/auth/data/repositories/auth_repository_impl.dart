@@ -256,17 +256,68 @@ class AuthRepositoryImpl implements AuthRepository {
   /// "present and non-empty" - see [isAuthenticated].
   @override
   Future<Result<User?>> getCurrentUser() async {
+    final generation = sessionGeneration.current;
     try {
       final token = await localDataSource.getToken();
+      if (!sessionGeneration.isCurrent(generation)) {
+        return const ResultFailure(_signInSessionEnded);
+      }
       if (token == null || token.isEmpty) {
         return const Success(null);
       }
-      return Success(await localDataSource.getCachedUser());
-    } on AppException catch (e) {
-      return ResultFailure(ExceptionToFailureMapper.map(e));
-    } on Exception catch (e) {
-      return ResultFailure(ExceptionToFailureMapper.map(e));
+      final User? user;
+      try {
+        user = await localDataSource.getCachedUser();
+      } on Object catch (error) {
+        // Generated JSON casts can throw Error, not just Exception. Neither
+        // case may leave bearer credentials behind a signed-out restore.
+        return await _discardUnrestorableSession(generation, readError: error);
+      }
+      if (!sessionGeneration.isCurrent(generation)) {
+        return const ResultFailure(_signInSessionEnded);
+      }
+      if (user == null) return await _discardUnrestorableSession(generation);
+      return Success(user);
+    } on Object catch (error) {
+      return ResultFailure(_asFailure(error));
     }
+  }
+
+  /// Evicts an orphaned credential set without waiting on a remote logout.
+  ///
+  /// Register before invalidating, as logout does: in-flight refreshes become
+  /// stale immediately, and the next sign-in waits for every local removal.
+  /// A stale restore must never remove a newer sign-in's credentials.
+  Future<Result<User?>> _discardUnrestorableSession(
+    int generation, {
+    Object? readError,
+  }) async {
+    if (!sessionGeneration.isCurrent(generation)) {
+      return const ResultFailure(_signInSessionEnded);
+    }
+    final done = Completer<void>();
+    sessionGeneration
+      ..trackTeardown(done.future)
+      ..invalidate();
+    Object? cleanupError;
+    try {
+      try {
+        await localDataSource.clearCache();
+      } on Object catch (error) {
+        cleanupError = error;
+      }
+      try {
+        await httpCache?.clearCache();
+      } on Object catch (error) {
+        cleanupError ??= error;
+      }
+    } finally {
+      done.complete();
+    }
+    final error = cleanupError ?? readError;
+    return error == null
+        ? const Success(null)
+        : ResultFailure(_asFailure(error));
   }
 
   /// Whether a usable session is present on this device.

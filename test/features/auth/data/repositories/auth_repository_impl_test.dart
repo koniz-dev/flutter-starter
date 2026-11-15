@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_starter/core/contracts/network_contracts.dart';
 import 'package:flutter_starter/core/errors/exceptions.dart';
@@ -78,6 +80,7 @@ void main() {
     setUp(() {
       mockRemoteDataSource = MockAuthRemoteDataSource();
       mockLocalDataSource = MockAuthLocalDataSource();
+      when(() => mockLocalDataSource.clearCache()).thenAnswer((_) async {});
       repository = AuthRepositoryImpl(
         remoteDataSource: mockRemoteDataSource,
         localDataSource: mockLocalDataSource,
@@ -662,6 +665,87 @@ void main() {
     });
 
     group('getCurrentUser', () {
+      test('a stale restore cannot erase a newer session', () async {
+        final read = Completer<UserModel?>();
+        final entered = Completer<void>();
+        when(() => mockLocalDataSource.getToken())
+            .thenAnswer((_) async => 'old');
+        when(() => mockLocalDataSource.getCachedUser()).thenAnswer((_) {
+          entered.complete();
+          return read.future;
+        });
+        final restoring = repository.getCurrentUser();
+        await entered.future;
+        repository.sessionGeneration.invalidate();
+        read.complete(null);
+        expect((await restoring).isFailure, isTrue);
+        verifyNever(() => mockLocalDataSource.clearCache());
+      });
+
+      test(
+        'sign-in waits for orphan cleanup before writing a new session',
+        () async {
+          final entered = Completer<void>();
+          final release = Completer<void>();
+          when(() => mockLocalDataSource.getToken())
+              .thenAnswer((_) async => 'old');
+          when(() => mockLocalDataSource.getCachedUser())
+              .thenAnswer((_) async => null);
+          when(() => mockLocalDataSource.clearCache()).thenAnswer((_) {
+            entered.complete();
+            return release.future;
+          });
+          const user = UserModel(id: 'new', email: 'new@example.com');
+          when(() => mockRemoteDataSource.login(any(), any())).thenAnswer(
+            (_) async =>
+                const AuthResponseModel(user: user, token: 'new-token'),
+          );
+          when(() => mockLocalDataSource.cacheUser(any()))
+              .thenAnswer((_) async {});
+          when(() => mockLocalDataSource.cacheToken(any()))
+              .thenAnswer((_) async {});
+          final restoring = repository.getCurrentUser();
+          await entered.future;
+          final signingIn = repository.login('new@example.com', 'password');
+          await Future<void>.delayed(Duration.zero);
+          verifyNever(() => mockRemoteDataSource.login(any(), any()));
+          verifyNever(() => mockLocalDataSource.cacheToken(any()));
+          release.complete();
+          expect((await restoring).isSuccess, isTrue);
+          expect((await signingIn).dataOrNull?.id, 'new');
+          verify(() => mockLocalDataSource.cacheToken('new-token')).called(1);
+        },
+      );
+
+      test(
+        'a failed local eviction still clears HTTP cache and reports failure',
+        () async {
+          final cache = _RecordingHttpCache();
+          final repo = AuthRepositoryImpl(
+            remoteDataSource: mockRemoteDataSource,
+            localDataSource: mockLocalDataSource,
+            httpCache: cache,
+          );
+          when(() => mockLocalDataSource.getToken())
+              .thenAnswer((_) async => 'old');
+          when(() => mockLocalDataSource.getCachedUser())
+              .thenAnswer((_) async => null);
+          when(() => mockLocalDataSource.clearCache())
+              .thenThrow(const CacheException('locked'));
+          expect(
+            (await repo.getCurrentUser()).failureOrNull,
+            isA<CacheFailure>(),
+          );
+          expect(cache.clearCalls, 1);
+          verifyNever(
+            () => mockRemoteDataSource.logout(
+              refreshToken: any(named: 'refreshToken'),
+              accessToken: any(named: 'accessToken'),
+            ),
+          );
+        },
+      );
+
       test('should return User when a token and a cached user exist', () async {
         // Arrange
         const userModel = UserModel(
