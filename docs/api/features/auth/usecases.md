@@ -4,7 +4,7 @@ Authentication use cases for business logic operations.
 
 ## Overview
 
-Use cases encapsulate single business operations and orchestrate repository calls. All use cases follow the same pattern: they take a repository and expose a `call` method.
+Use cases encapsulate single business operations and orchestrate repository calls. All use cases follow the same pattern: they take a repository and expose a `call` method. For UI login/registration, use `authNotifierProvider.notifier` so the returned user is also published to the session observed by the router; use cases alone do not update that UI state.
 
 ---
 
@@ -216,6 +216,8 @@ Future<Result<bool>> call();
 
 ## RefreshTokenUseCase
 
+For manual refresh from a consumer, import `core/utils/result.dart` for result extensions, `features/auth/di/auth_providers.dart` for the use-case provider, `AuthErrorCodes` from `features/auth/domain/auth_error_codes.dart`, and `signOutProvider` from `core/di/providers.dart`. See the [self-contained refresh example](../../examples/api-integration.md#manual-token-refresh). Only `AuthErrorCodes.refreshTokenExpired` ends the session. The repository persists successful refreshes, so callers must not write the returned token again.
+
 Refreshes the authentication token.
 
 **Location:** `lib/features/auth/domain/usecases/refresh_token_usecase.dart`
@@ -241,18 +243,14 @@ RefreshTokenUseCase(this.repository);
 /// 
 /// Example:
 /// ```dart
-/// final useCase = RefreshTokenUseCase(authRepository);
+/// final useCase = ref.read(refreshTokenUseCaseProvider);
 /// final result = await useCase();
-/// result.when(
-///   success: (token) {
-///     // Token refreshed successfully
-///     updateTokenInStorage(token);
-///   },
-///   failureCallback: (failure) {
-///     // Token refresh failed, logout user
-///     logout();
-///   },
-/// );
+/// if (result.failureOrNull?.code == AuthErrorCodes.refreshTokenExpired) {
+///   await ref.read(signOutProvider)();
+/// }
+/// // Success is already persisted by the repository. Do not store it again.
+/// // SESSION_TERMINATED must not end a newer session; report/retry transport
+/// // failures separately without treating every failure as expired.
 /// ```
 Future<Result<String>> call();
 ```
