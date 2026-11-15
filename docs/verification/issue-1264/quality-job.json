@@ -1,0 +1,157 @@
+{
+  "id": 132799857632,
+  "run_id": 43710190754,
+  "workflow_name": "CI",
+  "head_branch": "codex/fix-core-removal-guide",
+  "run_url": "https://api.github.com/repos/koniz-dev/flutter-starter/actions/runs/43710190754",
+  "run_attempt": 1,
+  "node_id": "CR_kwDOQVGyw88AAAAe630D4A",
+  "head_sha": "4ebffa8aacc4f510f8cab112d631ce7c25beadc1",
+  "url": "https://api.github.com/repos/koniz-dev/flutter-starter/actions/jobs/132799857632",
+  "html_url": "https://github.com/koniz-dev/flutter-starter/actions/runs/43710190754/job/132799857632",
+  "status": "completed",
+  "conclusion": "success",
+  "created_at": "2026-11-15T11:42:10Z",
+  "started_at": "2026-11-15T11:42:12Z",
+  "completed_at": "2026-11-15T11:45:06Z",
+  "name": "Quality gate",
+  "steps": [
+    {
+      "name": "Set up job",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 1,
+      "started_at": "2026-11-15T11:42:12Z",
+      "completed_at": "2026-11-15T11:42:13Z"
+    },
+    {
+      "name": "Checkout code",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 2,
+      "started_at": "2026-11-15T11:42:13Z",
+      "completed_at": "2026-11-15T11:42:15Z"
+    },
+    {
+      "name": "Decide the gate scope",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 3,
+      "started_at": "2026-11-15T11:42:15Z",
+      "completed_at": "2026-11-15T11:42:15Z"
+    },
+    {
+      "name": "Setup Flutter",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 4,
+      "started_at": "2026-11-15T11:42:15Z",
+      "completed_at": "2026-11-15T11:42:41Z"
+    },
+    {
+      "name": "Install dependencies",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 5,
+      "started_at": "2026-11-15T11:42:41Z",
+      "completed_at": "2026-11-15T11:42:42Z"
+    },
+    {
+      "name": "Run the tests that read markdown",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 6,
+      "started_at": "2026-11-15T11:42:42Z",
+      "completed_at": "2026-11-15T11:45:03Z"
+    },
+    {
+      "name": "Check generated code is up to date",
+      "status": "completed",
+      "conclusion": "skipped",
+      "number": 7,
+      "started_at": "2026-11-15T11:45:03Z",
+      "completed_at": "2026-11-15T11:45:03Z"
+    },
+    {
+      "name": "Verify formatting",
+      "status": "completed",
+      "conclusion": "skipped",
+      "number": 8,
+      "started_at": "2026-11-15T11:45:03Z",
+      "completed_at": "2026-11-15T11:45:03Z"
+    },
+    {
+      "name": "Analyze code",
+      "status": "completed",
+      "conclusion": "skipped",
+      "number": 9,
+      "started_at": "2026-11-15T11:45:03Z",
+      "completed_at": "2026-11-15T11:45:03Z"
+    },
+    {
+      "name": "Import every library for coverage",
+      "status": "completed",
+      "conclusion": "skipped",
+      "number": 10,
+      "started_at": "2026-11-15T11:45:03Z",
+      "completed_at": "2026-11-15T11:45:03Z"
+    },
+    {
+      "name": "Run tests (random order)",
+      "status": "completed",
+      "conclusion": "skipped",
+      "number": 11,
+      "started_at": "2026-11-15T11:45:03Z",
+      "completed_at": "2026-11-15T11:45:03Z"
+    },
+    {
+      "name": "Enforce minimum coverage",
+      "status": "completed",
+      "conclusion": "skipped",
+      "number": 12,
+      "started_at": "2026-11-15T11:45:03Z",
+      "completed_at": "2026-11-15T11:45:03Z"
+    },
+    {
+      "name": "Tracked files are unchanged",
+      "status": "completed",
+      "conclusion": "skipped",
+      "number": 13,
+      "started_at": "2026-11-15T11:45:03Z",
+      "completed_at": "2026-11-15T11:45:03Z"
+    },
+    {
+      "name": "Post Setup Flutter",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 25,
+      "started_at": "2026-11-15T11:45:03Z",
+      "completed_at": "2026-11-15T11:45:04Z"
+    },
+    {
+      "name": "Post Checkout code",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 26,
+      "started_at": "2026-11-15T11:45:04Z",
+      "completed_at": "2026-11-15T11:45:04Z"
+    },
+    {
+      "name": "Complete job",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 27,
+      "started_at": "2026-11-15T11:45:04Z",
+      "completed_at": "2026-11-15T11:45:04Z"
+    }
+  ],
+  "check_run_url": "https://api.github.com/repos/koniz-dev/flutter-starter/check-runs/132799857632",
+  "labels": [
+    "ubuntu-latest"
+  ],
+  "runner_id": 1000013499,
+  "runner_name": "GitHub Actions 1000013499",
+  "runner_group_id": 0,
+  "runner_group_name": "GitHub Actions"
+}
+

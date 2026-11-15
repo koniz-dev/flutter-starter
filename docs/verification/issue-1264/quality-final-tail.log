@@ -1,0 +1,99 @@
+2026-11-15T11:44:36.7276745Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_hardening_test.dart: criteria 1-2: deploy-android.yml reads only, and never races or cancels a deploy
+2026-11-15T11:44:36.7292582Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_hardening_test.dart: criteria 1-2: deploy-ios.yml reads only, and never races or cancels a deploy
+2026-11-15T11:44:36.7313407Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_hardening_test.dart: criteria 1-2: deploy-web.yml reads only, and never races or cancels a deploy
+2026-11-15T11:44:37.3100857Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/verify_action_pins_test.dart: verifyTags accepts a pin that is its tag commit
+2026-11-15T11:44:37.3168376Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/verify_action_pins_test.dart: verifyTags rejects a SHA that is not the tag commit, naming both
+2026-11-15T11:44:37.3384189Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/verify_action_pins_test.dart: verifyTags rejects a version comment that is not a tag
+2026-11-15T11:44:37.3494330Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/verify_action_pins_test.dart: verifyTags checks the uses value, not a pin written in another key
+2026-11-15T11:44:37.3564665Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/verify_action_pins_test.dart: verifyTags checks every step on a line, not only the first
+2026-11-15T11:44:37.3613976Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/verify_action_pins_test.dart: verifyTags reads pins written with YAML escapes
+2026-11-15T11:44:37.3674189Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/verify_action_pins_test.dart: verifyTags resolves each repo@tag once
+2026-11-15T11:44:37.3701790Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/verify_action_pins_test.dart: verifyTags never asks the API about a comment that is not a release tag
+2026-11-15T11:44:37.3938014Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/verify_action_pins_test.dart: ghTagResolver returns a lightweight tag commit
+2026-11-15T11:44:37.4196538Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/verify_action_pins_test.dart: ghTagResolver peels an annotated tag to its commit
+2026-11-15T11:44:37.4433397Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/verify_action_pins_test.dart: ghTagResolver returns null for a missing tag
+2026-11-15T11:44:37.4824861Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/verify_action_pins_test.dart: ghTagResolver throws, rather than passing, when the API cannot be asked
+2026-11-15T11:44:38.0585338Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/commit_msg_hook_test.dart: a subject under a commit.template comment is read
+2026-11-15T11:44:38.0923399Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/commit_msg_hook_test.dart: leading blank lines are skipped
+2026-11-15T11:44:38.1092391Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/commit_msg_hook_test.dart: an unedited squash merge message is accepted
+2026-11-15T11:44:38.1387323Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/commit_msg_hook_test.dart: core.commentString sets the comment prefix
+2026-11-15T11:44:38.1549003Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/commit_msg_hook_test.dart: a message of only comments is rejected
+2026-11-15T11:44:38.1865464Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/commit_msg_hook_test.dart: a plain conventional subject still passes
+2026-11-15T11:44:38.5514392Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/strip_rerun_test.dart: a nested app allows staged sibling edits but protects its own edits
+2026-11-15T11:44:39.6008776Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/strip_rerun_test.dart: protects assume-unchanged edits in a brick deletion target
+2026-11-15T11:44:40.7169318Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/strip_rerun_test.dart: protects assume-unchanged edits in a sample deletion target
+2026-11-15T11:44:41.7353291Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/strip_rerun_test.dart: protects skip-worktree edits in a brick deletion target
+2026-11-15T11:44:42.8636173Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/strip_rerun_test.dart: protects skip-worktree edits in a sample deletion target
+2026-11-15T11:44:43.3685231Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/format_check_readonly_test.dart: criteria 1-2: scripts/test/format_check_test.sh passes
+2026-11-15T11:44:43.4232705Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/secure_storage_clear_not_on_logout_test.dart: no code in lib/ calls clear() on a secure storage service
+2026-11-15T11:44:44.1550965Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/android_kotlin_optout_test.dart: criterion 2: the opt-out lasts exactly as long as a plugin applies KGP
+2026-11-15T11:44:44.1581027Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/android_kotlin_optout_test.dart: criterion 2: both directions fail opted out, but no resolved plugin applies KGP: migrate now
+2026-11-15T11:44:44.1617110Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/android_kotlin_optout_test.dart: criterion 2: both directions fail opt-out removed while a plugin still applies KGP
+2026-11-15T11:44:44.1632007Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/android_kotlin_optout_test.dart: criterion 2: both directions fail agreement either way passes
+2026-11-15T11:44:44.1658827Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/android_kotlin_optout_test.dart: detection recognises each way a build script applies KGP
+2026-11-15T11:44:44.1707991Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/android_kotlin_optout_test.dart: detection reads the flag only as a real, uncommented assignment
+2026-11-15T11:44:44.8403095Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/integration_test_readme_test.dart: every tool/golden/ path the README names exists
+2026-11-15T11:44:44.8428855Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/integration_test_readme_test.dart: a test file attributed to a golden variant is in that variant
+2026-11-15T11:44:45.6140325Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/config/enable_toggles_have_readers_test.dart: the guide documents the ENABLE_* toggles
+2026-11-15T11:44:45.6415320Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/config/enable_toggles_have_readers_test.dart: ENABLE_LOGGING: has a reader of AppConfig.enableLogging
+2026-11-15T11:44:45.6558266Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/config/enable_toggles_have_readers_test.dart: ENABLE_ANALYTICS: marked reserved, and nothing reads it
+2026-11-15T11:44:45.6704012Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/config/enable_toggles_have_readers_test.dart: ENABLE_CRASH_REPORTING: marked reserved, and nothing reads it
+2026-11-15T11:44:45.6828731Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/config/enable_toggles_have_readers_test.dart: ENABLE_PERFORMANCE_MONITORING: has a reader of AppConfig.enablePerformanceMonitoring
+2026-11-15T11:44:45.6946222Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/config/enable_toggles_have_readers_test.dart: ENABLE_DEBUG_FEATURES: has a reader of AppConfig.enableDebugFeatures
+2026-11-15T11:44:45.7108456Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/config/enable_toggles_have_readers_test.dart: ENABLE_HTTP_LOGGING: has a reader of AppConfig.enableHttpLogging
+2026-11-15T11:44:46.6655666Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/errors/http_status_failures_test.dart: criterion 1: the four statuses map to their typed failures 401 -> AuthFailure
+2026-11-15T11:44:46.6672614Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/errors/http_status_failures_test.dart: criterion 1: the four statuses map to their typed failures 403 -> PermissionFailure
+2026-11-15T11:44:46.6686547Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/errors/http_status_failures_test.dart: criterion 1: the four statuses map to their typed failures 404 -> NotFoundFailure
+2026-11-15T11:44:46.6699573Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/errors/http_status_failures_test.dart: criterion 1: the four statuses map to their typed failures 422 -> ValidationFailure
+2026-11-15T11:44:46.6742269Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/errors/http_status_failures_test.dart: criterion 1: the four statuses map to their typed failures any other status stays a ServerFailure and keeps its status
+2026-11-15T11:44:46.6763996Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/errors/http_status_failures_test.dart: criterion 1: the four statuses map to their typed failures a 500 and a 503 with the same message are no longer equal
+2026-11-15T11:44:46.6776795Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/errors/http_status_failures_test.dart: criterion 1: the four statuses map to their typed failures copyWith keeps the status
+2026-11-15T11:44:46.6933895Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/errors/http_status_failures_test.dart: criterion 3: every failure type docs/api/core/errors.md documents is reachable from a real producer
+2026-11-15T11:44:50.8298901Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_brick_placeholder_test.dart: the placeholder the brick writes is deleted
+2026-11-15T11:44:57.2692502Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_brick_placeholder_test.dart: the placeholder is deleted from a CRLF checkout too
+2026-11-15T11:45:03.6179984Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_brick_placeholder_test.dart: a file of the same name the brick did not write is kept
+2026-11-15T11:45:03.6334196Z ##[endgroup]
+2026-11-15T11:45:03.6334398Z 
+2026-11-15T11:45:03.6339576Z 🎉 752 tests passed, 2 skipped.
+2026-11-15T11:45:03.7606108Z Post job cleanup.
+2026-11-15T11:45:03.7609439Z ##[start-action display=Cache pub dependencies;id=__eca6bc22-d76d-4b66-91f6-1c0748b7229c.cache-pub]
+2026-11-15T11:45:03.8876169Z Post job cleanup.
+2026-11-15T11:45:03.9937268Z Cache hit occurred on the primary key flutter-pub-linux-stable-3.50.0-x64-ab2912035e160d9cad6306df307576da6128ebdb-3a059eac5ec38b730824a69464ccd728b60eeb6b7cbd7a89114311ece5ab8ecb, not saving cache.
+2026-11-15T11:45:04.0001408Z ##[end-action id=__eca6bc22-d76d-4b66-91f6-1c0748b7229c.cache-pub;outcome=success;conclusion=success;duration_ms=239]
+2026-11-15T11:45:04.0004163Z ##[start-action display=Cache Flutter;id=__eca6bc22-d76d-4b66-91f6-1c0748b7229c.cache-flutter]
+2026-11-15T11:45:04.0035722Z Post job cleanup.
+2026-11-15T11:45:04.1111215Z Cache hit occurred on the primary key flutter-linux-stable-3.50.0-x64-ab2912035e160d9cad6306df307576da6128ebdb, not saving cache.
+2026-11-15T11:45:04.1180473Z ##[end-action id=__eca6bc22-d76d-4b66-91f6-1c0748b7229c.cache-flutter;outcome=success;conclusion=success;duration_ms=117]
+2026-11-15T11:45:04.1264983Z Post job cleanup.
+2026-11-15T11:45:04.1955197Z [command]/usr/bin/git version
+2026-11-15T11:45:04.2026328Z git version 2.56.1
+2026-11-15T11:45:04.2058942Z Temporarily overriding HOME='/home/runner/work/_temp/2c7e671a-2f8e-427f-bfda-ed71802ed35e' before making global git config changes
+2026-11-15T11:45:04.2059936Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-15T11:45:04.2064089Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/flutter-starter/flutter-starter
+2026-11-15T11:45:04.2097100Z Removing SSH command configuration
+2026-11-15T11:45:04.2102688Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-15T11:45:04.2136451Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-15T11:45:04.2402458Z Removing HTTP extra header
+2026-11-15T11:45:04.2407487Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-15T11:45:04.2441658Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-15T11:45:04.2719593Z Removing includeIf entries pointing to credentials config files
+2026-11-15T11:45:04.2726377Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-15T11:45:04.2751430Z includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git.path
+2026-11-15T11:45:04.2752443Z includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git/worktrees/*.path
+2026-11-15T11:45:04.2753204Z includeif.gitdir:/github/workspace/.git.path
+2026-11-15T11:45:04.2753513Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-11-15T11:45:04.2758369Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git.path
+2026-11-15T11:45:04.2778838Z /home/runner/work/_temp/git-credentials-cfd025e4-ed16-4d6a-b46e-b8933cac3780.config
+2026-11-15T11:45:04.2786321Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-cfd025e4\-ed16\-4d6a\-b46e\-b8933cac3780\.config
+2026-11-15T11:45:04.2825301Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git/worktrees/*.path
+2026-11-15T11:45:04.2845981Z /home/runner/work/_temp/git-credentials-cfd025e4-ed16-4d6a-b46e-b8933cac3780.config
+2026-11-15T11:45:04.2852797Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-cfd025e4\-ed16\-4d6a\-b46e\-b8933cac3780\.config
+2026-11-15T11:45:04.2926545Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-11-15T11:45:04.2947668Z /github/runner_temp/git-credentials-cfd025e4-ed16-4d6a-b46e-b8933cac3780.config
+2026-11-15T11:45:04.2953194Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-cfd025e4\-ed16\-4d6a\-b46e\-b8933cac3780\.config
+2026-11-15T11:45:04.2981166Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-11-15T11:45:04.3000464Z /github/runner_temp/git-credentials-cfd025e4-ed16-4d6a-b46e-b8933cac3780.config
+2026-11-15T11:45:04.3006466Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-cfd025e4\-ed16\-4d6a\-b46e\-b8933cac3780\.config
+2026-11-15T11:45:04.3035422Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-15T11:45:04.3269768Z Removing credentials config '/home/runner/work/_temp/git-credentials-cfd025e4-ed16-4d6a-b46e-b8933cac3780.config'
+2026-11-15T11:45:04.3404134Z Cleaning up orphan processes

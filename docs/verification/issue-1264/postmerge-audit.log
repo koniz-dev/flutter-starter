@@ -1,0 +1,78 @@
+==> env asset guard
+OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+==> generated code (skipped: AUDIT_SKIP_CODEGEN=1)
+==> format (lib test integration_test tool examples)
+Formatted 631 files (0 changed) in 1.78 seconds.
+==> flutter analyze
+Analyzing flutter-starter...                                    
+No issues found! (ran in 5.4s)
+==> flutter test
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/supported_locales_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/supported_locales_test.dart: SupportedLocale.fromLocaleString accepts the BCP-47 hyphen form reported by browsers
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/supported_locales_test.dart: SupportedLocale.fromLocaleString still accepts the underscore form
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/supported_locales_test.dart: SupportedLocale.fromLocaleString returns null for unknown or null input
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/supported_locales_test.dart: supportedLocales single source of truth LocalizationService derives its list from SupportedLocale
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/supported_locales_test.dart: supportedLocales single source of truth the enum and the generated AppLocalizations list agree
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/supported_locales_test.dart: supportedLocales single source of truth every supported locale resolves to real strings
+00:00 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/supported_locales_test.dart: Arabic plurals cover the CLDR categories (setUpAll)
+00:00 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/supported_locales_test.dart: Arabic plurals cover the CLDR categories itemCount declares zero/one/two/few/many/other
+00:00 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/supported_locales_test.dart: Arabic plurals cover the CLDR categories minutesAgo declares zero/one/two/few/many/other
+00:00 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/supported_locales_test.dart: Arabic plurals cover the CLDR categories minutesFromNow declares zero/one/two/few/many/other
+00:00 +9: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/supported_locales_test.dart: Arabic plurals cover the CLDR categories hoursFromNow declares zero/one/two/few/many/other
+00:00 +10: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/supported_locales_test.dart: Arabic plurals cover the CLDR categories daysFromNow declares zero/one/two/few/many/other
+00:00 +11: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/supported_locales_test.dart: Arabic plurals cover the CLDR categories monthsFromNow declares zero/one/two/few/many/other
+00:00 +12: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/supported_locales_test.dart: Arabic plurals cover the CLDR categories yearsFromNow declares zero/one/two/few/many/other
+00:00 +13: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/supported_locales_test.dart: Arabic plurals cover the CLDR categories itemCount(2) uses the Arabic dual form
+00:00 +14: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/supported_locales_test.dart: Arabic plurals cover the CLDR categories minutesAgo(2) uses the Arabic dual form
+00:00 +15: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/supported_locales_test.dart: Arabic plurals cover the CLDR categories other Arabic categories still render
+00:00 +16: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/supported_locales_test.dart: Arabic plurals cover the CLDR categories (tearDownAll)
+00:03 +16: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: rejects unsafe example: await secureStorage.setString('token', value);
+00:03 +17: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: rejects unsafe example: await secureStorage.getString('refresh_token');
+00:03 +18: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: rejects unsafe example: await secureStorage.remove(StorageKeys.token);
+00:03 +19: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: rejects unsafe example: await secureStorage.getString(AppConstants.tokenKey);
+00:03 +20: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: rejects unsafe example: await secureStorage.setString('accessToken', value);
+00:03 +21: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: rejects unsafe example: await secureStorage.setBool(AppConstants.tokenKey, value: true);
+00:03 +22: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: rejects unsafe example: await ref.read(secureStorageServiceProvider) .getString(StorageKeys.token);
+00:03 +23: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: rejects unsafe example: await secureStorage.clear();
+00:03 +24: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: rejects unsafe example: secureStorage.remove(/* session key */ 'token');
+00:03 +25: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: rejects unsafe example: (secureStorage).remove('token');
+00:03 +26: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: rejects unsafe example: (secureStorage!).remove('token');
+00:03 +27: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: rejects unsafe example: logger!.info(accessToken);
+00:03 +28: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: rejects unsafe example: LoggingService audit; audit.info(accessToken);
+00:03 +29: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: rejects unsafe example: IKeyValueStore prefs; prefs.setString('token', token);
+00:03 +30: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: rejects unsafe example: await secureStorage?.getString('token');
+00:03 +31: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: rejects unsafe example: await secureStorage!.remove('token');
+00:03 +32: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: rejects unsafe example: secureStorage..remove('token');
+00:03 +33: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: rejects unsafe example: secureStorage?..remove('refresh_token');
+00:03 +34: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: rejects unsafe example: final IKeyValueStore secrets = ref.read(secureStorageServiceProvider); secrets.remove('token');
+00:03 +35: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: rejects unsafe example: secureStorage..getString('api_key')..remove('token');
+00:03 +36: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: rejects unsafe example: secureStorage..getString('token')..remove('api_key');
+00:03 +37: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: rejects unsafe example: final secret = SecureStorageService(); secret.remove('auth_token');
+00:03 +38: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: rejects unsafe example: final secret = ref.read(secureStorageServiceProvider); secret.getString('token');
+00:03 +39: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: rejects unsafe example: SecureStorageService secret; secret.remove(StorageKeys.refreshToken);
+00:03 +40: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: rejects unsafe example: print('New token: $token');
+00:03 +41: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: rejects unsafe example: print(newToken);
+00:03 +42: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: rejects unsafe example: logger.d('Token: $accessToken');
+00:03 +43: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: rejects unsafe example: print('); Token: $token');
+00:03 +44: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: rejects unsafe example: debugPrint('Token: ${response.accessToken}');
+00:03 +45: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: rejects unsafe example: print('result: ' + refreshToken);
+00:03 +46: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: rejects unsafe example: /// success: (token) => print('New token: $token'),
+00:03 +47: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: allows safe example: await tokenStore.setAccessToken(accessToken);
+00:03 +48: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: allows safe example: await tokenStore.getRefreshToken();
+00:03 +49: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: allows safe example: await authRepository.logout();
+00:03 +50: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: allows safe example: IKeyValueStore prefs; prefs.setString('theme_mode', 'dark');
+00:03 +51: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: allows safe example: await secureStorage.getString('api_key');
+00:03 +52: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: allows safe example: await secureStorage.setString('api_key', apiKey);
+00:03 +53: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: allows safe example: print('Token refreshed successfully');
+00:03 +54: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: allows safe example: print('Use print(token) to inspect it');
+00:03 +55: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: allows safe example: print('Done' /* token */);
+00:03 +56: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: allows safe example: /* /* nested */ secureStorage.remove('token'); */
+00:03 +57: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: allows safe example: print('${'Token refreshed'}');
+00:03 +58: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: allows safe example: print(r'Token example: $token');
+00:04 +59: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: allows safe example: print('Token example: \$token');
+00:04 +60: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: prose and non-Dart fences do not become executable calls
+00:04 +61: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: Dart doc-comment examples are checked without parsing their prose
+00:04 +62: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: blockquote and inline Dart-doc examples are checked
+00:04 +63: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: inline storage examples are checked
+00:04 +64: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: documentation uses token lifecycle contracts and never prints tokens
+00:04 +65: All tests passed!

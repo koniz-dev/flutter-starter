@@ -1,0 +1,99 @@
+diff --git a/docs/guides/migration/customization-guide.md b/docs/guides/migration/customization-guide.md
+index 2278ec4fdf1..743f71aa6da 100644
+--- a/docs/guides/migration/customization-guide.md
++++ b/docs/guides/migration/customization-guide.md
+@@ -115,56 +115,48 @@ dependencies:
+ **After removing dependencies:**
+ ```bash
+ flutter pub get
+-flutter pub outdated  # Check for unused dependencies
++flutter pub outdated  # List dependencies with newer available versions
+ ```
+ 
+ ### Step 4: Remove Unused Core Modules
+ 
+-#### Remove Localization
+-
+-If you don't need internationalization:
+-
+-```bash
+-# Remove localization files
+-rm -rf lib/core/localization
+-rm -rf lib/l10n
+-
+-# Remove from pubspec.yaml
+-# Remove flutter_localizations
+-
+-# Remove from main.dart
+-# Remove LocalizationsDelegates
+-```
+-
+-**Update `pubspec.yaml`:**
+-```yaml
+-dependencies:
+-  # Remove if not using
+-  # flutter_localizations:
+-  #   sdk: flutter
+-  # intl: ^0.20.2  # Only needed for localization
+-```
+-
+-**Update `lib/main.dart`:**
+-```dart
+-// Remove LocalizationsDelegates
+-// Remove supportedLocales
+-```
+-
+-#### Remove Secure Storage
+-
+-If you don't need secure storage:
+-
+-```bash
+-# Remove secure storage service
+-rm lib/core/storage/secure_storage_service.dart
+-
+-# Remove from providers
+-# Remove secureStorageServiceProvider
+-
+-# Remove dependency
+-# Remove flutter_secure_storage from pubspec.yaml
+-```
++#### Keep Localization for a Single-Language App
++
++Localization is a load-bearing module: routing, shared widgets and feature
++screens use `AppLocalizations` even when the app offers only one language.
++Keep `lib/core/localization`, `lib/l10n`, the app's localization delegates and
++supported-locale configuration, and the `flutter_localizations` and `intl`
++dependencies. Deleting those pieces alone leaves their consumers uncompilable.
++
++For a single-language app, keep one locale instead of removing the localization
++API. Treat narrowing the language set as a coordinated customization:
++`SupportedLocale` in `lib/core/localization/localization_service.dart`, its
++fallback, the ARB files and `l10n.yaml` must agree. Regenerate the committed
++localizations with `flutter gen-l10n`, retaining the UI delegate adapters in the
++`l10n.yaml` header. Update language-picker and locale-specific tests for the
++chosen language, and run `test/core/localization/supported_locales_test.dart`
++plus `flutter analyze` and the full test suite. See the
++[internationalization guide](../features/internationalization-guide.md) for the
++localization setup and generation process. This keeps existing translated-string
++calls working without a rewrite of every screen and shared consumer.
++
++#### Keep Secure Storage Until Its Consumers Are Migrated
++
++Secure storage is also load-bearing in the default app. Keep
++`secure_storage_service.dart`, `secureStorageServiceProvider` and
++`flutter_secure_storage` while core DI, `ApiClient`, `AuthInterceptor`,
++`SecureTokenStore` and `StorageMigrationService` still depend on the service.
++Removing just the file, provider and package breaks these consumers.
++
++If your app uses another credential vault, provide an `ITokenStore` adapter at
++the composition root and preserve its mutation ordering, certified snapshots
++and failure/clear semantics. An adapter override alone does not remove the
++remaining concrete-service imports or the storage migration path: migrate those
++consumers deliberately before deleting the default implementation or package.
++Do not replace credential storage with ordinary preferences to make the build
++pass. See the [storage contracts and replacement requirements](../../api/core/storage.md)
++and [storage migration guide](../features/storage-migration-guide.md), then run
++`flutter analyze` and the auth, network and storage tests after customization.
+ 
+ ### Step 5: Clean Up Tests
+ 
