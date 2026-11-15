@@ -1,0 +1,96 @@
+==> env asset guard
+OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+==> generated code (skipped: AUDIT_SKIP_CODEGEN=1)
+==> format (lib test integration_test tool examples)
+Formatted 631 files (0 changed) in 1.81 seconds.
+==> flutter analyze
+Analyzing flutter-starter...                                    
+No issues found! (ran in 4.6s)
+==> flutter test
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/auth_flow_examples_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:00 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:00 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:00 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:00 +9: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:00 +10: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:00 +11: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:00 +12: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:00 +13: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:00 +14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:00 +15: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:00 +16: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:00 +17: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:00 +18: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:00 +19: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:00 +20: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:00 +21: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:00 +22: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:00 +23: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:00 +24: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:00 +25: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:01 +26: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:09 +27: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:09 +28: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:09 +29: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:09 +30: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:09 +31: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:09 +32: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:09 +33: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:09 +34: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:09 +35: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:09 +36: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:09 +37: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:09 +38: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:09 +39: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:09 +40: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:09 +41: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:09 +42: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:09 +43: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:09 +44: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:09 +45: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:09 +46: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:09 +47: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:09 +48: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:09 +49: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:09 +50: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:09 +51: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:09 +52: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:09 +53: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:09 +54: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:09 +55: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:09 +56: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:09 +57: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:09 +58: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:09 +59: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:09 +60: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:09 +61: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:09 +62: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:09 +63: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:09 +64: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:09 +65: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:09 +66: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:09 +67: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:09 +68: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:09 +69: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:09 +70: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:09 +71: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:09 +72: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:09 +73: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:09 +74: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:10 +75: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:12 +76: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:12 +77: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:12 +78: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:12 +79: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:12 +80: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:12 +81: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:12 +82: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:12 +83: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:12 +84: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:14 +85: All tests passed!

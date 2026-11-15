@@ -1,0 +1,11 @@
+# Root documentation verification — issue 1263
+
+Accepted head: 4ea66476370637d983865b16e2973316d7b36cba. Base: 6699ce7f381bce67da5945b071e4c047fd68ee54. I read all four document diffs, the executable documentation test, actual notifier/repository/datasource/session-status sources, the import-rule functions and independent six-test transcript.
+
+The counterfactual executes the actual quoted login API shape. Old usecase-only login persists the token but leaves sessionStatusProvider signedOut; old raw-repository sign-out clears persisted credentials but leaves signedIn. All five old-doc regressions fail, including the real core-imports-feature violation, missing logout body and wrong refresh branch. Corrected cases pass through the real configured provider graph. The entire login example compiles; the two optional blueprint pieces compile together and declared core placement is checked with the same architecture-rule functions used over lib/.
+
+The notifier publishes UI session state; success navigation is left to the router so deep-link redirects survive. The generic core manager receives a sign-out function instead of importing a feature, and its feature wrapper obtains the configured port under the existing scope. The wrapper retains the existing app/router/localization and disposes its timer/observer. This is still an illustrative timeout scaffold, not a complete idle-timeout or device/backend assurance.
+
+Logout docs describe the optional refresh-token body and captured access-token bearer header in the real datasource. Manual refresh checks only the expired-token code, avoids duplicate token writes and does not clear a newer session for SESSION_TERMINATED. The self-contained helper returns its Result for caller handling.
+
+Root template audit: 85 tests pass; docs checker: no broken links, mismatched signatures or unresolved symbols. Full accepted-head format/analyzer and 4,494 tests pass (14 intentional skips). Independent focused run: six tests pass, raw transcript inspected. No app runtime source, dependency, platform, permission, endpoint or credential changed. All fixture credentials are synthetic; no screenshot or standing golden is used as wording/behavior proof.

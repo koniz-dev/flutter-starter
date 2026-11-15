@@ -1,0 +1,12 @@
+Merged HEAD ec3a05407e1cf997bb689dc19a85f8d82ee9708a
+Command: flutter test test/docs/auth_flow_examples_test.dart test/docs/api_integration_snippets_test.dart --reporter expanded
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/auth_flow_examples_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/api_integration_snippets_test.dart: every self-contained dart snippet in api-integration.md analyzes with no error or warning
+00:10 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/auth_flow_examples_test.dart: the session blueprint obeys the import guard where it is placed
+00:12 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/auth_flow_examples_test.dart: the blueprint sign-out action ends the visible session
+00:12 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/auth_flow_examples_test.dart: the Logout contract documents revocation body and bearer header
+00:12 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/auth_flow_examples_test.dart: both refresh examples end only an expired session without token writes
+00:12 +6: All tests passed!
+
+Exit code: 0

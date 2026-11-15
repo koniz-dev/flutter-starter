@@ -1,0 +1,89 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/auth_flow_examples_test.dart
+00:00 +0: the documented login call publishes the signed-in session
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: SessionStatus:<SessionStatus.signedIn>
+  Actual: SessionStatus:<SessionStatus.signedOut>
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/docs/auth_flow_examples_test.dart:116:5)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1968:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///Users/nguyenanhkiet/Playground/flutter-starter/test/docs/auth_flow_examples_test.dart line 116
+The test description was:
+  the documented login call publishes the signed-in session
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:00 +0 -1: the documented login call publishes the signed-in session [E]
+  Test failed. See exception logs above.
+  The test description was: the documented login call publishes the signed-in session
+  
+00:00 +0 -1: the session blueprint obeys the import guard where it is placed
+00:00 +0 -2: the session blueprint obeys the import guard where it is placed [E]
+  Expected: empty
+    Actual: [Instance of 'ImportViolation']
+  core_imports_feature
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/docs/auth_flow_examples_test.dart 128:5        main.<fn>
+  
+00:00 +0 -2: the blueprint sign-out action ends the visible session
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: SessionStatus:<SessionStatus.signedOut>
+  Actual: SessionStatus:<SessionStatus.signedIn>
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/docs/auth_flow_examples_test.dart:174:5)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1968:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///Users/nguyenanhkiet/Playground/flutter-starter/test/docs/auth_flow_examples_test.dart line 174
+The test description was:
+  the blueprint sign-out action ends the visible session
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:00 +0 -3: the blueprint sign-out action ends the visible session [E]
+  Test failed. See exception logs above.
+  The test description was: the blueprint sign-out action ends the visible session
+  
+00:00 +0 -3: the Logout contract documents revocation body and bearer header
+00:00 +0 -4: the Logout contract documents revocation body and bearer header [E]
+  Expected: contains '`refresh_token`'
+    Actual: ' none '
+     Which: does not contain '`refresh_token`'
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/docs/auth_flow_examples_test.dart 185:5        main.<fn>
+  
+00:00 +0 -4: both refresh examples end only an expired session without token writes
+00:00 +0 -5: both refresh examples end only an expired session without token writes [E]
+  Expected: contains 'if(result.failureOrNull?.code==AuthErrorCodes.refreshTokenExpired)'
+    Actual: '###ManualTokenRefresh```dartFuture<void>_refreshToken()async{finalrefreshUseCase=ref.read(refreshTokenUseCaseProvider);finalresult=awaitrefreshUseCase();result.when(success:(_){//Tokenrefreshedsuccessfully//AuthInterceptorwillusethenewtokenautomaticallyprint(\'Tokenrefreshedsuccessfully\');},failureCallback:(failure){//Tokenrefreshfailed,logoutuserif(failureisAuthFailure){_handleLogout();}},);}```---'
+     Which: does not contain 'if(result.failureOrNull?.code==AuthErrorCodes.refreshTokenExpired)'
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/docs/auth_flow_examples_test.dart 199:7        main.<fn>
+  
+00:00 +0 -5: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/auth_flow_examples_test.dart: both refresh examples end only an expired session without token writes
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/auth_flow_examples_test.dart: the Logout contract documents revocation body and bearer header
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/auth_flow_examples_test.dart: the blueprint sign-out action ends the visible session
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/auth_flow_examples_test.dart: the documented login call publishes the signed-in session
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/auth_flow_examples_test.dart: the session blueprint obeys the import guard where it is placed

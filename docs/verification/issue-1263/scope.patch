@@ -1,0 +1,522 @@
+diff --git a/docs/api/examples/api-integration.md b/docs/api/examples/api-integration.md
+index 3444b1d4693..82a6867c2b7 100644
+--- a/docs/api/examples/api-integration.md
++++ b/docs/api/examples/api-integration.md
+@@ -214,14 +214,15 @@ final result = await executeWithRetry(() => loginUseCase(email, password));
+ 
+ ### Complete Login Flow
+ 
+-Text shown to the user is a plain string here to keep the example short. Under `lib/features/**/presentation/`, `test/tooling/text_literal_guard_test.dart` fails on a bare `Text('...')`: take the string from `context.l10n`, as in [Adding a New Feature](adding-features.md).
++Use the notifier for UI sign-in. The use case alone persists credentials but does not publish the user to `authNotifierProvider`; the router reads that published session through `sessionStatusProvider`.
++
++Labels and the required-field prompt are plain strings here to keep the example short; authentication failures use the shared localizer. Under `lib/features/**/presentation/`, `test/tooling/text_literal_guard_test.dart` fails on a bare `Text('...')`: take the string from `context.l10n`, as in [Adding a New Feature](adding-features.md).
+ 
+ ```dart
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+-import 'package:flutter_starter/core/errors/failures.dart';
+-import 'package:flutter_starter/core/routing/navigation_extensions.dart';
+-import 'package:flutter_starter/core/utils/result.dart';
+-import 'package:flutter_starter/features/auth/di/auth_providers.dart';
++import 'package:flutter_starter/core/localization/failure_localizations.dart';
++import 'package:flutter_starter/features/auth/presentation/providers/auth_provider.dart';
++import 'package:flutter_starter/l10n/app_localizations.dart';
+ import 'package:flutter_starter/shared/extensions/context_extensions.dart';
+ import 'package:material_ui/material_ui.dart';
+ 
+@@ -235,7 +236,6 @@ class LoginScreen extends ConsumerStatefulWidget {
+ class _LoginScreenState extends ConsumerState<LoginScreen> {
+   final _emailController = TextEditingController();
+   final _passwordController = TextEditingController();
+-  bool _isLoading = false;
+ 
+   Future<void> _handleLogin() async {
+     final email = _emailController.text.trim();
+@@ -246,35 +246,29 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
+       return;
+     }
+ 
+-    setState(() => _isLoading = true);
+-
+-    final loginUseCase = ref.read(loginUseCaseProvider);
+-    final result = await loginUseCase(email, password);
++    await ref.read(authNotifierProvider.notifier).login(email, password);
+     if (!mounted) return;
+ 
+-    setState(() => _isLoading = false);
++    final failure = ref.read(authNotifierProvider).failure;
++    if (failure != null) {
++      context.showErrorSnackBar(
++        failure.localizedMessage(AppLocalizations.of(context)!),
++      );
++    }
++    // The router observes the published user and redirects on success,
++    // including a preserved deep-link destination. Do not force Home here.
++  }
+ 
+-    result.when(
+-      success: (user) {
+-        context.showSuccessSnackBar('Welcome back, ${user.name ?? user.email}!');
+-        context.goToHome();
+-      },
+-      failureCallback: (failure) {
+-        String errorMessage;
+-        if (failure is AuthFailure) {
+-          errorMessage = 'Invalid email or password';
+-        } else if (failure is NetworkFailure) {
+-          errorMessage = 'Network error. Please check your connection.';
+-        } else {
+-          errorMessage = failure.message;
+-        }
+-        context.showErrorSnackBar(errorMessage);
+-      },
+-    );
++  @override
++  void dispose() {
++    _emailController.dispose();
++    _passwordController.dispose();
++    super.dispose();
+   }
+ 
+   @override
+   Widget build(BuildContext context) {
++    final authState = ref.watch(authNotifierProvider);
+     return Scaffold(
+       appBar: AppBar(title: const Text('Login')),
+       body: Padding(
+@@ -294,8 +288,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
+             ),
+             const SizedBox(height: 24),
+             ElevatedButton(
+-              onPressed: _isLoading ? null : _handleLogin,
+-              child: _isLoading
++              onPressed: authState.isLoading ? null : _handleLogin,
++              child: authState.isLoading
+                   ? const CircularProgressIndicator()
+                   : const Text('Login'),
+             ),
+@@ -360,23 +354,21 @@ The `AuthInterceptor` automatically handles token refresh on 401 errors. No manu
+ ### Manual Token Refresh
+ 
+ ```dart
+-Future<void> _refreshToken() async {
+-  final refreshUseCase = ref.read(refreshTokenUseCaseProvider);
+-  final result = await refreshUseCase();
++import 'package:flutter_riverpod/flutter_riverpod.dart';
++import 'package:flutter_starter/core/di/providers.dart' show signOutProvider;
++import 'package:flutter_starter/core/utils/result.dart';
++import 'package:flutter_starter/features/auth/di/auth_providers.dart';
++import 'package:flutter_starter/features/auth/domain/auth_error_codes.dart';
+ 
+-  result.when(
+-    success: (_) {
+-      // Token refreshed successfully
+-      // AuthInterceptor will use the new token automatically
+-      print('Token refreshed successfully');
+-    },
+-    failureCallback: (failure) {
+-      // Token refresh failed, logout user
+-      if (failure is AuthFailure) {
+-        _handleLogout();
+-      }
+-    },
+-  );
++Future<Result<String>> refreshSession(WidgetRef ref) async {
++  final result = await ref.read(refreshTokenUseCaseProvider)();
++  if (result.failureOrNull?.code == AuthErrorCodes.refreshTokenExpired) {
++    await ref.read(signOutProvider)();
++  }
++  // Success has already persisted the token pair in the repository.
++  // SESSION_TERMINATED belongs to an ended attempt: never clear a newer
++  // session for it. The caller can render/retry other failures separately.
++  return result;
+ }
+ ```
+ 
+diff --git a/docs/api/features/auth/usecases.md b/docs/api/features/auth/usecases.md
+index 30f1a9712e2..a61f478d626 100644
+--- a/docs/api/features/auth/usecases.md
++++ b/docs/api/features/auth/usecases.md
+@@ -4,7 +4,7 @@ Authentication use cases for business logic operations.
+ 
+ ## Overview
+ 
+-Use cases encapsulate single business operations and orchestrate repository calls. All use cases follow the same pattern: they take a repository and expose a `call` method.
++Use cases encapsulate single business operations and orchestrate repository calls. All use cases follow the same pattern: they take a repository and expose a `call` method. For UI login/registration, use `authNotifierProvider.notifier` so the returned user is also published to the session observed by the router; use cases alone do not update that UI state.
+ 
+ ---
+ 
+@@ -216,6 +216,8 @@ Future<Result<bool>> call();
+ 
+ ## RefreshTokenUseCase
+ 
++For manual refresh from a consumer, import `core/utils/result.dart` for result extensions, `features/auth/di/auth_providers.dart` for the use-case provider, `AuthErrorCodes` from `features/auth/domain/auth_error_codes.dart`, and `signOutProvider` from `core/di/providers.dart`. See the [self-contained refresh example](../../examples/api-integration.md#manual-token-refresh). Only `AuthErrorCodes.refreshTokenExpired` ends the session. The repository persists successful refreshes, so callers must not write the returned token again.
++
+ Refreshes the authentication token.
+ 
+ **Location:** `lib/features/auth/domain/usecases/refresh_token_usecase.dart`
+@@ -241,18 +243,14 @@ RefreshTokenUseCase(this.repository);
+ /// 
+ /// Example:
+ /// ```dart
+-/// final useCase = RefreshTokenUseCase(authRepository);
++/// final useCase = ref.read(refreshTokenUseCaseProvider);
+ /// final result = await useCase();
+-/// result.when(
+-///   success: (token) {
+-///     // Token refreshed successfully
+-///     updateTokenInStorage(token);
+-///   },
+-///   failureCallback: (failure) {
+-///     // Token refresh failed, logout user
+-///     logout();
+-///   },
+-/// );
++/// if (result.failureOrNull?.code == AuthErrorCodes.refreshTokenExpired) {
++///   await ref.read(signOutProvider)();
++/// }
++/// // Success is already persisted by the repository. Do not store it again.
++/// // SESSION_TERMINATED must not end a newer session; report/retry transport
++/// // failures separately without treating every failure as expired.
+ /// ```
+ Future<Result<String>> call();
+ ```
+diff --git a/docs/guides/onboarding/getting-started.md b/docs/guides/onboarding/getting-started.md
+index 8b142bd07df..60c146acab8 100644
+--- a/docs/guides/onboarding/getting-started.md
++++ b/docs/guides/onboarding/getting-started.md
+@@ -198,7 +198,9 @@ particular API. Check two things before the first sign-in:
+   | Login | `POST /auth/login` | `email`, `password` | `user`, `token`, `refresh_token` |
+   | Register | `POST /auth/register` | `email`, `password`, `name` | `user`, `token`, `refresh_token` |
+   | Refresh | `POST /auth/refresh` | `refresh_token` | `user`, `token`, `refresh_token` |
+-  | Logout | `POST /auth/logout` | none | ignored |
++  | Logout | `POST /auth/logout` | `refresh_token` when stored | ignored |
++
++  Logout also sends `Authorization: Bearer <access_token>` when an access token is available. The refresh-token body is omitted when none was stored; the captured credentials let the server revoke the session after local cleanup.
+ 
+   `user` is an object with a string `id`, `email`, and optional `name` and
+   `avatar_url`. The full contract, with an example body, is the
+diff --git a/docs/guides/security/blueprints.md b/docs/guides/security/blueprints.md
+index d010e0c4632..ed28c8cb6ba 100644
+--- a/docs/guides/security/blueprints.md
++++ b/docs/guides/security/blueprints.md
+@@ -8,21 +8,22 @@ Code in this file is **not** checked into the starter. Use it as a copy-paste st
+ 
+ ### Step 1: Session manager
+ 
++Keep the core manager independent of feature implementations: inject the sign-out action instead of importing `AuthRepository`. The action supplied below updates the visible session and delegates to repository cleanup/revocation.
++
+ ```dart
+ // Blueprint: lib/core/security/session_manager.dart (add this file yourself)
+ import 'dart:async';
+ import 'package:flutter_starter/core/contracts/storage_contracts.dart';
+-import 'package:flutter_starter/features/auth/domain/repositories/auth_repository.dart';
+ 
+ /// Manages user session timeout and activity tracking
+ class SessionManager {
+   SessionManager({
+     required this.tokenStore,
+-    required this.authRepository,
++    required this.signOut,
+   });
+ 
+   final ITokenStore tokenStore;
+-  final AuthRepository authRepository;
++  final Future<void> Function() signOut;
+ 
+   Timer? _sessionTimer;
+   static const Duration sessionTimeout = Duration(hours: 24);
+@@ -55,7 +56,7 @@ class SessionManager {
+     } on Object {
+       // An unreadable credential must not skip the logout attempt.
+     }
+-    await authRepository.logout();
++    await signOut();
+   }
+ 
+   Duration? getTimeUntilTimeout() {
+@@ -73,46 +74,55 @@ class SessionManager {
+ 
+ ### Step 2: App lifecycle (illustrative)
+ 
++Wrap the existing app **inside its configured provider scope** (`UncontrolledProviderScope` in the default bootstrap) with `SessionActivityTracker(child: const MyApp())`; retain the current router and localization setup. The default app scope already binds `signOutProvider` through `authModuleOverrides`. Wire other activity events to `onUserActivity` as your timeout policy requires; this wrapper shows the lifecycle hook.
++
+ ```dart
+-// Illustrative only — this starter uses ConsumerWidget + go_router; adapt DI.
++// Blueprint: lib/features/auth/presentation/widgets/session_activity_tracker.dart
++import 'package:flutter_riverpod/flutter_riverpod.dart';
++import 'package:flutter_starter/core/di/providers.dart';
+ import 'package:flutter_starter/core/security/session_manager.dart';
+ import 'package:material_ui/material_ui.dart';
+ 
+-class MyApp extends StatefulWidget {
+-  const MyApp({super.key});
++class SessionActivityTracker extends ConsumerStatefulWidget {
++  const SessionActivityTracker({required this.child, super.key});
++
++  final Widget child;
+ 
+   @override
+-  State<MyApp> createState() => _MyAppState();
++  ConsumerState<SessionActivityTracker> createState() =>
++      _SessionActivityTrackerState();
+ }
+ 
+-class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+-  SessionManager? _sessionManager;
++class _SessionActivityTrackerState extends ConsumerState<SessionActivityTracker>
++    with WidgetsBindingObserver {
++  late final SessionManager _sessionManager;
+ 
+   @override
+   void initState() {
+     super.initState();
++    _sessionManager = SessionManager(
++      tokenStore: ref.read(tokenStoreProvider),
++      signOut: ref.read(signOutProvider),
++    )..initialize();
+     WidgetsBinding.instance.addObserver(this);
+-    // Wire your own ProviderContainer / ref to build SessionManager
+   }
+ 
+   @override
+   void dispose() {
+     WidgetsBinding.instance.removeObserver(this);
+-    _sessionManager?.dispose();
++    _sessionManager.dispose();
+     super.dispose();
+   }
+ 
+   @override
+   void didChangeAppLifecycleState(AppLifecycleState state) {
+     if (state == AppLifecycleState.resumed) {
+-      _sessionManager?.onUserActivity();
++      _sessionManager.onUserActivity();
+     }
+   }
+ 
+   @override
+-  Widget build(BuildContext context) {
+-    return const MaterialApp(/* … */);
+-  }
++  Widget build(BuildContext context) => widget.child;
+ }
+ ```
+ 
+diff --git a/test/docs/auth_flow_examples_test.dart b/test/docs/auth_flow_examples_test.dart
+new file mode 100644
+index 00000000000..fc91332f3e6
+--- /dev/null
++++ b/test/docs/auth_flow_examples_test.dart
+@@ -0,0 +1,212 @@
++import 'dart:io';
++
++import 'package:flutter/widgets.dart';
++import 'package:flutter_riverpod/flutter_riverpod.dart';
++import 'package:flutter_starter/core/di/providers.dart';
++import 'package:flutter_starter/core/routing/routes_registry.dart';
++import 'package:flutter_starter/core/routing/session_status.dart';
++import 'package:flutter_starter/features/auth/data/datasources/auth_remote_datasource.dart';
++import 'package:flutter_starter/features/auth/data/models/auth_response_model.dart';
++import 'package:flutter_starter/features/auth/data/models/user_model.dart';
++import 'package:flutter_starter/features/auth/di/auth_providers.dart';
++import 'package:flutter_starter/features/auth/presentation/providers/auth_provider.dart';
++import 'package:flutter_test/flutter_test.dart';
++import 'package:mocktail/mocktail.dart';
++
++import '../helpers/in_memory_stores.dart';
++import '../tooling/import_rules_test.dart' as architecture;
++import 'doc_snippets.dart';
++
++class _Remote extends Mock implements AuthRemoteDataSource {}
++
++String _section(String text, String start, String end) =>
++    text.substring(text.indexOf(start), text.indexOf(end, text.indexOf(start)));
++
++List<String> _blocks(String markdown) => RegExp(
++  r'^```dart\s*\n(.*?)^```',
++  multiLine: true,
++  dotAll: true,
++).allMatches(markdown).map((match) => match.group(1)!).toList();
++
++Future<
++  ({ProviderContainer container, WidgetRef ref, InMemoryTokenStore tokens})
++>
++_graph(WidgetTester tester) async {
++  final remote = _Remote();
++  when(() => remote.login('doc@example.com', 'password123')).thenAnswer(
++    (_) async => const AuthResponseModel(
++      user: UserModel(id: 'doc-user', email: 'doc@example.com'),
++      token: 'doc-access',
++      refreshToken: 'doc-refresh',
++    ),
++  );
++  when(
++    () => remote.logout(
++      refreshToken: any(named: 'refreshToken'),
++      accessToken: any(named: 'accessToken'),
++    ),
++  ).thenAnswer((_) async {});
++  final tokens = InMemoryTokenStore();
++  final container = ProviderContainer(
++    overrides: [
++      ...authModuleOverrides,
++      storageServiceProvider.overrideWithValue(InMemoryStorage()),
++      tokenStoreProvider.overrideWithValue(tokens),
++      authRemoteDataSourceProvider.overrideWithValue(remote),
++    ],
++  );
++  addTearDown(container.dispose);
++  late WidgetRef widgetRef;
++  await tester.pumpWidget(
++    UncontrolledProviderScope(
++      container: container,
++      child: Consumer(
++        builder: (context, ref, child) {
++          widgetRef = ref;
++          return const SizedBox.shrink();
++        },
++      ),
++    ),
++  );
++  await container.read(sessionRestorationProvider.future);
++  expect(container.read(sessionStatusProvider), SessionStatus.signedOut);
++  return (container: container, ref: widgetRef, tokens: tokens);
++}
++
++void main() {
++  final integration = File('docs/api/examples/api-integration.md')
++      .readAsStringSync();
++  final blueprints = File('docs/guides/security/blueprints.md')
++      .readAsStringSync();
++  final sessionBlocks = _blocks(
++    _section(blueprints, '## Session management', '## GDPR'),
++  );
++
++  testWidgets('the documented login call publishes the signed-in session', (
++    tester,
++  ) async {
++    final example = _section(
++      integration,
++      '### Complete Login Flow',
++      '### Check Authentication Status',
++    );
++    final selector = RegExp(
++      r'ref\.read\((loginUseCaseProvider|authNotifierProvider\.notifier)\)',
++    ).firstMatch(example);
++    expect(
++      selector,
++      isNotNull,
++      reason: 'compile and execute the documented API',
++    );
++    final graph = await _graph(tester);
++    // Both documented API shapes compile here. Selecting the actual quoted
++    // one makes the old usecase-only example fail on real session state.
++    if (selector!.group(1) == 'loginUseCaseProvider') {
++      await graph.ref.read(loginUseCaseProvider)(
++        'doc@example.com',
++        'password123',
++      );
++    } else {
++      await graph.ref
++          .read(authNotifierProvider.notifier)
++          .login('doc@example.com', 'password123');
++    }
++    await tester.pump();
++    expect(graph.tokens.accessToken, 'doc-access');
++    expect(graph.container.read(sessionStatusProvider), SessionStatus.signedIn);
++  });
++
++  test('the session blueprint obeys the import guard where it is placed', () {
++    final path = RegExp(r'Blueprint: (lib/[^\s]+\.dart)')
++        .firstMatch(sessionBlocks.first)!
++        .group(1)!;
++    final source = forPackage(sessionBlocks.first, currentPackageName());
++    final violations = [
++      for (final directive in architecture.parseDirectives(source))
++        ...architecture.violationsFor(path, directive),
++    ];
++    expect(
++      violations,
++      isEmpty,
++      reason: violations.map((v) => v.rule.id).join(', '),
++    );
++    // Compile both blueprint pieces together without pretending that the
++    // optional session_manager.dart already exists in the starter.
++    final imports = <String>{};
++    final bodies = <String>[];
++    for (final block in sessionBlocks.take(2)) {
++      final body = <String>[];
++      for (final line in block.split('\n')) {
++        if (line.startsWith('import ')) {
++          if (!line.contains('/core/security/session_manager.dart')) {
++            imports.add(line);
++          }
++        } else {
++          body.add(line);
++        }
++      }
++      bodies.add(body.join('\n'));
++    }
++    expect(
++      analyzeSnippets('auth_blueprint', [
++        '${imports.join('\n')}\n${bodies.join('\n')}',
++      ]),
++      isEmpty,
++    );
++  });
++
++  testWidgets('the blueprint sign-out action ends the visible session', (
++    tester,
++  ) async {
++    final graph = await _graph(tester);
++    await graph.ref
++        .read(authNotifierProvider.notifier)
++        .login('doc@example.com', 'password123');
++    expect(graph.container.read(sessionStatusProvider), SessionStatus.signedIn);
++    if (sessionBlocks.first.contains('await authRepository.logout()')) {
++      await graph.ref.read(authRepositoryProvider).logout();
++    } else {
++      expect(sessionBlocks.first, contains('await signOut()'));
++      expect(sessionBlocks[1], contains('ref.read(signOutProvider)'));
++      await graph.ref.read(signOutProvider)();
++    }
++    await tester.pump();
++    expect(graph.tokens.accessToken, isNull);
++    expect(
++      graph.container.read(sessionStatusProvider),
++      SessionStatus.signedOut,
++    );
++  });
++
++  test('the Logout contract documents revocation body and bearer header', () {
++    final guide = File('docs/guides/onboarding/getting-started.md')
++        .readAsStringSync();
++    final contract = _section(guide, '| Logout |', '`user` is an object');
++    final row = contract.split('\n').first.split('|');
++    expect(row[3], contains('`refresh_token`'));
++    expect(contract, contains('Authorization: Bearer'));
++  });
++
++  test('both refresh examples end only an expired session '
++      'without token writes', () {
++    final usecases = File('docs/api/features/auth/usecases.md')
++        .readAsStringSync();
++    for (final example in [
++      _section(integration, '### Manual Token Refresh', '## Related APIs'),
++      _section(usecases, '## RefreshTokenUseCase', '## Usage Pattern'),
++    ]) {
++      final normalized = example
++          .replaceAll(RegExp(r'\s*/// ?'), '')
++          .replaceAll(RegExp(r'\s+'), '');
++      expect(
++        normalized,
++        contains(
++          'if(result.failureOrNull?.code==AuthErrorCodes.refreshTokenExpired)',
++        ),
++      );
++      expect(example, isNot(contains('updateTokenInStorage')));
++      expect(example, isNot(contains('cacheToken(')));
++      expect(example, contains('signOutProvider'));
++    }
++  });
++}

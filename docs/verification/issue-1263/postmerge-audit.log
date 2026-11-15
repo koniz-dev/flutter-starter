@@ -1,0 +1,92 @@
+==> env asset guard
+OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+==> generated code (skipped: AUDIT_SKIP_CODEGEN=1)
+==> format (lib test integration_test tool examples)
+Formatted 631 files (0 changed) in 1.88 seconds.
+==> flutter analyze
+Analyzing flutter-starter...                                    
+No issues found! (ran in 5.9s)
+==> flutter test
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: import rules over lib/ no import-rule violation outside the allowlist
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: import rules over lib/ no stale allowlist entry
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: import rules over lib/ every allowlist key names a real rule
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: import rules over lib/ every allowlist path exists, unless it is a stripped sample
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: import rules over lib/ every rule has exactly one allowlist key
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: import rules over lib/ (tearDownAll)
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: rule predicates domain importing its own data or presentation is a violation
+00:00 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: rule predicates domain importing its own domain, core or a pub package is fine
+00:00 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: rule predicates domain importing a Flutter UI library is a violation
+00:00 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: rule predicates domain rejects standalone design libraries and their internals
+00:00 +9: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: rule predicates domain may import foundation.dart, and presentation material
+00:00 +10: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: rule predicates domain importing package:dio is a violation too
+00:00 +11: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: rule predicates data importing presentation is outside this rule set
+00:00 +12: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: rule predicates one feature importing another is a violation
+00:00 +13: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: rule predicates a feature importing itself, core or shared is fine
+00:00 +14: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: rule predicates lib/features importing lib/core is fine - that is the direction
+00:00 +15: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: rule predicates package:dio is allowed only under lib/core/network/
+00:00 +16: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: rule predicates go_router is allowed in core routing and route modules
+00:00 +17: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: rule predicates go_router outside those places is a violation
+00:00 +18: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: rule predicates lib/core importing lib/features is a violation
+00:00 +19: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: rule predicates the route registry seam is permanently allowed
+00:00 +20: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: strippable sample paths cover what tool/strip_sample_features.dart deletes
+00:00 +21: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: strippable sample paths do not cover files no strip variant removes
+00:00 +22: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: directive parsing picks up import and export, with line numbers
+00:00 +23: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: directive parsing a commented-out directive is not a violation
+00:00 +24: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: directive parsing handles show/hide/as clauses and double quotes
+00:06 +25: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:07 +26: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:07 +27: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:07 +28: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:07 +29: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:07 +30: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:07 +31: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:07 +32: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:07 +33: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:07 +34: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:07 +35: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:07 +36: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:07 +37: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:07 +38: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:07 +39: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:07 +40: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:07 +41: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:07 +42: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:07 +43: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:07 +44: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:07 +45: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:07 +46: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:07 +47: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:07 +48: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:07 +49: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:07 +50: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:07 +51: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:07 +52: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:07 +53: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:07 +54: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:07 +55: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:07 +56: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:07 +57: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:07 +58: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:07 +59: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:07 +60: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:07 +61: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:07 +62: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:07 +63: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:07 +64: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:07 +65: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:07 +66: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:07 +67: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:07 +68: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:07 +69: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:07 +70: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:07 +71: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:07 +72: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:07 +73: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:07 +74: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: documentation uses token lifecycle contracts and never prints tokens
+00:07 +75: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: documentation uses token lifecycle contracts and never prints tokens
+00:07 +76: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: documentation uses token lifecycle contracts and never prints tokens
+00:07 +77: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: documentation uses token lifecycle contracts and never prints tokens
+00:07 +78: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: documentation uses token lifecycle contracts and never prints tokens
+00:07 +79: All tests passed!
