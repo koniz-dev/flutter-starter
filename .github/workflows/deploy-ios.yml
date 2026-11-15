@@ -149,18 +149,16 @@ jobs:
 
       # - name: Build IPA
       #   env:
-      #     BASE_URL: ${{ secrets.BASE_URL_PRODUCTION }}
+      #     BASE_URL_STAGING: ${{ vars.BASE_URL_STAGING || secrets.BASE_URL_STAGING }}
+      #     BASE_URL_PRODUCTION: ${{ vars.BASE_URL_PRODUCTION || secrets.BASE_URL_PRODUCTION }}
       #     API_SSL_FINGERPRINTS: ${{ vars.API_SSL_FINGERPRINTS }}
       #     APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
       #     APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
       #     APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
       #   run: |
       #     ENV="${{ steps.env.outputs.environment }}"
-      #     if [ "$ENV" == "staging" ]; then
-      #       BASE_URL="${{ secrets.BASE_URL_STAGING }}"
-      #     else
-      #       BASE_URL="${{ secrets.BASE_URL_PRODUCTION }}"
-      #     fi
+      #     . scripts/ci/release_base_url.sh
+      #     release_base_url "$ENV" || exit 1
           
       #     # Refuses an empty API_SSL_FINGERPRINTS unless ENABLE_SSL_PINNING
       #     # is false: a release with pinning on and nothing to pin refuses
