@@ -412,8 +412,9 @@ allocation. `StringExtensions.isValidPhone` delegates to the same contract.
 ASCII DNS/punycode hostname, IPv4 or bracketed IPv6 address. Single labels such
 as `localhost` and a trailing DNS root dot are supported. DNS labels contain
 1-63 ASCII letters/digits/hyphens, begin/end with a letter or digit, and total
-at most 253 characters without the root dot. Explicit ports must be 0-65535.
-Raw whitespace, control characters and backslashes are rejected; encode path
+at most 253 characters without the root dot. Numeric ports use unsigned decimal
+digits in 0-65535; an empty port separator is treated as omitted. Raw whitespace,
+C0/C1 controls and backslashes are rejected; encode path
 spaces and use the ASCII/punycode form for international hostnames. This checks
 syntax, not reachability or authorization of a destination.
 

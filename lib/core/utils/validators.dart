@@ -70,11 +70,13 @@ class Validators {
   static final _phoneGroups = RegExp(r'^\+?[0-9]+(?:[ -]+[0-9]+)*$');
   static final _phoneSeparators = RegExp('[ -]');
   static const _urlSchemes = {'http', 'https', 'ftp', 'ws', 'wss'};
-  static final _urlForbiddenCharacters = RegExp(r'[\s\\\x00-\x1f\x7f]');
+  static final _urlForbiddenCharacters = RegExp(r'[\s\\\x00-\x1f\x7f-\x9f]');
   static final _urlHostLabel = RegExp(
     r'^[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?$',
   );
   static final _dottedIpv4 = RegExp(r'^[0-9]+(?:\.[0-9]+){3}$');
+  static final _authorityEnd = RegExp('[/#?]');
+  static final _unsignedPort = RegExp(r'^:[0-9]*$');
 
   /// Validate an email address.
   ///
@@ -169,8 +171,9 @@ class Validators {
   ///
   /// Hostnames allow single labels (e.g. localhost), a trailing root dot and
   /// ASCII/punycode labels of 1-63 characters, at most 253 without a root dot.
-  /// IPv4 and bracketed IPv6 literals are accepted. Explicit ports are 0-65535.
-  /// Raw whitespace, controls and backslashes are rejected; encode path spaces.
+  /// IPv4 and bracketed IPv6 literals are accepted. Numeric ports use unsigned
+  /// decimal digits in 0-65535; an empty port separator is treated as omitted.
+  /// Raw whitespace, C0/C1 controls and backslashes are rejected; encode spaces.
   /// Unicode hostnames must use their ASCII IDNA form. This is a syntax check,
   /// not a reachability, public-address or authorization policy.
   static bool isValidUrl(String url) {
@@ -183,11 +186,35 @@ class Validators {
           uri.host.isEmpty) {
         return false;
       }
-      if (uri.hasPort && (uri.port < 0 || uri.port > 65535)) return false;
+      if (!_hasValidRawPort(url, uri.scheme.length + 3)) return false;
       return _isValidUrlHost(uri.host);
     } on FormatException {
       return false;
     }
+  }
+
+  // Uri normalizes signed/default ports. Validate spelling before trusting
+  // its normalized hasPort/port properties, including userinfo/IPv6 shapes.
+  static bool _hasValidRawPort(String url, int authorityStart) {
+    final end = url.indexOf(_authorityEnd, authorityStart);
+    final authority = url.substring(
+      authorityStart,
+      end < 0 ? url.length : end,
+    );
+    final hostPort = authority.substring(authority.lastIndexOf('@') + 1);
+    final String suffix;
+    if (hostPort.startsWith('[')) {
+      final bracket = hostPort.indexOf(']');
+      if (bracket < 0) return false;
+      suffix = hostPort.substring(bracket + 1);
+    } else {
+      final colon = hostPort.lastIndexOf(':');
+      suffix = colon < 0 ? '' : hostPort.substring(colon);
+    }
+    if (suffix.isEmpty || suffix == ':') return true;
+    if (!_unsignedPort.hasMatch(suffix)) return false;
+    final port = int.tryParse(suffix.substring(1));
+    return port != null && port <= 65535;
   }
 
   static bool _isValidUrlHost(String host) {
