@@ -1,10 +1,7 @@
 /// DateTime extension methods
 extension DateTimeExtensions on DateTime {
-  /// Check if date is today
-  bool get isToday {
-    final now = DateTime.now();
-    return year == now.year && month == now.month && day == now.day;
-  }
+  /// Whether this date is today in the receiver's UTC or local zone.
+  bool get isToday => _isSameDay(_inReceiverZone(DateTime.now()));
 
   /// Check if date is yesterday
   bool get isYesterday => isYesterdayRelativeTo(DateTime.now());
@@ -12,31 +9,40 @@ extension DateTimeExtensions on DateTime {
   /// Check if date is tomorrow
   bool get isTomorrow => isTomorrowRelativeTo(DateTime.now());
 
-  /// Whether this date is the calendar day before [now]'s.
+  /// Whether this date is the calendar day before [now] in this date's zone.
   ///
   /// Calendar arithmetic, not `now - 24h`: around a daylight-saving change a
   /// day lasts 23 or 25 hours, and subtracting 24 hours landed on the wrong
   /// date for an hour.
-  bool isYesterdayRelativeTo(DateTime now) =>
-      _isSameDay(DateTime(now.year, now.month, now.day - 1));
+  bool isYesterdayRelativeTo(DateTime now) => _isRelativeDay(now, -1);
 
-  /// Whether this date is the calendar day after [now]'s; see
+  /// Whether this date is the calendar day after [now] in this date's zone; see
   /// [isYesterdayRelativeTo].
-  bool isTomorrowRelativeTo(DateTime now) =>
-      _isSameDay(DateTime(now.year, now.month, now.day + 1));
+  bool isTomorrowRelativeTo(DateTime now) => _isRelativeDay(now, 1);
+
+  bool _isRelativeDay(DateTime now, int offset) {
+    final reference = _inReceiverZone(now);
+    return _isSameDay(
+      _calendarDay(reference.year, reference.month, reference.day + offset),
+    );
+  }
+
+  DateTime _inReceiverZone(DateTime value) =>
+      isUtc ? value.toUtc() : value.toLocal();
+
+  DateTime _calendarDay(int year, int month, int day) =>
+      isUtc ? DateTime.utc(year, month, day) : DateTime(year, month, day);
 
   bool _isSameDay(DateTime other) =>
       year == other.year && month == other.month && day == other.day;
 
-  /// Get start of day
-  DateTime get startOfDay {
-    return DateTime(year, month, day);
-  }
+  /// Start of the calendar day, preserving the receiver's UTC or local zone.
+  DateTime get startOfDay => _calendarDay(year, month, day);
 
-  /// Get end of day
-  DateTime get endOfDay {
-    return DateTime(year, month, day, 23, 59, 59, 999);
-  }
+  /// End of the calendar day, preserving the receiver's UTC or local zone.
+  DateTime get endOfDay => isUtc
+      ? DateTime.utc(year, month, day, 23, 59, 59, 999)
+      : DateTime(year, month, day, 23, 59, 59, 999);
 
   /// Format date to string (yyyy-MM-dd)
   String toDateString() {

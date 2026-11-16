@@ -54,10 +54,21 @@ void main() {
       });
     });
 
+    test('UTC receiver stays inside its UTC calendar boundaries', () {
+      final date = DateTime.utc(2024, 1, 15, 20);
+      expect(date.startOfDay, DateTime.utc(2024, 1, 15));
+      expect(date.endOfDay, DateTime.utc(2024, 1, 15, 23, 59, 59, 999));
+      expect(date.startOfDay.isUtc, isTrue);
+      expect(date.endOfDay.isUtc, isTrue);
+      expect(date.isBefore(date.startOfDay), isFalse);
+      expect(date.isAfter(date.endOfDay), isFalse);
+    });
+
     group('startOfDay', () {
       test('should return start of day', () {
         final date = DateTime(2024, 1, 15, 14, 30, 45);
         final start = date.startOfDay;
+        expect(start.isUtc, isFalse);
         expect(start.year, 2024);
         expect(start.month, 1);
         expect(start.day, 15);
@@ -71,6 +82,7 @@ void main() {
       test('should return end of day', () {
         final date = DateTime(2024, 1, 15, 14, 30, 45);
         final end = date.endOfDay;
+        expect(end.isUtc, isFalse);
         expect(end.year, 2024);
         expect(end.month, 1);
         expect(end.day, 15);

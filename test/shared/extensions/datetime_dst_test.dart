@@ -27,7 +27,57 @@ void main() {
 }
 ''';
 
+const _utcScript = r'''
+import 'package:flutter_starter/shared/extensions/datetime_extensions.dart';
 void main() {
+  final utc = DateTime.utc(2024, 1, 15, 20);
+  final local = utc.toLocal();
+  final localYesterday = DateTime(local.year, local.month, local.day - 1);
+  final localTomorrow = DateTime(local.year, local.month, local.day + 1);
+  final results = [
+    utc.startOfDay.isUtc,
+    utc.endOfDay.isUtc,
+    utc.startOfDay == DateTime.utc(2024, 1, 15),
+    utc.endOfDay == DateTime.utc(2024, 1, 15, 23, 59, 59, 999),
+    !utc.isBefore(utc.startOfDay) && !utc.isAfter(utc.endOfDay),
+    DateTime.utc(2024, 1, 14).isYesterdayRelativeTo(local),
+    DateTime.utc(2024, 1, 16).isTomorrowRelativeTo(local),
+    localYesterday.isYesterdayRelativeTo(utc),
+    localTomorrow.isTomorrowRelativeTo(utc),
+    DateTime.now().toUtc().isToday,
+  ];
+  print('${local.timeZoneOffset.inHours}|' + results.join(','));
+}
+''';
+
+void main() {
+  for (final entry in const {
+    'Asia/Ho_Chi_Minh': 7,
+    'Pacific/Kiritimati': 14,
+    'Etc/GMT+12': -12,
+  }.entries) {
+    test('UTC receiver semantics in ${entry.key}', () {
+      final dir = Directory.systemTemp.createTempSync('datetime_utc_');
+      addTearDown(() => dir.deleteSync(recursive: true));
+      final script = File('${dir.path}/utc.dart')
+        ..writeAsStringSync(_utcScript);
+      final packages = File('.dart_tool/package_config.json').absolute.path;
+      final result = Process.runSync(
+        'dart',
+        ['--packages=$packages', script.path],
+        environment: {'TZ': entry.key},
+      );
+      expect(result.exitCode, 0, reason: '${result.stderr}');
+      // Keep the actual offset and results in the regression evidence.
+      // ignore: avoid_print
+      print('TZ=${entry.key}: ${result.stdout}');
+      expect(
+        '${result.stdout}'.trim(),
+        '${entry.value}|${List.filled(10, true).join(',')}',
+      );
+    });
+  }
+
   test('yesterday and tomorrow are calendar days across a DST change', () {
     final dir = Directory.systemTemp.createTempSync('datetime_dst_');
     addTearDown(() => dir.deleteSync(recursive: true));
