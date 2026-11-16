@@ -1,0 +1,121 @@
+==> env asset guard
+OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+==> generated code (skipped: AUDIT_SKIP_CODEGEN=1)
+==> format (lib test integration_test tool examples)
+Formatted 636 files (0 changed) in 2.05 seconds.
+==> flutter analyze
+Analyzing flutter-starter...                                    
+No issues found! (ran in 7.0s)
+==> flutter test
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/demo/demo_sign_in_card_contrast_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/demo/demo_sign_in_card_contrast_test.dart: light theme: the fill button reads against the card
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/demo/demo_sign_in_card_contrast_test.dart: light theme: the fill button reads against the card
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/demo/demo_sign_in_card_contrast_test.dart: light theme: the fill button reads against the card
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/demo/demo_sign_in_card_contrast_test.dart: light theme: the fill button reads against the card
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/demo/demo_sign_in_card_contrast_test.dart: light theme: the fill button reads against the card
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/demo/demo_sign_in_card_contrast_test.dart: light theme: the fill button reads against the card
+00:00 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/demo/demo_sign_in_card_contrast_test.dart: light theme: the fill button reads against the card
+00:00 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/demo/demo_sign_in_card_contrast_test.dart: light theme: the fill button reads against the card
+00:00 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/demo/demo_sign_in_card_contrast_test.dart: light theme: the fill button reads against the card
+00:00 +9: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/demo/demo_sign_in_card_contrast_test.dart: light theme: the fill button reads against the card
+00:00 +10: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/demo/demo_sign_in_card_contrast_test.dart: light theme: the fill button reads against the card
+00:00 +11: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/demo/demo_sign_in_card_contrast_test.dart: light theme: the fill button reads against the card
+00:01 +12: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/demo/demo_sign_in_card_contrast_test.dart: light theme: the fill button reads against the card
+00:01 +13: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/demo/demo_sign_in_card_contrast_test.dart: light theme: the fill button reads against the card
+00:01 +14: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/demo/demo_auth_test.dart: criterion 3: login -> demo sign-in -> home, with no backend the fill button and Login reach the home screen
+00:01 +15: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/demo/demo_auth_test.dart: criterion 3: login -> demo sign-in -> home, with no backend the fill button and Login reach the home screen
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:04 +16: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/demo/demo_auth_test.dart: criterion 3: login -> demo sign-in -> home, with no backend the fill button and Login reach the home screen
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home","previousRouteName":"login","previousRoutePath":"login"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Removed | Context: {"routeName":"login","routePath":"login"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:04 +17: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/demo/demo_auth_test.dart: criterion 3: login -> demo sign-in -> home, with no backend the fill button and Login reach the home screen
+00:04 +18: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/demo/demo_auth_test.dart: criterion 3: login -> demo sign-in -> home, with no backend the fill button and Login reach the home screen
+00:04 +19: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/demo/demo_auth_test.dart: criterion 3: login -> demo sign-in -> home, with no backend the fill button and Login reach the home screen
+00:04 +20: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/demo/demo_auth_test.dart: criterion 3: login -> demo sign-in -> home, with no backend the fill button and Login reach the home screen
+00:04 +21: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/demo/demo_auth_test.dart: criterion 3: login -> demo sign-in -> home, with no backend the fill button and Login reach the home screen
+00:04 +22: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/demo/demo_auth_test.dart: criterion 3: login -> demo sign-in -> home, with no backend the fill button and Login reach the home screen
+00:04 +23: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/demo/demo_auth_test.dart: criterion 3: login -> demo sign-in -> home, with no backend the fill button and Login reach the home screen
+00:04 +24: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/demo/demo_auth_test.dart: criterion 3: login -> demo sign-in -> home, with no backend the fill button and Login reach the home screen
+00:04 +25: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/demo/demo_auth_test.dart: criterion 3: login -> demo sign-in -> home, with no backend the fill button and Login reach the home screen
+00:04 +26: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/demo/demo_auth_test.dart: criterion 3: login -> demo sign-in -> home, with no backend the fill button and Login reach the home screen
+00:04 +27: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/demo/demo_auth_test.dart: criterion 3: login -> demo sign-in -> home, with no backend the fill button and Login reach the home screen
+00:04 +28: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/demo/demo_auth_test.dart: criterion 3: login -> demo sign-in -> home, with no backend the fill button and Login reach the home screen
+00:04 +29: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/demo/demo_auth_test.dart: criterion 3: login -> demo sign-in -> home, with no backend the fill button and Login reach the home screen
+00:04 +30: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/demo/demo_auth_test.dart: criterion 3: login -> demo sign-in -> home, with no backend the fill button and Login reach the home screen
+00:04 +31: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/demo/demo_auth_test.dart: criterion 3: login -> demo sign-in -> home, with no backend the fill button and Login reach the home screen
+[... 1371 lines elided ...]
+01:08 +708: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor idempotency gate an Idempotency-Key header opts a POST into replay
+01:08 +709: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_backoff_test.dart: a POST failing with sendTimeout is not retried
+01:08 +710: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor idempotency gate an empty Idempotency-Key header does not opt in
+01:08 +711: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_backoff_test.dart: maxJitter: Duration.zero removes the jitter entirely
+01:08 +712: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_backoff_test.dart: maxJitter: Duration.zero removes the jitter entirely
+01:09 +713: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart: AuthInterceptor 401 refresh queue three concurrent 401s with a failing refresh: all three complete
+01:09 +714: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart: AuthInterceptor 401 refresh queue three concurrent 401s with a failing refresh: all three complete
+01:09 +715: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart: AuthInterceptor 401 refresh queue three concurrent 401s with a failing refresh: all three complete
+01:09 +716: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart: AuthInterceptor 401 refresh queue three concurrent 401s with a failing refresh: all three complete
+01:09 +717: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart: AuthInterceptor 401 refresh queue three concurrent 401s with a failing refresh: all three complete
+01:09 +718: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart: AuthInterceptor 401 refresh queue three concurrent 401s with a failing refresh: all three complete
+01:09 +719: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart: AuthInterceptor 401 refresh queue three concurrent 401s with a failing refresh: all three complete
+01:09 +720: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart: AuthInterceptor 401 refresh queue three concurrent 401s with a failing refresh: all three complete
+01:09 +721: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart: AuthInterceptor 401 refresh queue three concurrent 401s with a failing refresh: all three complete
+01:09 +722: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart: AuthInterceptor 401 refresh queue three concurrent 401s with a failing refresh: all three complete
+01:09 +723: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart: AuthInterceptor 401 refresh queue three concurrent 401s with a failing refresh: all three complete
+01:09 +724: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart: AuthInterceptor 401 refresh queue three concurrent 401s with a failing refresh: all three complete
+01:09 +725: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart: AuthInterceptor 401 refresh queue three concurrent 401s with a failing refresh: all three complete
+01:09 +726: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart: AuthInterceptor 401 refresh queue three concurrent 401s with a failing refresh: all three complete
+01:09 +727: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart: AuthInterceptor 401 refresh queue three concurrent 401s with a failing refresh: all three complete
+01:09 +728: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/performance_interceptor_test.dart: PerformanceInterceptor onRequest should start trace when performance service returns trace
+01:10 +729: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: ticket-authenticated responses bypass cache and purge older rules
+01:10 +730: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: ticket-authenticated responses bypass cache and purge older rules
+01:10 +731: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: ticket-authenticated responses bypass cache and purge older rules
+01:10 +732: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: ticket-authenticated responses bypass cache and purge older rules
+01:10 +733: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: ticket-authenticated responses bypass cache and purge older rules
+01:10 +734: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart: AuthInterceptor 401 refresh queue an Error thrown by the refresh does not wedge the interceptor
+01:10 +735: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart: AuthInterceptor 401 refresh queue an Error thrown by the refresh does not wedge the interceptor
+01:10 +736: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/performance_interceptor_test.dart: PerformanceInterceptor onResponse should record error metric for non-2xx status codes
+01:10 +737: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart: AuthInterceptor 401 refresh queue reuses one retry client and closes it on dispose
+01:10 +738: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart: AuthInterceptor 401 refresh queue reuses one retry client and closes it on dispose
+01:10 +739: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart: AuthInterceptor 401 refresh queue reuses one retry client and closes it on dispose
+01:10 +740: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/performance_interceptor_test.dart: PerformanceInterceptor onResponse should handle response with string data
+01:10 +741: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart: AuthInterceptor 401 refresh queue cancelling the original request aborts the replay
+01:10 +742: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart: AuthInterceptor 401 refresh queue cancelling the original request aborts the replay
+01:10 +743: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/performance_interceptor_test.dart: PerformanceInterceptor onResponse should handle response with map data
+01:10 +744: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/performance_interceptor_test.dart: PerformanceInterceptor onResponse should handle response with null data
+01:10 +745: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart: AuthInterceptor 401 refresh queue propagates the original cancel token to the replay request
+01:10 +746: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart: AuthInterceptor 401 refresh queue propagates the original cancel token to the replay request
+01:10 +747: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/performance_interceptor_test.dart: PerformanceInterceptor onResponse should not process trace when trace is null
+01:10 +748: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/performance_interceptor_test.dart: PerformanceInterceptor onError should record error metric and error type
+01:10 +749: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/performance_interceptor_test.dart: PerformanceInterceptor onError should include status code when response is available
+01:10 +750: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/performance_interceptor_test.dart: PerformanceInterceptor onError should handle error without response
+01:10 +751: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/performance_interceptor_test.dart: PerformanceInterceptor onError should handle different error types
+01:10 +752: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/performance_interceptor_test.dart: PerformanceInterceptor onError should not process trace when trace is null
+01:10 +753: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/performance_interceptor_test.dart: PerformanceInterceptor _getTrace should return trace when present in extra
+01:10 +754: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/performance_interceptor_test.dart: PerformanceInterceptor _getTrace should return null when trace is not PerformanceTrace
+01:10 +755: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/performance_interceptor_test.dart: PerformanceInterceptor _estimateResponseSize should estimate size for string data
+01:10 +756: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/performance_interceptor_test.dart: PerformanceInterceptor _estimateResponseSize should estimate size for list data
+01:10 +757: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/performance_interceptor_test.dart: PerformanceInterceptor _estimateResponseSize should estimate size for map data
+01:11 +758: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/performance_path_redaction_test.dart: no trace name or attribute carries the secret
+01:11 +759: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+01:11 +760: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+01:11 +761: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+01:11 +762: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+01:11 +763: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: the scan itself flags a body with no assertion, naming its line
+01:11 +764: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: the scan itself accepts expect, verify, fail and expect-named helpers
+01:11 +765: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: the scan itself ignores an assertion that only appears in a string or comment
+01:11 +766: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: the scan itself skips skipped tests and honours the allow-list marker
+01:11 +767: All tests passed!

@@ -1,0 +1,80 @@
+==> env asset guard
+OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+==> generated code (skipped: AUDIT_SKIP_CODEGEN=1)
+==> format (lib test integration_test tool examples)
+Formatted 636 files (0 changed) in 2.21 seconds.
+==> flutter analyze
+Analyzing flutter-starter...                                    
+No issues found! (ran in 8.0s)
+==> flutter test
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: criterion 1: SessionGeneration notifies on invalidate every invalidate() notifies, and current/isCurrent are unchanged
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: a removed listener is no longer called
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: a throwing listener cannot interrupt a teardown invalidate() still advances, runs the rest, and does not throw
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: a throwing listener cannot interrupt a teardown forced logout still clears the tokens
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: a throwing listener cannot interrupt a teardown forced logout still clears the tokens
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: a throwing listener cannot interrupt a teardown forced logout still clears the tokens
+00:00 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: a throwing listener cannot interrupt a teardown forced logout still clears the tokens
+00:00 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: a throwing listener cannot interrupt a teardown forced logout still clears the tokens
+00:00 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: a throwing listener cannot interrupt a teardown forced logout still clears the tokens
+00:00 +9: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: a throwing listener cannot interrupt a teardown forced logout still clears the tokens
+00:00 +10: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: a throwing listener cannot interrupt a teardown forced logout still clears the tokens
+00:00 +11: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: a throwing listener cannot interrupt a teardown forced logout still clears the tokens
+00:00 +12: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: a throwing listener cannot interrupt a teardown forced logout still clears the tokens
+00:00 +13: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: a throwing listener cannot interrupt a teardown forced logout still clears the tokens
+00:00 +14: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: a throwing listener cannot interrupt a teardown forced logout still clears the tokens
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:00 +15: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: a throwing listener cannot interrupt a teardown forced logout still clears the tokens
+│ #0   LoggingService.debug (package:flutter_starter/core/logging/logging_service.dart:182:13)
+│ #1   ApiLoggingInterceptor.onRequest (package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart:47:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+00:00 +16: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: a throwing listener cannot interrupt a teardown forced logout still clears the tokens
+│ 🐛 API Request: GET /users/me | Context: {"method":"GET","path":"/users/me","baseUrl":"http://localhost:3000/v1","headers":{"Content-Type":"application/json","Accept":"application/json","Authorization":"***REDACTED***"}}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:00 +17: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: a throwing listener cannot interrupt a teardown forced logout still clears the tokens
+00:00 +18: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: a throwing listener cannot interrupt a teardown forced logout still clears the tokens
+00:00 +19: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: a throwing listener cannot interrupt a teardown forced logout still clears the tokens
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ DioException [DioExceptionType.badResponse] /users/me (status 401)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ #0   DioMixin.request (package:dio/src/dio_mixin.dart:404:36)
+│ #1   DioNetworkClient._send (package:flutter_starter/core/network/adapters/dio_network_client.dart:72:35)
+│ #2   DioNetworkClient.send (package:flutter_starter/core/network/adapters/dio_network_client.dart:47:21)
+│ #3   ApiClient._send (package:flutter_starter/core/network/api_client.dart:341:35)
+│ #4   ApiClient.get (package:flutter_starter/core/network/api_client.dart:213:18)
+│ #5   main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart:162:23)
+│ #6   <asynchronous suspension>
+│ #7   main.<anonymous closure>.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart:151:7)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ ⛔ API Error: DioExceptionType.badResponse /users/me | Context: {"type":"DioExceptionType.badResponse","path":"/users/me","method":"GET","statusCode":401,"responseBody":{"message":"Unauthorized"}}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:00 +20: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: criteria 2-3: each transition reaches sessionEpochProvider logout
+00:00 +21: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: criteria 2-3: each transition reaches sessionEpochProvider login
+00:00 +22: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: criteria 2-3: each transition reaches sessionEpochProvider register
+00:00 +23: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: criteria 2-3: each transition reaches sessionEpochProvider forced logout raised inside AuthInterceptor
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.debug (package:flutter_starter/core/logging/logging_service.dart:182:13)
+│ #1   ApiLoggingInterceptor.onRequest (package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart:47:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 API Request: GET /users/me | Context: {"method":"GET","path":"/users/me","baseUrl":"http://localhost:3000/v1","headers":{"Content-Type":"application/json","Accept":"application/json","Authorization":"***REDACTED***"}}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ DioException [DioExceptionType.badResponse] /users/me (status 401)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ #0   DioMixin.request (package:dio/src/dio_mixin.dart:404:36)
+│ #1   DioNetworkClient._send (package:flutter_starter/core/network/adapters/dio_network_client.dart:72:35)
+│ #2   DioNetworkClient.send (package:flutter_starter/core/network/adapters/dio_network_client.dart:47:21)
+│ #3   ApiClient._send (package:flutter_starter/core/network/api_client.dart:341:35)
+│ #4   ApiClient.get (package:flutter_starter/core/network/api_client.dart:213:18)
+│ #5   main.<anonymous closure>.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart:208:19)
+│ #6   <asynchronous suspension>
+│ #7   Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ ⛔ API Error: DioExceptionType.badResponse /users/me | Context: {"type":"DioExceptionType.badResponse","path":"/users/me","method":"GET","statusCode":401,"responseBody":{"message":"Unauthorized"}}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:01 +24: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:01 +25: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: the scan itself flags a body with no assertion, naming its line
+00:01 +26: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: the scan itself accepts expect, verify, fail and expect-named helpers
+00:01 +27: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: the scan itself ignores an assertion that only appears in a string or comment
+00:01 +28: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: the scan itself skips skipped tests and honours the allow-list marker
+00:01 +29: All tests passed!

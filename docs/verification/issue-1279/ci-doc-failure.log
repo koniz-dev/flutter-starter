@@ -1,0 +1,49 @@
+2026-11-16T12:37:55.2262280Z ##[group]❌ /home/runner/work/flutter-starter/flutter-starter/test/docs/auth_providers_quotes_test.dart: authRepositoryProvider is quoted as auth_providers.dart declares it (failed)
+2026-11-16T12:37:55.2263472Z Expected: 'final Provider<AuthRepository> authRepositoryProvider =\n'
+2026-11-16T12:37:55.2264035Z             'Provider<AuthRepository>((ref) {\n'
+2026-11-16T12:37:55.2264747Z             'final remoteDataSource = ref.read<AuthRemoteDataSource>(\n'
+2026-11-16T12:37:55.2265432Z             'authRemoteDataSourceProvider,\n'
+2026-11-16T12:37:55.2265873Z             ');\n'
+2026-11-16T12:37:55.2266342Z             'final localDataSource = ref.watch(authLocalDataSourceProvider);\n'
+2026-11-16T12:37:55.2266895Z             'return AuthRepositoryImpl(\n'
+2026-11-16T12:37:55.2267300Z             'remoteDataSource: remoteDataSource,\n'
+2026-11-16T12:37:55.2267720Z             'localDataSource: localDataSource,\n'
+2026-11-16T12:37:55.2268217Z             'httpCache: ref.read(networkClientProvider).responseCache,\n'
+2026-11-16T12:37:55.2268825Z             'sessionGeneration: ref.watch(sessionGenerationProvider),\n'
+2026-11-16T12:37:55.2269405Z             'sessionSink: ref.read(sessionTerminationSinkProvider),\n'
+2026-11-16T12:37:55.2269870Z             ');\n'
+2026-11-16T12:37:55.2270126Z             '});'
+2026-11-16T12:37:55.2270532Z   Actual: 'final Provider<AuthRepository> authRepositoryProvider =\n'
+2026-11-16T12:37:55.2271053Z             'Provider<AuthRepository>((ref) {\n'
+2026-11-16T12:37:55.2271553Z             'final remoteDataSource = ref.read<AuthRemoteDataSource>(\n'
+2026-11-16T12:37:55.2272051Z             'authRemoteDataSourceProvider,\n'
+2026-11-16T12:37:55.2272433Z             ');\n'
+2026-11-16T12:37:55.2272845Z             'final localDataSource = ref.watch(authLocalDataSourceProvider);\n'
+2026-11-16T12:37:55.2273381Z             'return AuthRepositoryImpl(\n'
+2026-11-16T12:37:55.2273780Z             'remoteDataSource: remoteDataSource,\n'
+2026-11-16T12:37:55.2274192Z             'localDataSource: localDataSource,\n'
+2026-11-16T12:37:55.2274810Z             'httpCache: ref.read(networkClientProvider).responseCache,\n'
+2026-11-16T12:37:55.2275375Z             'sessionGeneration: ref.watch(sessionGenerationProvider),\n'
+2026-11-16T12:37:55.2275831Z             ');\n'
+2026-11-16T12:37:55.2276073Z             '});'
+2026-11-16T12:37:55.2276456Z    Which: is different.
+2026-11-16T12:37:55.2276773Z           Expected: ... ovider),\nsessionSin ...
+2026-11-16T12:37:55.2277170Z             Actual: ... ovider),\n);\n});
+2026-11-16T12:37:55.2279437Z                                   ^
+2026-11-16T12:37:55.2280098Z            Differ at offset 466
+2026-11-16T12:37:55.2281032Z 
+2026-11-16T12:37:55.2281419Z package:matcher                                     expect
+2026-11-16T12:37:55.2282084Z package:flutter_test/src/widget_tester.dart 473:18  expect
+2026-11-16T12:37:55.2282780Z test/docs/auth_providers_quotes_test.dart 66:7      main.<fn>
+2026-11-16T12:37:55.2283635Z ##[endgroup]
+2026-11-16T12:37:55.2290468Z ##[group]✅ Passing tests
+2026-11-16T12:37:55.2291489Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/docs/auth_providers_quotes_test.dart: loginUseCaseProvider is quoted as auth_providers.dart declares it
+2026-11-16T12:37:55.2304566Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/docs/auth_providers_quotes_test.dart: registerUseCaseProvider is quoted as auth_providers.dart declares it
+2026-11-16T12:37:55.2318355Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/docs/auth_providers_quotes_test.dart: logoutUseCaseProvider is quoted as auth_providers.dart declares it
+2026-11-16T12:37:55.2330537Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/docs/auth_providers_quotes_test.dart: refreshTokenUseCaseProvider is quoted as auth_providers.dart declares it
+2026-11-16T12:37:55.2342509Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/docs/auth_providers_quotes_test.dart: getCurrentUserUseCaseProvider is quoted as auth_providers.dart declares it
+2026-11-16T12:37:55.2355645Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/docs/auth_providers_quotes_test.dart: isAuthenticatedUseCaseProvider is quoted as auth_providers.dart declares it
+2026-11-16T12:37:55.8375408Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/docs/doc_test_paths_test.dart: a fence inside a longer or other-character fence does not close it
+2026-11-16T12:37:55.8406134Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/docs/doc_test_paths_test.dart: a block ending in a backslash does not swallow its closing fence
+2026-11-16T12:37:55.8513679Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/docs/doc_test_paths_test.dart: covers README.md, CONTRIBUTING.md and CLAUDE.md as well as docs/
+2026-11-16T12:39:51.3466496Z ##[error]4460 tests passed, 1 failed, 32 skipped.

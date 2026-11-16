@@ -1,0 +1,205 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1279-independent-probe_test.dart
+00:00 +0: review: completed remote response racing restore barrier
+REVIEW results=[ResultFailure<User>(UnknownFailure(Session ended while the sign-in was in flight, SESSION_TERMINATED)), Success<User?>(null)] vault={}
+00:00 +0 -1: review: completed remote response racing restore barrier [E]
+  Expected: true
+    Actual: <false>
+  
+  package:matcher                                               expect
+  package:flutter_test/src/widget_tester.dart 473:18            expect
+  .git/codex-issue-work/1279-independent-probe_test.dart 593:5  main.<fn>
+  
+00:00 +0 -1: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1279-independent-probe_test.dart: review: completed remote response racing restore barrier
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1279-independent-probe_test.dart
+00:00 +0: review: completed remote response racing restore barrier
+REVIEW results=[ResultFailure<User>(UnknownFailure(Session ended while the sign-in was in flight, SESSION_TERMINATED)), Success<User?>(null)] vault={}
+00:00 +0 -1: review: completed remote response racing restore barrier [E]
+  Expected: true
+    Actual: <false>
+  
+  package:matcher                                               expect
+  package:flutter_test/src/widget_tester.dart 473:18            expect
+  .git/codex-issue-work/1279-independent-probe_test.dart 595:5  main.<fn>
+  
+00:00 +0 -1: review: transport 401 cannot terminate uncommitted replacement
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.debug (package:flutter_starter/core/logging/logging_service.dart:182:13)
+│ #1   ApiLoggingInterceptor.onRequest (package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart:47:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 API Request: GET /users/me | Context: {"method":"GET","path":"/users/me","baseUrl":"http://localhost:3000/v1","headers":{"Content-Type":"application/json","Accept":"application/json","Authorization":"***REDACTED***"}}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+[38;5;196m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m│ DioException [DioExceptionType.badResponse] /users/me (status 401)[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ #0   DioMixin.request (package:dio/src/dio_mixin.dart:404:36)[0m
+[38;5;196m│ #1   DioNetworkClient._send (package:flutter_starter/core/network/adapters/dio_network_client.dart:72:35)[0m
+[38;5;196m│ #2   DioNetworkClient.send (package:flutter_starter/core/network/adapters/dio_network_client.dart:47:21)[0m
+[38;5;196m│ #3   ApiClient._send (package:flutter_starter/core/network/api_client.dart:341:35)[0m
+[38;5;196m│ #4   ApiClient.get (package:flutter_starter/core/network/api_client.dart:213:18)[0m
+[38;5;196m│ #5   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1279-independent-probe_test.dart:607:30)[0m
+[38;5;196m│ #6   <asynchronous suspension>[0m
+[38;5;196m│ #7   Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ ⛔ API Error: DioExceptionType.badResponse /users/me | Context: {"type":"DioExceptionType.badResponse","path":"/users/me","method":"GET","statusCode":401,"responseBody":{}}[0m
+[38;5;196m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+REVIEW 401 sign-in=ResultFailure<User>(UnknownFailure(Session ended while the sign-in was in flight, SESSION_TERMINATED)) vault={}
+00:00 +0 -2: review: transport 401 cannot terminate uncommitted replacement [E]
+  Expected: true
+    Actual: <false>
+  
+  package:matcher                                               expect
+  package:flutter_test/src/widget_tester.dart 473:18            expect
+  .git/codex-issue-work/1279-independent-probe_test.dart 611:5  main.<fn>
+  
+00:01 +0 -2: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1279-independent-probe_test.dart: review: completed remote response racing restore barrier
+  /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1279-independent-probe_test.dart: review: transport 401 cannot terminate uncommitted replacement
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: criterion 1: SessionGeneration notifies on invalidate every invalidate() notifies, and current/isCurrent are unchanged
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: criterion 1: SessionGeneration notifies on invalidate every invalidate() notifies, and current/isCurrent are unchanged
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: criterion 1: SessionGeneration notifies on invalidate every invalidate() notifies, and current/isCurrent are unchanged
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: criterion 1: SessionGeneration notifies on invalidate every invalidate() notifies, and current/isCurrent are unchanged
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: criterion 1: SessionGeneration notifies on invalidate every invalidate() notifies, and current/isCurrent are unchanged
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: criterion 1: SessionGeneration notifies on invalidate every invalidate() notifies, and current/isCurrent are unchanged
+00:00 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: criterion 1: SessionGeneration notifies on invalidate every invalidate() notifies, and current/isCurrent are unchanged
+00:00 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: criterion 1: SessionGeneration notifies on invalidate every invalidate() notifies, and current/isCurrent are unchanged
+00:00 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: a rejected refresh write cannot be restored by a fresh repository
+00:00 +9: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: a rejected refresh write cannot be restored by a fresh repository
+00:00 +10: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: a rejected refresh write cannot be restored by a fresh repository
+00:00 +11: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: a rejected refresh write cannot be restored by a fresh repository
+00:00 +12: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: a rejected refresh write cannot be restored by a fresh repository
+00:00 +13: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: a rejected refresh write cannot be restored by a fresh repository
+00:00 +14: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: a rejected refresh write cannot be restored by a fresh repository
+00:00 +15: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: a rejected refresh write cannot be restored by a fresh repository
+00:00 +16: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: a rejected refresh write cannot be restored by a fresh repository
+00:00 +17: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: a rejected refresh write cannot be restored by a fresh repository
+00:00 +18: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: a rejected refresh write cannot be restored by a fresh repository
+00:00 +19: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: a rejected refresh write cannot be restored by a fresh repository
+00:00 +20: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: a rejected refresh write cannot be restored by a fresh repository
+00:00 +21: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: a rejected refresh write cannot be restored by a fresh repository
+00:00 +22: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: a rejected refresh write cannot be restored by a fresh repository
+00:00 +23: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: a rejected refresh write cannot be restored by a fresh repository
+00:00 +24: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: a rejected refresh write cannot be restored by a fresh repository
+00:00 +25: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: a rejected refresh write cannot be restored by a fresh repository
+00:00 +26: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: a rejected refresh write cannot be restored by a fresh repository
+00:00 +27: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: a rejected refresh write cannot be restored by a fresh repository
+00:00 +28: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: a rejected refresh write cannot be restored by a fresh repository
+00:00 +29: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: a rejected refresh write cannot be restored by a fresh repository
+00:00 +30: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: a rejected refresh write cannot be restored by a fresh repository
+00:00 +31: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: a rejected refresh write cannot be restored by a fresh repository
+00:00 +32: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: a rejected refresh write cannot be restored by a fresh repository
+00:00 +33: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: a rejected refresh write cannot be restored by a fresh repository
+00:00 +34: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: a rejected refresh write cannot be restored by a fresh repository
+00:00 +35: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: a rejected refresh write cannot be restored by a fresh repository
+00:00 +36: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: a rejected refresh write cannot be restored by a fresh repository
+00:00 +37: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: a rejected refresh write cannot be restored by a fresh repository
+00:00 +38: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: a throwing listener cannot interrupt a teardown forced logout still clears the tokens
+00:00 +39: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: a throwing listener cannot interrupt a teardown forced logout still clears the tokens
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.debug (package:flutter_starter/core/logging/logging_service.dart:182:13)
+│ #1   ApiLoggingInterceptor.onRequest (package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart:47:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+00:00 +40: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: a throwing listener cannot interrupt a teardown forced logout still clears the tokens
+│ 🐛 API Request: GET /users/me | Context: {"method":"GET","path":"/users/me","baseUrl":"http://localhost:3000/v1","headers":{"Content-Type":"application/json","Accept":"application/json","Authorization":"***REDACTED***"}}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:00 +41: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: a throwing listener cannot interrupt a teardown forced logout still clears the tokens
+00:00 +42: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: a throwing listener cannot interrupt a teardown forced logout still clears the tokens
+00:00 +43: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: a throwing listener cannot interrupt a teardown forced logout still clears the tokens
+00:00 +44: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: a throwing listener cannot interrupt a teardown forced logout still clears the tokens
+00:00 +45: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: a throwing listener cannot interrupt a teardown forced logout still clears the tokens
+00:00 +46: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: a throwing listener cannot interrupt a teardown forced logout still clears the tokens
+00:00 +47: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: a throwing listener cannot interrupt a teardown forced logout still clears the tokens
+00:00 +48: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: a throwing listener cannot interrupt a teardown forced logout still clears the tokens
+00:00 +49: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: a throwing listener cannot interrupt a teardown forced logout still clears the tokens
+00:00 +50: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: a throwing listener cannot interrupt a teardown forced logout still clears the tokens
+00:00 +51: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: a throwing listener cannot interrupt a teardown forced logout still clears the tokens
+00:00 +52: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: a throwing listener cannot interrupt a teardown forced logout still clears the tokens
+00:00 +53: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: a throwing listener cannot interrupt a teardown forced logout still clears the tokens
+00:00 +54: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: a throwing listener cannot interrupt a teardown forced logout still clears the tokens
+00:00 +55: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: a throwing listener cannot interrupt a teardown forced logout still clears the tokens
+00:00 +56: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: a throwing listener cannot interrupt a teardown forced logout still clears the tokens
+00:00 +57: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: a throwing listener cannot interrupt a teardown forced logout still clears the tokens
+00:00 +58: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: a throwing listener cannot interrupt a teardown forced logout still clears the tokens
+00:00 +59: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: a throwing listener cannot interrupt a teardown forced logout still clears the tokens
+00:00 +60: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: a throwing listener cannot interrupt a teardown forced logout still clears the tokens
+00:00 +61: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: a throwing listener cannot interrupt a teardown forced logout still clears the tokens
+00:00 +62: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: a throwing listener cannot interrupt a teardown forced logout still clears the tokens
+00:00 +63: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: a throwing listener cannot interrupt a teardown forced logout still clears the tokens
+[38;5;196m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m│ DioException [DioExceptionType.badResponse] /users/me (status 401)[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+00:00 +64: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: a throwing listener cannot interrupt a teardown forced logout still clears the tokens
+[38;5;196m│ #0   DioMixin.request (package:dio/src/dio_mixin.dart:404:36)[0m
+[38;5;196m│ #1   DioNetworkClient._send (package:flutter_starter/core/network/adapters/dio_network_client.dart:72:35)[0m
+[38;5;196m│ #2   DioNetworkClient.send (package:flutter_starter/core/network/adapters/dio_network_client.dart:47:21)[0m
+[38;5;196m│ #3   ApiClient._send (package:flutter_starter/core/network/api_client.dart:341:35)[0m
+[38;5;196m│ #4   ApiClient.get (package:flutter_starter/core/network/api_client.dart:213:18)[0m
+[38;5;196m│ #5   main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart:162:23)[0m
+[38;5;196m│ #6   <asynchronous suspension>[0m
+[38;5;196m│ #7   main.<anonymous closure>.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart:151:7)[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ ⛔ API Error: DioExceptionType.badResponse /users/me | Context: {"type":"DioExceptionType.badResponse","path":"/users/me","method":"GET","statusCode":401,"responseBody":{"message":"Unauthorized"}}[0m
+[38;5;196m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:00 +65: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: a throwing listener cannot interrupt a teardown forced logout still clears the tokens
+00:00 +66: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: a throwing listener cannot interrupt a teardown forced logout still clears the tokens
+00:00 +67: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: a throwing listener cannot interrupt a teardown forced logout still clears the tokens
+00:00 +68: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: login refresh exception leaves no failed session
+00:00 +69: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: criteria 2-3: each transition reaches sessionEpochProvider logout
+00:00 +70: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: criteria 2-3: each transition reaches sessionEpochProvider logout
+00:00 +71: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: login user false leaves no failed session
+00:00 +72: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: criteria 2-3: each transition reaches sessionEpochProvider login
+00:00 +73: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: login user exception leaves no failed session
+00:00 +74: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: criteria 2-3: each transition reaches sessionEpochProvider register
+00:00 +75: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: login user error leaves no failed session
+00:00 +75: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: criteria 2-3: each transition reaches sessionEpochProvider forced logout raised inside AuthInterceptor
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.debug (package:flutter_starter/core/logging/logging_service.dart:182:13)
+│ #1   ApiLoggingInterceptor.onRequest (package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart:47:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 API Request: GET /users/me | Context: {"method":"GET","path":"/users/me","baseUrl":"http://localhost:3000/v1","headers":{"Content-Type":"application/json","Accept":"application/json","Authorization":"***REDACTED***"}}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:00 +76: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart: criteria 2-3: each transition reaches sessionEpochProvider forced logout raised inside AuthInterceptor
+[38;5;196m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m│ DioException [DioExceptionType.badResponse] /users/me (status 401)[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ #0   DioMixin.request (package:dio/src/dio_mixin.dart:404:36)[0m
+[38;5;196m│ #1   DioNetworkClient._send (package:flutter_starter/core/network/adapters/dio_network_client.dart:72:35)[0m
+[38;5;196m│ #2   DioNetworkClient.send (package:flutter_starter/core/network/adapters/dio_network_client.dart:47:21)[0m
+[38;5;196m│ #3   ApiClient._send (package:flutter_starter/core/network/api_client.dart:341:35)[0m
+[38;5;196m│ #4   ApiClient.get (package:flutter_starter/core/network/api_client.dart:213:18)[0m
+[38;5;196m│ #5   main.<anonymous closure>.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/session/session_epoch_test.dart:208:19)[0m
+[38;5;196m│ #6   <asynchronous suspension>[0m
+[38;5;196m│ #7   Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ ⛔ API Error: DioExceptionType.badResponse /users/me | Context: {"type":"DioExceptionType.badResponse","path":"/users/me","method":"GET","statusCode":401,"responseBody":{"message":"Unauthorized"}}[0m
+[38;5;196m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:00 +77: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: register without refresh replaces the complete previous pair
+00:00 +78: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: register access false leaves no failed session
+00:00 +79: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: register access exception leaves no failed session
+00:00 +80: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: register access error leaves no failed session
+00:00 +81: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: register refresh false leaves no failed session
+00:00 +82: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: register refresh exception leaves no failed session
+00:00 +83: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: register refresh error leaves no failed session
+00:00 +84: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: register user false leaves no failed session
+00:00 +85: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: register user exception leaves no failed session
+00:00 +86: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: register user error leaves no failed session
+00:00 +87: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: remote ServerException: Rejected preserves the existing usable session
+00:00 +88: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: remote NetworkException: Offline preserves the existing usable session
+00:00 +89: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: a queued sign-in survives an earlier held user write (fails=false)
+00:00 +90: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: a queued sign-in survives an earlier held user write (fails=true)
+00:00 +91: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: a newer sign-in waits until failed persistence rollback settles
+00:00 +92: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: timing out a queued sign-in cannot leave its stale predecessor restorable
+00:00 +93: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: restore waits for in-flight sign-in persistence instead of evicting it
+00:00 +94: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: logout clears credentials without waiting on a held user write
+00:00 +95: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: restore has a bounded wait without cancelling the pending sign-in
+00:00 +96: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: restore does not wait for remote logout acknowledgement
+00:00 +97: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: refresh during a sign-in request cannot restore the old pair
+00:00 +98: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: refresh refuses an uncommitted pair and works after sign-in settles
+00:00 +99: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: a listener owns its replacement epoch (persistence=false)
+00:00 +100: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: a listener owns its replacement epoch (persistence=true)
+00:00 +101: All tests passed!

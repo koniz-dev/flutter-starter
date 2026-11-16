@@ -1,0 +1,14 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart
+00:00 +0: restore waits for in-flight sign-in persistence instead of evicting it
+00:00 +0 -1: restore waits for in-flight sign-in persistence instead of evicting it [E]
+  Expected: false
+    Actual: <true>
+  
+  package:matcher                                         expect
+  package:flutter_test/src/widget_tester.dart 473:18      expect
+  test/features/auth/sign_in_persistence_test.dart 387:7  main.<fn>
+  
+00:00 +0 -1: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: restore waits for in-flight sign-in persistence instead of evicting it

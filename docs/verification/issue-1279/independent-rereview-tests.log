@@ -1,0 +1,357 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1279-independent-probe_test.dart
+00:00 +0: review: completed remote response racing restore barrier
+REVIEW results=[Success<User>(Instance of 'UserModel'), Success<User?>(Instance of 'UserModel')] vault={auth_token: B-access, refresh_token: B-refresh}
+00:00 +1: review: transport 401 cannot terminate uncommitted replacement
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.debug (package:flutter_starter/core/logging/logging_service.dart:182:13)
+│ #1   ApiLoggingInterceptor.onRequest (package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart:47:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 API Request: GET /users/me | Context: {"method":"GET","path":"/users/me","baseUrl":"http://localhost:3000/v1","headers":{"Content-Type":"application/json","Accept":"application/json","Authorization":"***REDACTED***"}}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+[38;5;196m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m│ DioException [DioExceptionType.cancel] /users/me (status 401)[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ #0   DioMixin.request (package:dio/src/dio_mixin.dart:404:36)[0m
+[38;5;196m│ #1   DioNetworkClient._send (package:flutter_starter/core/network/adapters/dio_network_client.dart:72:35)[0m
+[38;5;196m│ #2   DioNetworkClient.send (package:flutter_starter/core/network/adapters/dio_network_client.dart:47:21)[0m
+[38;5;196m│ #3   ApiClient._send (package:flutter_starter/core/network/api_client.dart:341:35)[0m
+[38;5;196m│ #4   ApiClient.get (package:flutter_starter/core/network/api_client.dart:213:18)[0m
+[38;5;196m│ #5   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1279-independent-probe_test.dart:607:30)[0m
+[38;5;196m│ #6   <asynchronous suspension>[0m
+[38;5;196m│ #7   Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ ⛔ API Error: DioExceptionType.cancel /users/me | Context: {"type":"DioExceptionType.cancel","path":"/users/me","method":"GET","statusCode":401,"responseBody":{}}[0m
+[38;5;196m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+REVIEW 401 sign-in=Success<User>(Instance of 'UserModel') vault={auth_token: B-access, refresh_token: B-refresh}
+00:00 +2: All tests passed!
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1279-independent-controls_test.dart
+00:00 +0: review: pending persistence leaves excluded 401 unchanged: /auth/login
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.debug (package:flutter_starter/core/logging/logging_service.dart:182:13)
+│ #1   ApiLoggingInterceptor.onRequest (package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart:47:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 API Request: GET /auth/login | Context: {"method":"GET","path":"/auth/login","baseUrl":"http://localhost:3000/v1","headers":{"Content-Type":"application/json","Accept":"application/json","Authorization":"***REDACTED***"}}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+[38;5;196m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m│ DioException [DioExceptionType.badResponse] /auth/login (status 401)[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ #0   DioMixin.request (package:dio/src/dio_mixin.dart:404:36)[0m
+[38;5;196m│ #1   DioNetworkClient._send (package:flutter_starter/core/network/adapters/dio_network_client.dart:72:35)[0m
+[38;5;196m│ #2   DioNetworkClient.send (package:flutter_starter/core/network/adapters/dio_network_client.dart:47:21)[0m
+[38;5;196m│ #3   ApiClient._send (package:flutter_starter/core/network/api_client.dart:341:35)[0m
+[38;5;196m│ #4   ApiClient.get (package:flutter_starter/core/network/api_client.dart:213:18)[0m
+[38;5;196m│ #5   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1279-independent-controls_test.dart:591:32)[0m
+[38;5;196m│ #6   <asynchronous suspension>[0m
+[38;5;196m│ #7   Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ ⛔ API Error: DioExceptionType.badResponse /auth/login | Context: {"type":"DioExceptionType.badResponse","path":"/auth/login","method":"GET","statusCode":401,"responseBody":{}}[0m
+[38;5;196m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:00 +0 -1: review: pending persistence leaves excluded 401 unchanged: /auth/login [E]
+  Expected: throws <Instance of 'DioException'> with `original failure type`: DioExceptionType:<DioExceptionType.badResponse>
+    Actual: <Instance of 'Future<NetworkResponse<dynamic>>'>
+     Which: threw ServerException:<ServerException: {}>
+            stack package:flutter_starter/core/network/adapters/dio_network_client.dart 93:9  DioNetworkClient._send
+                  ===== asynchronous gap ===========================
+                  package:matcher                                                             expectLater
+                  package:flutter_test/src/widget_tester.dart 507:8                           expectLater
+                  .git/codex-issue-work/1279-independent-controls_test.dart 591:13            main.<fn>
+                  ===== asynchronous gap ===========================
+                  dart:async                                                                  Zone.registerUnaryCallback
+                  .git/codex-issue-work/1279-independent-controls_test.dart 587:7             main.<fn>
+                  
+            which is not an instance of 'DioException'
+  
+  package:matcher                                                   expectLater
+  package:flutter_test/src/widget_tester.dart 507:8                 expectLater
+  .git/codex-issue-work/1279-independent-controls_test.dart 591:13  main.<fn>
+  ===== asynchronous gap ===========================
+  dart:async                                                        Zone.registerUnaryCallback
+  .git/codex-issue-work/1279-independent-controls_test.dart 587:7   main.<fn>
+  
+00:00 +0 -1: review: pending persistence leaves excluded 401 unchanged: /auth/register
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.debug (package:flutter_starter/core/logging/logging_service.dart:182:13)
+│ #1   ApiLoggingInterceptor.onRequest (package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart:47:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 API Request: GET /auth/register | Context: {"method":"GET","path":"/auth/register","baseUrl":"http://localhost:3000/v1","headers":{"Content-Type":"application/json","Accept":"application/json","Authorization":"***REDACTED***"}}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+[38;5;196m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m│ DioException [DioExceptionType.badResponse] /auth/register (status 401)[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ #0   DioMixin.request (package:dio/src/dio_mixin.dart:404:36)[0m
+[38;5;196m│ #1   DioNetworkClient._send (package:flutter_starter/core/network/adapters/dio_network_client.dart:72:35)[0m
+[38;5;196m│ #2   DioNetworkClient.send (package:flutter_starter/core/network/adapters/dio_network_client.dart:47:21)[0m
+[38;5;196m│ #3   ApiClient._send (package:flutter_starter/core/network/api_client.dart:341:35)[0m
+[38;5;196m│ #4   ApiClient.get (package:flutter_starter/core/network/api_client.dart:213:18)[0m
+[38;5;196m│ #5   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1279-independent-controls_test.dart:591:32)[0m
+[38;5;196m│ #6   <asynchronous suspension>[0m
+[38;5;196m│ #7   Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ ⛔ API Error: DioExceptionType.badResponse /auth/register | Context: {"type":"DioExceptionType.badResponse","path":"/auth/register","method":"GET","statusCode":401,"responseBody":{}}[0m
+[38;5;196m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:00 +0 -2: review: pending persistence leaves excluded 401 unchanged: /auth/register [E]
+  Expected: throws <Instance of 'DioException'> with `original failure type`: DioExceptionType:<DioExceptionType.badResponse>
+    Actual: <Instance of 'Future<NetworkResponse<dynamic>>'>
+     Which: threw ServerException:<ServerException: {}>
+            stack package:flutter_starter/core/network/adapters/dio_network_client.dart 93:9  DioNetworkClient._send
+                  ===== asynchronous gap ===========================
+                  package:matcher                                                             expectLater
+                  package:flutter_test/src/widget_tester.dart 507:8                           expectLater
+                  .git/codex-issue-work/1279-independent-controls_test.dart 591:13            main.<fn>
+                  ===== asynchronous gap ===========================
+                  dart:async                                                                  Zone.registerUnaryCallback
+                  .git/codex-issue-work/1279-independent-controls_test.dart 587:7             main.<fn>
+                  
+            which is not an instance of 'DioException'
+  
+  package:matcher                                                   expectLater
+  package:flutter_test/src/widget_tester.dart 507:8                 expectLater
+  .git/codex-issue-work/1279-independent-controls_test.dart 591:13  main.<fn>
+  ===== asynchronous gap ===========================
+  dart:async                                                        Zone.registerUnaryCallback
+  .git/codex-issue-work/1279-independent-controls_test.dart 587:7   main.<fn>
+  
+00:00 +0 -2: review: pending persistence leaves excluded 401 unchanged: /auth/logout
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.debug (package:flutter_starter/core/logging/logging_service.dart:182:13)
+│ #1   ApiLoggingInterceptor.onRequest (package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart:47:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 API Request: GET /auth/logout | Context: {"method":"GET","path":"/auth/logout","baseUrl":"http://localhost:3000/v1","headers":{"Content-Type":"application/json","Accept":"application/json","Authorization":"***REDACTED***"}}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+[38;5;196m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m│ DioException [DioExceptionType.badResponse] /auth/logout (status 401)[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ #0   DioMixin.request (package:dio/src/dio_mixin.dart:404:36)[0m
+[38;5;196m│ #1   DioNetworkClient._send (package:flutter_starter/core/network/adapters/dio_network_client.dart:72:35)[0m
+[38;5;196m│ #2   DioNetworkClient.send (package:flutter_starter/core/network/adapters/dio_network_client.dart:47:21)[0m
+[38;5;196m│ #3   ApiClient._send (package:flutter_starter/core/network/api_client.dart:341:35)[0m
+[38;5;196m│ #4   ApiClient.get (package:flutter_starter/core/network/api_client.dart:213:18)[0m
+[38;5;196m│ #5   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1279-independent-controls_test.dart:591:32)[0m
+[38;5;196m│ #6   <asynchronous suspension>[0m
+[38;5;196m│ #7   Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ ⛔ API Error: DioExceptionType.badResponse /auth/logout | Context: {"type":"DioExceptionType.badResponse","path":"/auth/logout","method":"GET","statusCode":401,"responseBody":{}}[0m
+[38;5;196m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:00 +0 -3: review: pending persistence leaves excluded 401 unchanged: /auth/logout [E]
+  Expected: throws <Instance of 'DioException'> with `original failure type`: DioExceptionType:<DioExceptionType.badResponse>
+    Actual: <Instance of 'Future<NetworkResponse<dynamic>>'>
+     Which: threw ServerException:<ServerException: {}>
+            stack package:flutter_starter/core/network/adapters/dio_network_client.dart 93:9  DioNetworkClient._send
+                  ===== asynchronous gap ===========================
+                  package:matcher                                                             expectLater
+                  package:flutter_test/src/widget_tester.dart 507:8                           expectLater
+                  .git/codex-issue-work/1279-independent-controls_test.dart 591:13            main.<fn>
+                  ===== asynchronous gap ===========================
+                  dart:async                                                                  Zone.registerUnaryCallback
+                  .git/codex-issue-work/1279-independent-controls_test.dart 587:7             main.<fn>
+                  
+            which is not an instance of 'DioException'
+  
+  package:matcher                                                   expectLater
+  package:flutter_test/src/widget_tester.dart 507:8                 expectLater
+  .git/codex-issue-work/1279-independent-controls_test.dart 591:13  main.<fn>
+  ===== asynchronous gap ===========================
+  dart:async                                                        Zone.registerUnaryCallback
+  .git/codex-issue-work/1279-independent-controls_test.dart 587:7   main.<fn>
+  
+00:00 +0 -3: review: pending persistence leaves excluded 401 unchanged: /auth/refresh
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.debug (package:flutter_starter/core/logging/logging_service.dart:182:13)
+│ #1   ApiLoggingInterceptor.onRequest (package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart:47:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 API Request: GET /auth/refresh | Context: {"method":"GET","path":"/auth/refresh","baseUrl":"http://localhost:3000/v1","headers":{"Content-Type":"application/json","Accept":"application/json","Authorization":"***REDACTED***"}}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+[38;5;196m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m│ DioException [DioExceptionType.badResponse] /auth/refresh (status 401)[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ #0   DioMixin.request (package:dio/src/dio_mixin.dart:404:36)[0m
+[38;5;196m│ #1   DioNetworkClient._send (package:flutter_starter/core/network/adapters/dio_network_client.dart:72:35)[0m
+[38;5;196m│ #2   DioNetworkClient.send (package:flutter_starter/core/network/adapters/dio_network_client.dart:47:21)[0m
+[38;5;196m│ #3   ApiClient._send (package:flutter_starter/core/network/api_client.dart:341:35)[0m
+[38;5;196m│ #4   ApiClient.get (package:flutter_starter/core/network/api_client.dart:213:18)[0m
+[38;5;196m│ #5   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1279-independent-controls_test.dart:591:32)[0m
+[38;5;196m│ #6   <asynchronous suspension>[0m
+[38;5;196m│ #7   Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ ⛔ API Error: DioExceptionType.badResponse /auth/refresh | Context: {"type":"DioExceptionType.badResponse","path":"/auth/refresh","method":"GET","statusCode":401,"responseBody":{}}[0m
+[38;5;196m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:00 +0 -4: review: pending persistence leaves excluded 401 unchanged: /auth/refresh [E]
+  Expected: throws <Instance of 'DioException'> with `original failure type`: DioExceptionType:<DioExceptionType.badResponse>
+    Actual: <Instance of 'Future<NetworkResponse<dynamic>>'>
+     Which: threw ServerException:<ServerException: {}>
+            stack package:flutter_starter/core/network/adapters/dio_network_client.dart 93:9  DioNetworkClient._send
+                  ===== asynchronous gap ===========================
+                  package:matcher                                                             expectLater
+                  package:flutter_test/src/widget_tester.dart 507:8                           expectLater
+                  .git/codex-issue-work/1279-independent-controls_test.dart 591:13            main.<fn>
+                  ===== asynchronous gap ===========================
+                  dart:async                                                                  Zone.registerUnaryCallback
+                  .git/codex-issue-work/1279-independent-controls_test.dart 587:7             main.<fn>
+                  
+            which is not an instance of 'DioException'
+  
+  package:matcher                                                   expectLater
+  package:flutter_test/src/widget_tester.dart 507:8                 expectLater
+  .git/codex-issue-work/1279-independent-controls_test.dart 591:13  main.<fn>
+  ===== asynchronous gap ===========================
+  dart:async                                                        Zone.registerUnaryCallback
+  .git/codex-issue-work/1279-independent-controls_test.dart 587:7   main.<fn>
+  
+00:00 +0 -4: review: pending persistence leaves excluded 401 unchanged: https://other.example.test/users/me
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.debug (package:flutter_starter/core/logging/logging_service.dart:182:13)
+│ #1   ApiLoggingInterceptor.onRequest (package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart:47:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 API Request: GET https://other.example.test/users/me | Context: {"method":"GET","path":"https://other.example.test/users/me","baseUrl":"http://localhost:3000/v1","headers":{"Content-Type":"application/json","Accept":"application/json"}}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+[38;5;196m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m│ DioException [DioExceptionType.badResponse] https://other.example.test/users/me (status 401)[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ #0   DioMixin.request (package:dio/src/dio_mixin.dart:404:36)[0m
+[38;5;196m│ #1   DioNetworkClient._send (package:flutter_starter/core/network/adapters/dio_network_client.dart:72:35)[0m
+[38;5;196m│ #2   DioNetworkClient.send (package:flutter_starter/core/network/adapters/dio_network_client.dart:47:21)[0m
+[38;5;196m│ #3   ApiClient._send (package:flutter_starter/core/network/api_client.dart:341:35)[0m
+[38;5;196m│ #4   ApiClient.get (package:flutter_starter/core/network/api_client.dart:213:18)[0m
+[38;5;196m│ #5   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1279-independent-controls_test.dart:591:32)[0m
+[38;5;196m│ #6   <asynchronous suspension>[0m
+[38;5;196m│ #7   Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ ⛔ API Error: DioExceptionType.badResponse https://other.example.test/users/me | Context: {"type":"DioExceptionType.badResponse","path":"https://other.example.test/users/me","method":"GET","statusCode":401,"responseBody":{}}[0m
+[38;5;196m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:00 +0 -5: review: pending persistence leaves excluded 401 unchanged: https://other.example.test/users/me [E]
+  Expected: throws <Instance of 'DioException'> with `original failure type`: DioExceptionType:<DioExceptionType.badResponse>
+    Actual: <Instance of 'Future<NetworkResponse<dynamic>>'>
+     Which: threw ServerException:<ServerException: {}>
+            stack package:flutter_starter/core/network/adapters/dio_network_client.dart 93:9  DioNetworkClient._send
+                  ===== asynchronous gap ===========================
+                  package:matcher                                                             expectLater
+                  package:flutter_test/src/widget_tester.dart 507:8                           expectLater
+                  .git/codex-issue-work/1279-independent-controls_test.dart 591:13            main.<fn>
+                  ===== asynchronous gap ===========================
+                  dart:async                                                                  Zone.registerUnaryCallback
+                  .git/codex-issue-work/1279-independent-controls_test.dart 587:7             main.<fn>
+                  
+            which is not an instance of 'DioException'
+  
+  package:matcher                                                   expectLater
+  package:flutter_test/src/widget_tester.dart 507:8                 expectLater
+  .git/codex-issue-work/1279-independent-controls_test.dart 591:13  main.<fn>
+  ===== asynchronous gap ===========================
+  dart:async                                                        Zone.registerUnaryCallback
+  .git/codex-issue-work/1279-independent-controls_test.dart 587:7   main.<fn>
+  
+00:00 +0 -5: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1279-independent-controls_test.dart: review: pending persistence leaves excluded 401 unchanged: /auth/login
+  /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1279-independent-controls_test.dart: review: pending persistence leaves excluded 401 unchanged: /auth/logout
+  /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1279-independent-controls_test.dart: review: pending persistence leaves excluded 401 unchanged: /auth/refresh
+  /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1279-independent-controls_test.dart: review: pending persistence leaves excluded 401 unchanged: /auth/register
+  /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1279-independent-controls_test.dart: review: pending persistence leaves excluded 401 unchanged: https://other.example.test/users/me
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1279-independent-controls_test.dart
+00:00 +0: review: pending persistence leaves excluded 401 unchanged: /auth/login
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.debug (package:flutter_starter/core/logging/logging_service.dart:182:13)
+│ #1   ApiLoggingInterceptor.onRequest (package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart:47:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 API Request: GET /auth/login | Context: {"method":"GET","path":"/auth/login","baseUrl":"http://localhost:3000/v1","headers":{"Content-Type":"application/json","Accept":"application/json","Authorization":"***REDACTED***"}}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+[38;5;196m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m│ DioException [DioExceptionType.badResponse] /auth/login (status 401)[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ #0   DioMixin.request (package:dio/src/dio_mixin.dart:404:36)[0m
+[38;5;196m│ #1   DioMixin.get (package:dio/src/dio_mixin.dart:71:12)[0m
+[38;5;196m│ #2   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1279-independent-controls_test.dart:591:36)[0m
+[38;5;196m│ #3   <asynchronous suspension>[0m
+[38;5;196m│ #4   Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)[0m
+[38;5;196m│ #5   <asynchronous suspension>[0m
+[38;5;196m│ #6   Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)[0m
+[38;5;196m│ #7   <asynchronous suspension>[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ ⛔ API Error: DioExceptionType.badResponse /auth/login | Context: {"type":"DioExceptionType.badResponse","path":"/auth/login","method":"GET","statusCode":401,"responseBody":{}}[0m
+[38;5;196m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:00 +1: review: pending persistence leaves excluded 401 unchanged: /auth/register
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.debug (package:flutter_starter/core/logging/logging_service.dart:182:13)
+│ #1   ApiLoggingInterceptor.onRequest (package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart:47:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 API Request: GET /auth/register | Context: {"method":"GET","path":"/auth/register","baseUrl":"http://localhost:3000/v1","headers":{"Content-Type":"application/json","Accept":"application/json","Authorization":"***REDACTED***"}}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+[38;5;196m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m│ DioException [DioExceptionType.badResponse] /auth/register (status 401)[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ #0   DioMixin.request (package:dio/src/dio_mixin.dart:404:36)[0m
+[38;5;196m│ #1   DioMixin.get (package:dio/src/dio_mixin.dart:71:12)[0m
+[38;5;196m│ #2   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1279-independent-controls_test.dart:591:36)[0m
+[38;5;196m│ #3   <asynchronous suspension>[0m
+[38;5;196m│ #4   Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)[0m
+[38;5;196m│ #5   <asynchronous suspension>[0m
+[38;5;196m│ #6   Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)[0m
+[38;5;196m│ #7   <asynchronous suspension>[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ ⛔ API Error: DioExceptionType.badResponse /auth/register | Context: {"type":"DioExceptionType.badResponse","path":"/auth/register","method":"GET","statusCode":401,"responseBody":{}}[0m
+[38;5;196m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:00 +2: review: pending persistence leaves excluded 401 unchanged: /auth/logout
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.debug (package:flutter_starter/core/logging/logging_service.dart:182:13)
+│ #1   ApiLoggingInterceptor.onRequest (package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart:47:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 API Request: GET /auth/logout | Context: {"method":"GET","path":"/auth/logout","baseUrl":"http://localhost:3000/v1","headers":{"Content-Type":"application/json","Accept":"application/json","Authorization":"***REDACTED***"}}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+[38;5;196m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m│ DioException [DioExceptionType.badResponse] /auth/logout (status 401)[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ #0   DioMixin.request (package:dio/src/dio_mixin.dart:404:36)[0m
+[38;5;196m│ #1   DioMixin.get (package:dio/src/dio_mixin.dart:71:12)[0m
+[38;5;196m│ #2   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1279-independent-controls_test.dart:591:36)[0m
+[38;5;196m│ #3   <asynchronous suspension>[0m
+[38;5;196m│ #4   Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)[0m
+[38;5;196m│ #5   <asynchronous suspension>[0m
+[38;5;196m│ #6   Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)[0m
+[38;5;196m│ #7   <asynchronous suspension>[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ ⛔ API Error: DioExceptionType.badResponse /auth/logout | Context: {"type":"DioExceptionType.badResponse","path":"/auth/logout","method":"GET","statusCode":401,"responseBody":{}}[0m
+[38;5;196m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:00 +3: review: pending persistence leaves excluded 401 unchanged: /auth/refresh
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.debug (package:flutter_starter/core/logging/logging_service.dart:182:13)
+│ #1   ApiLoggingInterceptor.onRequest (package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart:47:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 API Request: GET /auth/refresh | Context: {"method":"GET","path":"/auth/refresh","baseUrl":"http://localhost:3000/v1","headers":{"Content-Type":"application/json","Accept":"application/json","Authorization":"***REDACTED***"}}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+[38;5;196m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m│ DioException [DioExceptionType.badResponse] /auth/refresh (status 401)[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ #0   DioMixin.request (package:dio/src/dio_mixin.dart:404:36)[0m
+[38;5;196m│ #1   DioMixin.get (package:dio/src/dio_mixin.dart:71:12)[0m
+[38;5;196m│ #2   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1279-independent-controls_test.dart:591:36)[0m
+[38;5;196m│ #3   <asynchronous suspension>[0m
+[38;5;196m│ #4   Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)[0m
+[38;5;196m│ #5   <asynchronous suspension>[0m
+[38;5;196m│ #6   Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)[0m
+[38;5;196m│ #7   <asynchronous suspension>[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ ⛔ API Error: DioExceptionType.badResponse /auth/refresh | Context: {"type":"DioExceptionType.badResponse","path":"/auth/refresh","method":"GET","statusCode":401,"responseBody":{}}[0m
+[38;5;196m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:00 +4: review: pending persistence leaves excluded 401 unchanged: https://other.example.test/users/me
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.debug (package:flutter_starter/core/logging/logging_service.dart:182:13)
+│ #1   ApiLoggingInterceptor.onRequest (package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart:47:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 API Request: GET https://other.example.test/users/me | Context: {"method":"GET","path":"https://other.example.test/users/me","baseUrl":"http://localhost:3000/v1","headers":{"Content-Type":"application/json","Accept":"application/json"}}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+[38;5;196m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m│ DioException [DioExceptionType.badResponse] https://other.example.test/users/me (status 401)[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ #0   DioMixin.request (package:dio/src/dio_mixin.dart:404:36)[0m
+[38;5;196m│ #1   DioMixin.get (package:dio/src/dio_mixin.dart:71:12)[0m
+[38;5;196m│ #2   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1279-independent-controls_test.dart:591:36)[0m
+[38;5;196m│ #3   <asynchronous suspension>[0m
+[38;5;196m│ #4   Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)[0m
+[38;5;196m│ #5   <asynchronous suspension>[0m
+[38;5;196m│ #6   Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)[0m
+[38;5;196m│ #7   <asynchronous suspension>[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ ⛔ API Error: DioExceptionType.badResponse https://other.example.test/users/me | Context: {"type":"DioExceptionType.badResponse","path":"https://other.example.test/users/me","method":"GET","statusCode":401,"responseBody":{}}[0m
+[38;5;196m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:00 +5: All tests passed!

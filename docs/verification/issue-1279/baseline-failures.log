@@ -1,0 +1,121 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart
+00:00 +0: a rejected refresh write cannot be restored by a fresh repository
+00:00 +0 -1: a rejected refresh write cannot be restored by a fresh repository [E]
+  Expected: null
+    Actual: <Instance of 'UserModel'>
+  
+  package:matcher                                         expect
+  package:flutter_test/src/widget_tester.dart 473:18      expect
+  test/features/auth/sign_in_persistence_test.dart 183:7  main.<fn>
+  
+00:00 +0 -1: login without refresh replaces the complete previous pair
+00:00 +0 -2: login without refresh replaces the complete previous pair [E]
+  Expected: null
+    Actual: 'A-refresh'
+  
+  package:matcher                                         expect
+  package:flutter_test/src/widget_tester.dart 473:18      expect
+  test/features/auth/sign_in_persistence_test.dart 200:9  main.<fn>
+  
+00:00 +0 -2: login access false cannot leave a restorable failed session
+00:00 +0 -3: login access false cannot leave a restorable failed session [E]
+  Expected: null
+    Actual: <Instance of 'UserModel'>
+  
+  package:matcher                                          expect
+  package:flutter_test/src/widget_tester.dart 473:18       expect
+  test/features/auth/sign_in_persistence_test.dart 227:11  main.<fn>
+  
+00:00 +0 -3: login access exception cannot leave a restorable failed session
+00:00 +0 -4: login access exception cannot leave a restorable failed session [E]
+  Expected: null
+    Actual: <Instance of 'UserModel'>
+  
+  package:matcher                                          expect
+  package:flutter_test/src/widget_tester.dart 473:18       expect
+  test/features/auth/sign_in_persistence_test.dart 227:11  main.<fn>
+  
+00:00 +0 -4: login access error cannot leave a restorable failed session
+00:00 +0 -5: login access error cannot leave a restorable failed session [E]
+  Expected: null
+    Actual: <Instance of 'UserModel'>
+  
+  package:matcher                                          expect
+  package:flutter_test/src/widget_tester.dart 473:18       expect
+  test/features/auth/sign_in_persistence_test.dart 227:11  main.<fn>
+  
+00:00 +0 -5: login refresh false cannot leave a restorable failed session
+00:01 +0 -6: login refresh false cannot leave a restorable failed session [E]
+  Expected: null
+    Actual: <Instance of 'UserModel'>
+  
+  package:matcher                                          expect
+  package:flutter_test/src/widget_tester.dart 473:18       expect
+  test/features/auth/sign_in_persistence_test.dart 227:11  main.<fn>
+  
+00:01 +0 -6: login refresh exception cannot leave a restorable failed session
+00:01 +0 -7: login refresh exception cannot leave a restorable failed session [E]
+  Expected: null
+    Actual: <Instance of 'UserModel'>
+  
+[... 102 lines elided ...]
+  
+00:01 +0 -18: register user false cannot leave a restorable failed session
+00:01 +0 -19: register user false cannot leave a restorable failed session [E]
+  Expected: null
+    Actual: <Instance of 'UserModel'>
+  
+  package:matcher                                          expect
+  package:flutter_test/src/widget_tester.dart 473:18       expect
+  test/features/auth/sign_in_persistence_test.dart 227:11  main.<fn>
+  
+00:01 +0 -19: register user exception cannot leave a restorable failed session
+00:01 +0 -20: register user exception cannot leave a restorable failed session [E]
+  Expected: null
+    Actual: <Instance of 'UserModel'>
+  
+  package:matcher                                          expect
+  package:flutter_test/src/widget_tester.dart 473:18       expect
+  test/features/auth/sign_in_persistence_test.dart 227:11  main.<fn>
+  
+00:01 +0 -20: register user error cannot leave a restorable failed session
+00:01 +0 -21: register user error cannot leave a restorable failed session [E]
+  Expected: null
+    Actual: <Instance of 'UserModel'>
+  
+  package:matcher                                          expect
+  package:flutter_test/src/widget_tester.dart 473:18       expect
+  test/features/auth/sign_in_persistence_test.dart 227:11  main.<fn>
+  
+00:01 +0 -21: remote ServerException: Rejected preserves the existing usable session
+00:01 +1 -21: remote NetworkException: Offline preserves the existing usable session
+00:01 +2 -21: a queued sign-in survives an earlier held user write (fails=false)
+00:01 +2 -22: a queued sign-in survives an earlier held user write (fails=false) [E]
+  Expected: ['A']
+    Actual: ['A', 'B']
+     Which: at location [1] is ['A', 'B'] which longer than expected
+  B waits for every earlier local mutation
+  
+  package:matcher                                         expect
+  package:flutter_test/src/widget_tester.dart 473:18      expect
+  test/features/auth/sign_in_persistence_test.dart 279:9  main.<fn>
+  
+00:01 +2 -22: a queued sign-in survives an earlier held user write (fails=true)
+00:01 +2 -23: a queued sign-in survives an earlier held user write (fails=true) [E]
+  Expected: ['A']
+    Actual: ['A', 'B']
+     Which: at location [1] is ['A', 'B'] which longer than expected
+  B waits for every earlier local mutation
+  
+  package:matcher                                         expect
+  package:flutter_test/src/widget_tester.dart 473:18      expect
+  test/features/auth/sign_in_persistence_test.dart 279:9  main.<fn>
+  
+00:01 +2 -23: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: a queued sign-in survives an earlier held user write (fails=false)
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: a queued sign-in survives an earlier held user write (fails=true)
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: a rejected refresh write cannot be restored by a fresh repository
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/sign_in_persistence_test.dart: login access error cannot leave a restorable failed session
+  ... and 19 more
