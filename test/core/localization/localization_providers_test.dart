@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/di/providers.dart';
 import 'package:flutter_starter/core/localization/localization_providers.dart';
@@ -103,6 +105,25 @@ void main() {
     });
 
     group('LocaleNotifier', () {
+      test(
+        'runtime locale delayed restore preserves a new manual choice',
+        () async {
+          final pending = Completer<Locale>();
+          final container = ProviderContainer(
+            overrides: [
+              currentLocaleProvider.overrideWith((ref) => pending.future),
+            ],
+          );
+          addTearDown(container.dispose);
+          container.read(localeStateProvider.notifier).locale = const Locale(
+            'es',
+          );
+          pending.complete(const Locale('en'));
+          await container.pump();
+          expect(container.read(localeStateProvider), const Locale('es'));
+        },
+      );
+
       test('should initialize with default locale', () {
         // Arrange
         final container = ProviderContainer(

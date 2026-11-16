@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/di/providers.dart';
+import 'package:flutter_starter/core/localization/localization_providers.dart';
 import 'package:flutter_starter/core/logging/error_reporter_providers.dart';
 import 'package:flutter_starter/core/logging/i_error_reporter.dart';
 import 'package:flutter_starter/core/startup/startup_failure_app.dart';
@@ -714,6 +715,40 @@ void main() {
   });
 
   group('main() boots MyApp end to end on a healthy startup', () {
+    testWidgets('runtime locale handles a change as bootstrap finishes', (
+      tester,
+    ) async {
+      installSecureBackend(<String, String>{});
+      tester.platformDispatcher.localesTestValue = const [Locale('en')];
+      addTearDown(tester.platformDispatcher.clearLocalesTestValue);
+      final container = app.createAppContainer();
+      addTearDown(container.dispose);
+      await bootRealMain(
+        tester,
+        entry: () async {
+          await app.bootstrap(createContainer: () => container);
+          await container.read(currentLocaleProvider.future);
+          tester.platformDispatcher.localesTestValue = const [Locale('vi')];
+        },
+      );
+      final materialApp = tester.widget<MaterialApp>(find.byType(MaterialApp));
+      expect(materialApp.locale?.languageCode, 'vi');
+    });
+
+    testWidgets('runtime locale follows the platform after real startup', (
+      tester,
+    ) async {
+      installSecureBackend(<String, String>{});
+      tester.platformDispatcher.localesTestValue = const [Locale('en')];
+      addTearDown(tester.platformDispatcher.clearLocalesTestValue);
+      await bootRealMain(tester);
+      expect(find.byType(app.MyApp), findsOneWidget);
+      tester.platformDispatcher.localesTestValue = const [Locale('vi')];
+      await tester.pumpAndSettle();
+      final materialApp = tester.widget<MaterialApp>(find.byType(MaterialApp));
+      expect(materialApp.locale?.languageCode, 'vi');
+    });
+
     testWidgets('wrong preference type: language boots in the device locale', (
       tester,
     ) async {
