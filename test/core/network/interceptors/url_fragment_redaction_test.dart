@@ -23,6 +23,11 @@ class _ResponseHandler extends ResponseInterceptorHandler {}
 void main() {
   const redacted = '***REDACTED***';
   const cases = {
+    '/cb#/a=b?co?de=SECRET': '/cb#/a=b?co?de=$redacted',
+    '/cb#/a=b?tok?en=SECRET': '/cb#/a=b?tok?en=$redacted',
+    '/cb#/a=b?view?co?de=SECRET?private_tail&state=ok':
+        '/cb#/a=b?view?co?de=$redacted&state=ok',
+    '/cb#/a=b?view?%63o?de=SECRET': '/cb#/a=b?view?%63o?de=$redacted',
     'https://h/cb#cb?code=SECRET': 'https://h/cb#cb?code=$redacted',
     'https://h/cb#/a=b?token=SECRET': 'https://h/cb#/a=b?token=$redacted',
     '/cb#cb?view=compact?code=SECRET&state=ok':
@@ -63,6 +68,10 @@ void main() {
       '/guide#section-2',
       '/guide#section?view=compact',
       '/guide#/a=b?view=compact',
+      '/guide#/a=b?view?ti?tle=compact',
+      '/guide#/a=b?view?codeCount=2',
+      '/guide#/a=b?prefix?co?dex=public',
+      '/guide#/a=b?prefix%3Fcode=public',
       '/guide#section?view=compact?sort=name',
       '/guide#!/token/callback?view=compact',
       '/guide#/token/callback?view=compact',

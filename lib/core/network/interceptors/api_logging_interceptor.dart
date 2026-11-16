@@ -352,11 +352,16 @@ class ApiLoggingInterceptor extends Interceptor {
     final safeQueries = safeFragment
         .split('&')
         .map((pair) {
-          for (final parameter in _fragmentQueryParameters.allMatches(pair)) {
-            final key = _decodeKey(parameter.group(1)!);
-            if (key == null || isSensitiveQueryKey(key)) {
-              return '${pair.substring(0, parameter.end)}$_redacted';
+          var cursor = 0;
+          while (true) {
+            final query = pair.indexOf('?', cursor);
+            if (query < 0) break;
+            final equals = pair.indexOf('=', query + 1);
+            if (equals < 0) break;
+            if (_hasSensitiveFragmentKey(pair.substring(query + 1, equals))) {
+              return '${pair.substring(0, equals + 1)}$_redacted';
             }
+            cursor = equals + 1;
           }
           return pair;
         })
@@ -364,7 +369,32 @@ class ApiLoggingInterceptor extends Interceptor {
     return '$safeBase#$safeQueries';
   }
 
-  static final RegExp _fragmentQueryParameters = RegExp(r'\?([^?=]*)=');
+  // All suffix keys share the same '='. Normalize each part once instead of
+  // repeatedly copying/decoding the suffix after every '?' in a long key.
+  static bool _hasSensitiveFragmentKey(String rawKey) {
+    final parts = <String>[];
+    for (final part in rawKey.split('?')) {
+      final key = _decodeKey(part);
+      if (key == null) return true;
+      parts.add(_normalizeKey(key));
+    }
+    final normalized = parts.join();
+    // A fragment rule matching any suffix also matches this complete key.
+    if (isSensitiveQueryKey(normalized)) return true;
+    var remaining = normalized.length;
+    for (final part in parts) {
+      remaining -= part.length;
+      // Exact rules may match only a suffix, e.g. 'view?co?de'. Compare fixed
+      // key lengths and endings without constructing each growing suffix.
+      bool matches(String key) =>
+          key.length == remaining && normalized.endsWith(key);
+      if (_sensitiveKeysExact.any(matches) ||
+          _sensitiveQueryOnlyKeys.any(matches)) {
+        return true;
+      }
+    }
+    return false;
+  }
 
   static String _redactParameters(String parameters) => parameters
       .split('&')
