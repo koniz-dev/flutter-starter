@@ -199,7 +199,7 @@ Future<void> _bootstrap({
 
     final localizationService = container.read(localizationServiceProvider);
     final savedLocale = await localizationService.getCurrentLocale();
-    container.read(localeStateProvider.notifier).locale = savedLocale;
+    container.read(localeStateProvider.notifier).restoreLocale(savedLocale);
   } on Object catch (error, stackTrace) {
     // Caught here, so neither uncaught-error handler sees it: report it
     // explicitly, or a failed launch never reaches the bound IErrorReporter.
@@ -245,11 +245,38 @@ Future<void> _initializeImageCache() async {
   imageCache.maximumSizeBytes = 100 << 20;
 }
 
-class MyApp extends ConsumerWidget {
+class MyApp extends ConsumerStatefulWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    // Catch a platform change after startup restored its fallback but before
+    // this widget mounted. Refresh after the frame, outside widget creation.
+    WidgetsBinding.instance.addPostFrameCallback((_) => _refreshLocale());
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeLocales(List<Locale>? locales) => _refreshLocale();
+
+  void _refreshLocale() {
+    if (mounted) ref.invalidate(currentLocaleProvider);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final locale = ref.watch<Locale>(localeStateProvider);
     final textDirection = ref.watch<TextDirection>(textDirectionProvider);
     final router = ref.watch(goRouterProvider);
