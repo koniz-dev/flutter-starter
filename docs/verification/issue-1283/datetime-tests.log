@@ -1,0 +1,35 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_extensions_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_extensions_test.dart: DateTimeExtensions isToday should return true for today
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Asia/Ho_Chi_Minh
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Asia/Ho_Chi_Minh
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Asia/Ho_Chi_Minh
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Asia/Ho_Chi_Minh
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Asia/Ho_Chi_Minh
+00:00 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Asia/Ho_Chi_Minh
+00:00 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Asia/Ho_Chi_Minh
+00:00 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Asia/Ho_Chi_Minh
+00:00 +9: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Asia/Ho_Chi_Minh
+00:00 +10: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Asia/Ho_Chi_Minh
+00:00 +11: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Asia/Ho_Chi_Minh
+00:00 +12: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Asia/Ho_Chi_Minh
+00:00 +13: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Asia/Ho_Chi_Minh
+00:00 +14: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Asia/Ho_Chi_Minh
+00:00 +15: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Asia/Ho_Chi_Minh
+00:00 +16: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Asia/Ho_Chi_Minh
+00:00 +17: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Asia/Ho_Chi_Minh
+00:00 +18: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Asia/Ho_Chi_Minh
+00:00 +19: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Asia/Ho_Chi_Minh
+00:00 +20: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Asia/Ho_Chi_Minh
+00:00 +21: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Asia/Ho_Chi_Minh
+00:00 +22: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Asia/Ho_Chi_Minh
+TZ=Asia/Ho_Chi_Minh: 7|true,true,true,true,true,true,true,true,true,true
+
+00:00 +23: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Pacific/Kiritimati
+TZ=Pacific/Kiritimati: 14|true,true,true,true,true,true,true,true,true,true
+
+00:01 +24: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Etc/GMT+12
+TZ=Etc/GMT+12: -12|true,true,true,true,true,true,true,true,true,true
+
+00:01 +25: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: yesterday and tomorrow are calendar days across a DST change
+00:02 +26: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: the getters still answer for the current day
+00:02 +27: All tests passed!

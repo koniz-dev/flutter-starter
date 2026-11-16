@@ -1,0 +1,66 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_extensions_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_extensions_test.dart: DateTimeExtensions UTC receiver stays inside its UTC calendar boundaries
+00:00 +0 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Asia/Ho_Chi_Minh
+00:00 +0 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_extensions_test.dart: DateTimeExtensions UTC receiver stays inside its UTC calendar boundaries [E]
+  Expected: DateTime:<2024-01-15 00:00:00.000Z>
+    Actual: DateTime:<2024-01-15 00:00:00.000>
+  
+  package:matcher                                            expect
+  package:flutter_test/src/widget_tester.dart 473:18         expect
+  test/shared/extensions/datetime_extensions_test.dart 59:7  main.<fn>.<fn>
+  
+00:00 +0 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Asia/Ho_Chi_Minh
+TZ=Asia/Ho_Chi_Minh: 7|false,false,false,false,false,false,false,false,false,false
+
+00:00 +0 -2: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Asia/Ho_Chi_Minh [E]
+  Expected: '7|true,true,true,true,true,true,true,true,true,true'
+    Actual: '7|false,false,false,false,false,false,false,false,false,false'
+     Which: is different.
+            Expected: 7|true,true, ...
+              Actual: 7|false,fals ...
+                        ^
+             Differ at offset 2
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/shared/extensions/datetime_dst_test.dart 73:7  main.<fn>
+  
+00:00 +0 -2: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Pacific/Kiritimati
+TZ=Pacific/Kiritimati: 14|false,false,false,false,false,false,false,false,false,false
+
+00:01 +0 -3: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Pacific/Kiritimati [E]
+  Expected: '14|true,true,true,true,true,true,true,true,true,true'
+    Actual: '14|false,false,false,false,false,false,false,false,false,false'
+     Which: is different.
+            Expected: 14|true,true, ...
+              Actual: 14|false,fals ...
+                         ^
+             Differ at offset 3
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/shared/extensions/datetime_dst_test.dart 73:7  main.<fn>
+  
+00:01 +0 -3: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Etc/GMT+12
+TZ=Etc/GMT+12: -12|false,false,false,false,true,true,true,true,true,true
+
+00:01 +0 -4: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Etc/GMT+12 [E]
+  Expected: '-12|true,true,true,true,true,true,true,true,true,true'
+    Actual: '-12|false,false,false,false,true,true,true,true,true,true'
+     Which: is different.
+            Expected: -12|true,true, ...
+              Actual: -12|false,fals ...
+                          ^
+             Differ at offset 4
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/shared/extensions/datetime_dst_test.dart 73:7  main.<fn>
+  
+00:01 +0 -4: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Asia/Ho_Chi_Minh
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Etc/GMT+12
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Pacific/Kiritimati
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_extensions_test.dart: DateTimeExtensions UTC receiver stays inside its UTC calendar boundaries

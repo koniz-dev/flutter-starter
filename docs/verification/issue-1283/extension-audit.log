@@ -1,0 +1,86 @@
+==> env asset guard
+OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+==> generated code (skipped: AUDIT_SKIP_CODEGEN=1)
+==> format (lib test integration_test tool examples)
+Formatted 638 files (0 changed) in 1.67 seconds.
+==> flutter analyze
+Analyzing flutter-starter...                                    
+No issues found! (ran in 4.8s)
+==> flutter test
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_extensions_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_extensions_test.dart: DateTimeExtensions isToday should return true for today
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Asia/Ho_Chi_Minh
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Asia/Ho_Chi_Minh
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Asia/Ho_Chi_Minh
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Asia/Ho_Chi_Minh
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Asia/Ho_Chi_Minh
+00:00 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Asia/Ho_Chi_Minh
+00:00 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Asia/Ho_Chi_Minh
+00:00 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Asia/Ho_Chi_Minh
+00:00 +9: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Asia/Ho_Chi_Minh
+00:00 +10: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Asia/Ho_Chi_Minh
+00:00 +11: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Asia/Ho_Chi_Minh
+00:00 +12: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Asia/Ho_Chi_Minh
+00:00 +13: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Asia/Ho_Chi_Minh
+00:00 +14: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Asia/Ho_Chi_Minh
+00:00 +15: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Asia/Ho_Chi_Minh
+00:00 +16: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Asia/Ho_Chi_Minh
+00:00 +17: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Asia/Ho_Chi_Minh
+00:00 +18: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Asia/Ho_Chi_Minh
+00:00 +19: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Asia/Ho_Chi_Minh
+00:00 +20: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Asia/Ho_Chi_Minh
+00:00 +21: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Asia/Ho_Chi_Minh
+00:00 +22: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Asia/Ho_Chi_Minh
+TZ=Asia/Ho_Chi_Minh: 7|true,true,true,true,true,true,true,true,true,true
+
+00:00 +23: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Pacific/Kiritimati
+TZ=Pacific/Kiritimati: 14|true,true,true,true,true,true,true,true,true,true
+
+00:01 +24: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: UTC receiver semantics in Etc/GMT+12
+TZ=Etc/GMT+12: -12|true,true,true,true,true,true,true,true,true,true
+
+00:01 +25: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: yesterday and tomorrow are calendar days across a DST change
+00:02 +26: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/datetime_dst_test.dart: the getters still answer for the current day
+00:04 +27: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/string_extensions_test.dart: StringExtensions isValidEmail should return true for valid email addresses
+00:04 +28: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/string_extensions_test.dart: StringExtensions isValidEmail should return false for invalid email addresses
+00:04 +29: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/string_extensions_test.dart: StringExtensions isValidEmail agrees with Validators.isValidEmail on its case table
+00:04 +30: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/string_extensions_test.dart: StringExtensions isValidPhone should return true for valid phone numbers
+00:04 +31: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/string_extensions_test.dart: StringExtensions isValidPhone should return false for invalid phone numbers
+00:04 +32: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/string_extensions_test.dart: StringExtensions capitalize should capitalize first letter
+00:04 +33: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/string_extensions_test.dart: StringExtensions capitalize should return empty string if string is empty
+00:04 +34: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/string_extensions_test.dart: StringExtensions capitalize should handle single character
+00:04 +35: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/string_extensions_test.dart: StringExtensions capitalizeWords should capitalize first letter of each word
+00:04 +36: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/string_extensions_test.dart: StringExtensions capitalizeWords should return empty string if string is empty
+00:04 +37: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/string_extensions_test.dart: StringExtensions capitalizeWords should handle single word
+00:04 +38: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/string_extensions_test.dart: StringExtensions removeWhitespace should remove all whitespace
+00:04 +39: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/string_extensions_test.dart: StringExtensions removeWhitespace should return same string if no whitespace
+00:04 +40: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/string_extensions_test.dart: StringExtensions isNullOrEmpty should return true for empty string
+00:04 +41: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/string_extensions_test.dart: StringExtensions isNullOrEmpty should return false for non-empty string
+00:04 +42: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/string_extensions_test.dart: StringExtensions Edge Cases capitalize should handle special characters
+00:04 +43: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/string_extensions_test.dart: StringExtensions Edge Cases capitalizeWords should handle multiple spaces
+00:04 +44: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/string_extensions_test.dart: StringExtensions Edge Cases removeWhitespace should handle all whitespace types
+00:04 +45: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/string_extensions_test.dart: NullableStringExtensions isNullOrEmpty should return true for null string
+00:04 +46: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/string_extensions_test.dart: NullableStringExtensions isNullOrEmpty should return true for empty string
+00:04 +47: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/string_extensions_test.dart: NullableStringExtensions isNullOrEmpty should return false for non-empty string
+00:04 +48: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/string_extensions_test.dart: NullableStringExtensions orEmpty should return empty string for null
+00:04 +49: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/string_extensions_test.dart: NullableStringExtensions orEmpty should return string value if not null
+00:04 +50: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:05 +51: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/context_extensions_test.dart: ContextExtensions should get theme
+00:05 +52: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/context_extensions_test.dart: ContextExtensions should get theme
+00:05 +53: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/context_extensions_test.dart: ContextExtensions should get theme
+00:05 +54: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/context_extensions_test.dart: ContextExtensions should get theme
+00:05 +55: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/context_extensions_test.dart: ContextExtensions should get theme
+00:05 +56: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/context_extensions_test.dart: ContextExtensions should get textTheme
+00:05 +57: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/context_extensions_test.dart: ContextExtensions should get colorScheme
+00:05 +58: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/context_extensions_test.dart: ContextExtensions should get mediaQuery
+00:05 +59: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/context_extensions_test.dart: ContextExtensions should get screenSize
+00:05 +60: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/context_extensions_test.dart: ContextExtensions should get screenWidth
+00:05 +61: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/context_extensions_test.dart: ContextExtensions should get screenHeight
+00:05 +62: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/context_extensions_test.dart: ContextExtensions should detect mobile screen
+00:06 +63: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/context_extensions_test.dart: ContextExtensions should detect tablet screen
+00:06 +64: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/context_extensions_test.dart: ContextExtensions should detect desktop screen
+00:06 +65: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/context_extensions_test.dart: ContextExtensions should show snackbar
+00:06 +66: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/context_extensions_test.dart: ContextExtensions should show error snackbar
+00:06 +67: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/context_extensions_test.dart: ContextExtensions should show success snackbar
+00:06 +68: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/context_extensions_test.dart: ContextExtensions context.pop() is unambiguous when go_router is also imported
+00:06 +69: All tests passed!
