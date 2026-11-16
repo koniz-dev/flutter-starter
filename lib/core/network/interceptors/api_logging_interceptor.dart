@@ -343,23 +343,28 @@ class ApiLoggingInterceptor extends Interceptor {
         isRoute && routeQuery >= 0 && (equals < 0 || routeQuery < equals)
         ? routeQuery + 1
         : 0;
-    var safeFragment =
+    final safeFragment =
         '${fragment.substring(0, prefixLength)}'
         '${_redactParameters(fragment.substring(prefixLength))}';
     // A fragment may have a plain prefix or an '=' before its router query.
-    // Inspect each remaining query suffix, keeping a sensitive value intact
-    // until it is replaced (including any '?' inside that secret value).
-    for (
-      var query = safeFragment.indexOf('?');
-      query >= 0;
-      query = safeFragment.indexOf('?', query + 1)
-    ) {
-      safeFragment =
-          '${safeFragment.substring(0, query + 1)}'
-          '${_redactParameters(safeFragment.substring(query + 1))}';
-    }
-    return '$safeBase#$safeFragment';
+    // Scan non-overlapping query keys within each '&' field once, then replace
+    // the entire sensitive value, including any '?' in that secret value.
+    final safeQueries = safeFragment
+        .split('&')
+        .map((pair) {
+          for (final parameter in _fragmentQueryParameters.allMatches(pair)) {
+            final key = _decodeKey(parameter.group(1)!);
+            if (key == null || isSensitiveQueryKey(key)) {
+              return '${pair.substring(0, parameter.end)}$_redacted';
+            }
+          }
+          return pair;
+        })
+        .join('&');
+    return '$safeBase#$safeQueries';
   }
+
+  static final RegExp _fragmentQueryParameters = RegExp(r'\?([^?=]*)=');
 
   static String _redactParameters(String parameters) => parameters
       .split('&')
