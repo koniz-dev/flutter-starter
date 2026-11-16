@@ -223,6 +223,23 @@ static Map<String, dynamic> removeNulls(Map<String, dynamic>? map);
 static String toQueryString(Map<String, dynamic>? map);
 ```
 
+### Integer extraction contract
+
+`getInt` accepts finite integral numbers or trimmed signed decimal/`0x` integer
+text. The value must fit the signed 64-bit range and the target's `int` exactly.
+Fractions, non-finite values, overflow and rounding return `null`; precision
+already lost before calling the helper cannot be recovered. For decimal IDs
+that must retain all digits across targets, keep the string via `getString`.
+
+| Input value | Result |
+|---|---|
+| `42`, `42.0`, `'42'`, `'0x2a'` | `42` |
+| `1.9`, `1e20` | `null` |
+| `'9223372036854775807'` | accepted on the VM; `null` on JavaScript, where that exact integer cannot be represented |
+
+Code needing intentional truncation must validate its range and explicitly
+truncate before extraction.
+
 ### Usage Examples
 
 #### Decoding JSON
@@ -376,6 +393,33 @@ static bool isValidUrl(String url);
 /// Check if string is empty or null
 static bool isEmpty(String? value);
 ```
+
+### Phone and URL contracts
+
+`isValidPhone` checks a basic format of 7-15 ASCII digits, with an optional
+leading `+`. It trims surrounding whitespace and allows spaces/hyphens between
+digit groups. Local numbers may start with zero; a `+` country prefix may not.
+Other punctuation and letters are rejected. It does not check national number
+allocation. `StringExtensions.isValidPhone` delegates to the same contract.
+
+| Phone input | Result |
+|---|---|
+| `'12'` | `false` |
+| `'0912345678'` | `true` |
+| `'+1 555 123 4567'` | `true` |
+
+`isValidUrl` accepts absolute `http`, `https`, `ftp`, `ws` and `wss` URLs with an
+ASCII DNS/punycode hostname, IPv4 or bracketed IPv6 address. Single labels such
+as `localhost` and a trailing DNS root dot are supported. DNS labels contain
+1-63 ASCII letters/digits/hyphens, begin/end with a letter or digit, and total
+at most 253 characters without the root dot. Explicit ports must be 0-65535.
+Raw whitespace, control characters and backslashes are rejected; encode path
+spaces and use the ASCII/punycode form for international hostnames. This checks
+syntax, not reachability or authorization of a destination.
+
+`'http://exa mple.com'`, `'http://.'` and `'javascript://alert(1)'` return `false`.
+Callers needing another URI scheme should choose their own policy around
+`Uri.tryParse`.
 
 ### Usage Examples
 
