@@ -22,7 +22,7 @@ class _UnreadableLegacyStorage extends StorageService {
     if (key == 'user_tags') {
       throw const CacheException('Read unavailable', code: 'STORE_READ_FAILED');
     }
-    return super.getString(key);
+    return await super.getString(key);
   }
 }
 
