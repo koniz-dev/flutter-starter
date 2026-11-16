@@ -99,14 +99,17 @@ final Provider<AuthRepository> authRepositoryProvider =
         // repository and one in the interceptor; they only agree about which
         // session is live if they share this counter.
         sessionGeneration: ref.watch(sessionGenerationProvider),
+        sessionSink: ref.read(sessionTerminationSinkProvider),
       );
     });
 ```
 
 An override of `authRepositoryProvider` - a different data source, say - must
-pass `httpCache` and `sessionGeneration` as well. Both are optional, so an
-override without them compiles, but logout then stops clearing the HTTP cache
-and a 401 refresh can write credentials into a session that has ended.
+pass `httpCache`, `sessionGeneration` and `sessionSink` as well. These are
+optional, so an override without them compiles, but logout then stops clearing
+the HTTP cache, a 401 refresh can write credentials into a session that has
+ended, and a local sign-in replacement cannot clear the old visible user through
+the configured termination sink.
 
 
 ---
