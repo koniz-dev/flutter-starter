@@ -1,0 +1,288 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/device_locale_test.dart
+No tests ran.
+No tests match "runtime locale|independent".
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/device_locale_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/device_locale_test.dart: runtime system locale runtime locale refreshes a fallback captured before mounting
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/device_locale_test.dart: runtime system locale runtime locale refreshes a fallback captured before mounting
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/startup/startup_reachability_test.dart: main() boots MyApp end to end on a healthy startup runtime locale handles a change as bootstrap finishes
+═══════════════════════════════════════════════════════════
+📱 App Configuration
+═══════════════════════════════════════════════════════════
+Environment: development
+Debug Mode: true
+Release Mode: false
+
+🌐 API Configuration:
+  Base URL: http://localhost:3000
+  Timeout: 30s
+  Connect Timeout: 10s
+  Receive Timeout: 30s
+  Send Timeout: 30s
+  SSL Pinning Requested: false
+  SSL Pinning Effective: false
+  SSL Fingerprints Configured: 0
+
+🚩 Feature Flags:
+  Logging: true
+  Analytics: false
+  Crash Reporting: false
+  Performance Monitoring: false
+  Debug Features: true
+  HTTP Logging: true
+═══════════════════════════════════════════════════════════
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   StorageMigrationService.migrateAll (package:flutter_starter/core/storage/storage_migration_service.dart:60:22)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Starting regular storage migration[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   MigrationExecutor.execute (package:flutter_starter/core/storage/migration/migration_executor.dart:64:20)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Starting storage migration | Context: {"current_version":1,"target_version":2,"migrations_count":1}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   MigrationExecutor.execute (package:flutter_starter/core/storage/migration/migration_executor.dart:111:24)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Executing migration: Migrate user preferences: rename keys and update data format | Context: {"from_version":1,"to_version":2}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   MigrationExecutor.execute (package:flutter_starter/core/storage/migration/migration_executor.dart:121:24)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Migration completed successfully | Context: {"from_version":1,"to_version":2}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   MigrationExecutor.execute (package:flutter_starter/core/storage/migration/migration_executor.dart:186:20)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 All migrations completed successfully | Context: {"final_version":2}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   StorageMigrationService.migrateAll (package:flutter_starter/core/storage/storage_migration_service.dart:70:22)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Starting secure storage migration[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   MigrationExecutor.execute (package:flutter_starter/core/storage/migration/migration_executor.dart:64:20)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Starting storage migration | Context: {"current_version":1,"target_version":2,"migrations_count":1}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   MigrationExecutor.execute (package:flutter_starter/core/storage/migration/migration_executor.dart:111:24)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Executing migration: Migrate user preferences: rename keys and update data format | Context: {"from_version":1,"to_version":2}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   MigrationExecutor.execute (package:flutter_starter/core/storage/migration/migration_executor.dart:121:24)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Migration completed successfully | Context: {"from_version":1,"to_version":2}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   MigrationExecutor.execute (package:flutter_starter/core/storage/migration/migration_executor.dart:186:20)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 All migrations completed successfully | Context: {"final_version":2}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   StorageMigrationService.migrateAll (package:flutter_starter/core/storage/storage_migration_service.dart:79:22)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 All storage migrations completed | Context: {"regular":2,"secure":2}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/device_locale_test.dart: runtime system locale runtime locale refreshes a fallback captured before mounting
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:01 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/startup/startup_reachability_test.dart: main() boots MyApp end to end on a healthy startup runtime locale handles a change as bootstrap finishes
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:01 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/startup/startup_reachability_test.dart: main() boots MyApp end to end on a healthy startup runtime locale handles a change as bootstrap finishes
+00:01 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/device_locale_test.dart: runtime system locale runtime locale follows platform changes (corrupt=false)
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:01 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/startup/startup_reachability_test.dart: main() boots MyApp end to end on a healthy startup runtime locale handles a change as bootstrap finishes
+00:01 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/device_locale_test.dart: runtime system locale runtime locale follows platform changes (corrupt=true)
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:02 +4: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1282_independent_probe_test.dart: independent observer leaves after unmount and catches remount
+00:02 +5: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1282_independent_probe_test.dart: independent observer leaves after unmount and catches remount
+00:02 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/startup/startup_reachability_test.dart: main() boots MyApp end to end on a healthy startup runtime locale follows the platform after real startup
+═══════════════════════════════════════════════════════════
+📱 App Configuration
+═══════════════════════════════════════════════════════════
+Environment: development
+Debug Mode: true
+Release Mode: false
+
+🌐 API Configuration:
+  Base URL: http://localhost:3000
+  Timeout: 30s
+  Connect Timeout: 10s
+  Receive Timeout: 30s
+  Send Timeout: 30s
+  SSL Pinning Requested: false
+  SSL Pinning Effective: false
+  SSL Fingerprints Configured: 0
+
+🚩 Feature Flags:
+  Logging: true
+  Analytics: false
+  Crash Reporting: false
+  Performance Monitoring: false
+  Debug Features: true
+  HTTP Logging: true
+═══════════════════════════════════════════════════════════
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   StorageMigrationService.migrateAll (package:flutter_starter/core/storage/storage_migration_service.dart:60:22)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Starting regular storage migration[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   MigrationExecutor.execute (package:flutter_starter/core/storage/migration/migration_executor.dart:64:20)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Starting storage migration | Context: {"current_version":1,"target_version":2,"migrations_count":1}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   MigrationExecutor.execute (package:flutter_starter/core/storage/migration/migration_executor.dart:111:24)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Executing migration: Migrate user preferences: rename keys and update data format | Context: {"from_version":1,"to_version":2}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   MigrationExecutor.execute (package:flutter_starter/core/storage/migration/migration_executor.dart:121:24)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Migration completed successfully | Context: {"from_version":1,"to_version":2}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   MigrationExecutor.execute (package:flutter_starter/core/storage/migration/migration_executor.dart:186:20)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 All migrations completed successfully | Context: {"final_version":2}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   StorageMigrationService.migrateAll (package:flutter_starter/core/storage/storage_migration_service.dart:70:22)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Starting secure storage migration[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   MigrationExecutor.execute (package:flutter_starter/core/storage/migration/migration_executor.dart:64:20)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Starting storage migration | Context: {"current_version":1,"target_version":2,"migrations_count":1}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   MigrationExecutor.execute (package:flutter_starter/core/storage/migration/migration_executor.dart:111:24)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Executing migration: Migrate user preferences: rename keys and update data format | Context: {"from_version":1,"to_version":2}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   MigrationExecutor.execute (package:flutter_starter/core/storage/migration/migration_executor.dart:121:24)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Migration completed successfully | Context: {"from_version":1,"to_version":2}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   MigrationExecutor.execute (package:flutter_starter/core/storage/migration/migration_executor.dart:186:20)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 All migrations completed successfully | Context: {"final_version":2}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:02 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/device_locale_test.dart: runtime system locale runtime locale keeps a stored choice
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:02 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/startup/startup_reachability_test.dart: main() boots MyApp end to end on a healthy startup runtime locale follows the platform after real startup
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   StorageMigrationService.migrateAll (package:flutter_starter/core/storage/storage_migration_service.dart:79:22)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 All storage migrations completed | Context: {"regular":2,"secure":2}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:02 +6: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1282_independent_probe_test.dart: independent observer leaves after unmount and catches remount
+00:02 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/device_locale_test.dart: runtime system locale runtime locale keeps an in-memory choice
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:02 +7: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1282_independent_probe_test.dart: independent observer leaves after unmount and catches remount
+00:02 +8: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1282_independent_probe_test.dart: independent observer leaves after unmount and catches remount
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:03 +9: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1282_independent_probe_test.dart: independent async invalidations discard old completion and preserve manual pick
+00:03 +10: All tests passed!
+
+$ git rev-parse HEAD
+d1b5830f4b73ac8abe118b6eba5c25c1d826d5f4
+exit 0
+
+$ git diff --exit-code 88fadddd80da674c77d6f2df3e633a13d7f62ec8 d1b5830f4b73ac8abe118b6eba5c25c1d826d5f4
+exit 0
+
+$ cmp lib/main.dart tool/golden/stripped/lib/main.dart
+exit 0
+
+$ ../flutter-starter-maintainers/scripts/check_issue_refs.sh --range 985cc6b2506a032671f85640cc12424632c71b2a..HEAD
+Commits in 985cc6b2506a032671f85640cc12424632c71b2a..HEAD
+  ok    d1b5830f fix(i18n): follow runtime platform locale changes (#1296)
+
+OK: every message links with 'Refs koniz-dev/flutter-starter#N' and closes nothing.
+exit 0
+
+$ gh issue view 1282 --repo koniz-dev/flutter-starter --json number,state,assignees,labels,url
+{"assignees":[{"id":"MDQ6VXNlcjg0OTIwMjE5","login":"koniz-dev","name":"Nguyễn Anh Kiệt","databaseId":84920219}],"labels":[{"id":"LA_kwDOQVGyw88AAAACxv3YpA","name":"type:bug","description":"Something that is broken relative to documented behavior","color":"d73a4a"},{"id":"LA_kwDOQVGyw88AAAACxv3hBw","name":"priority:P3","description":"Nice to have: cosmetic, speculative, or long tail","color":"0e8a16"},{"id":"LA_kwDOQVGyw88AAAACxv3hug","name":"status:in-progress","description":"Claimed by an assignee and being worked right now","color":"0052cc"},{"id":"LA_kwDOQVGyw88AAAAC4XVYIQ","name":"epic:i18n","description":"lib/l10n, lib/core/localization, l10n.yaml: ARB catalogs and locale plumbing","color":"5319e7"}],"number":1282,"state":"OPEN","url":"https://github.com/koniz-dev/flutter-starter/issues/1282"}
+exit 0
+
+$ gh pr view 1296 --repo koniz-dev/flutter-starter --json state,mergeCommit,headRefOid,statusCheckRollup
+{"headRefOid":"88fadddd80da674c77d6f2df3e633a13d7f62ec8","mergeCommit":{"oid":"d1b5830f4b73ac8abe118b6eba5c25c1d826d5f4"},"state":"MERGED","statusCheckRollup":[{"__typename":"CheckRun","completedAt":"2026-11-16T17:51:42Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/koniz-dev/flutter-starter/actions/runs/43920890064/job/133487542369","name":"Quality gate","startedAt":"2026-11-16T17:40:47Z","status":"COMPLETED","workflowName":"CI"},{"__typename":"CheckRun","completedAt":"2026-11-16T17:46:45Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/koniz-dev/flutter-starter/actions/runs/43920890102/job/133487542825","name":"Strip both-samples-removed + analyze + test","startedAt":"2026-11-16T17:40:48Z","status":"COMPLETED","workflowName":"Strip smoke"},{"__typename":"CheckRun","completedAt":"2026-11-16T17:48:08Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/koniz-dev/flutter-starter/actions/runs/43920890102/job/133487542317","name":"Strip tasks-removed + analyze + test","startedAt":"2026-11-16T17:40:47Z","status":"COMPLETED","workflowName":"Strip smoke"},{"__typename":"CheckRun","completedAt":"2026-11-16T17:47:17Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/koniz-dev/flutter-starter/actions/runs/43920890102/job/133487542879","name":"Strip feature-flags-removed + analyze + test","startedAt":"2026-11-16T17:40:47Z","status":"COMPLETED","workflowName":"Strip smoke"},{"__typename":"CheckRun","completedAt":"2026-11-16T17:46:40Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/koniz-dev/flutter-starter/actions/runs/43920890102/job/133487542711","name":"Strip renamed-both + analyze + test","startedAt":"2026-11-16T17:40:47Z","status":"COMPLETED","workflowName":"Strip smoke"},{"__typename":"CheckRun","completedAt":"2026-11-16T17:45:46Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/koniz-dev/flutter-starter/actions/runs/43920890102/job/133487543044","name":"Strip keep-samples + analyze + test","startedAt":"2026-11-16T17:40:47Z","status":"COMPLETED","workflowName":"Strip smoke"}]}
+exit 0
+
+$ git status --short
+exit 0

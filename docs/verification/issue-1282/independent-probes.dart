@@ -1,0 +1,52 @@
+import 'dart:async';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_starter/core/localization/localization_providers.dart';
+import 'package:flutter_starter/main.dart';
+import 'package:material_ui/material_ui.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+void main() {
+ testWidgets('independent observer leaves after unmount and catches remount', (tester) async {
+  SharedPreferences.setMockInitialValues({});
+  var reads = 0;
+  final c = ProviderContainer(overrides:[currentLocaleProvider.overrideWith((ref) async { reads++; return tester.platformDispatcher.locales.first; })]);
+  addTearDown(c.dispose);
+  addTearDown(tester.platformDispatcher.clearLocalesTestValue);
+  tester.platformDispatcher.localesTestValue = const [Locale('en')];
+  await tester.pumpWidget(UncontrolledProviderScope(container:c, child:const MyApp()));
+  await tester.pumpAndSettle();
+  await tester.pumpWidget(const SizedBox());
+  await tester.pumpAndSettle();
+  final before = reads;
+  tester.platformDispatcher.localesTestValue = const [Locale('vi')];
+  await tester.pumpAndSettle();
+  expect(reads,before);
+  await tester.pumpWidget(UncontrolledProviderScope(container:c, child:const MyApp()));
+  await tester.pumpAndSettle();
+  expect(c.read(localeStateProvider).languageCode,'vi');
+  expect(tester.takeException(),isNull);
+ });
+ test('independent async invalidations discard old completion and preserve manual pick', () async {
+  final pending = <Completer<Locale>>[];
+  final c = ProviderContainer(overrides:[currentLocaleProvider.overrideWith((ref) { final p=Completer<Locale>();pending.add(p);return p.future; })]);
+  addTearDown(c.dispose);
+  c.read(localeStateProvider);
+  c.invalidate(currentLocaleProvider);
+  c.read(currentLocaleProvider);
+  await c.pump();
+  expect(pending.length,2);
+  pending[1].complete(const Locale('vi'));
+  await c.pump();
+  pending[0].complete(const Locale('en'));
+  await c.pump();
+  expect(c.read(localeStateProvider),const Locale('vi'));
+  c.invalidate(currentLocaleProvider);
+  c.read(currentLocaleProvider);
+  await c.pump();
+  c.read(localeStateProvider.notifier).locale=const Locale('es');
+  pending[2].complete(const Locale('ar'));
+  await c.pump();
+  c.read(localeStateProvider.notifier).restoreLocale(const Locale('en'));
+  expect(c.read(localeStateProvider),const Locale('es'));
+ });
+}

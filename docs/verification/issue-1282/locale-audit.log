@@ -1,0 +1,121 @@
+==> env asset guard
+OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+==> generated code (skipped: AUDIT_SKIP_CODEGEN=1)
+==> format (lib test integration_test tool examples)
+Formatted 638 files (0 changed) in 1.65 seconds.
+==> flutter analyze
+Analyzing flutter-starter...                                    
+No issues found! (ran in 4.9s)
+==> flutter test
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/http_failure_localizations_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/http_failure_localizations_test.dart: en preserves HTTP status and separates rejection, waiting and outage
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/http_failure_localizations_test.dart: en keeps existing typed client-error messages
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/http_failure_localizations_test.dart: es preserves HTTP status and separates rejection, waiting and outage
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/http_failure_localizations_test.dart: es keeps existing typed client-error messages
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/http_failure_localizations_test.dart: vi preserves HTTP status and separates rejection, waiting and outage
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/http_failure_localizations_test.dart: vi keeps existing typed client-error messages
+00:00 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/http_failure_localizations_test.dart: ar preserves HTTP status and separates rejection, waiting and outage
+00:00 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/http_failure_localizations_test.dart: ar keeps existing typed client-error messages
+00:00 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: SupportedLocale should have all expected locales
+00:00 +9: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: SupportedLocale should return correct display names
+00:00 +10: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: SupportedLocale fromLanguageCode should return correct locale for valid language codes
+00:00 +11: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: SupportedLocale fromLanguageCode should return null for invalid language code
+00:00 +12: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: SupportedLocale fromLanguageCode should return null for null language code
+00:00 +13: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: SupportedLocale fromLanguageCode should be case sensitive
+00:00 +14: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: SupportedLocale fromLocaleString should return correct locale for valid locale strings
+00:00 +15: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: SupportedLocale fromLocaleString should return correct locale for language code only
+00:00 +16: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: SupportedLocale fromLocaleString should return null for invalid locale string
+00:00 +17: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: SupportedLocale fromLocaleString should return null for null locale string
+00:00 +18: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: SupportedLocale fromLocaleString should return null for empty locale string
+00:00 +19: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: SupportedLocale fromLocaleString should handle locale strings with multiple underscores
+00:00 +20: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: SupportedLocale fromLocaleString should handle locale string with only underscore
+00:00 +21: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: LocalizationService defaultLocale should return English locale as default
+00:00 +22: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: LocalizationService supportedLocales should return all supported locales
+00:00 +23: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: LocalizationService getCurrentLocale should return default locale when storage is empty
+00:00 +24: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: LocalizationService getCurrentLocale should return stored locale when valid
+00:00 +25: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: LocalizationService getCurrentLocale should return default locale when stored locale is invalid
+00:00 +26: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: LocalizationService getCurrentLocale should return default locale when storage throws exception
+00:00 +27: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: LocalizationService getCurrentLocale should handle all supported locales
+00:00 +28: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: LocalizationService setCurrentLocale should save locale to storage successfully
+00:00 +29: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: LocalizationService setCurrentLocale should return false when storage save fails
+00:00 +30: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: LocalizationService setCurrentLocale should return false when storage throws exception
+00:00 +31: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: LocalizationService setCurrentLocale should save language code for all supported locales
+00:00 +32: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: LocalizationService isRTL should return true for RTL languages
+00:00 +33: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: LocalizationService isRTL should return false for LTR languages
+00:00 +34: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: LocalizationService isRTL should check language code only, not country
+00:00 +35: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: LocalizationService getTextDirection should return RTL for RTL languages
+00:00 +36: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: LocalizationService getTextDirection should return LTR for LTR languages
+00:00 +37: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: LocalizationService Edge Cases should handle getCurrentLocale with empty string
+00:00 +38: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: LocalizationService Edge Cases should handle setCurrentLocale with unsupported locale
+00:00 +39: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: LocalizationService Edge Cases should handle multiple locale changes
+00:00 +40: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: LocalizationService Edge Cases should handle getCurrentLocale with whitespace language code
+00:00 +41: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localization_service_test.dart: LocalizationService Edge Cases should handle getCurrentLocale with numeric language code
+00:00 +42: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localized_formatters_test.dart: LocalizedFormatters formatDate should format date with default format
+00:00 +43: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localized_formatters_test.dart: LocalizedFormatters formatDate should format date with custom format
+00:00 +44: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localized_formatters_test.dart: LocalizedFormatters formatTime should format time with default format
+00:00 +45: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localized_formatters_test.dart: LocalizedFormatters formatTime should format time with custom format
+00:00 +46: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localized_formatters_test.dart: LocalizedFormatters formatDateTime should format date and time with default format
+00:00 +47: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localized_formatters_test.dart: LocalizedFormatters formatDateTime should format date and time with custom format
+00:00 +48: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localized_formatters_test.dart: LocalizedFormatters formatNumber should format number with default decimal digits
+00:00 +49: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/localized_formatters_test.dart: LocalizedFormatters formatNumber should format number with custom decimal digits
+[... 1984 lines elided ...]
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   MigrationExecutor.execute (package:flutter_starter/core/storage/migration/migration_executor.dart:111:24)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Executing migration: Migrate user preferences: rename keys and update data format | Context: {"from_version":1,"to_version":2}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   MigrationExecutor.execute (package:flutter_starter/core/storage/migration/migration_executor.dart:121:24)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Migration completed successfully | Context: {"from_version":1,"to_version":2}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   MigrationExecutor.execute (package:flutter_starter/core/storage/migration/migration_executor.dart:186:20)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 All migrations completed successfully | Context: {"final_version":2}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   StorageMigrationService.migrateAll (package:flutter_starter/core/storage/storage_migration_service.dart:70:22)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Starting secure storage migration
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   MigrationExecutor.execute (package:flutter_starter/core/storage/migration/migration_executor.dart:64:20)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Starting storage migration | Context: {"current_version":1,"target_version":2,"migrations_count":1}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   MigrationExecutor.execute (package:flutter_starter/core/storage/migration/migration_executor.dart:111:24)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Executing migration: Migrate user preferences: rename keys and update data format | Context: {"from_version":1,"to_version":2}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   MigrationExecutor.execute (package:flutter_starter/core/storage/migration/migration_executor.dart:121:24)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Migration completed successfully | Context: {"from_version":1,"to_version":2}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   MigrationExecutor.execute (package:flutter_starter/core/storage/migration/migration_executor.dart:186:20)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 All migrations completed successfully | Context: {"final_version":2}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   StorageMigrationService.migrateAll (package:flutter_starter/core/storage/storage_migration_service.dart:79:22)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 All storage migrations completed | Context: {"regular":2,"secure":2}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:14 +223: All tests passed!
