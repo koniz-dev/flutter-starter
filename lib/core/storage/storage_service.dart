@@ -2,6 +2,9 @@ import 'package:flutter_starter/core/contracts/storage_contracts.dart';
 import 'package:flutter_starter/core/errors/exceptions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+/// Error code for a stored value incompatible with a string preference read.
+const invalidPreferenceTypeCode = 'INVALID_PREFERENCE_TYPE';
+
 /// Abstract interface for storage operations
 ///
 /// A mutation returning `false` failed. Check its result even when no exception
@@ -95,7 +98,7 @@ class StorageService implements IStorageService, IKeyValueStore {
     if (value == null || value is String) return value as String?;
     throw const CacheException(
       'Stored preference is not a string',
-      code: 'INVALID_PREFERENCE_TYPE',
+      code: invalidPreferenceTypeCode,
     );
   }
 

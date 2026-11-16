@@ -2,7 +2,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/di/providers.dart';
 import 'package:flutter_starter/core/errors/exceptions.dart';
 import 'package:flutter_starter/core/errors/failures.dart';
+import 'package:flutter_starter/core/storage/migration/migrations/migration_v1_to_v2.dart';
 import 'package:flutter_starter/core/storage/storage_service.dart';
+import 'package:flutter_starter/core/storage/storage_version.dart';
 import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_starter/features/tasks/di/tasks_providers.dart';
 import 'package:flutter_starter/features/tasks/domain/entities/task.dart';
@@ -13,6 +15,16 @@ import 'package:flutter_starter/l10n/app_localizations_en.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+class _UnreadableLegacyStorage extends StorageService {
+  @override
+  Future<String?> getString(String key) async {
+    if (key == 'user_tags') {
+      throw const CacheException('Read unavailable', code: 'STORE_READ_FAILED');
+    }
+    return super.getString(key);
+  }
+}
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -37,6 +49,30 @@ void main() {
       expect(await storage.getString('value'), 'repaired');
     });
   }
+
+  test(
+    'migration preserves schema and legacy data on other read failures',
+    () async {
+      SharedPreferences.setMockInitialValues({
+        StorageVersion.versionKey: '1',
+        'user_tags': 'original,tags',
+      });
+      final storage = _UnreadableLegacyStorage();
+      await expectLater(
+        MigrationV1ToV2().execute(storage),
+        throwsA(
+          isA<CacheException>().having(
+            (error) => error.code,
+            'code',
+            'STORE_READ_FAILED',
+          ),
+        ),
+      );
+      final prefs = await SharedPreferences.getInstance();
+      expect(prefs.get(StorageVersion.versionKey), '1');
+      expect(prefs.get('user_tags'), 'original,tags');
+    },
+  );
 
   testWidgets(
     'wrong preference type: tasks shows a recoverable storage error',
