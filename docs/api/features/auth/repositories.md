@@ -178,6 +178,8 @@ It does not wait for remote logout acknowledgement. A refresh attempted during
 local replacement returns `AuthErrorCodes.sessionTerminated`; refreshes started
 against old credentials during the sign-in request are invalidated again before
 replacement begins. Neither may restore the previous credential pair.
+A 401 received while replacement is uncommitted fails only that API request;
+it does not trigger refresh or force logout of the sign-in still completing.
 
 ### A sign-in waits for a logout still tearing down
 

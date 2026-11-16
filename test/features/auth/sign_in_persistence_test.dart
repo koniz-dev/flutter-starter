@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:typed_data';
 
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/constants/app_constants.dart';
 import 'package:flutter_starter/core/di/providers.dart';
@@ -78,6 +80,23 @@ class _Remote implements AuthRemoteDataSource {
 }
 
 class _Service extends Mock implements SecureStorageService {}
+
+class _Unauthorized implements HttpClientAdapter {
+  final requests = <RequestOptions>[];
+
+  @override
+  Future<ResponseBody> fetch(
+    RequestOptions options,
+    Stream<Uint8List>? requestStream,
+    Future<void>? cancelFuture,
+  ) async {
+    requests.add(options);
+    return ResponseBody.fromString('{}', 401);
+  }
+
+  @override
+  void close({bool force = false}) {}
+}
 
 class _Storage extends InMemoryStorage {
   String? failedUser;
@@ -572,4 +591,66 @@ void main() {
       },
     );
   }
+
+  test(
+    'a queued remote response cannot slip past an empty restore barrier',
+    () async {
+      await fixture.seedSession();
+      fixture.remote.loginHold = Completer<AuthResponseModel>();
+      fixture.storage.heldUser = 'B';
+      final signIn = fixture.notifier.login('B@example.test', 'password123');
+      await _settle();
+      fixture.remote.loginHold!.complete(_response('B'));
+      // No await here: the remote continuation reserves persistence before the
+      // restore continuation resumes from its initially empty barrier.
+      final reading = fixture.container
+          .read(authRepositoryProvider)
+          .getCurrentUser();
+      await _settle();
+      fixture.storage.release.complete();
+      await signIn;
+      final result = await reading;
+      expect(result.dataOrNull?.id, 'B');
+      expect(fixture.container.read(authNotifierProvider).user?.id, 'B');
+      expect(await fixture.tokens.getAccessToken(), 'B-access');
+      expect(await fixture.tokens.getRefreshToken(), 'B-refresh');
+    },
+  );
+
+  test(
+    'a 401 during persistence cannot force logout of the uncommitted sign-in',
+    () async {
+      await fixture.seedSession();
+      fixture.storage.heldUser = 'B';
+      final signIn = fixture.notifier.login('B@example.test', 'password123');
+      await fixture.storage.started.future;
+      final repository =
+          fixture.container.read(authRepositoryProvider) as AuthRepositoryImpl;
+      final generation = repository.sessionGeneration.current;
+      final adapter = _Unauthorized();
+      final client = fixture.container.read(apiClientProvider)
+        ..dio.httpClientAdapter = adapter;
+      await expectLater(
+        client.get('/users/me').timeout(const Duration(seconds: 5)),
+        throwsA(anything),
+      );
+      final after401 = repository.sessionGeneration.current;
+      fixture.storage.release.complete();
+      await signIn;
+      expect(adapter.requests, hasLength(1));
+      expect(fixture.remote.refreshRequests, isEmpty);
+      expect(
+        after401,
+        generation,
+        reason: 'the request cannot end pending persistence',
+      );
+      expect(fixture.container.read(authNotifierProvider).user?.id, 'B');
+      expect(await fixture.tokens.getAccessToken(), 'B-access');
+      expect(await fixture.tokens.getRefreshToken(), 'B-refresh');
+      expect(
+        (await fixture.coldRepository().getCurrentUser()).dataOrNull?.id,
+        'B',
+      );
+    },
+  );
 }

@@ -266,8 +266,15 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Result<User?>> getCurrentUser() async {
     try {
-      if (!await sessionGeneration.persistenceSettled(pendingLogoutLimit)) {
-        return const ResultFailure(_signOutInProgress);
+      final waited = Stopwatch()..start();
+      while (true) {
+        final left = pendingLogoutLimit - waited.elapsed;
+        if (!await sessionGeneration.persistenceSettled(left)) {
+          return const ResultFailure(_signOutInProgress);
+        }
+        // An empty barrier can resolve before a queued remote response reserves
+        // its persistence. Recheck synchronously before capturing a read epoch.
+        if (!sessionGeneration.hasPendingPersistence) break;
       }
       final generation = sessionGeneration.current;
       final token = await localDataSource.getToken();
