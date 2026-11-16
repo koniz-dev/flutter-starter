@@ -29,6 +29,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- [Follow runtime system locale changes](https://github.com/koniz-dev/flutter-starter/issues/1282): refresh the app locale on platform changes and after mounting, preserve stored or manual choices, and prevent delayed reads from overwriting a new selection.
+
 - [Handle wrongly typed preferences](https://github.com/koniz-dev/flutter-starter/issues/1281): report non-string preferences as storage failures so startup can use the device locale and tasks can report a storage error. Preserve malformed data and migration idempotence without swallowing unrelated read failures.
 
 - [Redact nested fragment credentials](https://github.com/koniz-dev/flutter-starter/issues/1280): hide sensitive query values after plain fragment prefixes or earlier equals signs, including nested query markers and complete secret tails, while preserving public route fragments.
