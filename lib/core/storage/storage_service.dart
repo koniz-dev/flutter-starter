@@ -1,5 +1,9 @@
 import 'package:flutter_starter/core/contracts/storage_contracts.dart';
+import 'package:flutter_starter/core/errors/exceptions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+/// Error code for a stored value incompatible with a string preference read.
+const invalidPreferenceTypeCode = 'INVALID_PREFERENCE_TYPE';
 
 /// Abstract interface for storage operations
 ///
@@ -84,10 +88,18 @@ class StorageService implements IStorageService, IKeyValueStore {
     _prefs ??= await SharedPreferences.getInstance();
   }
 
+  /// A wrong stored type is a read failure, never a missing value. Reporting
+  /// it as [CacheException] lets callers handle corruption without an uncaught
+  /// cast error or silently overwriting the original data.
   @override
   Future<String?> getString(String key) async {
     final prefs = await _preferences;
-    return prefs.getString(key);
+    final value = prefs.get(key);
+    if (value == null || value is String) return value as String?;
+    throw const CacheException(
+      'Stored preference is not a string',
+      code: invalidPreferenceTypeCode,
+    );
   }
 
   @override

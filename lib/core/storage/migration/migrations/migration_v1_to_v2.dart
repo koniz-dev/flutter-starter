@@ -1,3 +1,4 @@
+import 'package:flutter_starter/core/errors/exceptions.dart';
 import 'package:flutter_starter/core/storage/migration/storage_migration.dart';
 import 'package:flutter_starter/core/storage/storage_service.dart';
 import 'package:flutter_starter/core/storage/string_list_encoding.dart';
@@ -131,23 +132,19 @@ class MigrationV1ToV2 extends StorageMigration {
     }
   }
 
-  /// Read [key] as a String, treating a value of any other type as absent.
+  /// Reads a legacy string, skipping a value already stored as another type.
   ///
-  /// A store written by an earlier run of this migration holds a
-  /// `List<String>` under 'user_tags'. `SharedPreferences.getString` casts
-  /// the cached value blindly, so reading it throws a `TypeError` - an
-  /// `Error`, not an `Exception`, which every `on Exception` handler in the
-  /// storage and auth layers misses. That turned a re-run into a crash before
-  /// `runApp`.
-  ///
-  /// Returning null instead is what makes this migration idempotent: the
-  /// second run sees nothing left to convert and does nothing.
+  /// Re-runs see a `List<String>` under 'user_tags'. StorageService reports
+  /// that expected type mismatch as a coded CacheException; older/custom
+  /// backends may still throw TypeError. Other read failures must propagate
+  /// so an unreadable legacy value cannot be skipped while advancing schema.
   Future<String?> _readLegacyString(IStorageService storage, String key) async {
     try {
       return await storage.getString(key);
-      // Catching an Error is the point here: the failure is a blind cast
-      // inside the storage backend, not a condition it reports as an
-      // Exception, and there is no type-probing read on IStorageService.
+    } on CacheException catch (error) {
+      if (error.code != invalidPreferenceTypeCode) rethrow;
+      return null;
+      // Backward compatibility for a backend that still casts blindly.
       // ignore: avoid_catching_errors
     } on TypeError {
       return null;
