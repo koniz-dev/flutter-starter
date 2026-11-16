@@ -23,6 +23,15 @@ class _ResponseHandler extends ResponseInterceptorHandler {}
 void main() {
   const redacted = '***REDACTED***';
   const cases = {
+    'https://h/cb#cb?code=SECRET': 'https://h/cb#cb?code=$redacted',
+    'https://h/cb#/a=b?token=SECRET': 'https://h/cb#/a=b?token=$redacted',
+    '/cb#cb?view=compact?code=SECRET&state=ok':
+        '/cb#cb?view=compact?code=$redacted&state=ok',
+    '/cb#/a=b?view=compact?%74oken=SECRET&state=ok':
+        '/cb#/a=b?view=compact?%74oken=$redacted&state=ok',
+    '/cb#cb?code=SECRET?private_tail&state=ok':
+        '/cb#cb?code=$redacted&state=ok',
+    '/cb#/a=b?bad%=SECRET&state=ok': '/cb#/a=b?bad%=$redacted&state=ok',
     'https://app.example/cb#access_token=SECRET&state=ok':
         'https://app.example/cb#access_token=$redacted&state=ok',
     '/cb#id_token=SECRET&state=ok': '/cb#id_token=$redacted&state=ok',
@@ -53,6 +62,9 @@ void main() {
     for (final path in [
       '/guide#section-2',
       '/guide#section?view=compact',
+      '/guide#/a=b?view=compact',
+      '/guide#section?view=compact?sort=name',
+      '/guide#!/token/callback?view=compact',
       '/guide#/token/callback?view=compact',
       '/guide?view=compact#section-2',
       '/socket?ticketCount=2&tickets=public#section',

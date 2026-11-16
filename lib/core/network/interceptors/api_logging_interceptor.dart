@@ -343,8 +343,22 @@ class ApiLoggingInterceptor extends Interceptor {
         isRoute && routeQuery >= 0 && (equals < 0 || routeQuery < equals)
         ? routeQuery + 1
         : 0;
-    return '$safeBase#${fragment.substring(0, prefixLength)}'
+    var safeFragment =
+        '${fragment.substring(0, prefixLength)}'
         '${_redactParameters(fragment.substring(prefixLength))}';
+    // A fragment may have a plain prefix or an '=' before its router query.
+    // Inspect each remaining query suffix, keeping a sensitive value intact
+    // until it is replaced (including any '?' inside that secret value).
+    for (
+      var query = safeFragment.indexOf('?');
+      query >= 0;
+      query = safeFragment.indexOf('?', query + 1)
+    ) {
+      safeFragment =
+          '${safeFragment.substring(0, query + 1)}'
+          '${_redactParameters(safeFragment.substring(query + 1))}';
+    }
+    return '$safeBase#$safeFragment';
   }
 
   static String _redactParameters(String parameters) => parameters
