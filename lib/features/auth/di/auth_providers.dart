@@ -70,6 +70,8 @@ final Provider<AuthRepository> authRepositoryProvider =
         // repository and one in the interceptor; they only agree about which
         // session is live if they share this counter.
         sessionGeneration: ref.watch(sessionGenerationProvider),
+        // Replacing the local credential set also ends its old visible user.
+        sessionSink: ref.read(sessionTerminationSinkProvider),
       );
     });
 
@@ -78,8 +80,8 @@ final Provider<AuthRepository> authRepositoryProvider =
 // ============================================================================
 
 /// Plugs this slice into the authentication seams `lib/core/di/providers.dart`
-/// declares, and is the only wiring the app needs to add for the 401 refresh
-/// flow to work.
+/// declares. This wires the 401 refresh flow and drops the old visible user
+/// when a local credential replacement discards that session.
 ///
 /// Core declares [tokenRefresherProvider] and [sessionTerminationSinkProvider]
 /// with degraded defaults because `apiClientProvider` must be resolvable
