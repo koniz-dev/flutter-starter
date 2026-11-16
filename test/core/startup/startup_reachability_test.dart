@@ -714,6 +714,24 @@ void main() {
   });
 
   group('main() boots MyApp end to end on a healthy startup', () {
+    testWidgets('wrong preference type: language boots in the device locale', (
+      tester,
+    ) async {
+      SharedPreferences.setMockInitialValues({'language': 42});
+      installSecureBackend(<String, String>{});
+      tester.platformDispatcher.localesTestValue = const [Locale('vi', 'VN')];
+      addTearDown(tester.platformDispatcher.clearLocalesTestValue);
+
+      await bootRealMain(tester);
+
+      expect(find.byType(app.MyApp), findsOneWidget);
+      expect(find.byType(StartupFailureApp), findsNothing);
+      final materialApp = tester.widget<MaterialApp>(find.byType(MaterialApp));
+      expect(materialApp.locale?.languageCode, 'vi');
+      final prefs = await SharedPreferences.getInstance();
+      expect(prefs.get('language'), 42);
+    });
+
     testWidgets('a healthy startup hands MyApp to runApp, not the failure '
         'screen', (tester) async {
       // A working Keychain is what separates this from the first failure case:
