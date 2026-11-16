@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_starter/core/contracts/network_contracts.dart';
+import 'package:flutter_starter/core/contracts/state_boundary_contracts.dart';
 import 'package:flutter_starter/core/contracts/storage_contracts.dart';
 import 'package:flutter_starter/core/errors/exception_to_failure_mapper.dart';
 import 'package:flutter_starter/core/errors/exceptions.dart';
@@ -23,11 +24,12 @@ class AuthRepositoryImpl implements AuthRepository {
     required this.remoteDataSource,
     required this.localDataSource,
     this.httpCache,
+    this.sessionSink,
     SessionGeneration? sessionGeneration,
     this.pendingLogoutLimit = const Duration(seconds: 30),
   }) : sessionGeneration = sessionGeneration ?? SessionGeneration();
 
-  /// How long a sign-in waits for a pending logout to finish tearing down
+  /// How long a sign-in waits for previous local session writes or teardown
   /// before it fails with [AuthErrorCodes.signOutInProgress].
   final Duration pendingLogoutLimit;
 
@@ -42,6 +44,12 @@ class AuthRepositoryImpl implements AuthRepository {
   /// Optional so existing call sites keep compiling; production wiring
   /// supplies it from `apiClientProvider`.
   final IHttpResponseCache? httpCache;
+
+  /// Drops the old visible session after its local data is discarded.
+  ///
+  /// Optional for standalone repositories; the configured app supplies the
+  /// same non-throwing adapter that handles transport session termination.
+  final ISessionTerminationSink? sessionSink;
 
   /// Which sign-in the credentials on this device belong to.
   ///
@@ -107,8 +115,10 @@ class AuthRepositoryImpl implements AuthRepository {
     // Synchronously, before any await: a different credential set is about
     // to land, so a refresh already in flight belongs to the session being
     // replaced, and a logout called right after this one ends this sign-in.
+    // Capture our own epoch before notifying listeners: a listener can start
+    // another sign-in synchronously and must not lend its epoch to this one.
+    final generation = sessionGeneration.current + 1;
     sessionGeneration.invalidate();
-    final generation = sessionGeneration.current;
     // A logout still tearing down would delete what this sign-in stores.
     if (!await _afterPendingLogouts()) {
       return const ResultFailure(_signOutInProgress);
@@ -132,7 +142,7 @@ class AuthRepositoryImpl implements AuthRepository {
   );
 
   static const _signOutInProgress = UnknownFailure(
-    'Still signing out of the previous session; try again',
+    'Still finishing the previous local session; try again',
     code: AuthErrorCodes.signOutInProgress,
   );
 
@@ -158,9 +168,8 @@ class AuthRepositoryImpl implements AuthRepository {
     return run;
   }
 
-  /// Waits until no logout is tearing down - this repository's or
-  /// `AuthInterceptor`'s forced one, both tracked on [sessionGeneration] -
-  /// and false if that takes longer than [pendingLogoutLimit].
+  /// Waits until no previous local mutation or logout is pending, including
+  /// `AuthInterceptor`'s forced teardown, and false after [pendingLogoutLimit].
   ///
   /// A teardown deletes whatever credentials are stored when its steps run,
   /// so a sign-in must not store its own while any teardown is running.
@@ -256,8 +265,11 @@ class AuthRepositoryImpl implements AuthRepository {
   /// "present and non-empty" - see [isAuthenticated].
   @override
   Future<Result<User?>> getCurrentUser() async {
-    final generation = sessionGeneration.current;
     try {
+      if (!await sessionGeneration.persistenceSettled(pendingLogoutLimit)) {
+        return const ResultFailure(_signOutInProgress);
+      }
+      final generation = sessionGeneration.current;
       final token = await localDataSource.getToken();
       if (!sessionGeneration.isCurrent(generation)) {
         return const ResultFailure(_signInSessionEnded);
@@ -344,12 +356,11 @@ class AuthRepositoryImpl implements AuthRepository {
   ///
   /// A logout, a forced logout or another sign-in during the round trip ends
   /// this attempt's session, and its writes must not land after that. A stale
-  /// attempt fails with [AuthErrorCodes.sessionTerminated], writes nothing
-  /// further and clears nothing - the session that replaced it owns what is in
-  /// the store. A write already in flight when the session ended may still
-  /// land: the token store makes a later clear win over it (by order, or by a
-  /// repair if the write outlived the store's wait bound), but the cached user
-  /// blob has no such queue.
+  /// attempt fails with [AuthErrorCodes.sessionTerminated]. Before reserving a
+  /// local mutation it clears nothing. Once reserved, its entire write and
+  /// rollback are tracked so a newer sign-in cannot persist until both settle.
+  /// A write already in flight when the session ended may still land; rollback
+  /// runs afterwards, and the token store orders or repairs late token writes.
   Future<Result<User>> _persistSignIn(
     AuthResponseModel authResponse,
     int generation,
@@ -358,16 +369,74 @@ class AuthRepositoryImpl implements AuthRepository {
     // to expires on its own.
     const stale = ResultFailure<User>(_signInSessionEnded);
     if (!sessionGeneration.isCurrent(generation)) return stale;
-    await localDataSource.cacheUser(authResponse.user);
+    final done = Completer<void>();
+    final persistence = sessionGeneration.trackPersistence(done.future);
+    try {
+      // Refreshes may have started against the old credentials while the
+      // remote sign-in request was pending. End those before replacing them.
+      // Reserve before notifying listeners so their sign-ins wait for us.
+      final persistenceGeneration = generation + 1;
+      sessionGeneration.invalidate();
+      if (!sessionGeneration.isCurrent(persistenceGeneration)) return stale;
+      Result<User> result;
+      try {
+        result = await _writeSignIn(authResponse, persistenceGeneration);
+      } on Object catch (error) {
+        if (sessionGeneration.isCurrent(persistenceGeneration)) {
+          sessionGeneration.invalidate();
+          result = ResultFailure(_asFailure(error));
+        } else {
+          result = stale;
+        }
+      }
+      if (!result.isSuccess) {
+        // The reservation remains held: every newer sign-in is still waiting,
+        // so rollback cannot delete a newer successfully persisted session.
+        // Include stale writes that already landed, even if the next attempt
+        // times out while waiting or subsequently fails at the server.
+        try {
+          await _clearSignInCache();
+        } on Object catch (error) {
+          result = ResultFailure(_asFailure(error));
+        }
+      }
+      return result;
+    } finally {
+      done.complete();
+      await persistence;
+    }
+  }
+
+  Future<Result<User>> _writeSignIn(
+    AuthResponseModel authResponse,
+    int generation,
+  ) async {
+    const stale = ResultFailure<User>(_signInSessionEnded);
+    // Replace the complete credential set after the remote request succeeds.
+    // An absent refresh token must not inherit another session's token.
+    await _clearSignInCache();
     if (!sessionGeneration.isCurrent(generation)) return stale;
     await localDataSource.cacheToken(authResponse.token);
+    if (!sessionGeneration.isCurrent(generation)) return stale;
     final refreshToken = authResponse.refreshToken;
     if (refreshToken != null) {
-      if (!sessionGeneration.isCurrent(generation)) return stale;
       await localDataSource.cacheRefreshToken(refreshToken);
     }
     if (!sessionGeneration.isCurrent(generation)) return stale;
+    // A user is restorable only after both credential writes succeeded.
+    await localDataSource.cacheUser(authResponse.user);
+    if (!sessionGeneration.isCurrent(generation)) return stale;
     return Success(authResponse.user);
+  }
+
+  Future<void> _clearSignInCache() async {
+    try {
+      await localDataSource.clearCache();
+    } finally {
+      // Local teardown has run (or been attempted), so a failed replacement
+      // must not keep the previous user visible in memory.
+      sessionSink?.onSessionTerminated();
+    }
   }
 
   Future<Result<String>>? _pendingRefresh;
@@ -385,6 +454,18 @@ class AuthRepositoryImpl implements AuthRepository {
   /// the session that replaced this one may own what is in the store now.
   @override
   Future<Result<String>> refreshToken() {
+    if (sessionGeneration.hasPendingPersistence) {
+      // This caller selected a session while its pair was uncommitted. It
+      // must not refresh a replacement session after waiting for that write.
+      return Future.value(
+        const ResultFailure(
+          UnknownFailure(
+            'Sign-in persistence is in progress',
+            code: AuthErrorCodes.sessionTerminated,
+          ),
+        ),
+      );
+    }
     final generation = sessionGeneration.current;
     final pending = _pendingRefresh;
     if (pending != null && _pendingRefreshGeneration == generation) {

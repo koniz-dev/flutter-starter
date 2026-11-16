@@ -161,11 +161,30 @@ The repository is implemented by `AuthRepositoryImpl` in the data layer, which c
 
 See [Providers](providers.md) for dependency injection setup.
 
+### Replacing a sign-in session
+
+After a successful remote login/register response, the repository discards the
+previous local credential set and stores the new credentials before its user.
+An omitted refresh token therefore leaves no previous refresh token behind.
+Failed or superseded local writes are rolled back before the next sign-in may
+persist; the configured session sink also drops the previous in-memory user.
+A rejected remote request before replacement starts leaves an existing usable
+session intact. Cleanup failures are returned; physical eviction still depends
+on the stores honoring their clear operations, as with logout.
+
+`getCurrentUser()` waits for local sign-in persistence/rollback, bounded by
+`pendingLogoutLimit`, so it cannot evict a half-written session as an orphan.
+It does not wait for remote logout acknowledgement. A refresh attempted during
+local replacement returns `AuthErrorCodes.sessionTerminated`; refreshes started
+against old credentials during the sign-in request are invalidated again before
+replacement begins. Neither may restore the previous credential pair.
+
 ### A sign-in waits for a logout still tearing down
 
 A logout - the user's, or `AuthInterceptor`'s forced one after a 401 that
 cannot be refreshed - clears the stored credentials after it ends the session.
-A sign-in that starts meanwhile waits for that clearing to finish before it
+A sign-in that starts meanwhile, or during earlier sign-in persistence, waits
+for that local operation to finish before it
 calls the server, so the clearing cannot delete the new session. The wait is
 bounded by `pendingLogoutLimit` (30 s by default); past it, the sign-in fails
 with `AuthErrorCodes.signOutInProgress` and stores nothing.
