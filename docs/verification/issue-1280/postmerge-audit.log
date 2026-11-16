@@ -1,0 +1,121 @@
+==> env asset guard
+OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+==> generated code (skipped: AUDIT_SKIP_CODEGEN=1)
+==> format (lib test integration_test tool examples)
+Formatted 636 files (0 changed) in 2.33 seconds.
+==> flutter analyze
+Analyzing flutter-starter...                                    
+No issues found! (ran in 7.8s)
+==> flutter test
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/userinfo_redaction_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/userinfo_redaction_test.dart: the request entry redacts userinfo in baseUrl and an absolute path
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/userinfo_redaction_test.dart: the retry log line redacts an absolute URL with userinfo
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/performance_path_redaction_test.dart: no trace name or attribute carries the secret
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/performance_path_redaction_test.dart: no trace name or attribute carries the secret
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/userinfo_redaction_test.dart: a realtime URL with leading whitespace fails without its userinfo
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.connect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:111:13)
+│ #1   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/userinfo_redaction_test.dart:103:11)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 Connecting to WebSocket at: wss://***REDACTED***@h.example/x
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/performance_path_redaction_test.dart: no trace name or attribute carries the secret
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/performance_path_redaction_test.dart: an absolute URL loses its userinfo in the trace
+00:00 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/performance_path_redaction_test.dart: the recorded path is the one the logs show
+00:00 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_url_redaction_test.dart: a cancelled handshake names the URL without its token
+00:00 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_url_redaction_test.dart: a cancelled handshake names the URL without its token
+00:00 +9: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_url_redaction_test.dart: a failed handshake logs no token
+00:00 +10: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_url_redaction_test.dart: a URL with no sensitive key is logged in full
+00:00 +11: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_url_redaction_test.dart: a refused handshake rethrows an error without the token or the userinfo password
+00:00 +12: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_url_redaction_test.dart: an apostrophe in an earlier query value does not expose the token
+00:00 +13: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_url_redaction_test.dart: userinfo "u:SECRET%2fx" is redacted from the error and the logs
+00:00 +14: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_url_redaction_test.dart: userinfo "u:SECRET%41" is redacted from the error and the logs
+00:00 +15: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_url_redaction_test.dart: userinfo "u:SECRETé" is redacted from the error and the logs
+00:00 +16: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_url_redaction_test.dart: userinfo "u:SECRET x" is redacted from the error and the logs
+00:00 +17: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_url_redaction_test.dart: userinfo in a ws:\\ URL is redacted from the error and the logs
+00:00 +18: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_url_redaction_test.dart: an unparsable URL throws a FormatException without the token
+00:01 +19: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:02 +20: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart: an uncaught framework error is reported once, with its stack, and still reaches the previous handler
+00:02 +21: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart: an uncaught framework error is reported once, with its stack, and still reaches the previous handler
+00:02 +22: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart: an uncaught framework error is reported once, with its stack, and still reaches the previous handler
+00:02 +23: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart: an uncaught framework error is reported once, with its stack, and still reaches the previous handler
+00:02 +24: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart: an uncaught framework error is reported once, with its stack, and still reaches the previous handler
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ Bad state: build failed
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ #0   _ThrowsInBuild.build (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart:36:41)
+│ #1   StatelessElement.build (package:flutter/src/widgets/framework.dart:5907:49)
+│ #2   ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5835:15)
+│ #3   Element.rebuild (package:flutter/src/widgets/framework.dart:5547:7)
+│ #4   ComponentElement._firstBuild (package:flutter/src/widgets/framework.dart:5817:5)
+│ #5   ComponentElement.mount (package:flutter/src/widgets/framework.dart:5811:5)
+│ #6   Element.inflateWidget (package:flutter/src/widgets/framework.dart:4605:20)
+│ #7   Element.updateChild (package:flutter/src/widgets/framework.dart:4071:20)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ ⛔ Uncaught Flutter error | Context: {"library":"widgets library","silent":false}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:03 +25: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart: an async error that escaped every zone is reported once, with its stack, and marked handled
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ Bad state: async failure
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+[... 128 lines elided ...]
+│ ⛔ Uncaught platform error
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:03 +29: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart: previous handlers receive safe errors and retain ordinary identity
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ StateError: Bad state: failed https://app.example/?token=***REDACTED***
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ #0   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart:274:32)
+│ #1   Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:25)
+│ #2   <asynchronous suspension>
+│ #3   Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+│ #4   <asynchronous suspension>
+│ #5   Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+│ #6   <asynchronous suspension>
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ ⛔ Uncaught Flutter error | Context: {"library":"fixture library","silent":true}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ StateError: Bad state: failed https://app.example/?token=***REDACTED***
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ #0   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart:274:32)
+│ #1   Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:25)
+│ #2   <asynchronous suspension>
+│ #3   Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+│ #4   <asynchronous suspension>
+│ #5   Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+│ #6   <asynchronous suspension>
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ ⛔ Uncaught platform error
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ Bad state: ordinary failure
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ #0   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart:274:32)
+│ #1   Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:25)
+│ #2   <asynchronous suspension>
+│ #3   Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+│ #4   <asynchronous suspension>
+│ #5   Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+│ #6   <asynchronous suspension>
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ ⛔ Uncaught Flutter error | Context: {"library":"Flutter framework","silent":false}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ Bad state: ordinary failure
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ #0   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart:274:32)
+│ #1   Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:25)
+│ #2   <asynchronous suspension>
+│ #3   Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+│ #4   <asynchronous suspension>
+│ #5   Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+│ #6   <asynchronous suspension>
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ ⛔ Uncaught platform error
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:03 +30: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart: actual image failure has safe diagnostics in the chained console
+00:03 +31: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart: ordinary exceptions also redact context and lazy diagnostic values
+00:03 +32: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart: diagnostic levels and nested filtering survive redaction
+00:03 +33: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart: the returned callback restores the previous handlers
+00:03 +34: All tests passed!

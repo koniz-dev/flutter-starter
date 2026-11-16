@@ -1,0 +1,709 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/path_query_redaction_test.dart: criterion 1: a ?token= in the path is redacted in the request entry
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/path_query_redaction_test.dart: criterion 1: a ?token= in the path is redacted in the request entry
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/redact_path_malformed_key_test.dart: redactPath does not throw on /v?a%=1
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/redact_path_malformed_key_test.dart: redactPath does not throw on /v?a%=1
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/redact_path_malformed_key_test.dart: redactPath does not throw on /v?a%=1
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/redact_path_malformed_key_test.dart: redactPath does not throw on /v?a%=1
+00:00 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/redact_path_malformed_key_test.dart: redactPath does not throw on /v?a%=1
+00:00 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/redact_path_malformed_key_test.dart: redactPath does not throw on /v?a%=1
+00:00 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/redact_path_malformed_key_test.dart: redactPath does not throw on /v?a%=1
+00:00 +9: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/redact_path_malformed_key_test.dart: redactPath does not throw on /v?a%=1
+00:00 +10: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/redact_path_malformed_key_test.dart: redactPath does not throw on /v?a%=1
+00:00 +11: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/path_query_redaction_test.dart: criterion 1: a ?token= in the path is redacted in RetryInterceptor's retry line
+00:00 +12: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/path_query_redaction_test.dart: criterion 1: a ?token= in the path is redacted in RetryInterceptor's retry line
+00:00 +13: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/path_query_redaction_test.dart: criterion 1: a ?token= in the path is redacted in RetryInterceptor's retry line
+00:00 +14: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/path_query_redaction_test.dart: criterion 1: a ?token= in the path is redacted in RetryInterceptor's retry line
+00:00 +15: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/redact_path_malformed_key_test.dart: redactPath does not throw on /v?x=1&b%=2
+00:00 +16: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/redact_path_malformed_key_test.dart: redactPath does not throw on /v?x=1&b%=2
+00:00 +17: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/redact_path_malformed_key_test.dart: redactPath does not throw on /v?x=1&b%=2
+00:00 +18: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/path_query_redaction_test.dart: criterion 1: a ?token= in the path is redacted redactPath keeps everything but the secret as written
+00:00 +19: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in /cb#access_token=SECRET?still_secret&state=ok
+00:00 +20: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/redact_path_malformed_key_test.dart: redactPath does not throw on /v?%E9=1
+00:00 +21: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/redact_path_malformed_key_test.dart: redactPath does not throw on /v?%E9=1
+00:00 +22: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/redact_path_malformed_key_test.dart: redactPath does not throw on /v?%E9=1
+00:00 +23: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/redact_path_malformed_key_test.dart: redactPath does not throw on /v?%E9=1
+00:00 +24: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in /cb#access?token=SECRET&state=ok
+00:00 +25: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/redact_path_malformed_key_test.dart: redactPath does not throw on /v?%FF=1
+00:00 +26: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in /cb#!/route?code=SECRET&state=ok
+00:00 +27: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/redact_path_malformed_key_test.dart: redactPath does not throw on /v?%C3=1
+00:00 +28: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in /cb#ticket=SECRET&state=ok
+00:00 +29: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/redact_path_malformed_key_test.dart: redactPath does not throw on /v?%D8%00=1
+00:00 +30: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in ws://app.example/socket?TiCkEt=SECRET&state=ok
+00:00 +31: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/redact_path_malformed_key_test.dart: redactPath does not throw on /v?%ED%A0%80=1
+00:00 +32: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in /socket?tic%6Bet=SECRET&state=ok
+00:00 +33: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/redact_path_malformed_key_test.dart: redactPath does not throw on /v?café=1
+00:00 +34: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: ordinary fragments and unrelated fields remain readable
+00:00 +35: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/redact_path_malformed_key_test.dart: redactPath does not throw on /v?�=1
+00:00 +36: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: ticket-authenticated responses bypass cache and purge older rules
+00:00 +37: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: ticket-authenticated responses bypass cache and purge older rules
+00:00 +38: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: ticket-authenticated responses bypass cache and purge older rules
+00:00 +39: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: ticket-authenticated responses bypass cache and purge older rules
+00:00 +40: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: ticket-authenticated responses bypass cache and purge older rules
+00:00 +41: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: ticket-authenticated responses bypass cache and purge older rules
+00:00 +42: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: ticket-authenticated responses bypass cache and purge older rules
+00:00 +43: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: ticket-authenticated responses bypass cache and purge older rules
+00:00 +44: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: ticket-authenticated responses bypass cache and purge older rules
+00:00 +45: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: ticket-authenticated responses bypass cache and purge older rules
+00:00 +46: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: ticket-authenticated responses bypass cache and purge older rules
+00:00 +47: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: ticket-authenticated responses bypass cache and purge older rules
+00:00 +48: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: ticket-authenticated responses bypass cache and purge older rules
+00:00 +49: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: ticket-authenticated responses bypass cache and purge older rules
+00:00 +50: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/redact_path_malformed_key_test.dart: redactUrl removes the secret from wss://u:SECRET@h:443x/s?token=T0KEN
+00:00 +51: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/redact_path_malformed_key_test.dart: redactUrl removes the secret from wss://h/s?token=T0KEN
+00:00 +52: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/redact_path_malformed_key_test.dart: redactUrl removes the secret from ws:\\u:SECRET@h/s
+00:00 +53: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/redact_path_malformed_key_test.dart: redactUrl removes the secret from ws:/\u:SECRET@h/s
+00:00 +54: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/redact_path_malformed_key_test.dart: redactUrl removes the secret from ws:\/u:SECRET@h/s
+00:00 +55: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/redact_path_malformed_key_test.dart: redactUrl removes the secret from //u:SECRET@h/s
+00:00 +56: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/redact_path_malformed_key_test.dart: redactUrl removes the secret from //SECRET@h/x://y
+00:00 +57: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/redact_path_malformed_key_test.dart: redactUrl keeps a URL with nothing to redact as written
+00:00 +58: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/redact_path_malformed_key_test.dart: redactUrl an @ after the authority is not userinfo
+00:00 +59: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/redact_path_malformed_key_test.dart: through ApiClient, with logging off /v?a%=1 reaches the transport and succeeds
+00:00 +60: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/redact_path_malformed_key_test.dart: through ApiClient, with logging off /v?%zz=1 reaches the transport and succeeds
+00:00 +61: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/redact_path_malformed_key_test.dart: through ApiClient, with logging off /v?%E9=1 reaches the transport and succeeds
+00:00 +62: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/redact_path_malformed_key_test.dart: through ApiClient, with logging off /v?café=1 reaches the transport and succeeds
+00:01 +63: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/userinfo_redaction_test.dart: the request entry redacts userinfo in baseUrl and an absolute path
+00:01 +64: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_error_object_test.dart: a failed request reaches neither the log nor the reporter with its query secrets or userinfo
+00:01 +65: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_error_object_test.dart: a failed request reaches neither the log nor the reporter with its query secrets or userinfo
+00:01 +66: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_error_object_test.dart: a failed request reaches neither the log nor the reporter with its query secrets or userinfo
+00:01 +66: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/userinfo_redaction_test.dart: a realtime URL with leading whitespace fails without its userinfo
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.connect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:111:13)
+│ #1   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/userinfo_redaction_test.dart:103:11)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 Connecting to WebSocket at: wss://***REDACTED***@h.example/x
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:01 +67: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_error_object_test.dart: a failed request reaches neither the log nor the reporter with its query secrets or userinfo
+00:01 +68: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_error_object_test.dart: a failed request reaches neither the log nor the reporter with its query secrets or userinfo
+00:01 +69: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_error_object_test.dart: a failed request reaches neither the log nor the reporter with its query secrets or userinfo
+00:01 +70: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_error_object_test.dart: a failed request reaches neither the log nor the reporter with its query secrets or userinfo
+00:01 +71: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_error_object_test.dart: a failed request reaches neither the log nor the reporter with its query secrets or userinfo
+00:01 +72: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_error_object_test.dart: a failed request reaches neither the log nor the reporter with its query secrets or userinfo
+00:01 +73: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key apikey -> "apiKey"
+00:01 +74: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key credential -> "credentials"
+00:01 +75: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key authorization -> "authorization"
+00:01 +76: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key privatekey -> "private_key"
+00:01 +77: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key creditcard -> "credit_card"
+00:01 +78: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key cardnumber -> "card_number"
+00:01 +79: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key signature -> "signature"
+00:01 +80: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key pincode -> "pin_code"
+00:01 +81: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key otpcode -> "otp_code"
+00:01 +82: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key jwt -> "jwt"
+00:01 +83: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key accesskey -> "access_key"
+00:01 +84: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key appkey -> "app_key"
+00:01 +85: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key clientkey -> "client_key"
+00:01 +86: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key hmac -> "x-hmac-sha256"
+00:01 +87: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key subscriptionkey -> "Ocp-Apim-Subscription-Key"
+00:01 +88: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key functionskey -> "x-functions-key"
+00:01 +89: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key sessionkey -> "session_key"
+00:01 +90: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key authkey -> "auth_key"
+00:01 +91: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key masterkey -> "master_key"
+00:01 +92: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key licensekey -> "license_key"
+00:01 +93: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key pin -> "pin"
+00:01 +94: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key otp -> "otp"
+00:01 +95: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key cvv -> "cvv"
+00:01 +96: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key cvc -> "cvc"
+00:01 +97: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key session -> "session"
+00:01 +98: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key sessionid -> "sessionId"
+00:01 +99: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key bearer -> "bearer"
+00:01 +100: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key sign -> "sign"
+00:01 +101: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key key -> "key"
+00:01 +102: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key access -> "access"
+00:01 +103: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key refresh -> "refresh"
+00:01 +104: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key near misses of the short names stay readable
+00:01 +105: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key the table covers both rule sets with no duplicates
+00:01 +106: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 2: onResponse never logs an access_token value
+00:01 +107: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: a SimpleJWT login response logs neither token
+00:01 +108: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: ticket is redacted in a query but stays readable in a body
+00:01 +109: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: code is a secret in a query string only a query code is redacted in the path and the query parameters
+00:01 +110: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: code is a secret in a query string only a body field code stays readable
+00:02 +111: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_rule_version_test.dart: the key rules match their version
+00:02 +112: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_rule_version_test.dart: entries cached under an older rule are dropped on the first request
+00:02 +113: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/performance_path_redaction_test.dart: no trace name or attribute carries the secret
+00:02 +114: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/performance_path_redaction_test.dart: no trace name or attribute carries the secret
+00:02 +114: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_rule_version_test.dart: a purge that fails runs again on the next request
+Cache legacy purge error: Exception: storage busy
+00:02 +115: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/performance_path_redaction_test.dart: no trace name or attribute carries the secret
+00:02 +116: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/performance_path_redaction_test.dart: no trace name or attribute carries the secret
+00:02 +117: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_url_redaction_test.dart: a cancelled handshake names the URL without its token
+00:02 +118: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_url_redaction_test.dart: a cancelled handshake names the URL without its token
+00:02 +119: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_url_redaction_test.dart: a cancelled handshake names the URL without its token
+00:02 +120: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_url_redaction_test.dart: a cancelled handshake names the URL without its token
+00:02 +121: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_url_redaction_test.dart: a failed handshake logs no token
+00:02 +122: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_url_redaction_test.dart: a URL with no sensitive key is logged in full
+00:02 +123: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_url_redaction_test.dart: a refused handshake rethrows an error without the token or the userinfo password
+00:02 +124: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_url_redaction_test.dart: an apostrophe in an earlier query value does not expose the token
+00:02 +125: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_url_redaction_test.dart: userinfo "u:SECRET%2fx" is redacted from the error and the logs
+00:03 +126: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_url_redaction_test.dart: userinfo "u:SECRET%41" is redacted from the error and the logs
+00:03 +127: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_url_redaction_test.dart: userinfo "u:SECRETé" is redacted from the error and the logs
+00:03 +128: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_url_redaction_test.dart: userinfo "u:SECRET x" is redacted from the error and the logs
+00:03 +129: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_url_redaction_test.dart: userinfo in a ws:\\ URL is redacted from the error and the logs
+00:03 +130: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_url_redaction_test.dart: an unparsable URL throws a FormatException without the token
+00:08 +131: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart: an uncaught framework error is reported once, with its stack, and still reaches the previous handler
+[38;5;196m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m│ Bad state: build failed[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ #0   _ThrowsInBuild.build (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart:36:41)[0m
+[38;5;196m│ #1   StatelessElement.build (package:flutter/src/widgets/framework.dart:5907:49)[0m
+[38;5;196m│ #2   ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5835:15)[0m
+[38;5;196m│ #3   Element.rebuild (package:flutter/src/widgets/framework.dart:5547:7)[0m
+[38;5;196m│ #4   ComponentElement._firstBuild (package:flutter/src/widgets/framework.dart:5817:5)[0m
+[38;5;196m│ #5   ComponentElement.mount (package:flutter/src/widgets/framework.dart:5811:5)[0m
+[38;5;196m│ #6   Element.inflateWidget (package:flutter/src/widgets/framework.dart:4605:20)[0m
+[38;5;196m│ #7   Element.updateChild (package:flutter/src/widgets/framework.dart:4071:20)[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ ⛔ Uncaught Flutter error | Context: {"library":"widgets library","silent":false}[0m
+[38;5;196m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:08 +132: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart: an async error that escaped every zone is reported once, with its stack, and marked handled
+[38;5;196m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m│ Bad state: async failure[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ #0   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart:94:30)[0m
+[38;5;196m│ #1   Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:25)[0m
+[38;5;196m│ #2   <asynchronous suspension>[0m
+[38;5;196m│ #3   Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)[0m
+[38;5;196m│ #4   <asynchronous suspension>[0m
+[38;5;196m│ #5   Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)[0m
+[38;5;196m│ #6   <asynchronous suspension>[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ ⛔ Uncaught platform error[0m
+[38;5;196m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:08 +133: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart: uncaught image and platform URL secrets are absent from reporter and file log
+00:08 +134: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart: relative request secrets are absent from reporter and file log
+00:08 +135: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart: redacted URL errors keep surrounding parentheses and diagnostics
+[38;5;196m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m│ StateError: Bad state: callback ((https://app.example/cb?token=***REDACTED***)) failed[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ #0   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart:239:22)[0m
+[38;5;196m│ #1   Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:25)[0m
+[38;5;196m│ #2   <asynchronous suspension>[0m
+[38;5;196m│ #3   Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)[0m
+[38;5;196m│ #4   <asynchronous suspension>[0m
+[38;5;196m│ #5   Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)[0m
+[38;5;196m│ #6   <asynchronous suspension>[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ ⛔ Uncaught platform error[0m
+[38;5;196m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m│ StateError: Bad state: callback ((https://app.example/cb?token=***REDACTED***)), failed[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ #0   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart:239:22)[0m
+[38;5;196m│ #1   Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:25)[0m
+[38;5;196m│ #2   <asynchronous suspension>[0m
+[38;5;196m│ #3   Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)[0m
+[38;5;196m│ #4   <asynchronous suspension>[0m
+[38;5;196m│ #5   Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)[0m
+[38;5;196m│ #6   <asynchronous suspension>[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ ⛔ Uncaught platform error[0m
+[38;5;196m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m│ StateError: Bad state: callback ((https://app.example/cb?token=***REDACTED***)). failed[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ #0   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart:239:22)[0m
+[38;5;196m│ #1   Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:25)[0m
+[38;5;196m│ #2   <asynchronous suspension>[0m
+[38;5;196m│ #3   Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)[0m
+[38;5;196m│ #4   <asynchronous suspension>[0m
+[38;5;196m│ #5   Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)[0m
+[38;5;196m│ #6   <asynchronous suspension>[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ ⛔ Uncaught platform error[0m
+[38;5;196m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m│ StateError: Bad state: callback ((/verify?token=***REDACTED***)) failed[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ #0   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart:239:22)[0m
+[38;5;196m│ #1   Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:25)[0m
+[38;5;196m│ #2   <asynchronous suspension>[0m
+[38;5;196m│ #3   Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)[0m
+[38;5;196m│ #4   <asynchronous suspension>[0m
+[38;5;196m│ #5   Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)[0m
+[38;5;196m│ #6   <asynchronous suspension>[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ ⛔ Uncaught platform error[0m
+[38;5;196m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m│ StateError: Bad state: callback ((/verify?token=***REDACTED***)), failed[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ #0   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart:239:22)[0m
+[38;5;196m│ #1   Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:25)[0m
+[38;5;196m│ #2   <asynchronous suspension>[0m
+[38;5;196m│ #3   Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)[0m
+[38;5;196m│ #4   <asynchronous suspension>[0m
+[38;5;196m│ #5   Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)[0m
+[38;5;196m│ #6   <asynchronous suspension>[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ ⛔ Uncaught platform error[0m
+[38;5;196m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m│ StateError: Bad state: callback ((/verify?token=***REDACTED***)). failed[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ #0   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart:239:22)[0m
+[38;5;196m│ #1   Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:25)[0m
+[38;5;196m│ #2   <asynchronous suspension>[0m
+[38;5;196m│ #3   Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)[0m
+[38;5;196m│ #4   <asynchronous suspension>[0m
+[38;5;196m│ #5   Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)[0m
+[38;5;196m│ #6   <asynchronous suspension>[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ ⛔ Uncaught platform error[0m
+[38;5;196m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m│ StateError: Bad state: callback ((https://app.example/a(b)?token=***REDACTED***)) failed[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ #0   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart:239:22)[0m
+[38;5;196m│ #1   Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:25)[0m
+[38;5;196m│ #2   <asynchronous suspension>[0m
+[38;5;196m│ #3   Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)[0m
+[38;5;196m│ #4   <asynchronous suspension>[0m
+[38;5;196m│ #5   Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)[0m
+[38;5;196m│ #6   <asynchronous suspension>[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ ⛔ Uncaught platform error[0m
+[38;5;196m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m│ StateError: Bad state: callback ((https://app.example/a(b)?token=***REDACTED***)), failed[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ #0   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart:239:22)[0m
+[38;5;196m│ #1   Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:25)[0m
+[38;5;196m│ #2   <asynchronous suspension>[0m
+[38;5;196m│ #3   Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)[0m
+[38;5;196m│ #4   <asynchronous suspension>[0m
+[38;5;196m│ #5   Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)[0m
+[38;5;196m│ #6   <asynchronous suspension>[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ ⛔ Uncaught platform error[0m
+[38;5;196m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m│ StateError: Bad state: callback ((https://app.example/a(b)?token=***REDACTED***)). failed[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ #0   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart:239:22)[0m
+[38;5;196m│ #1   Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:25)[0m
+[38;5;196m│ #2   <asynchronous suspension>[0m
+[38;5;196m│ #3   Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)[0m
+[38;5;196m│ #4   <asynchronous suspension>[0m
+[38;5;196m│ #5   Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)[0m
+[38;5;196m│ #6   <asynchronous suspension>[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ ⛔ Uncaught platform error[0m
+[38;5;196m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:08 +136: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart: previous handlers receive safe errors and retain ordinary identity
+[38;5;196m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m│ StateError: Bad state: failed https://app.example/?token=***REDACTED***[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ #0   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart:274:32)[0m
+[38;5;196m│ #1   Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:25)[0m
+[38;5;196m│ #2   <asynchronous suspension>[0m
+[38;5;196m│ #3   Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)[0m
+[38;5;196m│ #4   <asynchronous suspension>[0m
+[38;5;196m│ #5   Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)[0m
+[38;5;196m│ #6   <asynchronous suspension>[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ ⛔ Uncaught Flutter error | Context: {"library":"fixture library","silent":true}[0m
+[38;5;196m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m│ StateError: Bad state: failed https://app.example/?token=***REDACTED***[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ #0   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart:274:32)[0m
+[38;5;196m│ #1   Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:25)[0m
+[38;5;196m│ #2   <asynchronous suspension>[0m
+[38;5;196m│ #3   Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)[0m
+[38;5;196m│ #4   <asynchronous suspension>[0m
+[38;5;196m│ #5   Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)[0m
+[38;5;196m│ #6   <asynchronous suspension>[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ ⛔ Uncaught platform error[0m
+[38;5;196m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m│ Bad state: ordinary failure[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ #0   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart:274:32)[0m
+[38;5;196m│ #1   Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:25)[0m
+[38;5;196m│ #2   <asynchronous suspension>[0m
+[38;5;196m│ #3   Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)[0m
+[38;5;196m│ #4   <asynchronous suspension>[0m
+[38;5;196m│ #5   Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)[0m
+[38;5;196m│ #6   <asynchronous suspension>[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ ⛔ Uncaught Flutter error | Context: {"library":"Flutter framework","silent":false}[0m
+[38;5;196m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m│ Bad state: ordinary failure[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ #0   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart:274:32)[0m
+[38;5;196m│ #1   Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:25)[0m
+[38;5;196m│ #2   <asynchronous suspension>[0m
+[38;5;196m│ #3   Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)[0m
+[38;5;196m│ #4   <asynchronous suspension>[0m
+[38;5;196m│ #5   Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)[0m
+[38;5;196m│ #6   <asynchronous suspension>[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ ⛔ Uncaught platform error[0m
+[38;5;196m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:08 +137: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart: actual image failure has safe diagnostics in the chained console
+00:08 +138: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart: ordinary exceptions also redact context and lazy diagnostic values
+00:08 +139: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart: diagnostic levels and nested filtering survive redaction
+00:09 +140: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart: the returned callback restores the previous handlers
+00:09 +141: All tests passed!
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1280-base-fragment_test.dart
+00:00 +0: redacts credential parameters in https://h/cb#cb?code=SECRET
+00:00 +0 -1: redacts credential parameters in https://h/cb#cb?code=SECRET [E]
+  Expected: 'https://h/cb#cb?code=***REDACTED***'
+    Actual: 'https://h/cb#cb?code=SECRET'
+     Which: is different.
+            Expected: ... b#cb?code=***REDACTE ...
+              Actual: ... b#cb?code=SECRET
+                                    ^
+             Differ at offset 21
+  
+  package:matcher                                          expect
+  package:flutter_test/src/widget_tester.dart 473:18       expect
+  .git/codex-issue-work/1280-base-fragment_test.dart 56:7  main.<fn>
+  
+00:00 +0 -1: redacts credential parameters in https://h/cb#/a=b?token=SECRET
+00:00 +0 -2: redacts credential parameters in https://h/cb#/a=b?token=SECRET [E]
+  Expected: 'https://h/cb#/a=b?token=***REDACTED***'
+    Actual: 'https://h/cb#/a=b?token=SECRET'
+     Which: is different.
+            Expected: ... a=b?token=***REDACTE ...
+              Actual: ... a=b?token=SECRET
+                                    ^
+             Differ at offset 24
+  
+  package:matcher                                          expect
+  package:flutter_test/src/widget_tester.dart 473:18       expect
+  .git/codex-issue-work/1280-base-fragment_test.dart 56:7  main.<fn>
+  
+00:00 +0 -2: redacts credential parameters in /cb#cb?view=compact?code=SECRET&state=ok
+00:00 +0 -3: redacts credential parameters in /cb#cb?view=compact?code=SECRET&state=ok [E]
+  Expected: '/cb#cb?view=compact?code=***REDACTED***&state=ok'
+    Actual: '/cb#cb?view=compact?code=SECRET&state=ok'
+     Which: is different.
+            Expected: ... pact?code=***REDACTE ...
+              Actual: ... pact?code=SECRET&sta ...
+                                    ^
+             Differ at offset 25
+  
+  package:matcher                                          expect
+  package:flutter_test/src/widget_tester.dart 473:18       expect
+  .git/codex-issue-work/1280-base-fragment_test.dart 56:7  main.<fn>
+  
+00:00 +0 -3: redacts credential parameters in /cb#/a=b?view=compact?%74oken=SECRET&state=ok
+00:00 +0 -4: redacts credential parameters in /cb#/a=b?view=compact?%74oken=SECRET&state=ok [E]
+  Expected: '/cb#/a=b?view=compact?%74oken=***REDACTED***&state=ok'
+    Actual: '/cb#/a=b?view=compact?%74oken=SECRET&state=ok'
+     Which: is different.
+            Expected: ... t?%74oken=***REDACTE ...
+              Actual: ... t?%74oken=SECRET&sta ...
+                                    ^
+             Differ at offset 30
+  
+  package:matcher                                          expect
+  package:flutter_test/src/widget_tester.dart 473:18       expect
+  .git/codex-issue-work/1280-base-fragment_test.dart 56:7  main.<fn>
+  
+00:00 +0 -4: redacts credential parameters in /cb#cb?code=SECRET?private_tail&state=ok
+00:00 +0 -5: redacts credential parameters in /cb#cb?code=SECRET?private_tail&state=ok [E]
+  Expected: '/cb#cb?code=***REDACTED***&state=ok'
+    Actual: '/cb#cb?code=SECRET?private_tail&state=ok'
+     Which: is different.
+            Expected: ... b#cb?code=***REDACTE ...
+              Actual: ... b#cb?code=SECRET?pri ...
+                                    ^
+             Differ at offset 12
+  
+  package:matcher                                          expect
+  package:flutter_test/src/widget_tester.dart 473:18       expect
+  .git/codex-issue-work/1280-base-fragment_test.dart 56:7  main.<fn>
+  
+00:00 +0 -5: redacts credential parameters in /cb#/a=b?bad%=SECRET&state=ok
+00:00 +0 -6: redacts credential parameters in /cb#/a=b?bad%=SECRET&state=ok [E]
+  Expected: '/cb#/a=b?bad%=***REDACTED***&state=ok'
+    Actual: '/cb#/a=b?bad%=SECRET&state=ok'
+     Which: is different.
+            Expected: ... /a=b?bad%=***REDACTE ...
+              Actual: ... /a=b?bad%=SECRET&sta ...
+                                    ^
+             Differ at offset 14
+  
+  package:matcher                                          expect
+  package:flutter_test/src/widget_tester.dart 473:18       expect
+  .git/codex-issue-work/1280-base-fragment_test.dart 56:7  main.<fn>
+  
+00:00 +0 -6: redacts credential parameters in https://app.example/cb#access_token=SECRET&state=ok
+00:00 +1 -6: redacts credential parameters in /cb#id_token=SECRET&state=ok
+00:00 +2 -6: redacts credential parameters in /cb?token=QUERY_SECRET#access_token=FRAGMENT_SECRET&state=ok
+00:00 +3 -6: redacts credential parameters in /cb#access%5Ftoken=SECRET&state=ok
+00:00 +4 -6: redacts credential parameters in /cb#bad%=SECRET&state=ok
+00:00 +5 -6: redacts credential parameters in /cb#access_token=SECRET?still_secret&state=ok
+00:00 +6 -6: redacts credential parameters in /cb#/route?code=SECRET&state=ok
+00:00 +7 -6: redacts credential parameters in /cb#token?public=SECRET&state=ok
+00:00 +8 -6: redacts credential parameters in /cb#access?token=SECRET&state=ok
+00:00 +9 -6: redacts credential parameters in /cb#!/route?code=SECRET&state=ok
+00:00 +10 -6: redacts credential parameters in /cb#ticket=SECRET&state=ok
+00:00 +11 -6: redacts credential parameters in ws://app.example/socket?TiCkEt=SECRET&state=ok
+00:00 +12 -6: redacts credential parameters in /socket?tic%6Bet=SECRET&state=ok
+00:00 +13 -6: ordinary fragments and unrelated fields remain readable
+00:00 +14 -6: ticket-authenticated responses bypass cache and purge older rules
+00:00 +15 -6: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1280-base-fragment_test.dart: redacts credential parameters in /cb#/a=b?bad%=SECRET&state=ok
+  /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1280-base-fragment_test.dart: redacts credential parameters in /cb#/a=b?view=compact?%74oken=SECRET&state=ok
+  /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1280-base-fragment_test.dart: redacts credential parameters in /cb#cb?code=SECRET?private_tail&state=ok
+  /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1280-base-fragment_test.dart: redacts credential parameters in /cb#cb?view=compact?code=SECRET&state=ok
+  ... and 2 more
+N=1000 chars=7011 us=18035 unchanged=true
+N=2000 chars=14011 us=528 unchanged=true
+N=4000 chars=28011 us=280 unchanged=true
+N=8000 chars=56011 us=183 unchanged=true
+N=16000 chars=112011 us=279 unchanged=true
+N=32000 chars=224011 us=666 unchanged=true
+N=1000 chars=7011 us=51390 unchanged=true
+N=2000 chars=14011 us=53703 unchanged=true
+N=4000 chars=28011 us=155735 unchanged=true
+N=8000 chars=56011 us=560809 unchanged=true
+N=16000 chars=112011 us=2276551 unchanged=true
+N=32000 chars=224011 us=9077598 unchanged=true
+N=1000 chars=7011 us=42912 unchanged=true
+N=2000 chars=14011 us=18763 unchanged=true
+N=4000 chars=28011 us=19071 unchanged=true
+N=8000 chars=56011 us=23847 unchanged=true
+N=16000 chars=112011 us=40470 unchanged=true
+N=32000 chars=224011 us=81023 unchanged=true
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1280-independent-probes_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1280-independent-probes_test.dart: nested encoded malformed OAuth secrets and idempotence
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1280-independent-probes_test.dart: nested encoded malformed OAuth secrets and idempotence
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1280-independent-probes_test.dart: nested encoded malformed OAuth secrets and idempotence
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1280-independent-probes_test.dart: nested encoded malformed OAuth secrets and idempotence
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1280-independent-probes_test.dart: nested encoded malformed OAuth secrets and idempotence
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1280-independent-probes_test.dart: nested encoded malformed OAuth secrets and idempotence
+00:00 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in /cb#/a=b?bad%=SECRET&state=ok
+00:00 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in https://app.example/cb#access_token=SECRET&state=ok
+00:00 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in /cb#id_token=SECRET&state=ok
+00:00 +9: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in /cb?token=QUERY_SECRET#access_token=FRAGMENT_SECRET&state=ok
+00:00 +10: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in /cb#access%5Ftoken=SECRET&state=ok
+00:00 +11: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in /cb#bad%=SECRET&state=ok
+00:00 +12: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in /cb#access_token=SECRET?still_secret&state=ok
+00:00 +13: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in /cb#/route?code=SECRET&state=ok
+00:00 +14: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in /cb#token?public=SECRET&state=ok
+00:00 +15: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in /cb#access?token=SECRET&state=ok
+00:00 +16: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in /cb#!/route?code=SECRET&state=ok
+00:00 +17: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in /cb#ticket=SECRET&state=ok
+00:00 +18: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in ws://app.example/socket?TiCkEt=SECRET&state=ok
+00:00 +19: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in /socket?tic%6Bet=SECRET&state=ok
+00:00 +20: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: ordinary fragments and unrelated fields remain readable
+00:00 +21: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: ticket-authenticated responses bypass cache and purge older rules
+00:00 +22: All tests passed!
+/cb#/a=b?co?de=SECRET -> /cb#/a=b?co?de=***REDACTED***
+/cb#/a=b?tok?en=SECRET -> /cb#/a=b?tok?en=***REDACTED***
+/cb#/a=b?co?de=SECRET -> /cb#/a=b?co?de=SECRET
+/cb#/a=b?tok?en=SECRET -> /cb#/a=b?tok?en=SECRET
+/cb#/a=b?co?de=SECRET -> /cb#/a=b?co?de=SECRET
+/cb#/a=b?tok?en=SECRET -> /cb#/a=b?tok?en=SECRET
+queries N=8000 chars=56008 us=151878 unchanged=true
+queries N=16000 chars=112008 us=286452 unchanged=true
+queries N=32000 chars=224008 us=598148 unchanged=true
+no_equals N=8000 chars=40008 us=309 unchanged=true
+no_equals N=16000 chars=80008 us=572 unchanged=true
+no_equals N=32000 chars=160008 us=5154 unchanged=true
+key_parts N=8000 chars=40015 us=121665 unchanged=true
+key_parts N=16000 chars=80015 us=64553 unchanged=true
+key_parts N=32000 chars=160015 us=128035 unchanged=true
+after_equals N=8000 chars=40015 us=374 unchanged=true
+after_equals N=16000 chars=80015 us=2643 unchanged=true
+after_equals N=32000 chars=160015 us=7723 unchanged=true
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1280-independent-final-probes_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1280-independent-final-probes_test.dart: nested encoded malformed OAuth secrets and idempotence
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1280-independent-final-probes_test.dart: exact suffix boundary and encoded question controls
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in /cb#/a=b?co?de=SECRET
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in /cb#/a=b?tok?en=SECRET
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in /cb#/a=b?view?co?de=SECRET?private_tail&state=ok
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in /cb#/a=b?view?%63o?de=SECRET
+00:00 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in https://h/cb#cb?code=SECRET
+00:00 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in https://h/cb#/a=b?token=SECRET
+00:00 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in /cb#cb?view=compact?code=SECRET&state=ok
+00:00 +9: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in /cb#/a=b?view=compact?%74oken=SECRET&state=ok
+00:00 +10: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in /cb#cb?code=SECRET?private_tail&state=ok
+00:00 +11: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in /cb#/a=b?bad%=SECRET&state=ok
+00:00 +12: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in https://app.example/cb#access_token=SECRET&state=ok
+00:00 +13: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in /cb#id_token=SECRET&state=ok
+00:00 +14: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in /cb?token=QUERY_SECRET#access_token=FRAGMENT_SECRET&state=ok
+00:00 +15: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in /cb#access%5Ftoken=SECRET&state=ok
+00:00 +16: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in /cb#bad%=SECRET&state=ok
+00:00 +17: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in /cb#access_token=SECRET?still_secret&state=ok
+00:00 +18: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in /cb#/route?code=SECRET&state=ok
+00:00 +19: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in /cb#token?public=SECRET&state=ok
+00:00 +20: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in /cb#access?token=SECRET&state=ok
+00:00 +21: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in /cb#!/route?code=SECRET&state=ok
+00:00 +22: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in /cb#ticket=SECRET&state=ok
+00:00 +23: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in ws://app.example/socket?TiCkEt=SECRET&state=ok
+00:00 +24: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in /socket?tic%6Bet=SECRET&state=ok
+00:00 +25: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: ordinary fragments and unrelated fields remain readable
+00:00 +26: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: ticket-authenticated responses bypass cache and purge older rules
+00:00 +27: All tests passed!
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1280-base-fragment-final_test.dart
+00:00 +0: redacts credential parameters in /cb#/a=b?co?de=SECRET
+00:00 +0 -1: redacts credential parameters in /cb#/a=b?co?de=SECRET [E]
+  Expected: '/cb#/a=b?co?de=***REDACTED***'
+    Actual: '/cb#/a=b?co?de=SECRET'
+     Which: is different.
+            Expected: ... a=b?co?de=***REDACTE ...
+              Actual: ... a=b?co?de=SECRET
+                                    ^
+             Differ at offset 15
+  
+  package:matcher                                                expect
+  package:flutter_test/src/widget_tester.dart 473:18             expect
+  .git/codex-issue-work/1280-base-fragment-final_test.dart 61:7  main.<fn>
+  
+00:00 +0 -1: redacts credential parameters in /cb#/a=b?tok?en=SECRET
+00:00 +0 -2: redacts credential parameters in /cb#/a=b?tok?en=SECRET [E]
+  Expected: '/cb#/a=b?tok?en=***REDACTED***'
+    Actual: '/cb#/a=b?tok?en=SECRET'
+     Which: is different.
+            Expected: ... =b?tok?en=***REDACTE ...
+              Actual: ... =b?tok?en=SECRET
+                                    ^
+             Differ at offset 16
+  
+  package:matcher                                                expect
+  package:flutter_test/src/widget_tester.dart 473:18             expect
+  .git/codex-issue-work/1280-base-fragment-final_test.dart 61:7  main.<fn>
+  
+00:00 +0 -2: redacts credential parameters in /cb#/a=b?view?co?de=SECRET?private_tail&state=ok
+00:00 +0 -3: redacts credential parameters in /cb#/a=b?view?co?de=SECRET?private_tail&state=ok [E]
+  Expected: '/cb#/a=b?view?co?de=***REDACTED***&state=ok'
+    Actual: '/cb#/a=b?view?co?de=SECRET?private_tail&state=ok'
+     Which: is different.
+            Expected: ... iew?co?de=***REDACTE ...
+              Actual: ... iew?co?de=SECRET?pri ...
+                                    ^
+             Differ at offset 20
+  
+  package:matcher                                                expect
+  package:flutter_test/src/widget_tester.dart 473:18             expect
+  .git/codex-issue-work/1280-base-fragment-final_test.dart 61:7  main.<fn>
+  
+00:00 +0 -3: redacts credential parameters in /cb#/a=b?view?%63o?de=SECRET
+00:00 +0 -4: redacts credential parameters in /cb#/a=b?view?%63o?de=SECRET [E]
+  Expected: '/cb#/a=b?view?%63o?de=***REDACTED***'
+    Actual: '/cb#/a=b?view?%63o?de=SECRET'
+     Which: is different.
+            Expected: ... w?%63o?de=***REDACTE ...
+              Actual: ... w?%63o?de=SECRET
+                                    ^
+             Differ at offset 22
+  
+  package:matcher                                                expect
+  package:flutter_test/src/widget_tester.dart 473:18             expect
+  .git/codex-issue-work/1280-base-fragment-final_test.dart 61:7  main.<fn>
+  
+00:00 +0 -4: redacts credential parameters in https://h/cb#cb?code=SECRET
+00:00 +0 -5: redacts credential parameters in https://h/cb#cb?code=SECRET [E]
+  Expected: 'https://h/cb#cb?code=***REDACTED***'
+    Actual: 'https://h/cb#cb?code=SECRET'
+     Which: is different.
+            Expected: ... b#cb?code=***REDACTE ...
+              Actual: ... b#cb?code=SECRET
+                                    ^
+             Differ at offset 21
+  
+  package:matcher                                                expect
+  package:flutter_test/src/widget_tester.dart 473:18             expect
+  .git/codex-issue-work/1280-base-fragment-final_test.dart 61:7  main.<fn>
+  
+00:00 +0 -5: redacts credential parameters in https://h/cb#/a=b?token=SECRET
+00:00 +0 -6: redacts credential parameters in https://h/cb#/a=b?token=SECRET [E]
+  Expected: 'https://h/cb#/a=b?token=***REDACTED***'
+    Actual: 'https://h/cb#/a=b?token=SECRET'
+     Which: is different.
+            Expected: ... a=b?token=***REDACTE ...
+              Actual: ... a=b?token=SECRET
+                                    ^
+             Differ at offset 24
+  
+  package:matcher                                                expect
+  package:flutter_test/src/widget_tester.dart 473:18             expect
+  .git/codex-issue-work/1280-base-fragment-final_test.dart 61:7  main.<fn>
+  
+00:00 +0 -6: redacts credential parameters in /cb#cb?view=compact?code=SECRET&state=ok
+00:00 +0 -7: redacts credential parameters in /cb#cb?view=compact?code=SECRET&state=ok [E]
+  Expected: '/cb#cb?view=compact?code=***REDACTED***&state=ok'
+    Actual: '/cb#cb?view=compact?code=SECRET&state=ok'
+     Which: is different.
+            Expected: ... pact?code=***REDACTE ...
+              Actual: ... pact?code=SECRET&sta ...
+                                    ^
+             Differ at offset 25
+  
+  package:matcher                                                expect
+  package:flutter_test/src/widget_tester.dart 473:18             expect
+  .git/codex-issue-work/1280-base-fragment-final_test.dart 61:7  main.<fn>
+  
+00:00 +0 -7: redacts credential parameters in /cb#/a=b?view=compact?%74oken=SECRET&state=ok
+00:00 +0 -8: redacts credential parameters in /cb#/a=b?view=compact?%74oken=SECRET&state=ok [E]
+  Expected: '/cb#/a=b?view=compact?%74oken=***REDACTED***&state=ok'
+    Actual: '/cb#/a=b?view=compact?%74oken=SECRET&state=ok'
+     Which: is different.
+            Expected: ... t?%74oken=***REDACTE ...
+              Actual: ... t?%74oken=SECRET&sta ...
+                                    ^
+             Differ at offset 30
+  
+  package:matcher                                                expect
+  package:flutter_test/src/widget_tester.dart 473:18             expect
+  .git/codex-issue-work/1280-base-fragment-final_test.dart 61:7  main.<fn>
+  
+00:00 +0 -8: redacts credential parameters in /cb#cb?code=SECRET?private_tail&state=ok
+00:00 +0 -9: redacts credential parameters in /cb#cb?code=SECRET?private_tail&state=ok [E]
+  Expected: '/cb#cb?code=***REDACTED***&state=ok'
+    Actual: '/cb#cb?code=SECRET?private_tail&state=ok'
+     Which: is different.
+            Expected: ... b#cb?code=***REDACTE ...
+              Actual: ... b#cb?code=SECRET?pri ...
+                                    ^
+             Differ at offset 12
+  
+  package:matcher                                                expect
+  package:flutter_test/src/widget_tester.dart 473:18             expect
+  .git/codex-issue-work/1280-base-fragment-final_test.dart 61:7  main.<fn>
+  
+00:00 +0 -9: redacts credential parameters in /cb#/a=b?bad%=SECRET&state=ok
+00:00 +0 -10: redacts credential parameters in /cb#/a=b?bad%=SECRET&state=ok [E]
+  Expected: '/cb#/a=b?bad%=***REDACTED***&state=ok'
+    Actual: '/cb#/a=b?bad%=SECRET&state=ok'
+     Which: is different.
+            Expected: ... /a=b?bad%=***REDACTE ...
+              Actual: ... /a=b?bad%=SECRET&sta ...
+                                    ^
+             Differ at offset 14
+  
+  package:matcher                                                expect
+  package:flutter_test/src/widget_tester.dart 473:18             expect
+  .git/codex-issue-work/1280-base-fragment-final_test.dart 61:7  main.<fn>
+  
+00:00 +0 -10: redacts credential parameters in https://app.example/cb#access_token=SECRET&state=ok
+00:00 +1 -10: redacts credential parameters in /cb#id_token=SECRET&state=ok
+00:00 +2 -10: redacts credential parameters in /cb?token=QUERY_SECRET#access_token=FRAGMENT_SECRET&state=ok
+00:00 +3 -10: redacts credential parameters in /cb#access%5Ftoken=SECRET&state=ok
+00:00 +4 -10: redacts credential parameters in /cb#bad%=SECRET&state=ok
+00:00 +5 -10: redacts credential parameters in /cb#access_token=SECRET?still_secret&state=ok
+00:00 +6 -10: redacts credential parameters in /cb#/route?code=SECRET&state=ok
+00:00 +7 -10: redacts credential parameters in /cb#token?public=SECRET&state=ok
+00:00 +8 -10: redacts credential parameters in /cb#access?token=SECRET&state=ok
+00:00 +9 -10: redacts credential parameters in /cb#!/route?code=SECRET&state=ok
+00:00 +10 -10: redacts credential parameters in /cb#ticket=SECRET&state=ok
+00:00 +11 -10: redacts credential parameters in ws://app.example/socket?TiCkEt=SECRET&state=ok
+00:00 +12 -10: redacts credential parameters in /socket?tic%6Bet=SECRET&state=ok
+00:00 +13 -10: ordinary fragments and unrelated fields remain readable
+00:00 +14 -10: ticket-authenticated responses bypass cache and purge older rules
+00:00 +15 -10: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1280-base-fragment-final_test.dart: redacts credential parameters in /cb#/a=b?bad%=SECRET&state=ok
+  /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1280-base-fragment-final_test.dart: redacts credential parameters in /cb#/a=b?co?de=SECRET
+  /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1280-base-fragment-final_test.dart: redacts credential parameters in /cb#/a=b?tok?en=SECRET
+  /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1280-base-fragment-final_test.dart: redacts credential parameters in /cb#/a=b?view=compact?%74oken=SECRET&state=ok
+  ... and 6 more

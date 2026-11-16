@@ -1,0 +1,4 @@
+$ /Users/nguyenanhkiet/Playground/flutter-starter/scripts/dev/format_dart.sh --check
+
+Formatted 636 files (0 changed) in 2.03 seconds.
+exit: 0

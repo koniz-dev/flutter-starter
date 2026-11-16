@@ -1,0 +1,121 @@
+==> env asset guard
+OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+==> generated code (skipped: AUDIT_SKIP_CODEGEN=1)
+==> format (lib test integration_test tool examples)
+Formatted 636 files (0 changed) in 2.32 seconds.
+==> flutter analyze
+Analyzing flutter-starter...                                    
+No issues found! (ran in 11.8s)
+==> flutter test
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_credentials_reporting_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_rule_version_test.dart: the key rules match their version
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_credentials_reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_credentials_reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_credentials_reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_rule_version_test.dart: a purge that fails runs again on the next request
+Cache legacy purge error: Exception: storage busy
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_credentials_reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_credentials_reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_credentials_reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_credentials_reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key passphrase -> "wallet_passphrase"
+00:00 +9: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key token -> "refresh_token"
+00:00 +10: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key secret -> "client_secret"
+00:00 +11: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key apikey -> "apiKey"
+00:00 +12: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key credential -> "credentials"
+00:00 +13: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key authorization -> "authorization"
+00:00 +14: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key privatekey -> "private_key"
+00:00 +15: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key creditcard -> "credit_card"
+00:00 +16: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key cardnumber -> "card_number"
+00:00 +17: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key signature -> "signature"
+00:00 +18: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key pincode -> "pin_code"
+00:00 +19: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key otpcode -> "otp_code"
+00:00 +20: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key jwt -> "jwt"
+00:00 +21: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key accesskey -> "access_key"
+00:00 +22: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key appkey -> "app_key"
+00:00 +23: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key clientkey -> "client_key"
+00:00 +24: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key hmac -> "x-hmac-sha256"
+00:00 +25: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key subscriptionkey -> "Ocp-Apim-Subscription-Key"
+00:00 +26: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key functionskey -> "x-functions-key"
+00:00 +27: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key sessionkey -> "session_key"
+00:00 +28: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key authkey -> "auth_key"
+00:00 +29: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key masterkey -> "master_key"
+00:00 +30: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key licensekey -> "license_key"
+00:00 +31: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key pin -> "pin"
+00:00 +32: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key otp -> "otp"
+00:00 +33: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key cvv -> "cvv"
+00:00 +34: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key cvc -> "cvc"
+00:00 +35: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key session -> "session"
+00:00 +36: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key sessionid -> "sessionId"
+00:00 +37: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key bearer -> "bearer"
+00:00 +38: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key sign -> "sign"
+00:00 +39: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key key -> "key"
+00:00 +40: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key access -> "access"
+00:00 +41: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key refresh -> "refresh"
+00:00 +42: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key near misses of the short names stay readable
+00:00 +43: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key the table covers both rule sets with no duplicates
+00:00 +44: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 2: onResponse never logs an access_token value
+00:00 +45: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: a SimpleJWT login response logs neither token
+00:00 +46: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: ticket is redacted in a query but stays readable in a body
+00:00 +47: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: code is a secret in a query string only a query code is redacted in the path and the query parameters
+[... 1376 lines elided ...]
+00:45 +617: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_freshness_test.dart: criterion 1: an entry older than maxAge goes back to the network an entry older than maxStale is gone even as a fallback
+00:45 +618: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_freshness_test.dart: criterion 1: an entry older than maxAge goes back to the network an entry older than maxStale is gone even as a fallback
+00:45 +619: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_freshness_test.dart: criterion 1: an entry older than maxAge goes back to the network an entry older than maxStale is gone even as a fallback
+00:45 +620: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_freshness_test.dart: criterion 1: an entry older than maxAge goes back to the network an entry older than maxStale is gone even as a fallback
+00:45 +621: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_freshness_test.dart: criterion 1: an entry older than maxAge goes back to the network an entry older than maxStale is gone even as a fallback
+00:46 +622: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_freshness_test.dart: criterion 1: an entry older than maxAge goes back to the network an entry older than maxStale is gone even as a fallback
+00:46 +623: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_freshness_test.dart: criterion 1: an entry older than maxAge goes back to the network an entry older than maxStale is gone even as a fallback
+00:46 +624: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_freshness_test.dart: criterion 1: an entry older than maxAge goes back to the network an entry older than maxStale is gone even as a fallback
+00:46 +625: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_freshness_test.dart: criterion 1: an entry older than maxAge goes back to the network an entry older than maxStale is gone even as a fallback
+00:46 +626: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_freshness_test.dart: criterion 1: an entry older than maxAge goes back to the network an entry older than maxStale is gone even as a fallback
+00:46 +627: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_freshness_test.dart: criterion 1: an entry older than maxAge goes back to the network an entry older than maxStale is gone even as a fallback
+00:46 +628: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_freshness_test.dart: criterion 1: an entry older than maxAge goes back to the network an entry older than maxStale is gone even as a fallback
+00:46 +629: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_freshness_test.dart: criterion 1: an entry older than maxAge goes back to the network an entry older than maxStale is gone even as a fallback
+00:46 +630: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_freshness_test.dart: criterion 1: an entry older than maxAge goes back to the network an entry older than maxStale is gone even as a fallback
+00:46 +631: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_freshness_test.dart: criterion 1: an entry older than maxAge goes back to the network an entry older than maxStale is gone even as a fallback
+00:46 +632: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_freshness_test.dart: criterion 1: an entry older than maxAge goes back to the network an entry older than maxStale is gone even as a fallback
+00:46 +633: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_freshness_test.dart: criterion 1: an entry older than maxAge goes back to the network an entry older than maxStale is gone even as a fallback
+00:47 +633: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/request_body_replay_test.dart: a multipart upload replayed after a 401 refresh reaches the transport again with the file, and the caller gets the 200
+Cache legacy purge error: type 'Null' is not a subtype of type 'Future<List<String>?>'
+00:47 +634: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_freshness_test.dart: criterion 1: an entry older than maxAge goes back to the network an entry older than maxStale is gone even as a fallback
+00:47 +634: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/request_body_replay_test.dart: a multipart upload replayed after a 401 refresh two uploads queued behind one refresh each carry their own file
+Cache legacy purge error: type 'Null' is not a subtype of type 'Future<List<String>?>'
+Cache legacy purge error: type 'Null' is not a subtype of type 'Future<List<String>?>'
+00:47 +635: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_freshness_test.dart: criterion 1: an entry older than maxAge goes back to the network an entry older than maxStale is gone even as a fallback
+00:47 +635: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/request_body_replay_test.dart: a multipart upload replayed after a 401 refresh a Stream body fails the replay with a NetworkException naming the reason, not a StateError
+Cache legacy purge error: type 'Null' is not a subtype of type 'Future<List<String>?>'
+00:47 +636: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_freshness_test.dart: criterion 1: an entry older than maxAge goes back to the network an entry older than maxStale is gone even as a fallback
+00:47 +637: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_freshness_test.dart: criterion 1: an entry older than maxAge goes back to the network an entry older than maxStale is gone even as a fallback
+00:47 +638: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_freshness_test.dart: criterion 1: an entry older than maxAge goes back to the network an entry older than maxStale is gone even as a fallback
+00:47 +639: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_freshness_test.dart: criterion 1: an entry older than maxAge goes back to the network an entry older than maxStale is gone even as a fallback
+00:47 +640: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_freshness_test.dart: criterion 1: an entry older than maxAge goes back to the network an entry older than maxStale is gone even as a fallback
+00:47 +641: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_freshness_test.dart: criterion 1: an entry older than maxAge goes back to the network an entry older than maxStale is gone even as a fallback
+00:47 +642: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_freshness_test.dart: criterion 1: an entry older than maxAge goes back to the network an entry older than maxStale is gone even as a fallback
+00:47 +643: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_freshness_test.dart: criterion 1: an entry older than maxAge goes back to the network an entry older than maxStale is gone even as a fallback
+00:47 +644: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_freshness_test.dart: criterion 1: an entry older than maxAge goes back to the network an entry older than maxStale is gone even as a fallback
+00:47 +644: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/ssl_pinning_test.dart: SslPinning rejects a certificate whose fingerprint is not pinned
+SSL Pinning failure for api.example.com: 
+Expected one of: [0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef]
+Got: fdeab9acf3710362bd2658cdc9a29e8f9c757fcf9811603a8c447cd1d9151108
+00:47 +645: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_freshness_test.dart: criterion 1: an entry older than maxAge goes back to the network an entry older than maxStale is gone even as a fallback
+00:47 +645: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/ssl_pinning_test.dart: SslPinning rejects every certificate when the pin list is empty
+SSL Pinning failure for : 
+Expected one of: []
+Got: fdeab9acf3710362bd2658cdc9a29e8f9c757fcf9811603a8c447cd1d9151108
+00:47 +646: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_freshness_test.dart: criterion 1: an entry older than maxAge goes back to the network an entry older than maxStale is gone even as a fallback
+00:47 +646: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/ssl_pinning_test.dart: SslPinning fails loudly when enabled with no fingerprints
+SSL PINNING MISCONFIGURED: SSL pinning is enabled (by ENABLE_SSL_PINNING or the environment default) but API_SSL_FINGERPRINTS is empty. Nothing is pinned: every certificate the system trust store accepts would be accepted. Configure API_SSL_FINGERPRINTS or set ENABLE_SSL_PINNING=false.
+00:47 +647: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_freshness_test.dart: criterion 1: an entry older than maxAge goes back to the network an entry older than maxStale is gone even as a fallback
+00:47 +648: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_freshness_test.dart: criterion 1: an entry older than maxAge goes back to the network an entry older than maxStale is gone even as a fallback
+00:47 +649: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_freshness_test.dart: criterion 1: an entry older than maxAge goes back to the network an entry older than maxStale is gone even as a fallback
+00:47 +650: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_freshness_test.dart: criterion 1: an entry older than maxAge goes back to the network an entry older than maxStale is gone even as a fallback
+00:47 +651: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_freshness_test.dart: criterion 1: an entry older than maxAge goes back to the network an entry older than maxStale is gone even as a fallback
+00:48 +652: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_freshness_test.dart: criterion 2: ApiClient forwards a CacheConfig a non-default maxAge takes effect
+00:48 +653: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_freshness_test.dart: criterion 2: ApiClient forwards a CacheConfig enableCache: false bypasses the cache entirely
+00:48 +654: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:48 +655: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: the scan itself flags a body with no assertion, naming its line
+00:48 +656: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: the scan itself accepts expect, verify, fail and expect-named helpers
+00:48 +657: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: the scan itself ignores an assertion that only appears in a string or comment
+00:48 +658: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: the scan itself skips skipped tests and honours the allow-list marker
+00:48 +659: All tests passed!

@@ -1,0 +1,102 @@
+diff --git a/lib/core/network/interceptors/api_logging_interceptor.dart b/lib/core/network/interceptors/api_logging_interceptor.dart
+index 3efe4674dce..1dd36490271 100644
+--- a/lib/core/network/interceptors/api_logging_interceptor.dart
++++ b/lib/core/network/interceptors/api_logging_interceptor.dart
+@@ -343,8 +343,57 @@ class ApiLoggingInterceptor extends Interceptor {
+         isRoute && routeQuery >= 0 && (equals < 0 || routeQuery < equals)
+         ? routeQuery + 1
+         : 0;
+-    return '$safeBase#${fragment.substring(0, prefixLength)}'
++    final safeFragment =
++        '${fragment.substring(0, prefixLength)}'
+         '${_redactParameters(fragment.substring(prefixLength))}';
++    // A fragment may have a plain prefix or an '=' before its router query.
++    // Scan non-overlapping query keys within each '&' field once, then replace
++    // the entire sensitive value, including any '?' in that secret value.
++    final safeQueries = safeFragment
++        .split('&')
++        .map((pair) {
++          var cursor = 0;
++          while (true) {
++            final query = pair.indexOf('?', cursor);
++            if (query < 0) break;
++            final equals = pair.indexOf('=', query + 1);
++            if (equals < 0) break;
++            if (_hasSensitiveFragmentKey(pair.substring(query + 1, equals))) {
++              return '${pair.substring(0, equals + 1)}$_redacted';
++            }
++            cursor = equals + 1;
++          }
++          return pair;
++        })
++        .join('&');
++    return '$safeBase#$safeQueries';
++  }
++
++  // All suffix keys share the same '='. Normalize each part once instead of
++  // repeatedly copying/decoding the suffix after every '?' in a long key.
++  static bool _hasSensitiveFragmentKey(String rawKey) {
++    final parts = <String>[];
++    for (final part in rawKey.split('?')) {
++      final key = _decodeKey(part);
++      if (key == null) return true;
++      parts.add(_normalizeKey(key));
++    }
++    final normalized = parts.join();
++    // A fragment rule matching any suffix also matches this complete key.
++    if (isSensitiveQueryKey(normalized)) return true;
++    var remaining = normalized.length;
++    for (final part in parts) {
++      remaining -= part.length;
++      // Exact rules may match only a suffix, e.g. 'view?co?de'. Compare fixed
++      // key lengths and endings without constructing each growing suffix.
++      bool matches(String key) =>
++          key.length == remaining && normalized.endsWith(key);
++      if (_sensitiveKeysExact.any(matches) ||
++          _sensitiveQueryOnlyKeys.any(matches)) {
++        return true;
++      }
++    }
++    return false;
+   }
+ 
+   static String _redactParameters(String parameters) => parameters
+diff --git a/test/core/network/interceptors/url_fragment_redaction_test.dart b/test/core/network/interceptors/url_fragment_redaction_test.dart
+index 860eacd9b75..9cc89e08eee 100644
+--- a/test/core/network/interceptors/url_fragment_redaction_test.dart
++++ b/test/core/network/interceptors/url_fragment_redaction_test.dart
+@@ -23,6 +23,20 @@ class _ResponseHandler extends ResponseInterceptorHandler {}
+ void main() {
+   const redacted = '***REDACTED***';
+   const cases = {
++    '/cb#/a=b?co?de=SECRET': '/cb#/a=b?co?de=$redacted',
++    '/cb#/a=b?tok?en=SECRET': '/cb#/a=b?tok?en=$redacted',
++    '/cb#/a=b?view?co?de=SECRET?private_tail&state=ok':
++        '/cb#/a=b?view?co?de=$redacted&state=ok',
++    '/cb#/a=b?view?%63o?de=SECRET': '/cb#/a=b?view?%63o?de=$redacted',
++    'https://h/cb#cb?code=SECRET': 'https://h/cb#cb?code=$redacted',
++    'https://h/cb#/a=b?token=SECRET': 'https://h/cb#/a=b?token=$redacted',
++    '/cb#cb?view=compact?code=SECRET&state=ok':
++        '/cb#cb?view=compact?code=$redacted&state=ok',
++    '/cb#/a=b?view=compact?%74oken=SECRET&state=ok':
++        '/cb#/a=b?view=compact?%74oken=$redacted&state=ok',
++    '/cb#cb?code=SECRET?private_tail&state=ok':
++        '/cb#cb?code=$redacted&state=ok',
++    '/cb#/a=b?bad%=SECRET&state=ok': '/cb#/a=b?bad%=$redacted&state=ok',
+     'https://app.example/cb#access_token=SECRET&state=ok':
+         'https://app.example/cb#access_token=$redacted&state=ok',
+     '/cb#id_token=SECRET&state=ok': '/cb#id_token=$redacted&state=ok',
+@@ -53,6 +67,13 @@ void main() {
+     for (final path in [
+       '/guide#section-2',
+       '/guide#section?view=compact',
++      '/guide#/a=b?view=compact',
++      '/guide#/a=b?view?ti?tle=compact',
++      '/guide#/a=b?view?codeCount=2',
++      '/guide#/a=b?prefix?co?dex=public',
++      '/guide#/a=b?prefix%3Fcode=public',
++      '/guide#section?view=compact?sort=name',
++      '/guide#!/token/callback?view=compact',
+       '/guide#/token/callback?view=compact',
+       '/guide?view=compact#section-2',
+       '/socket?ticketCount=2&tickets=public#section',

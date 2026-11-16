@@ -1,0 +1,29 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1280-independent-final-probes_test.dart: nested encoded malformed OAuth secrets and idempotence
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1280-independent-final-probes_test.dart: nested encoded malformed OAuth secrets and idempotence
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1280-independent-final-probes_test.dart: nested encoded malformed OAuth secrets and idempotence
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1280-independent-final-probes_test.dart: nested encoded malformed OAuth secrets and idempotence
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1280-independent-final-probes_test.dart: nested encoded malformed OAuth secrets and idempotence
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1280-independent-final-probes_test.dart: nested encoded malformed OAuth secrets and idempotence
+00:00 +6: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1280-independent-final-probes_test.dart: nested encoded malformed OAuth secrets and idempotence
+00:00 +7: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1280-independent-final-probes_test.dart: nested encoded malformed OAuth secrets and idempotence
+00:00 +8: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1280-independent-final-probes_test.dart: nested encoded malformed OAuth secrets and idempotence
+00:00 +9: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1280-independent-final-probes_test.dart: nested encoded malformed OAuth secrets and idempotence
+00:00 +10: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1280-independent-final-probes_test.dart: nested encoded malformed OAuth secrets and idempotence
+00:00 +11: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1280-independent-final-probes_test.dart: nested encoded malformed OAuth secrets and idempotence
+00:00 +12: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1280-independent-final-probes_test.dart: nested encoded malformed OAuth secrets and idempotence
+00:00 +13: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1280-independent-final-probes_test.dart: nested encoded malformed OAuth secrets and idempotence
+00:00 +14: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1280-independent-final-probes_test.dart: nested encoded malformed OAuth secrets and idempotence
+00:00 +15: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1280-independent-final-probes_test.dart: nested encoded malformed OAuth secrets and idempotence
+00:00 +16: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1280-independent-final-probes_test.dart: nested encoded malformed OAuth secrets and idempotence
+00:00 +17: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1280-independent-final-probes_test.dart: nested encoded malformed OAuth secrets and idempotence
+00:00 +18: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1280-independent-final-probes_test.dart: nested encoded malformed OAuth secrets and idempotence
+00:00 +19: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in /cb#access?token=SECRET&state=ok
+00:00 +20: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1280-independent-final-probes_test.dart: exact suffix boundary and encoded question controls
+00:00 +21: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1280-independent-final-probes_test.dart: exact suffix boundary and encoded question controls
+00:00 +22: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in /cb#ticket=SECRET&state=ok
+00:00 +23: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in ws://app.example/socket?TiCkEt=SECRET&state=ok
+00:00 +24: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in /socket?tic%6Bet=SECRET&state=ok
+00:00 +25: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: ordinary fragments and unrelated fields remain readable
+00:00 +26: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: ticket-authenticated responses bypass cache and purge older rules
+00:00 +27: All tests passed!

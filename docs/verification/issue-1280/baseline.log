@@ -1,0 +1,108 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart
+00:00 +0: redacts credential parameters in https://h/cb#cb?code=SECRET
+00:00 +0 -1: redacts credential parameters in https://h/cb#cb?code=SECRET [E]
+  Expected: 'https://h/cb#cb?code=***REDACTED***'
+    Actual: 'https://h/cb#cb?code=SECRET'
+     Which: is different.
+            Expected: ... b#cb?code=***REDACTE ...
+              Actual: ... b#cb?code=SECRET
+                                    ^
+             Differ at offset 21
+  
+  package:matcher                                                       expect
+  package:flutter_test/src/widget_tester.dart 473:18                    expect
+  test/core/network/interceptors/url_fragment_redaction_test.dart 57:7  main.<fn>
+  
+00:00 +0 -1: redacts credential parameters in https://h/cb#/a=b?token=SECRET
+00:00 +0 -2: redacts credential parameters in https://h/cb#/a=b?token=SECRET [E]
+  Expected: 'https://h/cb#/a=b?token=***REDACTED***'
+    Actual: 'https://h/cb#/a=b?token=SECRET'
+     Which: is different.
+            Expected: ... a=b?token=***REDACTE ...
+              Actual: ... a=b?token=SECRET
+                                    ^
+             Differ at offset 24
+  
+  package:matcher                                                       expect
+  package:flutter_test/src/widget_tester.dart 473:18                    expect
+  test/core/network/interceptors/url_fragment_redaction_test.dart 57:7  main.<fn>
+  
+00:00 +0 -2: redacts credential parameters in /cb#cb?view=compact?code=SECRET&state=ok
+00:00 +0 -3: redacts credential parameters in /cb#cb?view=compact?code=SECRET&state=ok [E]
+  Expected: '/cb#cb?view=compact?code=***REDACTED***&state=ok'
+    Actual: '/cb#cb?view=compact?code=SECRET&state=ok'
+     Which: is different.
+            Expected: ... pact?code=***REDACTE ...
+              Actual: ... pact?code=SECRET&sta ...
+                                    ^
+             Differ at offset 25
+  
+  package:matcher                                                       expect
+  package:flutter_test/src/widget_tester.dart 473:18                    expect
+  test/core/network/interceptors/url_fragment_redaction_test.dart 57:7  main.<fn>
+  
+00:00 +0 -3: redacts credential parameters in /cb#/a=b?view=compact?%74oken=SECRET&state=ok
+00:00 +0 -4: redacts credential parameters in /cb#/a=b?view=compact?%74oken=SECRET&state=ok [E]
+  Expected: '/cb#/a=b?view=compact?%74oken=***REDACTED***&state=ok'
+    Actual: '/cb#/a=b?view=compact?%74oken=SECRET&state=ok'
+     Which: is different.
+            Expected: ... t?%74oken=***REDACTE ...
+              Actual: ... t?%74oken=SECRET&sta ...
+                                    ^
+             Differ at offset 30
+  
+  package:matcher                                                       expect
+  package:flutter_test/src/widget_tester.dart 473:18                    expect
+  test/core/network/interceptors/url_fragment_redaction_test.dart 57:7  main.<fn>
+  
+00:00 +0 -4: redacts credential parameters in /cb#cb?code=SECRET?private_tail&state=ok
+00:00 +0 -5: redacts credential parameters in /cb#cb?code=SECRET?private_tail&state=ok [E]
+  Expected: '/cb#cb?code=***REDACTED***&state=ok'
+    Actual: '/cb#cb?code=SECRET?private_tail&state=ok'
+     Which: is different.
+            Expected: ... b#cb?code=***REDACTE ...
+              Actual: ... b#cb?code=SECRET?pri ...
+                                    ^
+             Differ at offset 12
+  
+  package:matcher                                                       expect
+  package:flutter_test/src/widget_tester.dart 473:18                    expect
+  test/core/network/interceptors/url_fragment_redaction_test.dart 57:7  main.<fn>
+  
+00:00 +0 -5: redacts credential parameters in /cb#/a=b?bad%=SECRET&state=ok
+00:00 +0 -6: redacts credential parameters in /cb#/a=b?bad%=SECRET&state=ok [E]
+  Expected: '/cb#/a=b?bad%=***REDACTED***&state=ok'
+    Actual: '/cb#/a=b?bad%=SECRET&state=ok'
+     Which: is different.
+            Expected: ... /a=b?bad%=***REDACTE ...
+              Actual: ... /a=b?bad%=SECRET&sta ...
+                                    ^
+             Differ at offset 14
+  
+  package:matcher                                                       expect
+  package:flutter_test/src/widget_tester.dart 473:18                    expect
+  test/core/network/interceptors/url_fragment_redaction_test.dart 57:7  main.<fn>
+  
+00:00 +0 -6: redacts credential parameters in https://app.example/cb#access_token=SECRET&state=ok
+00:00 +1 -6: redacts credential parameters in /cb#id_token=SECRET&state=ok
+00:00 +2 -6: redacts credential parameters in /cb?token=QUERY_SECRET#access_token=FRAGMENT_SECRET&state=ok
+00:00 +3 -6: redacts credential parameters in /cb#access%5Ftoken=SECRET&state=ok
+00:00 +4 -6: redacts credential parameters in /cb#bad%=SECRET&state=ok
+00:00 +5 -6: redacts credential parameters in /cb#access_token=SECRET?still_secret&state=ok
+00:00 +6 -6: redacts credential parameters in /cb#/route?code=SECRET&state=ok
+00:00 +7 -6: redacts credential parameters in /cb#token?public=SECRET&state=ok
+00:00 +8 -6: redacts credential parameters in /cb#access?token=SECRET&state=ok
+00:00 +9 -6: redacts credential parameters in /cb#!/route?code=SECRET&state=ok
+00:00 +10 -6: redacts credential parameters in /cb#ticket=SECRET&state=ok
+00:00 +11 -6: redacts credential parameters in ws://app.example/socket?TiCkEt=SECRET&state=ok
+00:00 +12 -6: redacts credential parameters in /socket?tic%6Bet=SECRET&state=ok
+00:00 +13 -6: ordinary fragments and unrelated fields remain readable
+00:00 +14 -6: ticket-authenticated responses bypass cache and purge older rules
+00:00 +15 -6: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in /cb#/a=b?bad%=SECRET&state=ok
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in /cb#/a=b?view=compact?%74oken=SECRET&state=ok
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in /cb#cb?code=SECRET?private_tail&state=ok
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in /cb#cb?view=compact?code=SECRET&state=ok
+  ... and 2 more
