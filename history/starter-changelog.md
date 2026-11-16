@@ -29,6 +29,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- [Redact nested fragment credentials](https://github.com/koniz-dev/flutter-starter/issues/1280): hide sensitive query values after plain fragment prefixes or earlier equals signs, including nested query markers and complete secret tails, while preserving public route fragments.
+
 - [Complete sign-in persistence](https://github.com/koniz-dev/flutter-starter/issues/1279): replace the whole credential pair, clear failed writes before another sign-in persists, and keep failed replacements out of stored/visible sessions. Coordinate restore, refresh and 401 handling with pending persistence, preserve remote-failure sessions and reject stale refresh/listener work.
 
 - [Fastlane Play Store metadata](https://github.com/koniz-dev/flutter-starter/issues/1267): replace unsupported whatsnew_directory with an absolute metadata_path root and verify all five upload calls against documented Supply options. Correct root-shell commands, per-lane credential guidance, app/store changelog separation and automatic IPA build troubleshooting.
