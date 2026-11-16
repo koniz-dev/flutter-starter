@@ -1,0 +1,38 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/wrong_preference_type_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 Properties should have correct fromVersion
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 Properties should have correct toVersion
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 Properties should have non-empty description
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 migrate should rename user_name to username
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 migrate should not migrate if user_name does not exist
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 migrate should transform theme to theme_mode
+00:00 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 migrate should transform light theme correctly
+00:00 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 migrate should default unknown theme to system
+00:00 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 migrate should handle case-insensitive theme values
+00:00 +9: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 migrate should migrate comma-separated tags to list
+00:00 +10: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 migrate should convert an empty tags string to an empty list
+00:00 +11: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 migrate should add a default for a new key if not exists
+00:00 +12: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 migrate should not overwrite an existing value
+00:00 +13: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 migrate should not seed a language choice
+00:00 +14: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 migrate should remove deprecated keys
+00:00 +15: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 migrate should handle deprecated keys that do not exist
+00:00 +16: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 migrate should handle user_data (currently no-op)
+00:00 +17: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 migrate should handle user_data that does not exist
+00:00 +18: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 canMigrate should return true when version matches
+00:00 +19: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 canMigrate should return false when version does not match
+00:00 +20: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 canMigrate should return true when no version set (initial)
+00:00 +21: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 canMigrate should return false for invalid version string
+00:00 +22: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 execute should execute migration and update version
+00:00 +23: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 execute should throw when version does not match
+00:00 +24: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 Edge Cases should handle migration with all transformations
+00:00 +25: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 Edge Cases should handle tags with extra spaces
+00:00 +26: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 Edge Cases should handle tags with single tag
+00:00 +27: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 idempotency migrate twice does not throw and leaves the same data
+00:00 +28: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 idempotency migrate recovers a store left mid-migration
+00:00 +29: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 idempotency execute after a re-run leaves storage stamped at v2
+00:00 +30: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/wrong_preference_type_test.dart: wrong preference type: int reports storage failure without deleting the value
+00:00 +31: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/wrong_preference_type_test.dart: wrong preference type: bool reports storage failure without deleting the value
+00:00 +32: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/wrong_preference_type_test.dart: wrong preference type: double reports storage failure without deleting the value
+00:00 +33: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/wrong_preference_type_test.dart: wrong preference type: List<String> reports storage failure without deleting the value
+00:00 +34: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/wrong_preference_type_test.dart: migration preserves schema and legacy data on other read failures
+00:00 +35: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/wrong_preference_type_test.dart: wrong preference type: tasks shows a recoverable storage error
+00:02 +36: All tests passed!

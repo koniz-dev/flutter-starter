@@ -1,0 +1,256 @@
+diff --git a/lib/core/storage/migration/migrations/migration_v1_to_v2.dart b/lib/core/storage/migration/migrations/migration_v1_to_v2.dart
+index 779844faa23..78780da0fff 100644
+--- a/lib/core/storage/migration/migrations/migration_v1_to_v2.dart
++++ b/lib/core/storage/migration/migrations/migration_v1_to_v2.dart
+@@ -1,3 +1,4 @@
++import 'package:flutter_starter/core/errors/exceptions.dart';
+ import 'package:flutter_starter/core/storage/migration/storage_migration.dart';
+ import 'package:flutter_starter/core/storage/storage_service.dart';
+ import 'package:flutter_starter/core/storage/string_list_encoding.dart';
+@@ -131,23 +132,19 @@ class MigrationV1ToV2 extends StorageMigration {
+     }
+   }
+ 
+-  /// Read [key] as a String, treating a value of any other type as absent.
++  /// Reads a legacy string, skipping a value already stored as another type.
+   ///
+-  /// A store written by an earlier run of this migration holds a
+-  /// `List<String>` under 'user_tags'. `SharedPreferences.getString` casts
+-  /// the cached value blindly, so reading it throws a `TypeError` - an
+-  /// `Error`, not an `Exception`, which every `on Exception` handler in the
+-  /// storage and auth layers misses. That turned a re-run into a crash before
+-  /// `runApp`.
+-  ///
+-  /// Returning null instead is what makes this migration idempotent: the
+-  /// second run sees nothing left to convert and does nothing.
++  /// Re-runs see a `List<String>` under 'user_tags'. StorageService reports
++  /// that expected type mismatch as a coded CacheException; older/custom
++  /// backends may still throw TypeError. Other read failures must propagate
++  /// so an unreadable legacy value cannot be skipped while advancing schema.
+   Future<String?> _readLegacyString(IStorageService storage, String key) async {
+     try {
+       return await storage.getString(key);
+-      // Catching an Error is the point here: the failure is a blind cast
+-      // inside the storage backend, not a condition it reports as an
+-      // Exception, and there is no type-probing read on IStorageService.
++    } on CacheException catch (error) {
++      if (error.code != invalidPreferenceTypeCode) rethrow;
++      return null;
++      // Backward compatibility for a backend that still casts blindly.
+       // ignore: avoid_catching_errors
+     } on TypeError {
+       return null;
+diff --git a/lib/core/storage/storage_service.dart b/lib/core/storage/storage_service.dart
+index e19bfbc37c5..10769e189e5 100644
+--- a/lib/core/storage/storage_service.dart
++++ b/lib/core/storage/storage_service.dart
+@@ -1,6 +1,10 @@
+ import 'package:flutter_starter/core/contracts/storage_contracts.dart';
++import 'package:flutter_starter/core/errors/exceptions.dart';
+ import 'package:shared_preferences/shared_preferences.dart';
+ 
++/// Error code for a stored value incompatible with a string preference read.
++const invalidPreferenceTypeCode = 'INVALID_PREFERENCE_TYPE';
++
+ /// Abstract interface for storage operations
+ ///
+ /// A mutation returning `false` failed. Check its result even when no exception
+@@ -84,10 +88,18 @@ class StorageService implements IStorageService, IKeyValueStore {
+     _prefs ??= await SharedPreferences.getInstance();
+   }
+ 
++  /// A wrong stored type is a read failure, never a missing value. Reporting
++  /// it as [CacheException] lets callers handle corruption without an uncaught
++  /// cast error or silently overwriting the original data.
+   @override
+   Future<String?> getString(String key) async {
+     final prefs = await _preferences;
+-    return prefs.getString(key);
++    final value = prefs.get(key);
++    if (value == null || value is String) return value as String?;
++    throw const CacheException(
++      'Stored preference is not a string',
++      code: invalidPreferenceTypeCode,
++    );
+   }
+ 
+   @override
+diff --git a/test/core/startup/startup_reachability_test.dart b/test/core/startup/startup_reachability_test.dart
+index b5d79c76c5c..c5e5688fcea 100644
+--- a/test/core/startup/startup_reachability_test.dart
++++ b/test/core/startup/startup_reachability_test.dart
+@@ -714,6 +714,24 @@ void main() {
+   });
+ 
+   group('main() boots MyApp end to end on a healthy startup', () {
++    testWidgets('wrong preference type: language boots in the device locale', (
++      tester,
++    ) async {
++      SharedPreferences.setMockInitialValues({'language': 42});
++      installSecureBackend(<String, String>{});
++      tester.platformDispatcher.localesTestValue = const [Locale('vi', 'VN')];
++      addTearDown(tester.platformDispatcher.clearLocalesTestValue);
++
++      await bootRealMain(tester);
++
++      expect(find.byType(app.MyApp), findsOneWidget);
++      expect(find.byType(StartupFailureApp), findsNothing);
++      final materialApp = tester.widget<MaterialApp>(find.byType(MaterialApp));
++      expect(materialApp.locale?.languageCode, 'vi');
++      final prefs = await SharedPreferences.getInstance();
++      expect(prefs.get('language'), 42);
++    });
++
+     testWidgets('a healthy startup hands MyApp to runApp, not the failure '
+         'screen', (tester) async {
+       // A working Keychain is what separates this from the first failure case:
+diff --git a/test/core/storage/wrong_preference_type_test.dart b/test/core/storage/wrong_preference_type_test.dart
+new file mode 100644
+index 00000000000..26e1050c9ae
+--- /dev/null
++++ b/test/core/storage/wrong_preference_type_test.dart
+@@ -0,0 +1,65 @@
++import 'package:flutter_starter/core/errors/exceptions.dart';
++import 'package:flutter_starter/core/storage/migration/migrations/migration_v1_to_v2.dart';
++import 'package:flutter_starter/core/storage/storage_service.dart';
++import 'package:flutter_starter/core/storage/storage_version.dart';
++import 'package:flutter_test/flutter_test.dart';
++import 'package:shared_preferences/shared_preferences.dart';
++
++class _UnreadableLegacyStorage extends StorageService {
++  @override
++  Future<String?> getString(String key) async {
++    if (key == 'user_tags') {
++      throw const CacheException('Read unavailable', code: 'STORE_READ_FAILED');
++    }
++    return await super.getString(key);
++  }
++}
++
++void main() {
++  TestWidgetsFlutterBinding.ensureInitialized();
++
++  for (final value in <Object>[
++    42,
++    true,
++    1.5,
++    <String>['preserve me'],
++  ]) {
++    test('wrong preference type: ${value.runtimeType} reports storage failure '
++        'without deleting the value', () async {
++      SharedPreferences.setMockInitialValues({'value': value});
++      final storage = StorageService();
++      await expectLater(
++        storage.getString('value'),
++        throwsA(isA<CacheException>()),
++      );
++      final prefs = await SharedPreferences.getInstance();
++      expect(prefs.get('value'), value);
++      expect(await storage.setString('value', 'repaired'), isTrue);
++      expect(await storage.getString('value'), 'repaired');
++    });
++  }
++
++  test(
++    'migration preserves schema and legacy data on other read failures',
++    () async {
++      SharedPreferences.setMockInitialValues({
++        StorageVersion.versionKey: '1',
++        'user_tags': 'original,tags',
++      });
++      final storage = _UnreadableLegacyStorage();
++      await expectLater(
++        MigrationV1ToV2().execute(storage),
++        throwsA(
++          isA<CacheException>().having(
++            (error) => error.code,
++            'code',
++            'STORE_READ_FAILED',
++          ),
++        ),
++      );
++      final prefs = await SharedPreferences.getInstance();
++      expect(prefs.get(StorageVersion.versionKey), '1');
++      expect(prefs.get('user_tags'), 'original,tags');
++    },
++  );
++}
+diff --git a/test/features/tasks/presentation/screens/wrong_preference_type_test.dart b/test/features/tasks/presentation/screens/wrong_preference_type_test.dart
+new file mode 100644
+index 00000000000..fa9315fe45b
+--- /dev/null
++++ b/test/features/tasks/presentation/screens/wrong_preference_type_test.dart
+@@ -0,0 +1,73 @@
++import 'package:flutter_riverpod/flutter_riverpod.dart';
++import 'package:flutter_starter/core/di/providers.dart';
++import 'package:flutter_starter/core/errors/failures.dart';
++import 'package:flutter_starter/core/storage/storage_service.dart';
++import 'package:flutter_starter/core/utils/result.dart';
++import 'package:flutter_starter/features/tasks/di/tasks_providers.dart';
++import 'package:flutter_starter/features/tasks/domain/entities/task.dart';
++import 'package:flutter_starter/features/tasks/presentation/providers/tasks_provider.dart';
++import 'package:flutter_starter/features/tasks/presentation/screens/tasks_list_screen.dart';
++import 'package:flutter_starter/l10n/app_localizations.dart';
++import 'package:flutter_starter/l10n/app_localizations_en.dart';
++import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
++import 'package:shared_preferences/shared_preferences.dart';
++
++void main() {
++  testWidgets(
++    'wrong preference type: tasks shows a recoverable storage error',
++    (
++      tester,
++    ) async {
++      const original = <String>['preserve me'];
++      SharedPreferences.setMockInitialValues({'tasks_data': original});
++      final storage = StorageService();
++      await tester.runAsync(storage.init);
++      final container = ProviderContainer(
++        overrides: [storageServiceProvider.overrideWithValue(storage)],
++      );
++      addTearDown(container.dispose);
++      await tester.pumpWidget(
++        UncontrolledProviderScope(
++          container: container,
++          child: const MaterialApp(
++            locale: Locale('en'),
++            localizationsDelegates: AppLocalizations.localizationsDelegates,
++            supportedLocales: AppLocalizations.supportedLocales,
++            home: TasksListScreen(),
++          ),
++        ),
++      );
++      await tester.pumpAndSettle(
++        const Duration(milliseconds: 100),
++        EnginePhase.sendSemanticsUpdate,
++        const Duration(seconds: 2),
++      );
++      final state = container.read(tasksNotifierProvider);
++      expect(state.isLoading, isFalse);
++      expect(state.failure, isA<CacheFailure>());
++      expect(find.byType(CircularProgressIndicator), findsNothing);
++      final l10n = AppLocalizationsEn();
++      expect(find.text(l10n.failureStorage), findsOneWidget);
++      expect(find.text(l10n.retry), findsOneWidget);
++
++      final now = DateTime(2026);
++      final created = await container
++          .read(tasksRepositoryProvider)
++          .createTask(
++            Task(id: 'new', title: 'New task', createdAt: now, updatedAt: now),
++          );
++      expect(created.failureOrNull, isA<CacheFailure>());
++      final prefs = await SharedPreferences.getInstance();
++      expect(prefs.get('tasks_data'), original);
++
++      await tester.runAsync(() => storage.setString('tasks_data', '[]'));
++      await container.read(tasksNotifierProvider.notifier).refresh();
++      await tester.pumpAndSettle();
++      expect(container.read(tasksNotifierProvider).isLoading, isFalse);
++      expect(container.read(tasksNotifierProvider).failure, isNull);
++      expect(find.text(l10n.failureStorage), findsNothing);
++      expect(tester.takeException(), isNull);
++    },
++  );
++}

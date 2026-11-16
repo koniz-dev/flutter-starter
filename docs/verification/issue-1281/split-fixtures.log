@@ -1,0 +1,8 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/wrong_preference_type_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/wrong_preference_type_test.dart: wrong preference type: int reports storage failure without deleting the value
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/wrong_preference_type_test.dart: wrong preference type: bool reports storage failure without deleting the value
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/wrong_preference_type_test.dart: wrong preference type: double reports storage failure without deleting the value
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/wrong_preference_type_test.dart: wrong preference type: List<String> reports storage failure without deleting the value
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/wrong_preference_type_test.dart: migration preserves schema and legacy data on other read failures
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/wrong_preference_type_test.dart: wrong preference type: tasks shows a recoverable storage error
+00:04 +6: All tests passed!

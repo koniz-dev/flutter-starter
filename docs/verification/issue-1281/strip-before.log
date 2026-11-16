@@ -1,0 +1,14 @@
+Strip tasks-removed job133466797024 at fccc062991fbe1f7e2661cbe45c6bf225baba06a
+2026-11-16T17:08:16.4560213Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.50.0-x64/flutter
+2026-11-16T17:08:16.4560596Z   PUB_CACHE: /home/runner/.pub-cache
+2026-11-16T17:08:16.4560874Z ##[endgroup]
+2026-11-16T17:08:18.1713052Z Dropped 3 marked section(s) or line(s) from README.md.
+2026-11-16T17:08:18.1847998Z Dropped 1 marked section(s) or line(s) from docs/README.md.
+2026-11-16T17:08:18.1867327Z Dropped 1 marked section(s) or line(s) from docs/api/features/auth/models.md.
+2026-11-16T17:08:18.1927329Z Dropped 4 marked section(s) or line(s) from docs/architecture/design-decisions.md.
+2026-11-16T17:08:46.6139158Z Strip finished but forbidden references remain in code the analyzer reads:
+2026-11-16T17:08:46.6140755Z /home/runner/work/flutter-starter/flutter-starter/test/core/storage/wrong_preference_type_test.dart: references stripped module (package:flutter_starter/features/tasks/)
+2026-11-16T17:08:46.6141693Z Fix imports or excludes before committing.
+2026-11-16T17:08:46.6400861Z ##[error]Process completed with exit code 3.
+2026-11-16T17:08:46.6602813Z Post job cleanup.
+2026-11-16T17:08:46.6636754Z ##[start-action display=Cache pub dependencies;id=__36e83658-09d6-4acf-87f0-3912ba36e369.cache-pub]

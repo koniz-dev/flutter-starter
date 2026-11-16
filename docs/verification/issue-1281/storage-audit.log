@@ -1,0 +1,121 @@
+==> env asset guard
+OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+==> generated code (skipped: AUDIT_SKIP_CODEGEN=1)
+==> format (lib test integration_test tool examples)
+Formatted 637 files (0 changed) in 2.50 seconds.
+==> flutter analyze
+Analyzing flutter-starter...                                    
+No issues found! (ran in 10.6s)
+==> flutter test
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/storage_migration_service_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/storage_service_test.dart: StorageService String operations should store and retrieve string
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/secure_storage_service_test.dart: SecureStorageService String Operations should store and retrieve string value
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/secure_storage_service_test.dart: SecureStorageService String Operations should store and retrieve string value
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/secure_storage_service_test.dart: SecureStorageService String Operations should store and retrieve string value
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/secure_storage_service_test.dart: SecureStorageService String Operations should store and retrieve string value
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/secure_storage_service_test.dart: SecureStorageService String Operations should store and retrieve string value
+00:00 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/secure_storage_service_test.dart: SecureStorageService String Operations should store and retrieve string value
+00:00 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/secure_storage_service_test.dart: SecureStorageService String Operations should store and retrieve string value
+00:00 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/secure_storage_service_test.dart: SecureStorageService String Operations should store and retrieve string value
+00:00 +9: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/secure_storage_service_test.dart: SecureStorageService String Operations should store and retrieve string value
+00:00 +10: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/secure_storage_service_test.dart: SecureStorageService String Operations should store and retrieve string value
+00:00 +11: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/storage_service_test.dart: StorageService Edge Cases should handle empty string values
+00:00 +12: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/secure_storage_service_test.dart: SecureStorageService String Operations should return null for non-existent key
+00:00 +13: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/storage_service_test.dart: StorageService Edge Cases should handle zero integer
+00:00 +14: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/secure_storage_service_test.dart: SecureStorageService String Operations should overwrite existing value
+00:00 +15: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/storage_service_test.dart: StorageService Edge Cases should handle false boolean
+00:00 +16: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/storage_service_test.dart: StorageService Edge Cases should handle zero double
+00:00 +17: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/secure_storage_service_test.dart: SecureStorageService Integer Operations should store and retrieve integer value
+00:00 +18: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/storage_service_test.dart: StorageService Edge Cases should handle empty string list
+00:00 +19: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/secure_storage_service_test.dart: SecureStorageService Integer Operations should return null for non-existent integer key
+00:00 +20: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/secure_storage_service_test.dart: SecureStorageService Integer Operations should return null for non-existent integer key
+00:00 +21: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/storage_service_test.dart: StorageService Edge Cases should handle null return for non-existent bool
+00:00 +22: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/secure_storage_service_test.dart: SecureStorageService Integer Operations should handle negative integers
+00:00 +23: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/storage_service_test.dart: StorageService Edge Cases should handle null return for non-existent double
+00:00 +24: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/secure_storage_service_test.dart: SecureStorageService Boolean Operations should store and retrieve boolean value (true)
+00:00 +25: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/secure_storage_service_test.dart: SecureStorageService Boolean Operations should store and retrieve boolean value (true)
+00:00 +26: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/storage_service_test.dart: StorageService Edge Cases should handle multiple init calls
+00:00 +27: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/secure_storage_service_test.dart: SecureStorageService Boolean Operations should store and retrieve boolean value (false)
+00:00 +28: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/storage_service_test.dart: StorageService Edge Cases should handle overwriting existing values
+00:00 +29: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/secure_storage_service_test.dart: SecureStorageService Boolean Operations should return null for non-existent boolean key
+00:00 +30: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/storage_service_test.dart: StorageService Edge Cases should handle very long string values
+00:00 +31: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/secure_storage_service_test.dart: SecureStorageService Double Operations should store and retrieve double value
+00:00 +32: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/secure_storage_service_test.dart: SecureStorageService Double Operations should store and retrieve double value
+00:00 +33: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/storage_service_test.dart: StorageService Edge Cases should handle unicode characters in string values
+00:00 +34: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/secure_storage_service_test.dart: SecureStorageService Double Operations should return null for non-existent double key
+00:00 +35: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/secure_storage_service_test.dart: SecureStorageService Double Operations should return null for non-existent double key
+00:00 +36: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/storage_service_test.dart: StorageService Edge Cases should handle large integers
+00:00 +37: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/secure_storage_service_test.dart: SecureStorageService String List Operations should store and retrieve string list
+00:00 +38: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/secure_storage_service_test.dart: SecureStorageService String List Operations should store and retrieve string list
+00:00 +39: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/storage_service_test.dart: StorageService Edge Cases should handle very large doubles
+00:00 +40: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/secure_storage_service_test.dart: SecureStorageService String List Operations should return null for non-existent list key
+00:00 +41: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/storage_service_test.dart: StorageService Edge Cases should handle very small doubles
+00:00 +42: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/secure_storage_service_test.dart: SecureStorageService String List Operations should handle empty list
+00:00 +43: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/storage_service_test.dart: StorageService Edge Cases should handle large string lists
+00:00 +44: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/secure_storage_service_test.dart: SecureStorageService Remove Operations should remove existing key
+00:00 +45: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/storage_service_test.dart: StorageService Edge Cases should handle string lists with empty strings
+00:00 +46: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/secure_storage_service_test.dart: SecureStorageService Remove Operations should return true when removing non-existent key
+00:00 +47: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/storage_service_test.dart: StorageService Edge Cases should handle removing non-existent key
+00:00 +48: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/secure_storage_service_test.dart: SecureStorageService Clear Operations should clear all stored values
+00:00 +49: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/secure_storage_service_test.dart: SecureStorageService Clear Operations should clear all stored values
+[... 2627 lines elided ...]
+│ 💡 Navigation: Route Popped | Context: {"routeName":"task-detail","routePath":"task-detail","previousRouteName":"tasks","previousRoutePath":"tasks"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+01:06 +837: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: a failed save keeps the editor open a failed update stays on the detail screen with the edit
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"tasks","routePath":"tasks","previousRouteName":"home","previousRoutePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Removed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"task-detail","routePath":"task-detail","previousRouteName":"tasks","previousRoutePath":"tasks"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+01:07 +838: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: a failed save keeps the editor open a successful retry after a failure still pops to the list
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"tasks","routePath":"tasks","previousRouteName":"home","previousRoutePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Removed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"task-detail","routePath":"task-detail","previousRouteName":"tasks","previousRoutePath":"tasks"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Popped | Context: {"routeName":"task-detail","routePath":"task-detail","previousRouteName":"tasks","previousRoutePath":"tasks"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+01:07 +839: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: (tearDownAll)
+01:07 +839: All tests passed!

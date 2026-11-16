@@ -1,0 +1,24 @@
+Excerpt from the initial 1281-audit.log, before migration compatibility fix:
+00:12 +200: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 idempotency migrate twice does not throw and leaves the same data
+00:12 +200 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_rejected_write_test.dart: a rejected username mutation prevents advancing the schema
+00:12 +200 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 idempotency migrate twice does not throw and leaves the same data [E]
+  CacheException(INVALID_PREFERENCE_TYPE): Stored preference is not a string
+  package:flutter_starter/core/storage/storage_service.dart 96:5  StorageService.getString
+  
+00:12 +200 -2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_rejected_write_test.dart: a rejected username mutation prevents advancing the schema
+00:12 +200 -2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 idempotency migrate recovers a store left mid-migration [E]
+  CacheException(INVALID_PREFERENCE_TYPE): Stored preference is not a string
+  package:flutter_starter/core/storage/storage_service.dart 96:5  StorageService.getString
+  
+00:12 +201 -2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 idempotency execute after a re-run leaves storage stamped at v2
+00:12 +201 -3: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_rejected_write_test.dart: a rejected user_name mutation prevents advancing the schema
+00:12 +202 -3: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_rejected_write_test.dart: a rejected theme_mode mutation prevents advancing the schema
+00:12 +203 -3: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_rejected_write_test.dart: a rejected theme mutation prevents advancing the schema
+00:12 +203 -3: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 idempotency execute after a re-run leaves storage stamped at v2 [E]
+
+00:56 +836 -3: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 idempotency execute after a re-run leaves storage stamped at v2
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 idempotency migrate recovers a store left mid-migration
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 idempotency migrate twice does not throw and leaves the same data

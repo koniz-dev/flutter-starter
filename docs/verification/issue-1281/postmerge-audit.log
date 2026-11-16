@@ -1,0 +1,136 @@
+==> env asset guard
+OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+==> generated code (skipped: AUDIT_SKIP_CODEGEN=1)
+==> format (lib test integration_test tool examples)
+Formatted 638 files (0 changed) in 1.91 seconds.
+==> flutter analyze
+Analyzing flutter-starter...                                    
+No issues found! (ran in 6.5s)
+==> flutter test
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 Properties should have correct fromVersion
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_rejected_write_test.dart: a rejected username mutation prevents advancing the schema
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_rejected_write_test.dart: a rejected username mutation prevents advancing the schema
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 Properties should have correct toVersion
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/storage_migration_test.dart: StorageMigration canMigrate returns false when version does not match
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_rejected_write_test.dart: a rejected user_name mutation prevents advancing the schema
+00:00 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 Properties should have non-empty description
+00:00 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/storage_migration_test.dart: StorageMigration canMigrate returns true for initial version when no version set
+00:00 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_rejected_write_test.dart: a rejected theme_mode mutation prevents advancing the schema
+00:00 +9: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 migrate should rename user_name to username
+00:00 +10: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 migrate should rename user_name to username
+00:00 +11: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 migrate should rename user_name to username
+00:00 +12: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_rejected_write_test.dart: a rejected user_tags mutation prevents advancing the schema
+00:00 +13: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/storage_migration_test.dart: StorageMigration execute throws MigrationException when version mismatch
+00:00 +14: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/storage_migration_test.dart: StorageMigration execute throws MigrationException when version mismatch
+00:00 +15: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/storage_migration_test.dart: StorageMigration execute throws MigrationException when version mismatch
+00:00 +16: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/storage_migration_test.dart: StorageMigration execute throws MigrationException when version mismatch
+00:00 +17: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_rejected_write_test.dart: a rejected old_setting_1 mutation prevents advancing the schema
+00:00 +18: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 migrate should transform light theme correctly
+00:00 +19: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 migrate should default unknown theme to system
+00:00 +20: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 migrate should handle case-insensitive theme values
+00:00 +21: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 migrate should migrate comma-separated tags to list
+00:00 +22: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 migrate should convert an empty tags string to an empty list
+00:00 +23: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 migrate should add a default for a new key if not exists
+00:00 +24: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 migrate should not overwrite an existing value
+00:00 +25: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 migrate should not seed a language choice
+00:00 +26: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 migrate should remove deprecated keys
+00:00 +27: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 migrate should handle deprecated keys that do not exist
+00:00 +28: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 migrate should handle user_data (currently no-op)
+00:00 +29: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 migrate should handle user_data that does not exist
+00:00 +30: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 canMigrate should return true when version matches
+00:00 +31: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 canMigrate should return false when version does not match
+00:00 +32: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 canMigrate should return true when no version set (initial)
+00:00 +33: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 canMigrate should return false for invalid version string
+00:00 +34: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 execute should execute migration and update version
+00:00 +35: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 execute should throw when version does not match
+00:00 +36: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 Edge Cases should handle migration with all transformations
+00:00 +37: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 Edge Cases should handle tags with extra spaces
+00:00 +38: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 Edge Cases should handle tags with single tag
+00:00 +39: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 idempotency migrate twice does not throw and leaves the same data
+00:00 +40: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 idempotency migrate recovers a store left mid-migration
+00:00 +41: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart: MigrationV1ToV2 idempotency execute after a re-run leaves storage stamped at v2
+00:01 +42: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migration_read_failure_test.dart: control: with reads working, a store at v2 is left alone
+00:01 +43: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migration_executor_test.dart: MigrationExecutor execute returns current version when already at target
+00:01 +44: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migration_executor_test.dart: MigrationExecutor execute returns current version when already at target
+00:01 +45: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migration_read_failure_test.dart: a genuinely empty store is still stamped initial and migrated
+00:01 +46: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migration_executor_test.dart: MigrationExecutor execute runs migrations when version is behind
+00:01 +47: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migration_read_failure_test.dart: getStringOrThrow throws where getString returns null
+00:01 +48: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migration_executor_test.dart: MigrationExecutor execute sets initial version for first install
+00:01 +49: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migration_executor_test.dart: MigrationExecutor execute handles corrupted version gracefully
+00:01 +50: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migration_executor_test.dart: MigrationExecutor execute runs migrations in correct order
+00:01 +51: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migration_executor_test.dart: MigrationExecutor execute throws MigrationExecutionException on migration failure
+00:01 +52: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migration_executor_test.dart: MigrationExecutor missing migration path throws when no migration reaches the target version
+00:01 +53: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migration_registry_test.dart: MigrationRegistry migrations should return list of migrations
+00:01 +54: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migration_registry_test.dart: MigrationRegistry migrations should return list of migrations
+00:01 +55: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migration_registry_test.dart: MigrationRegistry migrations should return list of migrations
+00:01 +56: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migration_registry_test.dart: MigrationRegistry migrations should return list of migrations
+00:01 +57: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migration_registry_test.dart: MigrationRegistry migrations should return list of migrations
+00:01 +58: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migration_registry_test.dart: MigrationRegistry migrations should return list of migrations
+00:01 +59: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migration_registry_test.dart: MigrationRegistry migrations should return list of migrations
+00:01 +60: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migration_executor_test.dart: exception toString a downgrade refusal names itself, not its parent
+00:01 +61: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migration_registry_test.dart: MigrationRegistry migrations should contain MigrationV1ToV2
+00:01 +62: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migration_executor_test.dart: exception toString a missing migration path names itself, not its parent
+00:01 +63: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migration_registry_test.dart: MigrationRegistry migrations should have migrations in correct order
+00:01 +64: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migration_registry_test.dart: MigrationRegistry migrations should have valid version transitions
+00:01 +65: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migration_registry_test.dart: MigrationRegistry migrations should have non-empty descriptions
+00:01 +66: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migration_registry_test.dart: MigrationRegistry regularStorageMigrations should return migrations list
+00:02 +67: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migration_registry_test.dart: MigrationRegistry regularStorageMigrations should return same as migrations by default
+00:02 +68: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migration_registry_test.dart: MigrationRegistry secureStorageMigrations should return migrations list
+00:02 +69: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migration_registry_test.dart: MigrationRegistry secureStorageMigrations should return same as migrations by default
+00:02 +70: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migration_registry_test.dart: MigrationRegistry chain coverage migrations span initial -> current with no gap
+00:02 +71: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migration_registry_test.dart: MigrationRegistry chain coverage regularStorageMigrations span initial -> current
+00:02 +72: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migration_registry_test.dart: MigrationRegistry chain coverage secureStorageMigrations span initial -> current
+00:02 +73: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migration_registry_test.dart: MigrationRegistry Edge Cases returns an independent list on each call
+00:02 +74: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migration_registry_test.dart: MigrationRegistry Edge Cases should have consistent regular and secure migrations
+00:03 +75: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/storage_service_test.dart: StorageService String operations should store and retrieve string
+00:03 +76: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/storage_service_test.dart: StorageService String operations should return null for non-existent key
+00:03 +77: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/storage_service_test.dart: StorageService Int operations should store and retrieve int
+00:03 +78: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/storage_service_test.dart: StorageService Bool operations should store and retrieve bool
+00:03 +79: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/storage_service_test.dart: StorageService Double operations should store and retrieve double
+00:03 +80: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/storage_service_test.dart: StorageService StringList operations should store and retrieve string list
+00:03 +81: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/storage_service_test.dart: StorageService Remove operations should remove value by key
+00:03 +82: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/storage_service_test.dart: StorageService Clear operations should clear all values
+00:03 +83: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/storage_service_test.dart: StorageService ContainsKey operations should return true for existing key
+00:03 +84: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/storage_service_test.dart: StorageService ContainsKey operations should return false for non-existent key
+00:03 +85: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/storage_service_test.dart: StorageService Edge Cases should handle empty string values
+00:03 +86: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/storage_service_test.dart: StorageService Edge Cases should handle zero integer
+00:03 +87: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/storage_service_test.dart: StorageService Edge Cases should handle false boolean
+00:03 +88: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/storage_service_test.dart: StorageService Edge Cases should handle zero double
+00:03 +89: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/storage_service_test.dart: StorageService Edge Cases should handle empty string list
+00:03 +90: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/storage_service_test.dart: StorageService Edge Cases should handle null return for non-existent int
+00:03 +91: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/storage_service_test.dart: StorageService Edge Cases should handle null return for non-existent bool
+00:03 +92: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/storage_service_test.dart: StorageService Edge Cases should handle null return for non-existent double
+00:03 +93: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/storage_service_test.dart: StorageService Edge Cases should handle null return for non-existent list
+00:03 +94: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/storage_service_test.dart: StorageService Edge Cases should handle multiple init calls
+00:03 +95: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/storage_service_test.dart: StorageService Edge Cases should handle overwriting existing values
+00:03 +96: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/storage_service_test.dart: StorageService Edge Cases should handle very long string values
+00:03 +97: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/storage_service_test.dart: StorageService Edge Cases should handle special characters in string values
+00:03 +98: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/storage_service_test.dart: StorageService Edge Cases should handle unicode characters in string values
+00:03 +99: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/storage_service_test.dart: StorageService Edge Cases should handle negative integers
+00:03 +100: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/storage_service_test.dart: StorageService Edge Cases should handle large integers
+00:03 +101: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/storage_service_test.dart: StorageService Edge Cases should handle negative doubles
+00:03 +102: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/storage_service_test.dart: StorageService Edge Cases should handle very large doubles
+00:03 +103: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/storage_service_test.dart: StorageService Edge Cases should handle very small doubles
+00:03 +104: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/storage_service_test.dart: StorageService Edge Cases should handle large string lists
+00:03 +105: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/storage_service_test.dart: StorageService Edge Cases should handle string lists with empty strings
+00:03 +106: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/storage_service_test.dart: StorageService Edge Cases should handle removing non-existent key
+00:03 +107: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/storage_service_test.dart: StorageService Edge Cases should handle clear on empty storage
+00:03 +108: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/storage_service_test.dart: StorageService Edge Cases should handle containsKey after remove
+00:03 +109: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/storage_service_test.dart: StorageService Edge Cases should handle containsKey after clear
+00:03 +110: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/storage_service_test.dart: StorageService Edge Cases should handle lazy initialization without explicit init
+00:03 +111: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/storage_service_test.dart: StorageService Edge Cases should handle concurrent operations
+00:03 +112: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migration_executor_guards_test.dart: criterion 1: a migration that skips the version stamp fails the run
+00:03 +113: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migration_executor_guards_test.dart: criterion 2: migrations registered out of order run in fromVersion order
+00:03 +114: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migration_executor_guards_test.dart: criterion 3: a stored version of 0 is reset to the initial version
+00:03 +115: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migration_executor_guards_test.dart: criterion 3: a stored version of -1 is reset to the initial version
+00:03 +116: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/fresh_install_no_language_test.dart: a fresh boot writes no language key to either store
+VM versions={regular: 2, secure: 2} prefs={_storage_version: 2, sync_interval_minutes: 15} keychain={_storage_version: 2, sync_interval_minutes: 15}
+00:03 +117: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/fresh_install_no_language_test.dart: a language the user did choose survives the migration
+00:03 +118: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/fresh_install_no_language_test.dart: after a fresh boot, a vi device resolves to vi
+00:04 +119: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:04 +120: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: the scan itself flags a body with no assertion, naming its line
+00:04 +121: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: the scan itself accepts expect, verify, fail and expect-named helpers
+00:04 +122: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: the scan itself ignores an assertion that only appears in a string or comment
+00:04 +123: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: the scan itself skips skipped tests and honours the allow-list marker
+00:04 +124: All tests passed!

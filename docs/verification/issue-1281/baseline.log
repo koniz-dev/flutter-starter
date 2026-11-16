@@ -1,0 +1,262 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/wrong_preference_type_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/wrong_preference_type_test.dart: wrong preference type: int reports storage failure without deleting the value
+00:00 +0 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/startup/startup_reachability_test.dart: main() boots MyApp end to end on a healthy startup wrong preference type: language boots in the device locale
+00:00 +0 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/wrong_preference_type_test.dart: wrong preference type: int reports storage failure without deleting the value [E]
+  Expected: throws <Instance of 'CacheException'>
+    Actual: <Instance of 'Future<String?>'>
+     Which: threw _TypeError:<type 'int' is not a subtype of type 'String?' in type cast>
+            stack package:shared_preferences/src/shared_preferences_legacy.dart 127:58  SharedPreferences.getString
+                  package:flutter_starter/core/storage/storage_service.dart 90:18       StorageService.getString
+                  ===== asynchronous gap ===========================
+                  package:matcher                                                       expectLater
+                  package:flutter_test/src/widget_tester.dart 507:8                     expectLater
+                  test/core/storage/wrong_preference_type_test.dart 25:13               main.<fn>
+                  
+            which is not an instance of 'CacheException'
+  
+  package:matcher                                          expectLater
+  package:flutter_test/src/widget_tester.dart 507:8        expectLater
+  test/core/storage/wrong_preference_type_test.dart 25:13  main.<fn>
+  
+00:00 +0 -2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/startup/startup_reachability_test.dart: main() boots MyApp end to end on a healthy startup wrong preference type: language boots in the device locale
+00:00 +0 -2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/wrong_preference_type_test.dart: wrong preference type: bool reports storage failure without deleting the value [E]
+  Expected: throws <Instance of 'CacheException'>
+    Actual: <Instance of 'Future<String?>'>
+     Which: threw _TypeError:<type 'bool' is not a subtype of type 'String?' in type cast>
+            stack package:shared_preferences/src/shared_preferences_legacy.dart 127:58  SharedPreferences.getString
+                  package:flutter_starter/core/storage/storage_service.dart 90:18       StorageService.getString
+                  ===== asynchronous gap ===========================
+                  package:matcher                                                       expectLater
+                  package:flutter_test/src/widget_tester.dart 507:8                     expectLater
+                  test/core/storage/wrong_preference_type_test.dart 25:13               main.<fn>
+                  
+            which is not an instance of 'CacheException'
+  
+  package:matcher                                          expectLater
+  package:flutter_test/src/widget_tester.dart 507:8        expectLater
+  test/core/storage/wrong_preference_type_test.dart 25:13  main.<fn>
+  
+00:00 +0 -3: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/startup/startup_reachability_test.dart: main() boots MyApp end to end on a healthy startup wrong preference type: language boots in the device locale
+00:00 +0 -3: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/wrong_preference_type_test.dart: wrong preference type: double reports storage failure without deleting the value [E]
+  Expected: throws <Instance of 'CacheException'>
+    Actual: <Instance of 'Future<String?>'>
+     Which: threw _TypeError:<type 'double' is not a subtype of type 'String?' in type cast>
+            stack package:shared_preferences/src/shared_preferences_legacy.dart 127:58  SharedPreferences.getString
+                  package:flutter_starter/core/storage/storage_service.dart 90:18       StorageService.getString
+                  ===== asynchronous gap ===========================
+                  package:matcher                                                       expectLater
+                  package:flutter_test/src/widget_tester.dart 507:8                     expectLater
+                  test/core/storage/wrong_preference_type_test.dart 25:13               main.<fn>
+                  
+            which is not an instance of 'CacheException'
+  
+  package:matcher                                          expectLater
+  package:flutter_test/src/widget_tester.dart 507:8        expectLater
+  test/core/storage/wrong_preference_type_test.dart 25:13  main.<fn>
+  
+00:00 +0 -4: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/startup/startup_reachability_test.dart: main() boots MyApp end to end on a healthy startup wrong preference type: language boots in the device locale
+00:00 +0 -4: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/wrong_preference_type_test.dart: wrong preference type: List<String> reports storage failure without deleting the value [E]
+  Expected: throws <Instance of 'CacheException'>
+    Actual: <Instance of 'Future<String?>'>
+     Which: threw _TypeError:<type 'List<String>' is not a subtype of type 'String?' in type cast>
+            stack package:shared_preferences/src/shared_preferences_legacy.dart 127:58  SharedPreferences.getString
+                  package:flutter_starter/core/storage/storage_service.dart 90:18       StorageService.getString
+                  ===== asynchronous gap ===========================
+                  package:matcher                                                       expectLater
+                  package:flutter_test/src/widget_tester.dart 507:8                     expectLater
+                  test/core/storage/wrong_preference_type_test.dart 25:13               main.<fn>
+                  
+            which is not an instance of 'CacheException'
+  
+  package:matcher                                          expectLater
+  package:flutter_test/src/widget_tester.dart 507:8        expectLater
+  test/core/storage/wrong_preference_type_test.dart 25:13  main.<fn>
+  
+00:00 +0 -4: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/startup/startup_reachability_test.dart: main() boots MyApp end to end on a healthy startup wrong preference type: language boots in the device locale
+═══════════════════════════════════════════════════════════
+📱 App Configuration
+═══════════════════════════════════════════════════════════
+Environment: development
+Debug Mode: true
+Release Mode: false
+
+🌐 API Configuration:
+  Base URL: http://localhost:3000
+  Timeout: 30s
+  Connect Timeout: 10s
+  Receive Timeout: 30s
+  Send Timeout: 30s
+  SSL Pinning Requested: false
+  SSL Pinning Effective: false
+  SSL Fingerprints Configured: 0
+
+🚩 Feature Flags:
+  Logging: true
+  Analytics: false
+  Crash Reporting: false
+  Performance Monitoring: false
+  Debug Features: true
+  HTTP Logging: true
+═══════════════════════════════════════════════════════════
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   StorageMigrationService.migrateAll (package:flutter_starter/core/storage/storage_migration_service.dart:60:22)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Starting regular storage migration[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   MigrationExecutor.execute (package:flutter_starter/core/storage/migration/migration_executor.dart:64:20)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Starting storage migration | Context: {"current_version":1,"target_version":2,"migrations_count":1}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   MigrationExecutor.execute (package:flutter_starter/core/storage/migration/migration_executor.dart:111:24)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Executing migration: Migrate user preferences: rename keys and update data format | Context: {"from_version":1,"to_version":2}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   MigrationExecutor.execute (package:flutter_starter/core/storage/migration/migration_executor.dart:121:24)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Migration completed successfully | Context: {"from_version":1,"to_version":2}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   MigrationExecutor.execute (package:flutter_starter/core/storage/migration/migration_executor.dart:186:20)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 All migrations completed successfully | Context: {"final_version":2}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   StorageMigrationService.migrateAll (package:flutter_starter/core/storage/storage_migration_service.dart:70:22)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Starting secure storage migration[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   MigrationExecutor.execute (package:flutter_starter/core/storage/migration/migration_executor.dart:64:20)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Starting storage migration | Context: {"current_version":1,"target_version":2,"migrations_count":1}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   MigrationExecutor.execute (package:flutter_starter/core/storage/migration/migration_executor.dart:111:24)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Executing migration: Migrate user preferences: rename keys and update data format | Context: {"from_version":1,"to_version":2}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   MigrationExecutor.execute (package:flutter_starter/core/storage/migration/migration_executor.dart:121:24)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Migration completed successfully | Context: {"from_version":1,"to_version":2}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   MigrationExecutor.execute (package:flutter_starter/core/storage/migration/migration_executor.dart:186:20)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 All migrations completed successfully | Context: {"final_version":2}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   StorageMigrationService.migrateAll (package:flutter_starter/core/storage/storage_migration_service.dart:79:22)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 All storage migrations completed | Context: {"regular":2,"secure":2}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m│ type 'int' is not a subtype of type 'String?' in type cast[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ #0   SharedPreferences.getString (package:shared_preferences/src/shared_preferences_legacy.dart:127:58)[0m
+[38;5;196m│ #1   StorageService.getString (package:flutter_starter/core/storage/storage_service.dart:90:18)[0m
+[38;5;196m│ #2   <asynchronous suspension>[0m
+[38;5;196m│ #3   LocalizationService.getCurrentLocale (package:flutter_starter/core/localization/localization_service.dart:119:28)[0m
+[38;5;196m│ #4   <asynchronous suspension>[0m
+[38;5;196m│ #5   _bootstrap (package:flutter_starter/main.dart:201:25)[0m
+[38;5;196m│ #6   <asynchronous suspension>[0m
+[38;5;196m│ #7   StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ ⛔ Startup failed[0m
+[38;5;196m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: exactly one matching candidate
+  Actual: _TypeWidgetFinder:<Found 0 widgets with type "MyApp": []>
+   Which: means none were found but one was expected
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure>.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/startup/startup_reachability_test.dart:727:7)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1968:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/startup/startup_reachability_test.dart line 727
+The test description was:
+  wrong preference type: language boots in the device locale
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:01 +0 -5: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/wrong_preference_type_test.dart: wrong preference type: tasks shows a recoverable storage error
+00:01 +0 -5: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/startup/startup_reachability_test.dart: main() boots MyApp end to end on a healthy startup wrong preference type: language boots in the device locale [E]
+  Test failed. See exception logs above.
+  The test description was: wrong preference type: language boots in the device locale
+  
+00:01 +0 -5: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/wrong_preference_type_test.dart: wrong preference type: tasks shows a recoverable storage error
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following _TypeError was thrown running a test:
+type 'List<String>' is not a subtype of type 'String?' in type cast
+
+When the exception was thrown, this was the stack:
+#0      SharedPreferences.getString (package:shared_preferences/src/shared_preferences_legacy.dart:127:58)
+#1      StorageService.getString (package:flutter_starter/core/storage/storage_service.dart:90:18)
+<asynchronous suspension>
+#2      TasksLocalDataSourceImpl._readTasks (package:flutter_starter/features/tasks/data/datasources/tasks_local_datasource.dart:157:23)
+<asynchronous suspension>
+#3      TasksLocalDataSourceImpl.getAllTasks (package:flutter_starter/features/tasks/data/datasources/tasks_local_datasource.dart:71:14)
+<asynchronous suspension>
+#4      TasksRepositoryImpl.getAllTasks (package:flutter_starter/features/tasks/data/repositories/tasks_repository_impl.dart:21:21)
+<asynchronous suspension>
+#5      GetAllTasksUseCase.call (package:flutter_starter/features/tasks/domain/usecases/get_all_tasks_usecase.dart:15:12)
+<asynchronous suspension>
+#6      TasksNotifier._loadTasks (package:flutter_starter/features/tasks/presentation/providers/tasks_provider.dart:220:20)
+<asynchronous suspension>
+
+The test description was:
+  wrong preference type: tasks shows a recoverable storage error
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:01 +0 -6: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/wrong_preference_type_test.dart: wrong preference type: tasks shows a recoverable storage error [E]
+  Test failed. See exception logs above.
+  The test description was: wrong preference type: tasks shows a recoverable storage error
+  
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following assertion was thrown running a test (but after the test had completed):
+pumpAndSettle timed out
+
+When the exception was thrown, this was the stack:
+#0      WidgetTester.pumpAndSettle.<anonymous closure> (package:flutter_test/src/widget_tester.dart:717:11)
+<asynchronous suspension>
+#1      TestAsyncUtils.guard.<anonymous closure> (package:flutter_test/src/test_async_utils.dart:130:27)
+<asynchronous suspension>
+#2      main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/wrong_preference_type_test.dart:55:5)
+<asynchronous suspension>
+#3      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#4      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1968:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+════════════════════════════════════════════════════════════════════════════════════════════════════
+  Test failed. See exception logs above.
+  The test description was: wrong preference type: tasks shows a recoverable storage error
+  
+00:02 +0 -6: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/startup/startup_reachability_test.dart: main() boots MyApp end to end on a healthy startup wrong preference type: language boots in the device locale
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/wrong_preference_type_test.dart: wrong preference type: List<String> reports storage failure without deleting the value
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/wrong_preference_type_test.dart: wrong preference type: bool reports storage failure without deleting the value
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/wrong_preference_type_test.dart: wrong preference type: double reports storage failure without deleting the value
+  ... and 2 more
