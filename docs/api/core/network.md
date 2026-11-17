@@ -384,8 +384,12 @@ creates one client per session and disconnects it when disposed. It watches
 `sessionEpochProvider`, so logout, a forced logout and every sign-in
 disconnect the current client, and the next read gets a fresh one to connect
 as the new user - a socket authenticated as one user never outlives that
-user's session. Reconnect after a session change from whatever reads the
-client:
+user's session. Watch the client (`ref.watch` / `ref.listen`) rather than
+reading it once: a reference kept from before a session change points at a
+disconnected client whose stream simply goes quiet. Connect when the app is
+signed in, not on every session change - a sign-in advances the session
+twice (when it starts and when it is stored), and a logout leaves no user to
+connect as:
 
 ```dart
 final overrides = [
