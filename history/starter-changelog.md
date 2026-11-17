@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- [Open the log file once](https://github.com/koniz-dev/flutter-starter/issues/1321): `package:logger` calls `init()` on its output again, so `FileLogOutput` opened the log file twice and replaced the first sink unclosed - log lines around startup could be lost and a file descriptor leaked. It now opens once.
+
 ## [5.0.0] - 2026-11-17
 
 ### Breaking
