@@ -197,17 +197,26 @@ class _FeatureFlagsDebugScreenState
           if (flagKey.description.isNotEmpty)
             Text(
               flagKey.description,
-              style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+              style: TextStyle(
+                fontSize: 12,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
             ),
           const SizedBox(height: 4),
-          Row(
+          // Wraps: a Row overflowed a 360dp phone at a large text size.
+          Wrap(
+            spacing: 8,
+            runSpacing: 4,
+            crossAxisAlignment: WrapCrossAlignment.center,
             children: [
               _buildSourceChip(flag.source),
-              const SizedBox(width: 8),
               if (flag.lastUpdated != null)
                 Text(
                   l10n.featureFlagsUpdatedAt(_formatDate(flag.lastUpdated!)),
-                  style: TextStyle(fontSize: 10, color: Colors.grey[500]),
+                  style: TextStyle(
+                    fontSize: 10,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
                 ),
             ],
           ),
