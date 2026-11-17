@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Breaking
 
+### Fixed
+
+## [5.0.0] - 2026-11-17
+
+### Breaking
+
 - [Utility validation contracts](https://github.com/koniz-dev/flutter-starter/issues/1284): phone validation now requires 7–15 digits with optional initial + and space/hyphen separators; URL validation requires http/https/ftp/ws/wss and valid ASCII DNS/punycode or IP hosts and unsigned ports. Convert international domains to punycode and apply a separate policy for other URI schemes. JsonHelper.getInt now returns null for fractions, overflow or target rounding; callers needing truncation must validate range and truncate explicitly, and large identifiers should remain strings.
 
 - Forks with custom iOS AppDelegate code must follow the UIScene lifecycle migration: conform to FlutterImplicitEngineDelegate and register plugins through the engine bridge in didInitializeImplicitFlutterEngine. Preserve custom native lifecycle behavior when merging; see docs/deployment/ios-deployment.md. Existing deployment targets and signing settings are unchanged.
@@ -30,6 +36,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Dependency floors moved after v4.0.0.** `patrol` ^4.11.0 needs `patrol_cli` 4.9.0 (reinstall the CLI); `equatable` ^3.0.0 removes `EquatableMixin`, so write `with Equatable` where your code said `with EquatableMixin`; `go_router` ^18.1.4, `material_ui` ^1.11.0 and the code generators (`build_runner` 2.17.1, `build` 5.0.0) are routine: run `flutter pub get` and regenerate.
 
 ### Fixed
+
+- [Keep the test suite green after a manual rename](https://github.com/koniz-dev/flutter-starter/issues/1319): after renaming by hand as `fork-and-customize.md` Option B documents, two setup brick tests failed; they now skip once the project is renamed.
 
 - [Close the 2026-11-17 audit's P3 findings](https://github.com/koniz-dev/flutter-starter/issues/1310): `OptimizedListView` no longer re-sends a failed prefetch on every scroll, keeps a fixed `itemExtent` off its error slot, and offers Load More for an empty first page; the not-found screen scrolls; task ids are percent-encoded in paths; nested and percent-encoded URL credentials are redacted in logs; a late logout no longer undoes a newer sign-in. Tooling: workflows that run on push group runs per commit and never cancel a push run; `check_docs` reads reference, angle-bracket and HTML links; `test_coverage.sh --html` asks you to install lcov instead of installing it. Docs: brick instructions are removed with `--remove-bricks`, and `security/audit.md` re-rates obfuscation, manifest and ATS entries.
 
