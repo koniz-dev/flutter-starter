@@ -103,6 +103,57 @@ void main() {
     expect(_deployWorkflows, hasLength(3));
   });
 
+  // The prompt offered to enable "automatic CI/CD triggers", a bare --yes
+  // then reported nothing to do for every workflow, and declining said CI
+  // "defaults to manual dispatch" while ci.yml runs on every PR.
+  group('the prompt and the report describe what exists', () {
+    test('a bare --yes names the deploy option it skipped', () async {
+      final result = await setupCi(['--yes']);
+
+      expect(result.exitCode, 0);
+      expect(
+        result.stdout,
+        contains('no workflow other than deploy-* had a commented trigger'),
+      );
+      expect(result.stdout, contains('only the deploy-* workflows have'));
+    });
+
+    test('declining changes nothing and says so', () async {
+      final process = await Process.start('dart', [
+        'scripts/dev/setup_ci.dart',
+        '--dir',
+        copy.path,
+      ]);
+      process.stdin.writeln('n');
+      await process.stdin.close();
+      final stdout = await process.stdout
+          .transform(const SystemEncoding().decoder)
+          .join();
+
+      expect(await process.exitCode, 0);
+      expect(stdout, contains('deploy-* workflows stay manual-only'));
+      expect(stdout, contains('No workflow was changed'));
+      expect(stdout, isNot(contains('manual dispatch')));
+    });
+
+    test('coverage.yml does not claim commented-out triggers', () {
+      final header = File('.github/workflows/coverage.yml')
+          .readAsStringSync()
+          .split('\non:')
+          .first;
+
+      final live = liveTriggers('coverage.yml');
+
+      expect(header, isNot(contains('commented out')));
+      expect(live.any((l) => l.startsWith('workflow_dispatch:')), isTrue);
+      expect(live, contains('schedule:'));
+      expect(
+        File('docs/guides/testing/test-coverage.md').readAsStringSync(),
+        isNot(contains('triggers are commented out')),
+      );
+    });
+  });
+
   group('criterion 1: setup_ci.dart enables exactly one deploy option', () {
     test(
       'without --deploy-trigger, no deploy workflow gets a push trigger',

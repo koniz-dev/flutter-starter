@@ -1,24 +1,15 @@
 name: Coverage Analysis
 
 # ========================================================================
-# Workflow Triggers Configuration
+# Triggers
 # ========================================================================
-# This is a starter template, so branches are commented out by default.
-# Uncomment and configure the branches according to your project needs:
+# Manual (workflow_dispatch) and weekly (schedule). It does not run on push
+# or pull_request: ci.yml's Quality gate already enforces the total line
+# coverage floor on every PR, and this job adds the per-layer targets
+# below. To enforce those on every PR too, add under `on:`:
 #
-# For example:
-#   push:
-#     branches: [ main, develop ]
-#   pull_request:
-#     branches: [ main, develop ]
-#
-# Or for a single branch:
-#   push:
-#     branches: [ main ]
 #   pull_request:
 #     branches: [ main ]
-#
-# workflow_dispatch allows manual triggering from GitHub Actions UI
 # ========================================================================
 on:
   workflow_dispatch:  # Allows manual trigger from GitHub Actions UI
