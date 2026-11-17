@@ -164,6 +164,23 @@ void main() {
     );
   }
 
+  // Servers behind gzip or a CDN send `Vary: Accept-Encoding` on every
+  // response, and CORS setups `Vary: Origin`; refusing those disabled the
+  // cache against real APIs. Neither selects a different body here.
+  for (final vary in <List<String>>[
+    ['Accept-Encoding'],
+    ['Origin'],
+    ['accept-encoding, ORIGIN'],
+    ['Accept-Encoding', ' Origin '],
+  ]) {
+    test('Vary $vary is covered and the anonymous GET is reused', () async {
+      final client = build(vary: vary);
+      expect((await client.get('/feed')).data, {'hit': 1});
+      expect((await client.get('/feed')).data, {'hit': 1});
+      expect(transport.hits, 1);
+    });
+  }
+
   test('anonymous GETs without Vary still reuse the cached body', () async {
     final client = build();
     expect((await client.get('/feed')).data, {'hit': 1});
