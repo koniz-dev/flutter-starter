@@ -253,4 +253,122 @@ void main() {
       expect(finished(tester), contains(true));
     });
   });
+
+  group('keyboard flow', () {
+    /// The text of the field that holds keyboard focus.
+    String? focusedText() => FocusManager.instance.primaryFocus?.context
+        ?.findAncestorWidgetOfExactType<EditableText>()
+        ?.controller
+        .text;
+
+    Future<void> next(WidgetTester tester) async {
+      await tester.testTextInput.receiveAction(TextInputAction.next);
+      await tester.pump();
+    }
+
+    testWidgets('login: Next on the email moves to the password', (
+      tester,
+    ) async {
+      await pump(tester, AppRoutes.login);
+      await tester.enterText(
+        find.widgetWithText(TextFormField, _l10n.email),
+        'a@b.co',
+      );
+      await tester.enterText(
+        find.widgetWithText(TextFormField, _l10n.password),
+        'pw-field',
+      );
+      await tester.showKeyboard(
+        find.widgetWithText(TextFormField, _l10n.email),
+      );
+      expect(focusedText(), 'a@b.co');
+
+      await next(tester);
+
+      expect(focusedText(), 'pw-field');
+    });
+
+    testWidgets('register: Next goes name, email, password', (tester) async {
+      await pump(tester, AppRoutes.register);
+      await tester.enterText(
+        find.widgetWithText(TextFormField, _l10n.email),
+        'a@b.co',
+      );
+      await tester.enterText(
+        find.widgetWithText(TextFormField, _l10n.password),
+        'pw-field',
+      );
+      await tester.enterText(
+        find.widgetWithText(TextFormField, _l10n.name),
+        'Ann',
+      );
+      expect(focusedText(), 'Ann');
+
+      await next(tester);
+      expect(focusedText(), 'a@b.co');
+      await next(tester);
+      expect(focusedText(), 'pw-field');
+    });
+
+    Future<void> doneAgain(WidgetTester tester) async {
+      await tester.showKeyboard(
+        find.widgetWithText(TextFormField, _l10n.password),
+      );
+      await tester.testTextInput.receiveAction(TextInputAction.done);
+      // Not pumpAndSettle: the request is still running behind a spinner.
+      await tester.pump(const Duration(milliseconds: 100));
+    }
+
+    testWidgets('login: Done while signing in does not send again', (
+      tester,
+    ) async {
+      final reply = Completer<Result<User>>();
+      when(() => login(any(), any())).thenAnswer((_) => reply.future);
+      await pump(tester, AppRoutes.login);
+      await tester.enterText(
+        find.widgetWithText(TextFormField, _l10n.email),
+        'a@b.co',
+      );
+      await tester.enterText(
+        find.widgetWithText(TextFormField, _l10n.password),
+        'password123',
+      );
+
+      await doneAgain(tester);
+      await doneAgain(tester);
+      reply.complete(const Success(_user));
+      await tester.pumpAndSettle();
+
+      verify(() => login('a@b.co', 'password123')).called(1);
+    });
+
+    testWidgets('register: Done while registering does not send again', (
+      tester,
+    ) async {
+      final reply = Completer<Result<User>>();
+      when(
+        () => register(any(), any(), any()),
+      ).thenAnswer((_) => reply.future);
+      await pump(tester, AppRoutes.register);
+      await tester.enterText(
+        find.widgetWithText(TextFormField, _l10n.name),
+        'Ann',
+      );
+      await tester.enterText(
+        find.widgetWithText(TextFormField, _l10n.email),
+        'a@b.co',
+      );
+      await tester.enterText(
+        find.widgetWithText(TextFormField, _l10n.password),
+        'password123',
+      );
+
+      await doneAgain(tester);
+      await doneAgain(tester);
+      reply.complete(const Success(_user));
+      await tester.pumpAndSettle();
+
+      verify(() => register('a@b.co', 'password123', 'Ann')).called(1);
+    });
+  });
 }
