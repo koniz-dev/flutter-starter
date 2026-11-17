@@ -31,6 +31,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- [Anchor Dart formatting to the project root](https://github.com/koniz-dev/flutter-starter/issues/1288): `scripts/dev/format_dart.sh` changes to the project root first, so `--check` run from a subdirectory checks the project instead of passing having checked nothing.
+
 - [Define phone, URL and integer conversion contracts](https://github.com/koniz-dev/flutter-starter/issues/1284): validate supported network URLs and basic formatted phone numbers, and return only exact target-representable signed 64-bit integers.
 
 - [Keep calendar helpers in the receiver time zone](https://github.com/koniz-dev/flutter-starter/issues/1283): preserve UTC/local day boundaries and compare today/yesterday/tomorrow against a clock in the same zone, retaining calendar-day handling across DST.
