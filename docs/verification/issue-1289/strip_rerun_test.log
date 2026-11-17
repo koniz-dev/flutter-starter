@@ -1,0 +1,27 @@
+00:00 +0: loading /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/c9040f3a-094e-4757-b5d0-3dd1371d6d3a/scratchpad/g2/test/tooling/strip_rerun_test.dart
+00:00 +0: (a) a git-ignored file importing the sample does not fail the strip
+00:05 +1: (b) a re-run after a partial strip completes
+00:13 +2: (c) a run from a subdirectory refuses and writes nothing
+00:16 +3: refuses unstaged edits before deleting or overwriting anything
+00:20 +4: refuses staged edits before deleting or overwriting anything
+00:24 +5: refuses untracked edits before deleting or overwriting anything
+00:28 +6: refuses skip-worktree edits before deleting or overwriting anything
+00:33 +7: refuses assume-unchanged edits before deleting or overwriting anything
+00:38 +8: refuses unrelated edits before deleting or overwriting anything
+00:43 +9: force permits an intentional overwrite of a dirty tree
+00:50 +10: clean CRLF overwrite targets do not trigger the guard
+00:57 +11: a modified pubspec.lock alone is reported, not refused
+01:04 +12: a modified pubspec.lock alone is reported, not refused (nested in "app")
+01:12 +13: a modified pubspec.lock alone is reported, not refused (nested in "my ứng app")
+01:20 +14: a modified pubspec.lock does not hide another edit
+01:24 +15: bricks-only removal also refuses a dirty tree
+01:28 +16: a missing Git baseline refuses unless force is explicit
+01:36 +17: a clean app nested in a monorepo resolves committed override paths
+01:44 +18: a nested app allows untracked sibling edits but protects its own edits
+01:53 +19: a nested app allows unstaged sibling edits but protects its own edits
+02:02 +20: a nested app allows staged sibling edits but protects its own edits
+02:12 +21: protects assume-unchanged edits in a brick deletion target
+02:17 +22: protects assume-unchanged edits in a sample deletion target
+02:22 +23: protects skip-worktree edits in a brick deletion target
+02:27 +24: protects skip-worktree edits in a sample deletion target
+02:33 +25: All tests passed!

@@ -1,0 +1,4 @@
+Commits in 711e1e6cc3b~1..711e1e6cc3b
+  ok    711e1e6c fix(tooling): let the strip run past pub's own lockfile re-pin (#1300)
+
+OK: every message links with 'Refs koniz-dev/flutter-starter#N' and closes nothing.

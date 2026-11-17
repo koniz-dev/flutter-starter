@@ -1,0 +1,11 @@
+tree: 54379d60 fix(tooling): anchor Dart formatting to the project root (#1299)
+flutter: Flutter 3.47.0 • channel stable • https://github.com/flutter/flutter.git
+Running build hooks...Running build hooks...Refusing to strip an edited working tree. Nothing was deleted:
+ M pubspec.lock
+Commit or stash your changes first. Use --force only if you intentionally accept overwriting or deleting them.
+exit=2
+ M pubspec.lock
+auth
+feature_flags
+home
+tasks
