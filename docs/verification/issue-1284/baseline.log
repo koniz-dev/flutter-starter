@@ -1,0 +1,222 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart
+00:00 +0: utility contract phone 12
+00:00 +0 -1: utility contract phone 12 [E]
+  Expected: <false>
+    Actual: <true>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/core/utils/utility_contracts_test.dart 24:9    main.<fn>.<fn>
+  
+00:00 +0 -1: utility contract phone 0912345678
+00:00 +0 -2: utility contract phone 0912345678 [E]
+  Expected: <true>
+    Actual: <false>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/core/utils/utility_contracts_test.dart 24:9    main.<fn>.<fn>
+  
+00:00 +0 -2: utility contract phone +1 555 123 4567
+00:00 +0 -3: utility contract phone +1 555 123 4567 [E]
+  Expected: <true>
+    Actual: <false>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/core/utils/utility_contracts_test.dart 24:9    main.<fn>.<fn>
+  
+00:00 +0 -3: utility contract phone 123-456-7890
+00:00 +0 -4: utility contract phone 123-456-7890 [E]
+  Expected: <true>
+    Actual: <false>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/core/utils/utility_contracts_test.dart 24:9    main.<fn>.<fn>
+  
+00:00 +0 -4: utility contract phone 1234567
+00:00 +1 -4: utility contract phone +123456789012345
+00:00 +2 -4: utility contract phone 123456
+00:00 +2 -5: utility contract phone 123456 [E]
+  Expected: <false>
+    Actual: <true>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/core/utils/utility_contracts_test.dart 24:9    main.<fn>.<fn>
+  
+00:00 +2 -5: utility contract phone +1234567890123456
+00:00 +3 -5: utility contract phone +0123456789
+00:00 +4 -5: utility contract phone 123abc4567
+00:00 +5 -5: utility contract phone 123+4567890
+00:00 +6 -5: utility contract phone (123) 456-7890
+00:00 +7 -5: utility contract URL http://exa mple.com
+00:00 +7 -6: utility contract URL http://exa mple.com [E]
+  Expected: <false>
+    Actual: <true>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/core/utils/utility_contracts_test.dart 56:9    main.<fn>.<fn>
+  
+00:00 +7 -6: utility contract URL http://.
+00:00 +7 -7: utility contract URL http://. [E]
+  Expected: <false>
+    Actual: <true>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/core/utils/utility_contracts_test.dart 56:9    main.<fn>.<fn>
+  
+00:00 +7 -7: utility contract URL javascript://alert(1)
+00:00 +7 -8: utility contract URL javascript://alert(1) [E]
+  Expected: <false>
+    Actual: <true>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/core/utils/utility_contracts_test.dart 56:9    main.<fn>.<fn>
+  
+00:00 +7 -8: utility contract URL javascript://example.com
+00:00 +7 -9: utility contract URL javascript://example.com [E]
+  Expected: <false>
+    Actual: <true>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/core/utils/utility_contracts_test.dart 56:9    main.<fn>.<fn>
+  
+00:00 +7 -9: utility contract URL http://example..com
+00:00 +7 -10: utility contract URL http://example..com [E]
+  Expected: <false>
+    Actual: <true>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/core/utils/utility_contracts_test.dart 56:9    main.<fn>.<fn>
+  
+00:00 +7 -10: utility contract URL http://-example.com
+00:00 +7 -11: utility contract URL http://-example.com [E]
+  Expected: <false>
+    Actual: <true>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/core/utils/utility_contracts_test.dart 56:9    main.<fn>.<fn>
+  
+00:00 +7 -11: utility contract URL http://999.999.999.999
+00:00 +7 -12: utility contract URL http://999.999.999.999 [E]
+  Expected: <false>
+    Actual: <true>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/core/utils/utility_contracts_test.dart 56:9    main.<fn>.<fn>
+  
+00:00 +7 -12: utility contract URL http://example.com:70000
+00:00 +7 -13: utility contract URL http://example.com:70000 [E]
+  Expected: <false>
+    Actual: <true>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/core/utils/utility_contracts_test.dart 56:9    main.<fn>.<fn>
+  
+00:00 +7 -13: utility contract URL http:\\example.com
+00:00 +7 -14: utility contract URL http:\\example.com [E]
+  Expected: <false>
+    Actual: <true>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/core/utils/utility_contracts_test.dart 56:9    main.<fn>.<fn>
+  
+00:00 +7 -14: utility contract URL https://例え.テスト
+00:00 +7 -15: utility contract URL https://例え.テスト [E]
+  Expected: <false>
+    Actual: <true>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/core/utils/utility_contracts_test.dart 56:9    main.<fn>.<fn>
+  
+00:00 +7 -15: utility contract URL https://example.com/path with space
+00:00 +7 -16: utility contract URL https://example.com/path with space [E]
+  Expected: <false>
+    Actual: <true>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/core/utils/utility_contracts_test.dart 56:9    main.<fn>.<fn>
+  
+00:00 +7 -16: utility contract URL http://exa%20mple.com
+00:00 +7 -17: utility contract URL http://exa%20mple.com [E]
+  Expected: <false>
+    Actual: <true>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/core/utils/utility_contracts_test.dart 56:9    main.<fn>.<fn>
+  
+00:00 +7 -17: utility contract URL https://example.com/path%20with%20space
+00:00 +8 -17: utility contract URL HTTP://example.com:65535
+00:00 +9 -17: utility contract URL ftp://example.com/file
+00:00 +10 -17: utility contract URL ws://localhost:3000
+00:00 +11 -17: utility contract URL wss://example.com
+00:00 +12 -17: utility contract URL http://127.0.0.1
+00:00 +13 -17: utility contract URL http://[::1]:8080
+00:00 +14 -17: utility contract URL https://xn--r8jz45g.xn--zckzah
+00:00 +15 -17: utility contract URL https://example.com.
+00:00 +16 -17: utility contract URL https://intranet
+00:00 +17 -17: utility contract exact integer fraction
+00:00 +17 -18: utility contract exact integer fraction [E]
+  Expected: null
+    Actual: <1>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/core/utils/utility_contracts_test.dart 73:9    main.<fn>.<fn>
+  
+00:00 +17 -18: utility contract exact integer negative fraction
+00:00 +17 -19: utility contract exact integer negative fraction [E]
+  Expected: null
+    Actual: <-1>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/core/utils/utility_contracts_test.dart 73:9    main.<fn>.<fn>
+  
+00:00 +17 -19: utility contract exact integer overflow
+00:00 +17 -20: utility contract exact integer overflow [E]
+  Expected: null
+    Actual: <9223372036854775807>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/core/utils/utility_contracts_test.dart 73:9    main.<fn>.<fn>
+  
+00:00 +17 -20: utility contract exact integer negative overflow
+00:00 +17 -21: utility contract exact integer negative overflow [E]
+  Expected: null
+    Actual: <-9223372036854775808>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/core/utils/utility_contracts_test.dart 73:9    main.<fn>.<fn>
+  
+00:00 +17 -21: utility contract exact integer positive overflow text
+00:00 +18 -21: utility contract exact integer negative overflow text
+00:00 +19 -21: utility contract exact integer infinity
+00:00 +20 -21: utility contract exact integer nan
+00:00 +21 -21: utility contract exact integer integral numbers and integer text retain their values
+00:00 +22 -21: utility contract exact integer signed bounds and target representability
+00:00 +23 -21: utility contract exact integer long leading zero text remains a bounded small integer
+00:00 +24 -21: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract URL http://-example.com
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract URL http://.
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract URL http://999.999.999.999
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract URL http://exa mple.com
+  ... and 17 more

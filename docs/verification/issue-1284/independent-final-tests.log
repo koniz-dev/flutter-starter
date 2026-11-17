@@ -1,0 +1,57 @@
+PASS 90 raw port/IPv6/userinfo/zero-padding/C0/C1/encoded control cases
+Compiled 10,900,752 input bytes (5,390,062 characters source) to 240,830 characters JavaScript in 1.11 seconds
+PASS 90 raw port/IPv6/userinfo/zero-padding/C0/C1/encoded control cases
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart
+00:00 +0: utility contract phone 12
+00:00 +1: utility contract phone 0912345678
+00:00 +2: utility contract phone +1 555 123 4567
+00:00 +3: utility contract phone 123-456-7890
+00:00 +4: utility contract phone 1234567
+00:00 +5: utility contract phone +123456789012345
+00:00 +6: utility contract phone 123456
+00:00 +7: utility contract phone +1234567890123456
+00:00 +8: utility contract phone +0123456789
+00:00 +9: utility contract phone 123abc4567
+00:00 +10: utility contract phone 123+4567890
+00:00 +11: utility contract phone (123) 456-7890
+00:00 +12: utility contract URL http://exa mple.com
+00:00 +13: utility contract URL http://.
+00:00 +14: utility contract URL javascript://alert(1)
+00:00 +15: utility contract URL javascript://example.com
+00:00 +16: utility contract URL http://example..com
+00:00 +17: utility contract URL http://-example.com
+00:00 +18: utility contract URL http://999.999.999.999
+00:00 +19: utility contract URL http://example.com:70000
+00:00 +20: utility contract URL http://example.com:+80
+00:00 +21: utility contract URL http://example.com:-0
+00:00 +22: utility contract URL http://user:pass@[::1]:+80
+00:00 +23: utility contract URL http://example.com/pathtail
+00:00 +24: utility contract URL http://example.com/pathtail
+00:00 +25: utility contract URL http://example.com:
+00:00 +26: utility contract URL http://user:pass@[::1]:00080
+00:00 +27: utility contract URL http:\\example.com
+00:00 +28: utility contract URL https://例え.テスト
+00:00 +29: utility contract URL https://example.com/path with space
+00:00 +30: utility contract URL http://exa%20mple.com
+00:00 +31: utility contract URL https://example.com/path%20with%20space
+00:00 +32: utility contract URL HTTP://example.com:65535
+00:00 +33: utility contract URL ftp://example.com/file
+00:00 +34: utility contract URL ws://localhost:3000
+00:00 +35: utility contract URL wss://example.com
+00:00 +36: utility contract URL http://127.0.0.1
+00:00 +37: utility contract URL http://[::1]:8080
+00:00 +38: utility contract URL https://xn--r8jz45g.xn--zckzah
+00:00 +39: utility contract URL https://example.com.
+00:00 +40: utility contract URL https://intranet
+00:00 +41: utility contract exact integer fraction
+00:00 +42: utility contract exact integer negative fraction
+00:00 +43: utility contract exact integer overflow
+00:00 +44: utility contract exact integer negative overflow
+00:00 +45: utility contract exact integer positive overflow text
+00:00 +46: utility contract exact integer negative overflow text
+00:00 +47: utility contract exact integer infinity
+00:00 +48: utility contract exact integer nan
+00:00 +49: utility contract exact integer integral numbers and integer text retain their values
+00:00 +50: utility contract exact integer signed bounds and target representability
+00:00 +51: utility contract exact integer long leading zero text remains a bounded small integer
+00:00 +52: All tests passed!

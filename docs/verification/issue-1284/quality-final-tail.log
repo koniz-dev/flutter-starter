@@ -1,0 +1,156 @@
+2026-11-16T23:57:19.9364886Z ⏭️ /home/runner/work/flutter-starter/flutter-starter/test/acceptance/session_restore_acceptance_test.dart: (suite) (skipped)
+2026-11-16T23:57:19.9370118Z Skip: Host-renderer dependent. Run: flutter test --run-skipped --tags golden test/acceptance
+2026-11-16T23:57:19.9371228Z ⏭️ /home/runner/work/flutter-starter/flutter-starter/test/acceptance/forced_logout_acceptance_test.dart: (suite) (skipped)
+2026-11-16T23:57:19.9372121Z Skip: Host-renderer dependent. Run: flutter test --run-skipped --tags golden test/acceptance
+2026-11-16T23:57:26.8463706Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/docs/doc_signatures_test.dart: a malformed signature directive is reported, not skipped
+2026-11-16T23:58:17.5646248Z │ #1   main.<anonymous closure>.<anonymous closure> (file:///home/runner/work/flutter-starter/flutter-starter/test/core/network/realtime/raw_websocket_release_wss_test.dart:122:16)
+2026-11-16T23:58:19.0324624Z [38;5;196m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+2026-11-16T23:59:11.5946245Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/logging/log_level_test.dart: LogLevel comparison can filter levels above threshold
+2026-11-16T23:59:55.4744968Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/storage/adapters/secure_token_store_snapshot_test.dart: a pending platform write makes a bypassed snapshot unusable
+2026-11-17T00:00:35.2244303Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/config/dart_defines_test.dart: dart-define mechanism no dart-define read is skipped on web
+2026-11-17T00:00:35.2275499Z ⏭️ /home/runner/work/flutter-starter/flutter-starter/test/core/config/dart_defines_test.dart: end-to-end with a supplied --dart-define pinning defines reach AppConfig, and web never reports pinning effective (skipped)
+2026-11-17T00:00:35.2278740Z ⏭️ /home/runner/work/flutter-starter/flutter-starter/test/core/config/dart_defines_test.dart: end-to-end with a supplied --dart-define BASE_URL reaches EnvConfig and AppConfig (skipped)
+2026-11-17T00:00:36.6095268Z ⏭️ /home/runner/work/flutter-starter/flutter-starter/test/core/config/env_typed_getters_test.dart: criterion 1: a .env without the key falls through to the define getBool (skipped)
+2026-11-17T00:00:36.6097535Z ⏭️ /home/runner/work/flutter-starter/flutter-starter/test/core/config/env_typed_getters_test.dart: criterion 1: a .env without the key falls through to the define getInt (skipped)
+2026-11-17T00:00:36.6400854Z ⏭️ /home/runner/work/flutter-starter/flutter-starter/test/core/config/env_typed_getters_test.dart: criterion 1: a .env without the key falls through to the define getDouble (skipped)
+2026-11-17T00:01:00.5545536Z 🎉 4624 tests passed, 16 skipped.
+2026-11-17T00:01:00.7128007Z [36;1mtotal=$(grep -oE 'Coverage: [0-9.]+%' "$RUNNER_TEMP/coverage.log" | grep -oE '[0-9.]+%' || true)[0m
+2026-11-17T00:01:00.7407245Z   Coverage: 96.77%
+2026-11-17T00:01:00.7639523Z [36;1mecho "No tracked file changed."[0m
+2026-11-17T00:01:00.7771927Z No tracked file changed.
+
+2026-11-17T00:00:40.8935479Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle getMap with null map
+2026-11-17T00:00:40.8959458Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle deepMerge with nested non-map values
+2026-11-17T00:00:40.8973085Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle getInt with large number
+2026-11-17T00:00:40.8989527Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle getListOf with null list
+2026-11-17T00:00:40.9004576Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle getList with null map
+2026-11-17T00:00:40.9025309Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle getDouble with invalid string
+2026-11-17T00:00:40.9040230Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle getDouble with large number
+2026-11-17T00:00:40.9055665Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle getString with null map
+2026-11-17T00:00:40.9070893Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle removeNulls with all null values
+2026-11-17T00:00:40.9085890Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle encodePretty with nested structures
+2026-11-17T00:00:40.9103986Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle toQueryString with single entry
+2026-11-17T00:00:40.9118601Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle getListOf with empty list
+2026-11-17T00:00:40.9143064Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle getInt with invalid string
+2026-11-17T00:00:40.9175078Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle getInt with null map
+2026-11-17T00:00:40.9181561Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle toQueryString with all null values
+2026-11-17T00:00:40.9199795Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle getDouble with int value
+2026-11-17T00:00:40.9218134Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle deepMerge with map1 having nested map
+2026-11-17T00:00:40.9239918Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle removeNulls with no null values
+2026-11-17T00:00:40.9263174Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle encodePretty with list
+2026-11-17T00:00:40.9276666Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle getBool with null map
+2026-11-17T00:01:00.7126492Z [36;1m./scripts/test/test_coverage.sh --no-test --min="$COVERAGE_MIN_TOTAL" \[0m
+2026-11-17T00:01:00.7126943Z [36;1m  | tee "$RUNNER_TEMP/coverage.log"[0m
+2026-11-17T00:01:00.7128007Z [36;1mtotal=$(grep -oE 'Coverage: [0-9.]+%' "$RUNNER_TEMP/coverage.log" | grep -oE '[0-9.]+%' || true)[0m
+2026-11-17T00:01:00.7128646Z [36;1mecho "- Line coverage: \`${total:-unknown}\` (minimum \`${COVERAGE_MIN_TOTAL}%\`)" >> "$GITHUB_STEP_SUMMARY"[0m
+2026-11-17T00:01:00.7130136Z [36;1m  echo "::error title=Coverage below minimum::Line coverage ${total:-unknown} is below ${COVERAGE_MIN_TOTAL}%. Add tests, or lower COVERAGE_MIN_TOTAL in ci.yml with a reason."[0m
+2026-11-17T00:01:00.7241636Z [1;33mSkipping tests (using existing coverage data)[0m
+2026-11-17T00:01:00.7302617Z [1;33mCalculating coverage...[0m
+2026-11-17T00:01:00.7406077Z [0;34mCoverage Statistics:[0m
+2026-11-17T00:01:00.7406565Z   Total lines: 5627
+2026-11-17T00:01:00.7406903Z   Covered lines: 5445
+2026-11-17T00:01:00.7407245Z   Coverage: 96.77%
+2026-11-17T00:01:00.7423717Z [0;32m✓ Coverage 96.77% meets minimum threshold of 94%[0m
+2026-11-17T00:01:00.7424325Z [0;32mCoverage report complete![0m
+2026-11-17T00:01:00.7639523Z [36;1mecho "No tracked file changed."[0m
+2026-11-17T00:01:00.7771927Z No tracked file changed.
+
+2026-11-17T00:00:59.8017204Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/utils/image_cache_helper_redaction_test.dart: with a context, the timeout path prints no secret
+2026-11-17T00:01:00.5535681Z ##[endgroup]
+2026-11-17T00:01:00.5536028Z 
+2026-11-17T00:01:00.5545536Z 🎉 4624 tests passed, 16 skipped.
+2026-11-17T00:01:00.6931347Z Test order seed: 2915445247
+2026-11-17T00:01:00.7124669Z ##[group]Run # Actions runs bash with -e: without set +e a failing check exits
+2026-11-17T00:01:00.7125273Z [36;1m# Actions runs bash with -e: without set +e a failing check exits[0m
+2026-11-17T00:01:00.7125747Z [36;1m# here, before the summary line and the annotation below.[0m
+2026-11-17T00:01:00.7126125Z [36;1mset +e[0m
+2026-11-17T00:01:00.7126492Z [36;1m./scripts/test/test_coverage.sh --no-test --min="$COVERAGE_MIN_TOTAL" \[0m
+2026-11-17T00:01:00.7126943Z [36;1m  | tee "$RUNNER_TEMP/coverage.log"[0m
+2026-11-17T00:01:00.7127302Z [36;1mstatus=${PIPESTATUS[0]}[0m
+2026-11-17T00:01:00.7127595Z [36;1mset -e[0m
+2026-11-17T00:01:00.7128007Z [36;1mtotal=$(grep -oE 'Coverage: [0-9.]+%' "$RUNNER_TEMP/coverage.log" | grep -oE '[0-9.]+%' || true)[0m
+2026-11-17T00:01:00.7128646Z [36;1mecho "- Line coverage: \`${total:-unknown}\` (minimum \`${COVERAGE_MIN_TOTAL}%\`)" >> "$GITHUB_STEP_SUMMARY"[0m
+2026-11-17T00:01:00.7129325Z [36;1mif [ "$status" -ne 0 ]; then[0m
+2026-11-17T00:01:00.7130136Z [36;1m  echo "::error title=Coverage below minimum::Line coverage ${total:-unknown} is below ${COVERAGE_MIN_TOTAL}%. Add tests, or lower COVERAGE_MIN_TOTAL in ci.yml with a reason."[0m
+2026-11-17T00:01:00.7130797Z [36;1mfi[0m
+2026-11-17T00:01:00.7131034Z [36;1mexit "$status"[0m
+2026-11-17T00:01:00.7162590Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-17T00:01:00.7163071Z env:
+2026-11-17T00:01:00.7163403Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.50.0-x64/flutter
+2026-11-17T00:01:00.7163812Z   PUB_CACHE: /home/runner/.pub-cache
+2026-11-17T00:01:00.7164131Z   COVERAGE_MIN_TOTAL: 94
+2026-11-17T00:01:00.7164401Z ##[endgroup]
+2026-11-17T00:01:00.7241636Z [1;33mSkipping tests (using existing coverage data)[0m
+2026-11-17T00:01:00.7241959Z 
+2026-11-17T00:01:00.7242178Z [0;32m✓ Tests completed[0m
+2026-11-17T00:01:00.7242375Z 
+2026-11-17T00:01:00.7302617Z [1;33mCalculating coverage...[0m
+2026-11-17T00:01:00.7406077Z [0;34mCoverage Statistics:[0m
+2026-11-17T00:01:00.7406565Z   Total lines: 5627
+2026-11-17T00:01:00.7406903Z   Covered lines: 5445
+2026-11-17T00:01:00.7407245Z   Coverage: 96.77%
+2026-11-17T00:01:00.7407436Z 
+2026-11-17T00:01:00.7423717Z [0;32m✓ Coverage 96.77% meets minimum threshold of 94%[0m
+2026-11-17T00:01:00.7424102Z 
+2026-11-17T00:01:00.7424325Z [0;32mCoverage report complete![0m
+2026-11-17T00:01:00.7633320Z ##[group]Run dirty=$(git status --porcelain --untracked-files=no)
+2026-11-17T00:01:00.7634501Z [36;1mdirty=$(git status --porcelain --untracked-files=no)[0m
+2026-11-17T00:01:00.7634899Z [36;1mif [ -n "$dirty" ]; then[0m
+2026-11-17T00:01:00.7635198Z [36;1m  echo "$dirty"[0m
+2026-11-17T00:01:00.7635458Z [36;1m  git diff --stat[0m
+2026-11-17T00:01:00.7636182Z [36;1m  echo "::error title=pub get / analyze / test changed tracked files::Run flutter pub get on main with this stable and commit the result (usually pubspec.lock or analysis_options.yaml)."[0m
+2026-11-17T00:01:00.7637050Z [36;1m  echo "- **Tracked files changed by pub get / analyze / test:**" >> "$GITHUB_STEP_SUMMARY"[0m
+2026-11-17T00:01:00.7637749Z [36;1m  # sed prefixes every line; ${dirty//...} cannot anchor at each line start.[0m
+2026-11-17T00:01:00.7638174Z [36;1m  # shellcheck disable=SC2001[0m
+2026-11-17T00:01:00.7638535Z [36;1m  echo "$dirty" | sed 's/^/  - /' >> "$GITHUB_STEP_SUMMARY"[0m
+2026-11-17T00:01:00.7638915Z [36;1m  exit 1[0m
+2026-11-17T00:01:00.7639276Z [36;1mfi[0m
+2026-11-17T00:01:00.7639523Z [36;1mecho "No tracked file changed."[0m
+2026-11-17T00:01:00.7669392Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-17T00:01:00.7669836Z env:
+2026-11-17T00:01:00.7670339Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.50.0-x64/flutter
+2026-11-17T00:01:00.7670825Z   PUB_CACHE: /home/runner/.pub-cache
+2026-11-17T00:01:00.7671152Z ##[endgroup]
+2026-11-17T00:01:00.7771927Z No tracked file changed.
+2026-11-17T00:01:00.8642281Z Post job cleanup.
+2026-11-17T00:01:00.8717672Z ##[start-action display=Cache pub dependencies;id=__8e79aeca-a4ab-45df-97b1-2de9420f59bb.cache-pub]
+2026-11-17T00:01:01.2143562Z Post job cleanup.
+2026-11-17T00:01:01.3383616Z Cache hit occurred on the primary key flutter-pub-linux-stable-3.50.0-x64-ab2912035e160d9cad6306df307576da6128ebdb-3a059eac5ec38b730824a69464ccd728b60eeb6b7cbd7a89114311ece5ab8ecb, not saving cache.
+2026-11-17T00:01:01.3434405Z ##[end-action id=__8e79aeca-a4ab-45df-97b1-2de9420f59bb.cache-pub;outcome=success;conclusion=success;duration_ms=471]
+2026-11-17T00:01:01.3530251Z ##[start-action display=Cache Flutter;id=__8e79aeca-a4ab-45df-97b1-2de9420f59bb.cache-flutter]
+2026-11-17T00:01:01.3923553Z Post job cleanup.
+2026-11-17T00:01:01.5160855Z Cache hit occurred on the primary key flutter-linux-stable-3.50.0-x64-ab2912035e160d9cad6306df307576da6128ebdb, not saving cache.
+2026-11-17T00:01:01.5220241Z ##[end-action id=__8e79aeca-a4ab-45df-97b1-2de9420f59bb.cache-flutter;outcome=success;conclusion=success;duration_ms=168]
+2026-11-17T00:01:01.6436670Z Post job cleanup.
+2026-11-17T00:01:01.7328312Z [command]/usr/bin/git version
+2026-11-17T00:01:01.7369479Z git version 2.56.1
+2026-11-17T00:01:01.7406498Z Temporarily overriding HOME='/home/runner/work/_temp/51d5156f-2bcf-45d1-b82f-54957b27b807' before making global git config changes
+2026-11-17T00:01:01.7407629Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-17T00:01:01.7412923Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/flutter-starter/flutter-starter
+2026-11-17T00:01:01.7451967Z Removing SSH command configuration
+2026-11-17T00:01:01.7459446Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-17T00:01:01.7497026Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-17T00:01:01.7782587Z Removing HTTP extra header
+2026-11-17T00:01:01.7813036Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-17T00:01:01.7865489Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-17T00:01:01.8108445Z Removing includeIf entries pointing to credentials config files
+2026-11-17T00:01:01.8115399Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-17T00:01:01.8139311Z includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git.path
+2026-11-17T00:01:01.8140578Z includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git/worktrees/*.path
+2026-11-17T00:01:01.8141574Z includeif.gitdir:/github/workspace/.git.path
+2026-11-17T00:01:01.8142400Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-11-17T00:01:01.8148679Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git.path
+2026-11-17T00:01:01.8174087Z /home/runner/work/_temp/git-credentials-5cdd1285-1cbf-4a7b-b4db-d89d4f646b01.config
+2026-11-17T00:01:01.8184758Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-5cdd1285\-1cbf\-4a7b\-b4db\-d89d4f646b01\.config
+2026-11-17T00:01:01.8234916Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git/worktrees/*.path
+2026-11-17T00:01:01.8267864Z /home/runner/work/_temp/git-credentials-5cdd1285-1cbf-4a7b-b4db-d89d4f646b01.config
+2026-11-17T00:01:01.8280759Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-5cdd1285\-1cbf\-4a7b\-b4db\-d89d4f646b01\.config
+2026-11-17T00:01:01.8313775Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-11-17T00:01:01.8334687Z /github/runner_temp/git-credentials-5cdd1285-1cbf-4a7b-b4db-d89d4f646b01.config
+2026-11-17T00:01:01.8341641Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-5cdd1285\-1cbf\-4a7b\-b4db\-d89d4f646b01\.config
+2026-11-17T00:01:01.8373580Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-11-17T00:01:01.8393149Z /github/runner_temp/git-credentials-5cdd1285-1cbf-4a7b-b4db-d89d4f646b01.config
+2026-11-17T00:01:01.8399475Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-5cdd1285\-1cbf\-4a7b\-b4db\-d89d4f646b01\.config
+2026-11-17T00:01:01.8431361Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-17T00:01:01.8652637Z Removing credentials config '/home/runner/work/_temp/git-credentials-5cdd1285-1cbf-4a7b-b4db-d89d4f646b01.config'
+2026-11-17T00:01:01.8788293Z Cleaning up orphan processes

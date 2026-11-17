@@ -1,0 +1,466 @@
+diff --git a/docs/api/core/utils.md b/docs/api/core/utils.md
+index d6762a899e4..7ee826acf89 100644
+--- a/docs/api/core/utils.md
++++ b/docs/api/core/utils.md
+@@ -223,6 +223,23 @@ static Map<String, dynamic> removeNulls(Map<String, dynamic>? map);
+ static String toQueryString(Map<String, dynamic>? map);
+ ```
+ 
++### Integer extraction contract
++
++`getInt` accepts finite integral numbers or trimmed signed decimal/`0x` integer
++text. The value must fit the signed 64-bit range and the target's `int` exactly.
++Fractions, non-finite values, overflow and rounding return `null`; precision
++already lost before calling the helper cannot be recovered. For decimal IDs
++that must retain all digits across targets, keep the string via `getString`.
++
++| Input value | Result |
++|---|---|
++| `42`, `42.0`, `'42'`, `'0x2a'` | `42` |
++| `1.9`, `1e20` | `null` |
++| `'9223372036854775807'` | accepted on the VM; `null` on JavaScript, where that exact integer cannot be represented |
++
++Code needing intentional truncation must validate its range and explicitly
++truncate before extraction.
++
+ ### Usage Examples
+ 
+ #### Decoding JSON
+@@ -377,6 +394,34 @@ static bool isValidUrl(String url);
+ static bool isEmpty(String? value);
+ ```
+ 
++### Phone and URL contracts
++
++`isValidPhone` checks a basic format of 7-15 ASCII digits, with an optional
++leading `+`. It trims surrounding whitespace and allows spaces/hyphens between
++digit groups. Local numbers may start with zero; a `+` country prefix may not.
++Other punctuation and letters are rejected. It does not check national number
++allocation. `StringExtensions.isValidPhone` delegates to the same contract.
++
++| Phone input | Result |
++|---|---|
++| `'12'` | `false` |
++| `'0912345678'` | `true` |
++| `'+1 555 123 4567'` | `true` |
++
++`isValidUrl` accepts absolute `http`, `https`, `ftp`, `ws` and `wss` URLs with an
++ASCII DNS/punycode hostname, IPv4 or bracketed IPv6 address. Single labels such
++as `localhost` and a trailing DNS root dot are supported. DNS labels contain
++1-63 ASCII letters/digits/hyphens, begin/end with a letter or digit, and total
++at most 253 characters without the root dot. Numeric ports use unsigned decimal
++digits in 0-65535; an empty port separator is treated as omitted. Raw whitespace,
++C0/C1 controls and backslashes are rejected; encode path
++spaces and use the ASCII/punycode form for international hostnames. This checks
++syntax, not reachability or authorization of a destination.
++
++`'http://exa mple.com'`, `'http://.'` and `'javascript://alert(1)'` return `false`.
++Callers needing another URI scheme should choose their own policy around
++`Uri.tryParse`.
++
+ ### Usage Examples
+ 
+ ```dart
+diff --git a/lib/core/utils/json_helper.dart b/lib/core/utils/json_helper.dart
+index b9f86149f27..14e47f93cac 100644
+--- a/lib/core/utils/json_helper.dart
++++ b/lib/core/utils/json_helper.dart
+@@ -4,6 +4,12 @@ import 'dart:convert';
+ class JsonHelper {
+   JsonHelper._();
+ 
++  static final BigInt _minInt64 = -(BigInt.one << 63);
++  static final BigInt _maxInt64 = (BigInt.one << 63) - BigInt.one;
++  static final _decimalDigits = RegExp(r'^[0-9]+$');
++  static final _hexDigits = RegExp(r'^[0-9a-fA-F]+$');
++  static final _leadingZeroes = RegExp('^0+');
++
+   /// Safely decode a JSON string to a Map or List
+   /// Returns null if decoding fails
+   static dynamic decode(String? jsonString) {
+@@ -78,21 +84,47 @@ class JsonHelper {
+     return getValue<String>(map, key);
+   }
+ 
+-  /// Safely get an int value from a Map by key
++  /// Gets an exact signed 64-bit integer representable on the current target.
+   ///
+-  /// Returns null for a non-finite number. `jsonDecode('{"a":1e999}')`
+-  /// yields `double.infinity`, and `Infinity.toInt()` throws
+-  /// `UnsupportedError` - an Error, so no `on Exception` handler upstream
+-  /// would have caught it.
++  /// Accepts integral finite numbers and trimmed signed decimal/0x integer
++  /// text. Fractions, non-finite values, overflow and target rounding return
++  /// null. Existing precision loss before this call cannot be recovered.
+   static int? getInt(Map<String, dynamic>? map, String key) {
+     final value = map?[key];
+-    if (value is int) return value;
++    final BigInt? integer;
+     if (value is num) {
+       if (!value.isFinite) return null;
+-      return value.toInt();
++      // JavaScript also considers large integral doubles to be int, so range
++      // checking cannot be skipped merely because `value is int` is true.
++      if (value is! int && value != value.truncateToDouble()) return null;
++      integer = BigInt.from(value);
++    } else if (value is String) {
++      integer = _parseIntegerText(value);
++    } else {
++      return null;
+     }
+-    if (value is String) return int.tryParse(value);
+-    return null;
++    if (integer == null || integer < _minInt64 || integer > _maxInt64) {
++      return null;
++    }
++    final result = integer.toInt();
++    return BigInt.from(result) == integer ? result : null;
++  }
++
++  static BigInt? _parseIntegerText(String value) {
++    var digits = value.trim();
++    final negative = digits.startsWith('-');
++    if (negative || digits.startsWith('+')) digits = digits.substring(1);
++    final hex = digits.startsWith('0x') || digits.startsWith('0X');
++    if (hex) digits = digits.substring(2);
++    if (!(hex ? _hexDigits : _decimalDigits).hasMatch(digits)) return null;
++    digits = digits.replaceFirst(_leadingZeroes, '');
++    // Bound significant digits before BigInt parsing, even for huge inputs.
++    if (digits.length > (hex ? 16 : 19)) return null;
++    final magnitude = BigInt.parse(
++      digits.isEmpty ? '0' : digits,
++      radix: hex ? 16 : 10,
++    );
++    return negative ? -magnitude : magnitude;
+   }
+ 
+   /// Safely get a double value from a Map by key
+diff --git a/lib/core/utils/validators.dart b/lib/core/utils/validators.dart
+index 216c54d7584..cafe05f72d7 100644
+--- a/lib/core/utils/validators.dart
++++ b/lib/core/utils/validators.dart
+@@ -67,6 +67,17 @@ class Validators {
+   /// Maximum length of a single DNS label (RFC 1035 section 2.3.4).
+   static const int _maxLabelOctets = 63;
+ 
++  static final _phoneGroups = RegExp(r'^\+?[0-9]+(?:[ -]+[0-9]+)*$');
++  static final _phoneSeparators = RegExp('[ -]');
++  static const _urlSchemes = {'http', 'https', 'ftp', 'ws', 'wss'};
++  static final _urlForbiddenCharacters = RegExp(r'[\s\\\x00-\x1f\x7f-\x9f]');
++  static final _urlHostLabel = RegExp(
++    r'^[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?$',
++  );
++  static final _dottedIpv4 = RegExp(r'^[0-9]+(?:\.[0-9]+){3}$');
++  static final _authorityEnd = RegExp('[/#?]');
++  static final _unsignedPort = RegExp(r'^:[0-9]*$');
++
+   /// Validate an email address.
+   ///
+   /// See the class-level "Email standard" section for exactly what is
+@@ -94,10 +105,19 @@ class Validators {
+     return true;
+   }
+ 
+-  /// Validate phone number (basic validation)
++  /// Basic phone format: 7-15 ASCII digits, optional leading '+'.
++  ///
++  /// Surrounding whitespace is trimmed; spaces and hyphens may separate digit
++  /// groups. A local number may start with zero; an international '+' number
++  /// must start with a nonzero digit. Other punctuation/letters are rejected.
++  /// This checks format rather than a country's numbering/allocation rules.
+   static bool isValidPhone(String phone) {
+-    final phoneRegex = RegExp(r'^\+?[1-9]\d{1,14}$');
+-    return phoneRegex.hasMatch(phone);
++    final text = phone.trim();
++    if (!_phoneGroups.hasMatch(text)) return false;
++    final compact = text.replaceAll(_phoneSeparators, '');
++    if (compact.startsWith('+0')) return false;
++    final count = compact.startsWith('+') ? compact.length - 1 : compact.length;
++    return count >= 7 && count <= 15;
+   }
+ 
+   /// Validate password length (at least 8 characters)
+@@ -147,17 +167,70 @@ class Validators {
+     return RegExp(r'^[a-zA-Z0-9]+$').hasMatch(s);
+   }
+ 
+-  /// Validate URL
++  /// Absolute http/https/ftp/ws/wss URL with an ASCII DNS or IP host.
++  ///
++  /// Hostnames allow single labels (e.g. localhost), a trailing root dot and
++  /// ASCII/punycode labels of 1-63 characters, at most 253 without a root dot.
++  /// IPv4 and bracketed IPv6 literals are accepted. Numeric ports use unsigned
++  /// decimal digits in 0-65535; an empty port separator is treated as omitted.
++  /// Raw whitespace, C0/C1 controls and backslashes are rejected; encode spaces.
++  /// Unicode hostnames must use their ASCII IDNA form. This is a syntax check,
++  /// not a reachability, public-address or authorization policy.
+   static bool isValidUrl(String url) {
++    if (url.contains(_urlForbiddenCharacters)) return false;
+     try {
+       final uri = Uri.parse(url);
+-      // Check that URL has both scheme and non-empty authority
+-      return uri.hasScheme && uri.hasAuthority && uri.host.isNotEmpty;
++      if (!_urlSchemes.contains(uri.scheme) ||
++          !uri.hasAuthority ||
++          url.indexOf('://') != uri.scheme.length ||
++          uri.host.isEmpty) {
++        return false;
++      }
++      if (!_hasValidRawPort(url, uri.scheme.length + 3)) return false;
++      return _isValidUrlHost(uri.host);
+     } on FormatException {
+       return false;
+     }
+   }
+ 
++  // Uri normalizes signed/default ports. Validate spelling before trusting
++  // its normalized hasPort/port properties, including userinfo/IPv6 shapes.
++  static bool _hasValidRawPort(String url, int authorityStart) {
++    final end = url.indexOf(_authorityEnd, authorityStart);
++    final authority = url.substring(
++      authorityStart,
++      end < 0 ? url.length : end,
++    );
++    final hostPort = authority.substring(authority.lastIndexOf('@') + 1);
++    final String suffix;
++    if (hostPort.startsWith('[')) {
++      final bracket = hostPort.indexOf(']');
++      if (bracket < 0) return false;
++      suffix = hostPort.substring(bracket + 1);
++    } else {
++      final colon = hostPort.lastIndexOf(':');
++      suffix = colon < 0 ? '' : hostPort.substring(colon);
++    }
++    if (suffix.isEmpty || suffix == ':') return true;
++    if (!_unsignedPort.hasMatch(suffix)) return false;
++    final port = int.tryParse(suffix.substring(1));
++    return port != null && port <= 65535;
++  }
++
++  static bool _isValidUrlHost(String host) {
++    if (host.contains(':')) {
++      Uri.parseIPv6Address(host);
++      return true;
++    }
++    final name = host.endsWith('.') ? host.substring(0, host.length - 1) : host;
++    if (name.isEmpty || name.length > 253) return false;
++    if (_dottedIpv4.hasMatch(name)) {
++      Uri.parseIPv4Address(name);
++      return true;
++    }
++    return name.split('.').every(_urlHostLabel.hasMatch);
++  }
++
+   /// Check if string is empty or null
+   static bool isEmpty(String? value) {
+     return value == null || value.trim().isEmpty;
+diff --git a/test/core/utils/json_helper_test.dart b/test/core/utils/json_helper_test.dart
+index f525c4afa4c..918348082e7 100644
+--- a/test/core/utils/json_helper_test.dart
++++ b/test/core/utils/json_helper_test.dart
+@@ -578,8 +578,8 @@ void main() {
+         );
+       });
+ 
+-      test('getInt still converts finite numbers', () {
+-        expect(JsonHelper.getInt({'a': 3.7}, 'a'), 3);
++      test('getInt only converts integral finite numbers', () {
++        expect(JsonHelper.getInt({'a': 3.7}, 'a'), isNull);
+         expect(JsonHelper.getInt({'a': 42}, 'a'), 42);
+         expect(JsonHelper.getInt({'a': '42'}, 'a'), 42);
+       });
+diff --git a/test/core/utils/utility_contracts_test.dart b/test/core/utils/utility_contracts_test.dart
+new file mode 100644
+index 00000000000..6802c4ef23f
+--- /dev/null
++++ b/test/core/utils/utility_contracts_test.dart
+@@ -0,0 +1,111 @@
++import 'package:flutter_starter/core/utils/json_helper.dart';
++import 'package:flutter_starter/core/utils/validators.dart';
++import 'package:flutter_starter/shared/extensions/string_extensions.dart';
++import 'package:flutter_test/flutter_test.dart';
++
++const _usesJavaScriptNumbers = bool.fromEnvironment('dart.library.js');
++
++void main() {
++  group('utility contract phone', () {
++    for (final entry in const {
++      '12': false,
++      '0912345678': true,
++      '+1 555 123 4567': true,
++      '123-456-7890': true,
++      '1234567': true,
++      '+123456789012345': true,
++      '123456': false,
++      '+1234567890123456': false,
++      '+0123456789': false,
++      '123abc4567': false,
++      '123+4567890': false,
++      '(123) 456-7890': false,
++    }.entries) {
++      test(entry.key, () {
++        expect(Validators.isValidPhone(entry.key), entry.value);
++        expect(entry.key.isValidPhone, entry.value);
++      });
++    }
++  });
++
++  group('utility contract URL', () {
++    for (final entry in const {
++      'http://exa mple.com': false,
++      'http://.': false,
++      'javascript://alert(1)': false,
++      'javascript://example.com': false,
++      'http://example..com': false,
++      'http://-example.com': false,
++      'http://999.999.999.999': false,
++      'http://example.com:70000': false,
++      'http://example.com:+80': false,
++      'http://example.com:-0': false,
++      'http://user:pass@[::1]:+80': false,
++      'http://example.com/path\u0085tail': false,
++      'http://example.com/path\u009ftail': false,
++      'http://example.com:': true,
++      'http://user:pass@[::1]:00080': true,
++      r'http:\\example.com': false,
++      'https://例え.テスト': false,
++      'https://example.com/path with space': false,
++      'http://exa%20mple.com': false,
++      'https://example.com/path%20with%20space': true,
++      'HTTP://example.com:65535': true,
++      'ftp://example.com/file': true,
++      'ws://localhost:3000': true,
++      'wss://example.com': true,
++      'http://127.0.0.1': true,
++      'http://[::1]:8080': true,
++      'https://xn--r8jz45g.xn--zckzah': true,
++      'https://example.com.': true,
++      'https://intranet': true,
++    }.entries) {
++      test(entry.key, () {
++        expect(Validators.isValidUrl(entry.key), entry.value);
++      });
++    }
++  });
++
++  group('utility contract exact integer', () {
++    for (final entry in <String, dynamic>{
++      'fraction': 1.9,
++      'negative fraction': -1.9,
++      'overflow': 1e20,
++      'negative overflow': -1e20,
++      'positive overflow text': '9223372036854775808',
++      'negative overflow text': '-9223372036854775809',
++      'infinity': double.infinity,
++      'nan': double.nan,
++    }.entries) {
++      test(entry.key, () {
++        expect(JsonHelper.getInt({'value': entry.value}, 'value'), isNull);
++      });
++    }
++    test('integral numbers and integer text retain their values', () {
++      for (final value in <dynamic>[42, 42.0, '42', ' +00042 ', '0x2a']) {
++        expect(JsonHelper.getInt({'value': value}, 'value'), 42);
++      }
++      expect(JsonHelper.getInt({'value': -42.0}, 'value'), -42);
++      expect(JsonHelper.getInt(null, 'value'), isNull);
++    });
++    test('signed bounds and target representability', () {
++      const max = '9223372036854775807';
++      const min = '-9223372036854775808';
++      const odd = '9007199254740993';
++      expect(
++        JsonHelper.getInt({'value': max}, 'value'),
++        _usesJavaScriptNumbers ? null : int.parse(max),
++      );
++      expect(JsonHelper.getInt({'value': min}, 'value'), int.parse(min));
++      expect(
++        JsonHelper.getInt({'value': odd}, 'value'),
++        _usesJavaScriptNumbers ? null : int.parse(odd),
++      );
++    });
++    test('long leading zero text remains a bounded small integer', () {
++      final value = '${'0' * 10000}42';
++      expect(JsonHelper.getInt({'value': value}, 'value'), 42);
++      expect(JsonHelper.getInt({'value': '9' * 10000}, 'value'), isNull);
++    });
++  });
++}
+diff --git a/test/core/utils/validators_test.dart b/test/core/utils/validators_test.dart
+index 5ab3f869069..5d321a6596b 100644
+--- a/test/core/utils/validators_test.dart
++++ b/test/core/utils/validators_test.dart
+@@ -110,10 +110,8 @@ void main() {
+       });
+ 
+       test('should return false for invalid phone numbers', () {
+-        // Note: '123' is actually valid per regex (starts with 1-9)
+         expect(Validators.isValidPhone('abc'), isFalse);
+         expect(Validators.isValidPhone('+'), isFalse);
+-        expect(Validators.isValidPhone('0123456789'), isFalse); // Starts with 0
+         expect(Validators.isValidPhone(''), isFalse); // Empty
+       });
+ 
+@@ -129,8 +127,8 @@ void main() {
+         expect(Validators.isValidPhone('12345678901234'), isTrue);
+       });
+ 
+-      test('should reject phone numbers starting with zero', () {
+-        expect(Validators.isValidPhone('0123456789'), isFalse);
++      test('allows local zero prefixes but rejects a zero country prefix', () {
++        expect(Validators.isValidPhone('0123456789'), isTrue);
+         expect(Validators.isValidPhone('+0123456789'), isFalse);
+       });
+ 
+@@ -140,25 +138,23 @@ void main() {
+         expect(Validators.isValidPhone('+123abc'), isFalse);
+       });
+ 
+-      test('should reject phone numbers with special characters', () {
+-        expect(Validators.isValidPhone('123-456-7890'), isFalse);
++      test('allows supported separators and rejects other punctuation', () {
++        expect(Validators.isValidPhone('123-456-7890'), isTrue);
+         expect(Validators.isValidPhone('(123) 456-7890'), isFalse);
+         expect(Validators.isValidPhone('123.456.7890'), isFalse);
+-        expect(Validators.isValidPhone('123 456 7890'), isFalse);
++        expect(Validators.isValidPhone('123 456 7890'), isTrue);
+       });
+ 
+       test('should handle minimum length phone numbers', () {
+-        // Regex requires: [1-9] + at least 1 digit = minimum 2 digits
+-        expect(Validators.isValidPhone('12'), isTrue);
+-        expect(Validators.isValidPhone('+12'), isTrue);
+-        expect(Validators.isValidPhone('19'), isTrue);
++        expect(Validators.isValidPhone('12'), isFalse);
++        expect(Validators.isValidPhone('+12'), isFalse);
++        expect(Validators.isValidPhone('1234567'), isTrue);
+       });
+ 
+       test('should handle maximum length phone numbers', () {
+-        // Regex allows: [1-9] + up to 14 digits = maximum 15 digits total
+-        expect(Validators.isValidPhone('12345678901234'), isTrue); // 15 digits
++        expect(Validators.isValidPhone('123456789012345'), isTrue); // 15 digits
+         expect(
+-          Validators.isValidPhone('+12345678901234'),
++          Validators.isValidPhone('+123456789012345'),
+           isTrue, // 15 digits with +
+         );
+       });
+diff --git a/test/shared/extensions/string_extensions_test.dart b/test/shared/extensions/string_extensions_test.dart
+index 3bfe53c7210..a1b9d7adfea 100644
+--- a/test/shared/extensions/string_extensions_test.dart
++++ b/test/shared/extensions/string_extensions_test.dart
+@@ -47,12 +47,12 @@ void main() {
+         expect('+1234567890'.isValidPhone, isTrue);
+         expect('1234567890'.isValidPhone, isTrue);
+         expect('+441234567890'.isValidPhone, isTrue);
++        expect('0123456789'.isValidPhone, isTrue);
+       });
+ 
+       test('should return false for invalid phone numbers', () {
+         expect('abc'.isValidPhone, isFalse);
+         expect('+'.isValidPhone, isFalse);
+-        expect('0123456789'.isValidPhone, isFalse);
+         expect(''.isValidPhone, isFalse);
+       });
+     });

@@ -1,0 +1,513 @@
+==> env asset guard
+OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+==> generated code (skipped: AUDIT_SKIP_CODEGEN=1)
+==> format (lib test integration_test tool examples)
+Formatted 639 files (0 changed) in 2.81 seconds.
+==> flutter analyze
+Analyzing flutter-starter...                                    
+No issues found! (ran in 10.1s)
+==> flutter test
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/date_formatter_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/date_formatter_test.dart: DateFormatter formatDate should format date correctly
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/date_formatter_test.dart: DateFormatter formatDate should handle different dates
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/date_formatter_test.dart: DateFormatter formatDateTime should format date and time correctly
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/date_formatter_test.dart: DateFormatter formatTime should format time correctly
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/date_formatter_test.dart: DateFormatter parseDate should parse valid date string
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/date_formatter_test.dart: DateFormatter parseDate should return null for invalid date string
+00:00 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/date_formatter_test.dart: DateFormatter parseDate rejects out-of-range calendar fields instead of rolling over
+00:00 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/date_formatter_test.dart: DateFormatter parseDate rejects trailing junk after a well-formed date
+00:00 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/date_formatter_test.dart: DateFormatter parseDate should return null for empty string
+00:00 +9: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/date_formatter_test.dart: DateFormatter parseDateTime should parse valid date-time string
+00:00 +10: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/date_formatter_test.dart: DateFormatter parseDateTime should parse date-time with different times
+00:00 +11: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/date_formatter_test.dart: DateFormatter parseDateTime should return null for invalid date-time string
+00:00 +12: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/date_formatter_test.dart: DateFormatter parseDateTime rejects out-of-range calendar and clock fields
+00:00 +13: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/date_formatter_test.dart: DateFormatter timezone round trip formatIso8601 always emits a UTC instant ending in Z
+00:00 +14: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/date_formatter_test.dart: DateFormatter timezone round trip a UTC DateTime survives the ISO-8601 round trip unshifted
+00:00 +15: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result Success should create Success with data
+00:00 +16: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result Success should create Success with data
+00:00 +17: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result Success should create Success with data
+00:00 +18: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result Success should create Success with data
+00:00 +19: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result Success should create Success with data
+00:00 +20: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result Success should create Success with data
+00:00 +21: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result Success should create Success with data
+00:00 +22: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result Success should create Success with data
+00:00 +23: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result Success should handle nullable data
+00:00 +24: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result Success should return data from dataOrNull
+00:00 +25: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result Success should return null from errorOrNull
+00:00 +26: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result Success should return null from failureOrNull
+00:00 +27: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result ResultFailure should create ResultFailure with Failure
+00:00 +28: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result ResultFailure should return null from dataOrNull
+00:00 +29: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result ResultFailure should return message from errorOrNull
+00:00 +30: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result ResultFailure should return failure from failureOrNull
+00:00 +31: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result ResultFailure should handle different Failure subtypes
+00:00 +32: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result when() - Pattern Matching should call success callback for Success
+00:00 +33: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result when() - Pattern Matching should call failureCallback for ResultFailure
+00:00 +34: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result when() - Pattern Matching should return value from success callback
+00:00 +35: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result when() - Pattern Matching should return value from failureCallback
+00:00 +36: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result when() - Pattern Matching should handle async callbacks
+00:00 +37: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result when() - Pattern Matching should preserve type information in success callback
+00:00 +38: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result when() - Pattern Matching should preserve Failure subtype information
+00:00 +39: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result when() - Pattern Matching should handle all Failure subtypes
+00:00 +40: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result when() - Pattern Matching should handle nullable T types
+00:00 +41: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result map() should map Success data
+00:00 +42: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result map() should preserve Failure in map
+00:00 +43: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result mapError() should not change Success
+00:00 +44: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result mapError() should map Failure message
+00:00 +45: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result when() - Pattern Matching should call success callback for Success
+00:00 +46: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result when() - Pattern Matching should call failureCallback with message and code
+00:00 +47: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result when() - Pattern Matching should handle null code in failureCallback
+00:00 +48: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result mapError() - Comprehensive Failure Type Coverage should map ServerFailure message
+00:00 +49: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result mapError() - Comprehensive Failure Type Coverage should map NetworkFailure message
+00:00 +50: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result mapError() - Comprehensive Failure Type Coverage should map CacheFailure message
+00:00 +51: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result mapError() - Comprehensive Failure Type Coverage should map AuthFailure message
+00:00 +52: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result mapError() - Comprehensive Failure Type Coverage should map ValidationFailure message
+00:00 +53: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result mapError() - Comprehensive Failure Type Coverage should map PermissionFailure message
+00:00 +54: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result mapError() - Comprehensive Failure Type Coverage should map UnknownFailure message
+00:00 +55: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result Integration with when() should chain map and when
+00:00 +56: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result Integration with when() should handle complex type transformations
+00:00 +57: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result Integration with when() should chain mapError and when
+00:00 +58: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result Edge Cases - Additional Coverage should handle mapError with empty message
+00:00 +59: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract phone 12
+00:00 +60: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract phone 12
+00:00 +61: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract phone 12
+00:00 +62: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result Edge Cases - Additional Coverage should handle map on ResultFailure
+00:00 +63: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result Edge Cases - Additional Coverage should handle map on ResultFailure
+00:00 +64: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract phone +1 555 123 4567
+00:00 +65: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract phone +1 555 123 4567
+00:00 +66: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result when() - Legacy Pattern Matching (migrated) should call success callback for Success
+00:00 +67: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract phone 123-456-7890
+00:00 +68: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract phone 1234567
+00:00 +69: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result when() - Legacy Pattern Matching (migrated) should call failureCallback with message and code for ResultFailure
+00:00 +70: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract phone +123456789012345
+00:00 +71: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result when() - Legacy Pattern Matching (migrated) should handle null code in failureCallback
+00:00 +72: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract phone 123456
+00:00 +73: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result when() - Legacy Pattern Matching (migrated) should return value from success callback
+00:00 +74: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract phone +1234567890123456
+00:00 +75: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result when() - Legacy Pattern Matching (migrated) should return value from failureCallback
+00:00 +76: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract phone +0123456789
+00:00 +77: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract phone 123abc4567
+00:00 +78: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract phone 123abc4567
+00:00 +79: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result when() - Legacy Pattern Matching should call success callback for Success
+00:00 +80: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract phone 123+4567890
+00:00 +81: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result when() - Legacy Pattern Matching should call failureCallback with message and code for ResultFailure
+00:00 +82: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result when() - Legacy Pattern Matching should call failureCallback with message and code for ResultFailure
+00:00 +83: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract URL http://exa mple.com
+00:00 +84: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract URL http://exa mple.com
+00:00 +85: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result when() - Legacy Pattern Matching should return value from success callback
+00:00 +86: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract URL http://.
+00:00 +87: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract URL http://.
+00:00 +88: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract URL javascript://alert(1)
+00:00 +89: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result _createFailureWithMessage - Fallback Case should handle custom Failure type with fallback
+00:00 +90: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract URL javascript://example.com
+00:00 +91: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result whenLegacy() - Deprecated Pattern Matching should call success callback for Success
+00:00 +92: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract URL http://example..com
+00:00 +93: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result whenLegacy() - Deprecated Pattern Matching should call failureCallback with message and code for ResultFailure
+00:00 +94: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract URL http://-example.com
+00:00 +95: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result whenLegacy() - Deprecated Pattern Matching should handle null code in failureCallback
+00:00 +96: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract URL http://999.999.999.999
+00:00 +97: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract URL http://999.999.999.999
+00:00 +98: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result whenLegacy() - Deprecated Pattern Matching should return value from failureCallback
+00:00 +99: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract URL http://example.com:70000
+00:00 +100: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result _createFailureWithMessage - Fallback Path Coverage should use fallback for unknown Failure types
+00:00 +101: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract URL http://example.com:+80
+00:00 +102: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result _createFailureWithMessage - Fallback Path Coverage should handle all if-else branches in _createFailureWithMessage
+00:00 +103: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result _createFailureWithMessage - Fallback Path Coverage should handle all if-else branches in _createFailureWithMessage
+00:00 +104: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract URL http://user:pass@[::1]:+80
+00:00 +105: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result equality two Success values with equal data are equal
+00:00 +106: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result equality two Success values with equal data are equal
+00:00 +107: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract URL http://example.com/pathtail
+00:00 +108: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result equality Success values with different data are not equal
+00:00 +109: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract URL http://example.com:
+00:00 +110: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result equality two ResultFailure values wrapping equal failures are equal
+00:00 +111: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result equality two ResultFailure values wrapping equal failures are equal
+00:00 +112: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result equality two ResultFailure values wrapping equal failures are equal
+00:00 +113: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract URL https://例え.テスト
+00:00 +114: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result equality ResultFailure values wrapping different failures differ
+00:00 +115: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract URL https://example.com/path with space
+00:00 +116: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result equality a Success never equals a ResultFailure
+00:00 +117: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract URL http://exa%20mple.com
+00:00 +118: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result equality equality is only as deep as T, so lists compare by identity
+00:00 +119: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract URL https://example.com/path%20with%20space
+00:00 +120: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result equality results are usable directly in expect
+00:00 +121: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract URL HTTP://example.com:65535
+00:00 +122: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result equality toString names the variant and its payload
+00:00 +123: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/result_test.dart: Result equality toString names the variant and its payload
+00:00 +124: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract URL ws://localhost:3000
+00:00 +125: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract URL wss://example.com
+00:00 +126: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract URL http://127.0.0.1
+00:00 +127: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract URL http://[::1]:8080
+00:00 +128: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract URL https://xn--r8jz45g.xn--zckzah
+00:00 +129: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract URL https://example.com.
+00:00 +130: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract URL https://intranet
+00:00 +131: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract exact integer fraction
+00:00 +132: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract exact integer negative fraction
+00:00 +133: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract exact integer overflow
+00:00 +134: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract exact integer negative overflow
+00:00 +135: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract exact integer positive overflow text
+00:00 +136: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract exact integer negative overflow text
+00:00 +137: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract exact integer infinity
+00:00 +138: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract exact integer nan
+00:00 +139: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract exact integer integral numbers and integer text retain their values
+00:00 +140: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract exact integer signed bounds and target representability
+00:00 +141: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract exact integer long leading zero text remains a bounded small integer
+00:01 +142: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/throttler_monotonic_test.dart: calls are spaced by elapsed monotonic time, whatever the wall clock does
+00:01 +143: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/throttler_monotonic_test.dart: the default source is a running stopwatch
+00:02 +144: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:02 +145: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:02 +146: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:02 +147: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:02 +148: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:02 +149: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +150: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +151: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +152: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +153: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +154: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +155: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +156: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +157: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +158: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +159: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +160: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +161: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +162: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +163: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +164: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +165: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +166: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +167: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +168: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +169: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +170: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +171: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +172: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +173: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +174: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +175: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +176: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +177: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +178: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +179: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +180: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +181: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +182: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +183: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +184: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +185: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +186: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +187: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +188: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +189: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +190: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +191: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +192: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +193: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +194: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +195: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +196: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +197: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +198: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +199: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +200: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +201: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +202: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +203: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +204: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +205: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +206: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +207: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +208: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +209: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +210: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +211: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +212: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +213: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +214: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +215: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +216: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +217: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +218: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +219: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +220: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +221: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +222: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +223: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +224: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +225: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +226: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +227: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +228: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +229: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +230: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +231: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +232: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +233: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +234: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +235: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +236: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +237: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +238: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +239: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +240: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +241: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +242: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +243: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +244: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +245: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +246: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +247: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +248: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +249: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:03 +250: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:04 +251: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:04 +252: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:04 +253: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:04 +254: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:04 +254: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/pagination_helper_test.dart: PaginationHelper should handle load errors
+Pagination error: Exception: Load error
+00:04 +255: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:04 +256: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:04 +257: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:04 +258: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:04 +259: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:04 +260: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:04 +261: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:04 +262: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:04 +263: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/provider_disposal_test.dart: ProviderDisposal should dispose registered disposables
+00:04 +264: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/pagination_helper_test.dart: PaginationScrollExtension should calculate scroll ratio
+00:04 +265: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/pagination_helper_test.dart: PaginationScrollExtension should calculate scroll ratio
+00:04 +266: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/pagination_helper_test.dart: PaginationScrollExtension should calculate scroll ratio
+00:04 +267: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/pagination_helper_test.dart: PaginationScrollExtension should calculate scroll ratio
+00:04 +268: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/pagination_helper_test.dart: PaginationScrollExtension should calculate scroll ratio
+00:04 +269: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/pagination_helper_test.dart: PaginationScrollExtension should calculate scroll ratio
+00:06 +270: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/image_cache_helper_cached_test.dart: preloading an image already in the cache succeeds at once
+00:06 +271: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/pagination_helper_test.dart: PaginationScrollExtension should check if near end
+00:06 +272: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/pagination_helper_test.dart: PaginationScrollExtension should check if at end
+00:06 +273: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/pagination_helper_test.dart: PaginationScrollExtension should return 0 for scroll ratio when no clients
+00:06 +274: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/pagination_helper_test.dart: PaginationScrollExtension a list that fits on screen counts as at the end
+00:06 +275: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/lazy_loader_test.dart: LazyLoader should create instance with loader function
+00:06 +276: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/lazy_loader_test.dart: LazyLoader should create instance with loader function
+00:06 +277: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/lazy_loader_test.dart: LazyLoader should create instance with loader function
+00:06 +278: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/lazy_loader_test.dart: LazyLoader should create instance with loader function
+00:06 +279: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/pagination_helper_test.dart: PaginationHelper config plumbing an error is cleared by the next successful page
+Pagination error: Exception: network down
+00:06 +280: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/pagination_helper_test.dart: PaginationState.copyWith clearError drops an error that error: null cannot
+00:06 +281: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/pagination_helper_test.dart: PaginationState.copyWith clearError drops an error that error: null cannot
+00:06 +282: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/pagination_helper_test.dart: PaginationState.copyWith clearError drops an error that error: null cannot
+00:06 +283: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/lazy_loader_test.dart: LazyLoader should not cache when cacheEnabled is false
+00:06 +284: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/lazy_loader_test.dart: LazyLoader should handle multiple concurrent loads
+00:06 +285: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/lazy_loader_test.dart: LazyLoader should evict oldest entries when cache is full
+00:06 +286: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/lazy_loader_test.dart: LazyLoader should preload resource
+00:06 +287: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/lazy_loader_test.dart: LazyLoader should preload multiple resources
+00:06 +288: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/lazy_loader_test.dart: LazyLoader should clear cache
+00:06 +289: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/lazy_loader_test.dart: LazyLoader should evict specific key
+00:06 +290: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/lazy_loader_test.dart: LazyLoader should check if key is cached
+00:06 +291: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/lazy_loader_test.dart: LazyLoader should check if key is loading
+00:06 +292: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/lazy_loader_test.dart: LazyLoader should handle load errors
+00:06 +293: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/lazy_loader_test.dart: LazyLoader caches a legitimately null value without throwing
+00:06 +294: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/lazy_loader_test.dart: DeferredImportLoader should create instance with load function
+00:06 +295: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/lazy_loader_test.dart: DeferredImportLoader should load library
+00:06 +296: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/lazy_loader_test.dart: DeferredImportLoader should not load twice
+00:06 +297: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/lazy_loader_test.dart: DeferredImportLoader should handle concurrent loads
+00:07 +298: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/lazy_loader_test.dart: DeferredImportLoader should reset loader
+00:07 +299: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/lazy_loader_test.dart: DeferredImportLoader should handle load errors
+00:07 +300: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/lazy_loader_test.dart: LazyInitializer should create instance with initializer
+00:07 +301: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/lazy_loader_test.dart: LazyInitializer should initialize and cache value
+00:07 +302: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/lazy_loader_test.dart: LazyInitializer should handle concurrent initialization
+00:07 +303: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/lazy_loader_test.dart: LazyInitializer should reset initializer
+00:07 +304: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/lazy_loader_test.dart: LazyInitializer should handle initialization errors
+00:08 +305: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/lazy_loader_reset_race_test.dart: nullable initialization caches null until reset
+00:08 +306: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/lazy_loader_reset_race_test.dart: a stale null completion cannot initialize the new generation
+00:08 +307: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/lazy_loader_reset_race_test.dart: LazyInitializer: a get in flight across reset does not return the old value to later callers
+00:08 +308: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/lazy_loader_reset_race_test.dart: DeferredImportLoader: a load in flight across reset does not mark the next load done
+00:08 +309: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/lazy_loader_reset_race_test.dart: LazyInitializer: a stale get failing after reset leaves the newer initialization shared
+00:08 +310: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/image_cache_helper_redaction_test.dart: without a context, the timeout path prints no secret
+00:08 +311: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/image_cache_helper_redaction_test.dart: without a context, the timeout path prints no secret
+00:09 +312: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/image_cache_helper_test.dart: ImageCacheHelper preloadImage should return false for invalid URL
+00:09 +313: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/image_cache_helper_test.dart: ImageCacheHelper preloadImage should return false for invalid URL
+00:10 +314: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/image_cache_helper_test.dart: ImageCacheHelper preloadImage should return false for invalid URL
+00:10 +315: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/image_cache_helper_test.dart: ImageCacheHelper preloadImage should return false for invalid URL
+00:10 +316: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/image_cache_helper_test.dart: ImageCacheHelper preloadImage should return false for invalid URL
+00:10 +317: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/image_cache_helper_test.dart: ImageCacheHelper preloadImage should return false for invalid URL
+00:10 +318: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/image_cache_helper_test.dart: ImageCacheHelper preloadImage should return false for invalid URL
+00:10 +319: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/image_cache_helper_test.dart: ImageCacheHelper preloadImage should return false for invalid URL format
+Preload error: NetworkImageLoadException (HTTP 400)
+00:10 +320: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/image_cache_helper_test.dart: ImageCacheHelper preloadImage reports failure when given a context
+Preload error: NetworkImageLoadException (HTTP 400)
+Preload error: NetworkImageLoadException (HTTP 400)
+00:10 +321: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/image_cache_helper_test.dart: ImageCacheHelper preloadImage exposes a default timeout
+00:10 +322: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/image_cache_helper_test.dart: ImageCacheHelper preloadImages should return 0 for empty list
+00:10 +323: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/image_cache_helper_test.dart: ImageCacheHelper preloadImages counts only the URLs that loaded
+Preload error: NetworkImageLoadException (HTTP 400)
+Preload error: NetworkImageLoadException (HTTP 400)
+00:10 +324: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/image_cache_helper_test.dart: ImageCacheHelper clearCache should clear image cache
+00:10 +325: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/image_cache_helper_test.dart: ImageCacheHelper maxCacheSize should get and set max cache size
+00:10 +326: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/image_cache_helper_test.dart: ImageCacheHelper maxCacheBytes should get and set max cache bytes
+00:10 +327: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/image_cache_helper_test.dart: ImageCacheHelper getCacheStats should return cache statistics
+00:12 +328: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/debouncer_test.dart: Debouncer should create instance with duration
+00:12 +329: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/lazy_loader_sync_throw_test.dart: LazyLoader calls the loader again after it threw synchronously
+00:12 +330: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/debouncer_test.dart: Debouncer should execute callback after duration
+00:12 +331: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/debouncer_test.dart: Debouncer should execute callback after duration
+00:12 +332: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/debouncer_test.dart: Debouncer should execute callback after duration
+00:12 +333: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/debouncer_test.dart: Debouncer should cancel previous callback when run multiple times
+00:13 +334: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/debouncer_test.dart: Debouncer should cancel previous callback when run multiple times
+00:13 +335: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/debouncer_test.dart: Debouncer should cancel previous callback when run multiple times
+00:13 +336: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/debouncer_test.dart: Debouncer should cancel previous callback when run multiple times
+00:13 +337: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/debouncer_test.dart: Debouncer should cancel previous callback when run multiple times
+00:13 +338: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/debouncer_test.dart: Debouncer should cancel previous callback when run multiple times
+00:13 +339: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/debouncer_test.dart: Debouncer should cancel previous callback when run multiple times
+00:13 +340: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/debouncer_test.dart: Debouncer should cancel previous callback when run multiple times
+00:13 +341: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/date_formatter_rollover_test.dart: criterion 2: valid forms parse to the correct UTC instant 2026-02-28T13:45:30Z
+00:13 +342: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/debouncer_test.dart: Debouncer should cancel pending callback
+00:13 +343: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/debouncer_test.dart: Debouncer should cancel pending callback
+00:13 +344: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/debouncer_test.dart: Debouncer should cancel pending callback
+00:13 +345: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/debouncer_test.dart: Debouncer should cancel pending callback
+00:13 +346: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/debouncer_test.dart: Debouncer should cancel pending callback
+00:13 +347: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/debouncer_test.dart: Debouncer should cancel pending callback
+00:13 +348: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/debouncer_test.dart: Debouncer should cancel pending callback
+00:13 +349: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/debouncer_test.dart: Debouncer should cancel pending callback
+00:13 +350: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/debouncer_test.dart: Debouncer should dispose and cancel pending callbacks
+00:13 +351: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/debouncer_test.dart: Debouncer should handle multiple rapid calls
+00:13 +352: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/debouncer_test.dart: Debouncer should handle zero duration
+00:13 +353: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/debouncer_test.dart: Debouncer should handle very long duration
+00:13 +354: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/debouncer_test.dart: Throttler should create instance with duration
+00:13 +355: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/debouncer_test.dart: Throttler should execute callback immediately on first call
+00:13 +356: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/debouncer_test.dart: Throttler should throttle rapid calls
+00:13 +357: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/debouncer_test.dart: Throttler should allow execution after duration
+00:13 +358: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/debouncer_test.dart: Throttler should reset and allow immediate execution
+00:13 +359: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/debouncer_test.dart: Throttler should handle zero duration
+00:13 +360: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/debouncer_test.dart: Throttler should handle multiple calls with reset
+00:14 +361: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/lazy_loader_defects_test.dart: criterion 1: a failing preload records no uncaught error
+00:14 +362: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/lazy_loader_defects_test.dart: a failed preload leaves the key to be retried by load
+00:14 +363: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/lazy_loader_defects_test.dart: criterion 2: clearCache() during a load is not undone when it completes
+00:14 +364: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/lazy_loader_defects_test.dart: evict() during a load is not undone either
+00:14 +365: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/lazy_loader_defects_test.dart: a load that starts after clearCache() caches as normal
+00:15 +366: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/disposal_tracker_throw_test.dart: a throwing disposable does not stop the others or super.dispose()
+00:15 +367: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/disposal_tracker_throw_test.dart: a throwing disposable does not stop the others or super.dispose()
+00:15 +368: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/disposal_tracker_throw_test.dart: a throwing disposable does not stop the others or super.dispose()
+00:15 +369: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/disposal_tracker_throw_test.dart: a throwing disposable does not stop the others or super.dispose()
+00:15 +370: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/disposal_tracker_throw_test.dart: a throwing disposable does not stop the others or super.dispose()
+00:15 +371: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/disposal_tracker_throw_test.dart: a throwing disposable does not stop the others or super.dispose()
+00:15 +372: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/disposal_tracker_throw_test.dart: a throwing disposable does not stop the others or super.dispose()
+00:15 +373: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/disposal_tracker_throw_test.dart: a throwing disposable does not stop the others or super.dispose()
+00:15 +374: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/disposal_tracker_throw_test.dart: a throwing disposable does not stop the others or super.dispose()
+00:15 +375: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/disposal_tracker_throw_test.dart: a throwing disposable does not stop the others or super.dispose()
+00:15 +376: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/disposal_tracker_throw_test.dart: a throwing disposable does not stop the others or super.dispose()
+00:15 +377: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/disposal_tracker_throw_test.dart: a throwing disposable does not stop the others or super.dispose()
+00:15 +378: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/disposal_tracker_throw_test.dart: a throwing disposable does not stop the others or super.dispose()
+00:15 +379: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/disposal_tracker_throw_test.dart: a throwing disposable does not stop the others or super.dispose()
+00:15 +380: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/disposal_tracker_throw_test.dart: a throwing disposable does not stop the others or super.dispose()
+00:15 +381: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/disposal_tracker_throw_test.dart: a throwing disposable does not stop the others or super.dispose()
+00:15 +382: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/disposal_tracker_throw_test.dart: a throwing disposable does not stop the others or super.dispose()
+00:15 +383: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/disposal_tracker_throw_test.dart: a throwing disposable does not stop the others or super.dispose()
+00:15 +384: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/disposal_tracker_throw_test.dart: a throwing disposable does not stop the others or super.dispose()
+00:15 +385: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/disposal_tracker_throw_test.dart: a throwing disposable does not stop the others or super.dispose()
+00:15 +386: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/disposal_tracker_throw_test.dart: a throwing disposable does not stop the others or super.dispose()
+00:15 +387: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/disposal_tracker_throw_test.dart: a throwing disposable does not stop the others or super.dispose()
+00:15 +388: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/disposal_tracker_throw_test.dart: a throwing disposable does not stop the others or super.dispose()
+00:15 +389: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/disposal_tracker_throw_test.dart: a throwing disposable does not stop the others or super.dispose()
+00:15 +390: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/disposal_tracker_throw_test.dart: a throwing disposable does not stop the others or super.dispose()
+00:15 +391: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/disposal_tracker_throw_test.dart: a throwing disposable does not stop the others or super.dispose()
+00:15 +392: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/disposal_tracker_throw_test.dart: a throwing disposable does not stop the others or super.dispose()
+00:15 +393: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/disposal_tracker_throw_test.dart: a throwing disposable does not stop the others or super.dispose()
+00:15 +394: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/disposal_tracker_throw_test.dart: a throwing disposable does not stop the others or super.dispose()
+00:15 +395: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/disposal_tracker_throw_test.dart: a throwing disposable does not stop the others or super.dispose()
+00:15 +396: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/disposal_tracker_throw_test.dart: a throwing disposable does not stop the others or super.dispose()
+00:15 +397: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/disposal_tracker_throw_test.dart: a throwing disposable does not stop the others or super.dispose()
+00:15 +398: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper merge should override values from second map
+00:15 +399: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper encodePretty should encode map with indentation
+00:15 +400: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper encodePretty should return null for unencodable objects
+00:15 +401: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper encodePretty should handle encodePretty with Exception during encoding
+00:15 +402: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper getMap should get nested map
+00:15 +403: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper getMap should return null for non-map value
+00:15 +404: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper getMap should return null for missing key
+00:15 +405: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper getList should get list value
+00:15 +406: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper getList should return null for non-list value
+00:15 +407: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper getListOf should get list of strings
+00:15 +408: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper getListOf should convert list items
+00:15 +409: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper getListOf should return null for missing key
+00:15 +410: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper getListOf should return null when conversion fails
+00:15 +411: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper deepMerge should deep merge nested maps
+00:15 +412: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper deepMerge should handle null maps
+00:15 +413: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper deepMerge should override non-map values
+00:15 +414: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper removeNulls should remove null values
+00:15 +415: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper removeNulls should handle null map
+00:15 +416: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper removeNulls should preserve non-null values
+00:15 +417: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper toQueryString should convert map to query string
+00:15 +418: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper toQueryString should URL encode values
+00:15 +419: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper toQueryString should handle null map
+00:15 +420: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper toQueryString should handle empty map
+00:15 +421: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper toQueryString should skip null values
+00:15 +422: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper toQueryString should handle numeric values
+00:15 +423: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper toQueryString should handle boolean values
+00:15 +424: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper toQueryString should handle special characters in keys
+00:15 +425: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle getInt with double value
+00:15 +426: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle getInt with large number
+00:15 +427: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle getDouble with int value
+00:15 +428: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle getDouble with large number
+00:15 +429: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle getDouble with invalid string
+00:15 +430: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle getInt with invalid string
+00:15 +431: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle getInt with null map
+00:15 +432: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle getDouble with null map
+00:15 +433: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle getBool with null map
+00:15 +434: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle getList with null map
+00:15 +435: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle getMap with null map
+00:15 +436: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle getString with null map
+00:15 +437: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle deepMerge with nested non-map values
+00:15 +438: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle deepMerge with map1 having nested map
+00:15 +439: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle encodePretty with list
+00:15 +440: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle encodePretty with nested structures
+00:15 +441: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle getListOf with empty list
+00:15 +442: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle getListOf with null list
+00:15 +443: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle removeNulls with all null values
+00:15 +444: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle removeNulls with no null values
+00:15 +445: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle toQueryString with single entry
+00:15 +446: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle toQueryString with all null values
+00:15 +447: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper non-finite and non-Exception failures getInt returns null for a non-finite number
+00:15 +448: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper non-finite and non-Exception failures getInt only converts integral finite numbers
+00:15 +449: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper non-finite and non-Exception failures getListOf returns null when the converter raises a TypeError
+00:15 +450: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper non-finite and non-Exception failures getListOf still converts a well-formed list
+00:15 +451: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/memory_helper_test.dart: MemoryHelper should have private constructor
+00:15 +452: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/memory_helper_test.dart: MemoryHelper should clear image cache
+00:15 +453: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/memory_helper_test.dart: MemoryHelper should force GC in debug mode
+Memory: Attempting to free memory
+00:15 +454: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/memory_helper_test.dart: MemoryHelper should get memory info
+00:15 +455: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/memory_helper_test.dart: MemoryHelper should optimize image cache with maxSize
+00:15 +456: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/memory_helper_test.dart: MemoryHelper should optimize image cache with maxSizeBytes
+00:15 +457: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/memory_helper_test.dart: MemoryHelper should optimize image cache with both parameters
+00:15 +458: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/memory_helper_test.dart: MemoryHelper should optimize image cache with null parameters
+00:15 +459: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/memory_helper_test.dart: MemoryHelper should dispose resources
+Memory: Attempting to free memory
+00:15 +460: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/memory_helper_test.dart: MemoryHelper disposeResources empties a populated image cache
+Memory: Attempting to free memory
+00:15 +461: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/memory_helper_test.dart: DisposalTracker should register and dispose disposables
+00:17 +462: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:17 +463: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:17 +464: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:17 +465: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:17 +466: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:17 +467: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:17 +468: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:17 +469: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:17 +470: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:17 +471: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:17 +472: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:17 +473: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:17 +474: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:17 +475: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:17 +476: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:17 +477: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:17 +478: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:17 +479: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:17 +480: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:17 +481: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:17 +482: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:17 +483: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:17 +484: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:17 +485: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:17 +486: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:17 +487: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: the scan itself flags a body with no assertion, naming its line
+00:17 +488: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: the scan itself accepts expect, verify, fail and expect-named helpers
+00:17 +489: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: the scan itself ignores an assertion that only appears in a string or comment
+00:17 +490: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: the scan itself skips skipped tests and honours the allow-list marker
+00:17 +491: All tests passed!

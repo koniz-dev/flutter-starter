@@ -1,0 +1,13 @@
+PASS 90 raw port/IPv6/userinfo/zero-padding/C0/C1/encoded control cases
+Compiled 10,900,752 input bytes (5,390,062 characters source) to 240,834 characters JavaScript in 1.94 seconds
+PASS 90 raw port/IPv6/userinfo/zero-padding/C0/C1/encoded control cases
+PASS short phone rejection
+PASS local phone acceptance
+PASS formatted international phone
+PASS spaced URL rejection
+PASS empty-label URL rejection
+PASS script scheme rejection
+PASS fraction rejection
+PASS overflow rejection
+PASS unchanged auth email
+PASS unchanged auth password

@@ -1,0 +1,45 @@
+backend=VM
+PASS phone samples
+PASS URL samples
+PASS network schemes/IP controls
+PASS raw port and C1 rejection
+PASS empty port and IPv6 userinfo controls
+PASS reject 1.9
+PASS reject -1.9
+PASS reject 100000000000000000000.0
+PASS reject -100000000000000000000.0
+PASS reject Infinity
+PASS reject NaN
+PASS exact 42
+PASS exact 42.0
+PASS exact 42
+PASS exact  +00042 
+PASS exact 0x2a
+PASS max target precision
+PASS min exact
+PASS odd target precision
+PASS out of signed range
+PASS bounded leading zero parse
+Compiled 10,909,005 input bytes (5,398,315 characters source) to 292,717 characters JavaScript in 2.43 seconds
+backend=JavaScript
+PASS phone samples
+PASS URL samples
+PASS network schemes/IP controls
+PASS raw port and C1 rejection
+PASS empty port and IPv6 userinfo controls
+PASS reject 1.9
+PASS reject -1.9
+PASS reject 100000000000000000000
+PASS reject -100000000000000000000
+PASS reject Infinity
+PASS reject NaN
+PASS exact 42
+PASS exact 42
+PASS exact 42
+PASS exact  +00042 
+PASS exact 0x2a
+PASS max target precision
+PASS min exact
+PASS odd target precision
+PASS out of signed range
+PASS bounded leading zero parse

@@ -1,0 +1,328 @@
+URL [104, 116, 116, 112, 58, 47, 47, 101, 120, 97, 109, 112, 108, 101, 46, 99, 111, 109, 58] => true URI=http://example.com
+URL [104, 116, 116, 112, 58, 47, 47, 101, 120, 97, 109, 112, 108, 101, 46, 99, 111, 109, 58, 48, 48, 48, 48, 48] => true URI=http://example.com:0
+URL [104, 116, 116, 112, 58, 47, 47, 101, 120, 97, 109, 112, 108, 101, 46, 99, 111, 109, 58, 45, 48] => true URI=http://example.com:0
+URL [104, 116, 116, 112, 58, 47, 47, 101, 120, 97, 109, 112, 108, 101, 46, 99, 111, 109, 58, 43, 56, 48] => true URI=http://example.com
+URL [104, 116, 116, 112, 58, 47, 47, 101, 120, 97, 109, 112, 108, 101, 46, 99, 111, 109, 47, 133] => true URI=http://example.com/%C2%85
+URL [104, 116, 116, 112, 58, 47, 47, 101, 120, 97, 109, 112, 108, 101, 46, 99, 111, 109, 47, 159] => true URI=http://example.com/%C2%9F
+URL [104, 116, 116, 112, 58, 47, 47, 101, 120, 97, 109, 112, 108, 101, 46, 99, 111, 109, 47, 37] => true URI=http://example.com/%25
+URL [104, 116, 116, 112, 58, 47, 47, 49, 50, 55, 46, 49] => true URI=http://127.1
+URL [104, 116, 116, 112, 58, 47, 47, 48, 120, 55, 102, 48, 48, 48, 48, 48, 49] => true URI=http://0x7f000001
+URL [104, 116, 116, 112, 58, 47, 47, 91, 58, 58, 49, 93, 46] => false URI=null
+URL [104, 116, 116, 112, 58, 47, 47, 49, 50, 55, 46, 48, 48, 48, 46, 48, 48, 48, 46, 48, 48, 49] => false URI=http://127.000.000.001
+URL [104, 116, 116, 112, 58, 47, 47, 37, 54, 53, 120, 97, 109, 112, 108, 101, 46, 99, 111, 109] => true URI=http://example.com
+URL [104, 116, 116, 112, 58, 47, 47, 101, 120, 97, 109, 112, 108, 101, 46, 99, 111, 109, 47, 8232] => false URI=http://example.com/%E2%80%A8
+INT 0xffffffffffffffff => null
+INT -0x8000000000000000 => -9223372036854775808
+INT 0x8000000000000000 => null
+INT -0000000000000000 => 0
+INT 9007199254740994 => 9007199254740994
+INT 9223372036854774784 => 9223372036854774784
+INT -9223372036854775808 => -9223372036854775808
+NUM 1e+308 => null
+NUM -1e+308 => null
+NUM 9223372036854776000.0 => null
+NUM -9223372036854776000.0 => -9223372036854775808
+NUM 9007199254740994.0 => 9007199254740994
+NUM 1e-10 => null
+long phone false elapsed=84
+long int 42 elapsed=118
+Compiled 10,906,943 input bytes (5,396,253 characters source) to 294,909 characters JavaScript in 0.98 seconds
+URL [104, 116, 116, 112, 58, 47, 47, 101, 120, 97, 109, 112, 108, 101, 46, 99, 111, 109, 58] => true URI=http://example.com
+URL [104, 116, 116, 112, 58, 47, 47, 101, 120, 97, 109, 112, 108, 101, 46, 99, 111, 109, 58, 48, 48, 48, 48, 48] => true URI=http://example.com:0
+URL [104, 116, 116, 112, 58, 47, 47, 101, 120, 97, 109, 112, 108, 101, 46, 99, 111, 109, 58, 45, 48] => true URI=http://example.com:-0.0
+URL [104, 116, 116, 112, 58, 47, 47, 101, 120, 97, 109, 112, 108, 101, 46, 99, 111, 109, 58, 43, 56, 48] => true URI=http://example.com
+URL [104, 116, 116, 112, 58, 47, 47, 101, 120, 97, 109, 112, 108, 101, 46, 99, 111, 109, 47, 133] => true URI=http://example.com/%C2%85
+URL [104, 116, 116, 112, 58, 47, 47, 101, 120, 97, 109, 112, 108, 101, 46, 99, 111, 109, 47, 159] => true URI=http://example.com/%C2%9F
+URL [104, 116, 116, 112, 58, 47, 47, 101, 120, 97, 109, 112, 108, 101, 46, 99, 111, 109, 47, 37] => true URI=http://example.com/%25
+URL [104, 116, 116, 112, 58, 47, 47, 49, 50, 55, 46, 49] => true URI=http://127.1
+URL [104, 116, 116, 112, 58, 47, 47, 48, 120, 55, 102, 48, 48, 48, 48, 48, 49] => true URI=http://0x7f000001
+URL [104, 116, 116, 112, 58, 47, 47, 91, 58, 58, 49, 93, 46] => false URI=null
+URL [104, 116, 116, 112, 58, 47, 47, 49, 50, 55, 46, 48, 48, 48, 46, 48, 48, 48, 46, 48, 48, 49] => false URI=http://127.000.000.001
+URL [104, 116, 116, 112, 58, 47, 47, 37, 54, 53, 120, 97, 109, 112, 108, 101, 46, 99, 111, 109] => true URI=http://example.com
+URL [104, 116, 116, 112, 58, 47, 47, 101, 120, 97, 109, 112, 108, 101, 46, 99, 111, 109, 47, 8232] => false URI=http://example.com/%E2%80%A8
+INT 0xffffffffffffffff => null
+INT -0x8000000000000000 => -9223372036854776000
+INT 0x8000000000000000 => null
+INT -0000000000000000 => 0
+INT 9007199254740994 => 9007199254740994
+INT 9223372036854774784 => 9223372036854775000
+INT -9223372036854775808 => -9223372036854776000
+NUM 1e+308 => null
+NUM -1e+308 => null
+NUM 9223372036854776000 => null
+NUM -9223372036854776000 => -9223372036854776000
+NUM 9007199254740994 => 9007199254740994
+NUM 1e-10 => null
+long phone false elapsed=28
+long int 42 elapsed=30
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isValidEmail accepts <test@example.com> - the ordinary case
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract phone 12
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract phone 12
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract phone 12
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract phone 12
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper decode should decode valid JSON string
+00:00 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper decode should decode valid JSON string
+00:00 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper decode should decode valid JSON string
+00:00 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isValidEmail accepts <a@b.co> - shortest plausible address
+00:00 +9: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract phone +1 555 123 4567
+00:00 +10: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper decode should decode JSON array
+00:00 +11: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper decode should decode JSON array
+00:00 +12: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract phone 123-456-7890
+00:00 +13: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isValidEmail accepts <_user@example.com> - leading underscore is atext, unlike a dot
+00:00 +14: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper decode should return null for invalid JSON
+00:00 +15: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper decode should return null for invalid JSON
+00:00 +16: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isValidEmail accepts <user_@example.com> - trailing underscore is atext, unlike a dot
+00:00 +17: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract phone +123456789012345
+00:00 +18: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper decode should return null for null or empty string
+00:00 +19: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isValidEmail accepts <123user@example.com> - digit-leading local part
+00:00 +20: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract phone 123456
+00:00 +21: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper decodeMap should decode valid JSON map
+00:00 +22: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper decodeMap should decode valid JSON map
+00:00 +23: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract phone +1234567890123456
+00:00 +24: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isValidEmail accepts <!#$%&'*+-/=?^_`{|}~@example.com> - every printable ASCII atext character
+00:00 +25: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper decodeMap should return null for non-map JSON
+00:00 +26: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract phone +0123456789
+00:00 +27: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isValidEmail accepts <user@example.xn--p1ai> - punycode TLD - digits and hyphens inside
+00:00 +28: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper decodeMap should return null for invalid JSON
+00:00 +29: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract phone 123abc4567
+00:00 +30: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isValidEmail accepts <josé@example.com> - non-ASCII local part, valid under SMTPUTF8
+00:00 +31: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper decodeList should decode valid JSON list
+00:00 +32: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract phone 123+4567890
+00:00 +33: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isValidEmail accepts <用户@例子.测试> - fully internationalised address (RFC 6531)
+00:00 +34: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isValidEmail accepts <用户@例子.测试> - fully internationalised address (RFC 6531)
+00:00 +35: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isValidEmail accepts <用户@例子.测试> - fully internationalised address (RFC 6531)
+00:00 +36: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper encode should encode map to JSON string
+00:00 +37: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract URL http://exa mple.com
+00:00 +38: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isValidEmail rejects <user@example..com> - empty DNS label
+00:00 +39: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper encode should encode list to JSON string
+00:00 +40: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract URL http://.
+00:00 +41: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract URL http://.
+00:00 +42: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper encode should return null for unencodable objects
+00:00 +43: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper encode should return null for unencodable objects
+00:00 +44: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract URL javascript://alert(1)
+00:00 +45: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isValidEmail rejects <.user@example.com> - leading dot in the local part
+00:00 +46: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper getValue should get value by key
+00:00 +47: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract URL javascript://example.com
+00:00 +48: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isValidEmail rejects <user.@example.com> - trailing dot in the local part
+00:00 +49: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper getValue should return null for missing key
+00:00 +50: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract URL http://example..com
+00:00 +51: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract URL http://example..com
+00:00 +52: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper getValue should return null for null map
+00:00 +53: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isValidEmail rejects <user@@example.com> - two at-signs
+00:00 +54: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract URL http://-example.com
+00:00 +55: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper getValue should return null for wrong type
+00:00 +56: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isValidEmail rejects <user@example> - single-label domain
+00:00 +57: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract URL http://999.999.999.999
+00:00 +58: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper getString should get string value
+00:00 +59: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isValidEmail rejects <user@.com> - empty first label
+00:00 +60: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract URL http://example.com:70000
+00:00 +61: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper getString should return null for non-string value
+00:00 +62: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper getString should return null for non-string value
+00:00 +63: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract URL http:\\example.com
+00:00 +64: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isValidEmail rejects <user@example.123> - all-digit TLD
+00:00 +65: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper getInt should get int value
+00:00 +66: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper getInt should get int value
+00:00 +67: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper getInt should get int value
+00:00 +68: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper getInt should get int value
+00:00 +69: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper getInt should get int value
+00:00 +70: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract URL http://exa%20mple.com
+00:00 +71: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract URL http://exa%20mple.com
+00:00 +72: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper getInt should parse string number to int
+00:00 +73: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper getInt should parse string number to int
+00:00 +74: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper getInt should parse string number to int
+00:00 +75: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper getInt should parse string number to int
+00:00 +76: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper getInt should parse string number to int
+00:00 +77: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isValidEmail rejects <@example.com> - empty local part
+00:00 +78: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract URL ftp://example.com/file
+00:00 +79: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper getInt should parse num to int
+00:00 +80: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isValidEmail rejects <user name@example.com> - space in the local part
+00:00 +81: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract URL ws://localhost:3000
+00:00 +82: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper getInt should return null for invalid value
+00:00 +83: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isValidEmail rejects <user@exam ple.com> - space in the domain
+00:00 +84: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract URL wss://example.com
+00:00 +85: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper getDouble should get double value
+00:00 +86: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isValidEmail rejects < user@example.com> - leading space
+00:00 +87: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract URL http://127.0.0.1
+00:00 +88: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper getDouble should parse string number to double
+00:00 +89: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isValidEmail rejects <user@example.com > - trailing space
+00:00 +90: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract URL http://[::1]:8080
+00:00 +91: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper getDouble should parse int to double
+00:00 +92: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isValidEmail rejects <user@example .com> - space before the dot
+00:00 +93: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract URL https://xn--r8jz45g.xn--zckzah
+00:00 +94: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper getBool should get bool value
+00:00 +95: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isValidEmail rejects <user@localhost> - deliberately rejected: single-label domain
+00:00 +96: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract URL https://example.com.
+00:00 +97: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper getBool should return null for non-bool value
+00:00 +98: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isValidEmail rejects <"john doe"@example.com> - deliberately rejected: quoted-string local part
+00:00 +99: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract URL https://intranet
+00:00 +100: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper isValidJson should return true for valid JSON
+00:00 +101: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isValidEmail rejects <user@[192.168.0.1]> - deliberately rejected: domain literal
+00:00 +102: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract exact integer fraction
+00:00 +103: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isValidEmail rejects <user(comment)@example.com> - deliberately rejected: comment in the local part
+00:00 +104: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper isValidJson should return false for invalid JSON
+00:00 +105: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract exact integer negative fraction
+00:00 +106: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isValidEmail rejects newline injection at either end
+00:00 +107: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper merge should merge two maps
+00:00 +108: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract exact integer overflow
+00:00 +109: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract exact integer overflow
+00:00 +110: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract exact integer overflow
+00:00 +111: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract exact integer overflow
+00:00 +112: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper merge should override values from second map
+00:00 +113: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isValidEmail enforces the overall 254-octet limit
+00:00 +114: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isValidEmail enforces the overall 254-octet limit
+00:00 +115: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper encodePretty should encode map with indentation
+00:00 +116: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract exact integer positive overflow text
+00:00 +117: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract exact integer positive overflow text
+00:00 +118: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract exact integer positive overflow text
+00:00 +119: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isValidPhone should return false for invalid phone numbers
+00:00 +120: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper encodePretty should handle encodePretty with Exception during encoding
+00:00 +121: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract exact integer negative overflow text
+00:00 +122: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isValidPhone should handle phone numbers with country codes
+00:00 +123: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper getMap should get nested map
+00:00 +124: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract exact integer infinity
+00:00 +125: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isValidPhone should handle phone numbers without country code
+00:00 +126: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper getMap should return null for non-map value
+00:00 +127: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper getMap should return null for non-map value
+00:00 +128: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper getMap should return null for non-map value
+00:00 +129: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract exact integer integral numbers and integer text retain their values
+00:00 +130: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract exact integer integral numbers and integer text retain their values
+00:00 +131: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract exact integer integral numbers and integer text retain their values
+00:00 +132: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isValidPhone allows supported separators and rejects other punctuation
+00:00 +133: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isValidPhone allows supported separators and rejects other punctuation
+00:00 +134: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract exact integer signed bounds and target representability
+00:00 +135: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract exact integer signed bounds and target representability
+00:00 +136: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isValidPhone should handle minimum length phone numbers
+00:00 +137: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper getListOf should get list of strings
+00:00 +138: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract exact integer long leading zero text remains a bounded small integer
+00:00 +139: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/utility_contracts_test.dart: utility contract exact integer long leading zero text remains a bounded small integer
+00:00 +140: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper getListOf should convert list items
+00:00 +141: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isValidPassword should return true for passwords with 8+ characters
+00:00 +142: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper getListOf should return null for missing key
+00:00 +143: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper getListOf should return null for missing key
+00:00 +144: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper getListOf should return null when conversion fails
+00:00 +145: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isValidUrl should return true for valid URLs
+00:00 +146: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper deepMerge should deep merge nested maps
+00:00 +147: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isValidUrl should return false for invalid URLs
+00:00 +148: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper deepMerge should handle null maps
+00:00 +149: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isValidUrl should handle URLs with different schemes
+00:00 +150: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper deepMerge should override non-map values
+00:00 +151: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isValidUrl should reject URLs without scheme
+00:00 +152: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper removeNulls should remove null values
+00:00 +153: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isValidUrl should reject URLs without authority
+00:00 +154: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper removeNulls should handle null map
+00:00 +155: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isValidUrl should reject URLs with empty host
+00:00 +156: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper removeNulls should preserve non-null values
+00:00 +157: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper removeNulls should preserve non-null values
+00:00 +158: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isEmpty should return false for non-empty strings
+00:00 +159: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper toQueryString should convert map to query string
+00:00 +160: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isEmpty should handle strings with only whitespace
+00:00 +161: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper toQueryString should URL encode values
+00:00 +162: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isEmpty should handle strings with mixed whitespace and content
+00:00 +163: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper toQueryString should handle null map
+00:00 +164: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isEmpty should handle unicode whitespace
+00:00 +165: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper toQueryString should handle empty map
+00:00 +166: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isEmpty should handle empty strings with special characters
+00:00 +167: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper toQueryString should skip null values
+00:00 +168: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isValidUrl - Edge Cases should handle URLs with ports
+00:00 +169: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper toQueryString should handle numeric values
+00:00 +170: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper toQueryString should handle numeric values
+00:00 +171: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isValidUrl - Edge Cases should handle URLs with fragments
+00:00 +172: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper toQueryString should handle boolean values
+00:00 +173: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isValidUrl - Edge Cases should reject URLs without scheme
+00:00 +174: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper toQueryString should handle special characters in keys
+00:00 +175: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isValidUrl - Edge Cases should reject URLs without authority
+00:00 +176: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isValidUrl - Edge Cases should reject URLs without authority
+00:00 +177: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle getInt with large number
+00:00 +178: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isValidPassword - Edge Cases should accept exactly 8 characters
+00:00 +179: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle getDouble with int value
+00:00 +180: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle getDouble with int value
+00:00 +181: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isValidPassword - Edge Cases should handle special characters
+00:00 +182: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle getDouble with large number
+00:00 +183: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isValidPassword - Edge Cases should handle unicode characters
+00:00 +184: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle getDouble with invalid string
+00:00 +185: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isValidPassword - Edge Cases should handle very long passwords
+00:00 +186: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle getInt with invalid string
+00:00 +187: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isValidPassword - Edge Cases should handle passwords with spaces
+00:00 +188: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle getInt with null map
+00:00 +189: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isValidPassword - Edge Cases should handle passwords with only numbers
+00:00 +190: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle getDouble with null map
+00:00 +191: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isValidPassword - Edge Cases should handle passwords with only letters
+00:00 +192: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle getBool with null map
+00:00 +193: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isStrongPassword should return true for passwords meeting all criteria
+00:00 +194: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle getList with null map
+00:00 +195: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isStrongPassword should return false if missing uppercase
+00:00 +196: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle getMap with null map
+00:00 +197: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isStrongPassword should return false if missing lowercase
+00:00 +198: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle getString with null map
+00:00 +199: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isStrongPassword should return false if missing digit
+00:00 +200: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle deepMerge with nested non-map values
+00:00 +201: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isStrongPassword should return false if missing special character
+00:00 +202: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle deepMerge with map1 having nested map
+00:00 +203: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isStrongPassword should return false if less than 8 characters
+00:00 +204: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle encodePretty with list
+00:00 +205: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isStrongPassword accepts every non-alphanumeric as the special character
+00:00 +206: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle encodePretty with nested structures
+00:00 +207: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isStrongPassword doc comment and behaviour agree: no special char means false
+00:00 +208: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle getListOf with empty list
+00:00 +209: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isNumeric should return true for purely numeric strings
+00:00 +210: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle getListOf with null list
+00:00 +211: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isNumeric should return false for alphanumeric strings
+00:00 +212: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle removeNulls with all null values
+00:00 +213: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isNumeric should return false for empty string
+00:00 +214: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle removeNulls with no null values
+00:00 +215: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isAlphaNumeric should return true for alphanumeric strings
+00:00 +216: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle toQueryString with single entry
+00:00 +217: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/validators_test.dart: Validators isAlphaNumeric should return false for strings with special characters
+00:00 +218: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper Edge Cases - Additional Coverage should handle toQueryString with all null values
+00:00 +219: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper non-finite and non-Exception failures getInt returns null for a non-finite number
+00:00 +220: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper non-finite and non-Exception failures getInt only converts integral finite numbers
+00:00 +221: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper non-finite and non-Exception failures getListOf returns null when the converter raises a TypeError
+00:00 +222: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/json_helper_test.dart: JsonHelper non-finite and non-Exception failures getListOf still converts a well-formed list
+00:01 +223: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/string_extensions_test.dart: StringExtensions isValidEmail should return true for valid email addresses
+00:01 +224: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/string_extensions_test.dart: StringExtensions isValidEmail should return false for invalid email addresses
+00:01 +225: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/string_extensions_test.dart: StringExtensions isValidEmail agrees with Validators.isValidEmail on its case table
+00:01 +226: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/string_extensions_test.dart: StringExtensions isValidPhone should return true for valid phone numbers
+00:01 +227: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/string_extensions_test.dart: StringExtensions isValidPhone should return false for invalid phone numbers
+00:01 +228: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/string_extensions_test.dart: StringExtensions capitalize should capitalize first letter
+00:01 +229: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/string_extensions_test.dart: StringExtensions capitalize should return empty string if string is empty
+00:01 +230: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/string_extensions_test.dart: StringExtensions capitalize should handle single character
+00:01 +231: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/string_extensions_test.dart: StringExtensions capitalizeWords should capitalize first letter of each word
+00:01 +232: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/string_extensions_test.dart: StringExtensions capitalizeWords should return empty string if string is empty
+00:01 +233: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/string_extensions_test.dart: StringExtensions capitalizeWords should handle single word
+00:01 +234: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/string_extensions_test.dart: StringExtensions removeWhitespace should remove all whitespace
+00:01 +235: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/string_extensions_test.dart: StringExtensions removeWhitespace should return same string if no whitespace
+00:01 +236: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/string_extensions_test.dart: StringExtensions isNullOrEmpty should return true for empty string
+00:01 +237: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/string_extensions_test.dart: StringExtensions isNullOrEmpty should return false for non-empty string
+00:01 +238: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/string_extensions_test.dart: StringExtensions Edge Cases capitalize should handle special characters
+00:01 +239: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/string_extensions_test.dart: StringExtensions Edge Cases capitalizeWords should handle multiple spaces
+00:01 +240: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/string_extensions_test.dart: StringExtensions Edge Cases removeWhitespace should handle all whitespace types
+00:01 +241: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/string_extensions_test.dart: NullableStringExtensions isNullOrEmpty should return true for null string
+00:01 +242: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/string_extensions_test.dart: NullableStringExtensions isNullOrEmpty should return true for empty string
+00:01 +243: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/string_extensions_test.dart: NullableStringExtensions isNullOrEmpty should return false for non-empty string
+00:01 +244: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/string_extensions_test.dart: NullableStringExtensions orEmpty should return empty string for null
+00:01 +245: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/string_extensions_test.dart: NullableStringExtensions orEmpty should return string value if not null
+00:01 +246: All tests passed!
+Node URL http://example.com:+80 => TypeError
+Node URL http://example.com:-0 => TypeError
+Node URL http://example.com: => http://example.com/
+FAIL short phone rejection
+FAIL local phone acceptance
+FAIL formatted international phone
+FAIL spaced URL rejection
+FAIL empty-label URL rejection
+FAIL script scheme rejection
+FAIL fraction rejection
+FAIL overflow rejection
+PASS unchanged auth email
+PASS unchanged auth password
+PASS short phone rejection
+PASS local phone acceptance
+PASS formatted international phone
+PASS spaced URL rejection
+PASS empty-label URL rejection
+PASS script scheme rejection
+PASS fraction rejection
+PASS overflow rejection
+PASS unchanged auth email
+PASS unchanged auth password
