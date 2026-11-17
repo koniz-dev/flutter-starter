@@ -39,6 +39,9 @@ mason-lock.json
 .pub/
 /build/
 /coverage/
+# A failed golden comparison writes its diff images next to the test.
+# Scoped to test/: a `failures/` directory under lib/ is source.
+/test/**/failures/
 
 # Symbolication related
 app.*.symbols
