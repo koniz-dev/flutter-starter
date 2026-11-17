@@ -31,6 +31,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- [Close the 2026-11-17 audit's P3 findings](https://github.com/koniz-dev/flutter-starter/issues/1310): `OptimizedListView` no longer re-sends a failed prefetch on every scroll, keeps a fixed `itemExtent` off its error slot, and offers Load More for an empty first page; the not-found screen scrolls; task ids are percent-encoded in paths; nested and percent-encoded URL credentials are redacted in logs; a late logout no longer undoes a newer sign-in. Tooling: workflows that run on push group runs per commit and never cancel a push run; `check_docs` reads reference, angle-bracket and HTML links; `test_coverage.sh --html` asks you to install lcov instead of installing it. Docs: brick instructions are removed with `--remove-bricks`, and `security/audit.md` re-rates obfuscation, manifest and ATS entries.
+
 - [Cache responses that vary only on Accept-Encoding or Origin](https://github.com/koniz-dev/flutter-starter/issues/1308): the URL cache refused every response with a `Vary` header, so against a real API (gzip, CDN, CORS) it stored nothing. Those two fields are now allowed; any other `Vary` still prevents storage.
 
 - [End the realtime client with the session](https://github.com/koniz-dev/flutter-starter/issues/1309): the client created through `realtimeClientFactoryProvider` is disconnected on logout, forced logout and every sign-in, and the next read gets a fresh one. If you enabled realtime, watch the client and reconnect when signed in (see the network API doc).
