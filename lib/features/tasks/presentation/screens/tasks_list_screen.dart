@@ -23,6 +23,16 @@ class TasksListScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
+        // Opened from Home the list has a back button. Reached by a deep link
+        // or a sign-in redirect it is the only page, and without this the
+        // user had no way to Home, or to Sign out from there.
+        leading: Navigator.canPop(context)
+            ? null
+            : IconButton(
+                icon: const Icon(Icons.home_outlined),
+                tooltip: l10n.backToHome,
+                onPressed: context.goToHome,
+              ),
         title: Text(l10n.tasks),
         actions: [
           if (tasksState.isLoading)
