@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Breaking
 
+- [Utility validation contracts](https://github.com/koniz-dev/flutter-starter/issues/1284): phone validation now requires 7–15 digits with optional initial + and space/hyphen separators; URL validation requires http/https/ftp/ws/wss and valid ASCII DNS/punycode or IP hosts and unsigned ports. Convert international domains to punycode and apply a separate policy for other URI schemes. JsonHelper.getInt now returns null for fractions, overflow or target rounding; callers needing truncation must validate range and truncate explicitly, and large identifiers should remain strings.
+
 - Forks with custom iOS AppDelegate code must follow the UIScene lifecycle migration: conform to FlutterImplicitEngineDelegate and register plugins through the engine bridge in didInitializeImplicitFlutterEngine. Preserve custom native lifecycle behavior when merging; see docs/deployment/ios-deployment.md. Existing deployment targets and signing settings are unchanged.
 
 - Custom widgets, themes or design-token adapters using design-library types must switch their Material/Cupertino imports to material_ui/cupertino_ui so their public types match the starter. Retain the l10n.yaml header and its delegate adapters when regenerating translations; update relative imports if relocating generated output. See the standalone UI section of upgrading-this-starter.md.
@@ -28,6 +30,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Dependency floors moved after v4.0.0.** `patrol` ^4.11.0 needs `patrol_cli` 4.9.0 (reinstall the CLI); `equatable` ^3.0.0 removes `EquatableMixin`, so write `with Equatable` where your code said `with EquatableMixin`; `go_router` ^18.1.3 and the code generators (`build_runner` 2.17.1, `build` 5.0.0) are routine: run `flutter pub get` and regenerate.
 
 ### Fixed
+
+- [Define phone, URL and integer conversion contracts](https://github.com/koniz-dev/flutter-starter/issues/1284): validate supported network URLs and basic formatted phone numbers, and return only exact target-representable signed 64-bit integers.
 
 - [Keep calendar helpers in the receiver time zone](https://github.com/koniz-dev/flutter-starter/issues/1283): preserve UTC/local day boundaries and compare today/yesterday/tomorrow against a clock in the same zone, retaining calendar-day handling across DST.
 
