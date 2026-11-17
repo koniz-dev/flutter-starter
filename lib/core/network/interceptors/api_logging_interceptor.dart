@@ -379,27 +379,59 @@ class ApiLoggingInterceptor extends Interceptor {
   ///
   /// The splits above read one level: a URL inside a parameter value
   /// (`?redirect=https://x/?code=...`, `?next=/y?token=...`) or a `;`
-  /// separator (`#/route?a=1;token=...`) passed its credential in clear.
-  static String _redactNestedParameters(String text) {
+  /// separator (`#/route?a=1;token=...`) passed its credential in clear. A
+  /// value that is itself a percent-encoded URL (`redirect=https%3A%2F%2F
+  /// x%2F%3Fcode%3D...`, the form `Uri` and dio produce) is decoded,
+  /// redacted the same way and re-encoded, down to [depth] levels.
+  static String _redactNestedParameters(String text, {int depth = 3}) {
     final out = StringBuffer();
     var copied = 0;
     for (final match in _nestedKey.allMatches(text)) {
       if (match.start < copied) continue;
-      final key = _decodeKey(match.group(1)!);
-      if (key != null && !isSensitiveQueryKey(key)) continue;
-      var valueEnd = text.length;
-      for (final separator in const ['&', ';', '#']) {
-        final index = text.indexOf(separator, match.end);
-        if (index >= 0 && index < valueEnd) valueEnd = index;
+      // One forward scan to the value's end. Each value is scanned once:
+      // a redacted value is skipped as a whole, and an unredacted one ends
+      // where the next key starts.
+      var valueEnd = match.end;
+      while (valueEnd < text.length && !_valueEnds(text.codeUnitAt(valueEnd))) {
+        valueEnd++;
       }
+      final key = _decodeKey(match.group(1)!);
+      if (key == null || isSensitiveQueryKey(key)) {
+        out
+          ..write(text.substring(copied, match.end))
+          ..write(_redacted);
+        copied = valueEnd;
+        continue;
+      }
+      if (depth == 0) continue;
+      final value = text.substring(match.end, valueEnd);
+      if (!_encodedQueryOrFragment.hasMatch(value)) continue;
+      final String decoded;
+      try {
+        decoded = Uri.decodeComponent(value);
+      } on FormatException {
+        continue;
+      }
+      final safe = _redactNestedParameters(decoded, depth: depth - 1);
+      if (safe == decoded) continue;
       out
         ..write(text.substring(copied, match.end))
-        ..write(_redacted);
+        ..write(Uri.encodeComponent(safe));
       copied = valueEnd;
     }
     out.write(text.substring(copied));
     return out.toString();
   }
+
+  /// `&`, `;` or `#`: where a parameter value ends.
+  static bool _valueEnds(int unit) =>
+      unit == 0x26 || unit == 0x3B || unit == 0x23;
+
+  /// A percent-encoded `?` or `#`: the value carries a URL of its own.
+  static final RegExp _encodedQueryOrFragment = RegExp(
+    '%3F|%23',
+    caseSensitive: false,
+  );
 
   // All suffix keys share the same '='. Normalize each part once instead of
   // repeatedly copying/decoding the suffix after every '?' in a long key.

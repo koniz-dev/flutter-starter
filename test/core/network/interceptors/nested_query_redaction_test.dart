@@ -37,4 +37,40 @@ void main() {
 
     expect(ApiLoggingInterceptor.redactUrl(url), url);
   });
+
+  // Pre-merge review: the form Uri and dio actually produce is
+  // percent-encoded, and the first version scanned to the end of the URL for
+  // every sensitive key (quadratic on a long query).
+  test('a percent-encoded nested URL is decoded, redacted and re-encoded', () {
+    final inner = Uri.encodeComponent('https://x/?code=SECRET&page=2');
+    final redacted = ApiLoggingInterceptor.redactUrl(
+      'https://h/cb?redirect=$inner&lang=en',
+    );
+
+    expect(redacted, isNot(contains('SECRET')));
+    expect(
+      Uri.decodeComponent(redacted.split('redirect=')[1].split('&lang')[0]),
+      'https://x/?code=***REDACTED***&page=2',
+    );
+    expect(redacted, endsWith('&lang=en'));
+  });
+
+  test('an encoded value without a nested secret is kept byte for byte', () {
+    const url = 'https://h/cb?redirect=https%3A%2F%2Fx%2F%3Fpage%3D2';
+
+    expect(ApiLoggingInterceptor.redactUrl(url), url);
+  });
+
+  test('a long query of secrets is redacted in linear time', () {
+    final query = List.filled(40000, 'token=abcdef').join('&');
+    final watch = Stopwatch()..start();
+
+    final redacted = ApiLoggingInterceptor.redactUrl('https://h/p?$query');
+
+    watch.stop();
+    expect(redacted, isNot(contains('abcdef')));
+    // Linear is tens of milliseconds; the quadratic scan took tens of
+    // seconds at this size.
+    expect(watch.elapsed, lessThan(const Duration(seconds: 3)));
+  });
 }
