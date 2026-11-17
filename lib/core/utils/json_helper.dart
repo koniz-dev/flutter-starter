@@ -4,6 +4,12 @@ import 'dart:convert';
 class JsonHelper {
   JsonHelper._();
 
+  static final BigInt _minInt64 = -(BigInt.one << 63);
+  static final BigInt _maxInt64 = (BigInt.one << 63) - BigInt.one;
+  static final _decimalDigits = RegExp(r'^[0-9]+$');
+  static final _hexDigits = RegExp(r'^[0-9a-fA-F]+$');
+  static final _leadingZeroes = RegExp('^0+');
+
   /// Safely decode a JSON string to a Map or List
   /// Returns null if decoding fails
   static dynamic decode(String? jsonString) {
@@ -78,21 +84,47 @@ class JsonHelper {
     return getValue<String>(map, key);
   }
 
-  /// Safely get an int value from a Map by key
+  /// Gets an exact signed 64-bit integer representable on the current target.
   ///
-  /// Returns null for a non-finite number. `jsonDecode('{"a":1e999}')`
-  /// yields `double.infinity`, and `Infinity.toInt()` throws
-  /// `UnsupportedError` - an Error, so no `on Exception` handler upstream
-  /// would have caught it.
+  /// Accepts integral finite numbers and trimmed signed decimal/0x integer
+  /// text. Fractions, non-finite values, overflow and target rounding return
+  /// null. Existing precision loss before this call cannot be recovered.
   static int? getInt(Map<String, dynamic>? map, String key) {
     final value = map?[key];
-    if (value is int) return value;
+    final BigInt? integer;
     if (value is num) {
       if (!value.isFinite) return null;
-      return value.toInt();
+      // JavaScript also considers large integral doubles to be int, so range
+      // checking cannot be skipped merely because `value is int` is true.
+      if (value is! int && value != value.truncateToDouble()) return null;
+      integer = BigInt.from(value);
+    } else if (value is String) {
+      integer = _parseIntegerText(value);
+    } else {
+      return null;
     }
-    if (value is String) return int.tryParse(value);
-    return null;
+    if (integer == null || integer < _minInt64 || integer > _maxInt64) {
+      return null;
+    }
+    final result = integer.toInt();
+    return BigInt.from(result) == integer ? result : null;
+  }
+
+  static BigInt? _parseIntegerText(String value) {
+    var digits = value.trim();
+    final negative = digits.startsWith('-');
+    if (negative || digits.startsWith('+')) digits = digits.substring(1);
+    final hex = digits.startsWith('0x') || digits.startsWith('0X');
+    if (hex) digits = digits.substring(2);
+    if (!(hex ? _hexDigits : _decimalDigits).hasMatch(digits)) return null;
+    digits = digits.replaceFirst(_leadingZeroes, '');
+    // Bound significant digits before BigInt parsing, even for huge inputs.
+    if (digits.length > (hex ? 16 : 19)) return null;
+    final magnitude = BigInt.parse(
+      digits.isEmpty ? '0' : digits,
+      radix: hex ? 16 : 10,
+    );
+    return negative ? -magnitude : magnitude;
   }
 
   /// Safely get a double value from a Map by key

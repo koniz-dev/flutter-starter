@@ -47,12 +47,12 @@ void main() {
         expect('+1234567890'.isValidPhone, isTrue);
         expect('1234567890'.isValidPhone, isTrue);
         expect('+441234567890'.isValidPhone, isTrue);
+        expect('0123456789'.isValidPhone, isTrue);
       });
 
       test('should return false for invalid phone numbers', () {
         expect('abc'.isValidPhone, isFalse);
         expect('+'.isValidPhone, isFalse);
-        expect('0123456789'.isValidPhone, isFalse);
         expect(''.isValidPhone, isFalse);
       });
     });

@@ -110,10 +110,8 @@ void main() {
       });
 
       test('should return false for invalid phone numbers', () {
-        // Note: '123' is actually valid per regex (starts with 1-9)
         expect(Validators.isValidPhone('abc'), isFalse);
         expect(Validators.isValidPhone('+'), isFalse);
-        expect(Validators.isValidPhone('0123456789'), isFalse); // Starts with 0
         expect(Validators.isValidPhone(''), isFalse); // Empty
       });
 
@@ -129,8 +127,8 @@ void main() {
         expect(Validators.isValidPhone('12345678901234'), isTrue);
       });
 
-      test('should reject phone numbers starting with zero', () {
-        expect(Validators.isValidPhone('0123456789'), isFalse);
+      test('allows local zero prefixes but rejects a zero country prefix', () {
+        expect(Validators.isValidPhone('0123456789'), isTrue);
         expect(Validators.isValidPhone('+0123456789'), isFalse);
       });
 
@@ -140,25 +138,23 @@ void main() {
         expect(Validators.isValidPhone('+123abc'), isFalse);
       });
 
-      test('should reject phone numbers with special characters', () {
-        expect(Validators.isValidPhone('123-456-7890'), isFalse);
+      test('allows supported separators and rejects other punctuation', () {
+        expect(Validators.isValidPhone('123-456-7890'), isTrue);
         expect(Validators.isValidPhone('(123) 456-7890'), isFalse);
         expect(Validators.isValidPhone('123.456.7890'), isFalse);
-        expect(Validators.isValidPhone('123 456 7890'), isFalse);
+        expect(Validators.isValidPhone('123 456 7890'), isTrue);
       });
 
       test('should handle minimum length phone numbers', () {
-        // Regex requires: [1-9] + at least 1 digit = minimum 2 digits
-        expect(Validators.isValidPhone('12'), isTrue);
-        expect(Validators.isValidPhone('+12'), isTrue);
-        expect(Validators.isValidPhone('19'), isTrue);
+        expect(Validators.isValidPhone('12'), isFalse);
+        expect(Validators.isValidPhone('+12'), isFalse);
+        expect(Validators.isValidPhone('1234567'), isTrue);
       });
 
       test('should handle maximum length phone numbers', () {
-        // Regex allows: [1-9] + up to 14 digits = maximum 15 digits total
-        expect(Validators.isValidPhone('12345678901234'), isTrue); // 15 digits
+        expect(Validators.isValidPhone('123456789012345'), isTrue); // 15 digits
         expect(
-          Validators.isValidPhone('+12345678901234'),
+          Validators.isValidPhone('+123456789012345'),
           isTrue, // 15 digits with +
         );
       });
