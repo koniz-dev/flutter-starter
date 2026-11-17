@@ -1,3 +1,5 @@
+import 'dart:io' show SocketException, TlsException;
+
 import 'package:dio/dio.dart';
 import 'package:flutter_starter/core/errors/exceptions.dart';
 
@@ -74,8 +76,21 @@ class DioExceptionMapper {
         // check for.
         final carried = exception.error;
         if (carried is AppException) return carried;
-        // Check if it's actually a network error
-        if ((exception.message?.contains('SocketException') ?? false) ||
+        // A rejected certificate arrives here, not as badCertificate (dio
+        // raises that only from its validateCertificate hook, which the
+        // starter does not use): a pinning mismatch from SslPinning's
+        // badCertificateCallback, an untrusted or expired certificate. Its
+        // `message` is null, so it read as "check your connection" - inviting
+        // the user to switch networks around a possible interception.
+        if (carried is TlsException) {
+          return NetworkException(
+            'Bad certificate: ${carried.message}',
+            code: 'BAD_CERTIFICATE',
+          );
+        }
+        // Decided by the error's type: `message` is null in this branch.
+        if (carried is SocketException ||
+            (exception.message?.contains('SocketException') ?? false) ||
             (exception.message?.contains('Network is unreachable') ?? false)) {
           return NetworkException(
             'Network error: '
