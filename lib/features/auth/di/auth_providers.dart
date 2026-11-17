@@ -65,10 +65,10 @@ final Provider<AuthRepository> authRepositoryProvider =
         // Same ApiClient instance the remote data source already resolved, so
         // this adds no new edge to the provider graph.
         httpCache: ref.read(networkClientProvider).responseCache,
-        // The *same* instance `authInterceptorProvider` holds. Two of the
-        // three credential writes behind one 401 refresh happen in this
-        // repository and one in the interceptor; they only agree about which
-        // session is live if they share this counter.
+        // The *same* instance `authInterceptorProvider` holds. The credential
+        // writes behind one 401 refresh happen in this repository, or for a
+        // custom refresh callback in the interceptor's selection step; they
+        // only agree about which session is live if they share this counter.
         sessionGeneration: ref.watch(sessionGenerationProvider),
         // Replacing the local credential set also ends its old visible user.
         sessionSink: ref.read(sessionTerminationSinkProvider),

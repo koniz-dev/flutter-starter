@@ -299,6 +299,19 @@ assets/
       logo.png
 ```
 
+Flutter does not bundle the subdirectories of a declared asset directory, and
+`pubspec.yaml` declares only `assets/images/`. Declare each language directory
+too, or `Image.asset` fails at runtime:
+
+```yaml
+flutter:
+  assets:
+    - assets/images/
+    - assets/images/en/
+    - assets/images/es/
+    - assets/images/ar/
+```
+
 **Usage:**
 ```dart
 import 'package:flutter_riverpod/flutter_riverpod.dart';

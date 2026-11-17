@@ -791,9 +791,13 @@ logout landing part-way through stops the remaining replays too. Rejection
 still completes every handler, so the guarantee from point 4 above is
 unaffected.
 
-The request whose 401 started the refresh is checked the same way, and a second
-time **after** `setAccessToken` returns. That write is a platform call, so a
-logout or sign-in can land while it is pending. Once the generation is stale,
+The request whose 401 started the refresh is checked the same way, in the
+interceptor's selection step (`_selectRefreshResult`). A repository refresh
+callback persists the new pair itself, so the interceptor writes nothing for
+it; for a custom callback the step writes the candidate with
+`setAccessTokenIfCurrent` and checks the generation again **after** that write
+returns. That write is a platform call, so a logout or sign-in can land while
+it is pending. Once the generation is stale,
 the request fails with its original 401 and is not replayed, and no
 `_logoutUser()` runs, for the reason given above. This request used to be the
 only replay with no check after the write, so it went on the wire with the freshly minted token after the

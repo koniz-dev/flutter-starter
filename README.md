@@ -139,7 +139,7 @@ Every pull request runs the Quality gate:
 
 Pull requests that touch them also run the docs check (the docs' code samples,
 paths, symbols and commands must match the code), action pinning and workflow
-lint, an Android build on the JDK floor, and the git hook and release script
+lint, the Android toolchain-floor check and debug build on JDK 25, and the git hook and release script
 tests. Patrol on an Android emulator, per-layer coverage and the store builds
 run manually or weekly, not per pull request. Run the same gate locally:
 
