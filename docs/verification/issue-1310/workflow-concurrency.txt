@@ -1,0 +1,20 @@
+$ grep -c ... || true with no match
+[]
+$ git grep -n "cancel-in-progress\|group:" on push workflows
+.github/workflows/action-pins.yml:38:  group: action-pins-${{ github.event_name == 'pull_request' && github.ref || github.sha }}
+.github/workflows/action-pins.yml-39-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+--
+.github/workflows/ci.yml:31:  group: ci-${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.ref || github.sha }}
+.github/workflows/ci.yml-32-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+--
+.github/workflows/docs-check.yml:51:  group: docs-check-${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.ref || github.sha }}
+.github/workflows/docs-check.yml-52-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+--
+.github/workflows/git-hooks.yml:34:  group: git-hooks-${{ github.event_name == 'pull_request' && github.ref || github.sha }}
+.github/workflows/git-hooks.yml-35-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+--
+.github/workflows/release-scripts.yml:37:  group: release-scripts-${{ github.event_name == 'pull_request' && github.ref || github.sha }}
+.github/workflows/release-scripts.yml-38-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+--
+.github/workflows/strip-smoke.yml:36:  group: strip-smoke-${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.ref || github.sha }}
+.github/workflows/strip-smoke.yml-37-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}

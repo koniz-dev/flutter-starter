@@ -1,0 +1,7 @@
+Commits in be2197da5f6..HEAD
+  ok    ceae85cf fix(ui): close the layout and navigation findings of the 2026-11-17 audit (#1316)
+  ok    b6ee59b5 fix(auth): close the network and auth findings of the 2026-11-17 audit (#1315)
+  ok    99c5ff58 docs: close the documentation findings of the 2026-11-17 audit (#1314)
+  ok    39d97eef fix(tooling): close the tooling findings of the 2026-11-17 audit (#1313)
+
+OK: every message links with 'Refs koniz-dev/flutter-starter#N' and closes nothing.

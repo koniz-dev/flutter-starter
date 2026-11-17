@@ -1,0 +1,1 @@
+ceae85cf fix(ui): close the layout and navigation findings of the 2026-11-17 audit (#1316)
