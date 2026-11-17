@@ -1,0 +1,7 @@
+00:00 +0: loading /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/c9040f3a-094e-4757-b5d0-3dd1371d6d3a/scratchpad/g2/test/tooling/setup_brick_log_test.dart
+00:00 +0: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/c9040f3a-094e-4757-b5d0-3dd1371d6d3a/scratchpad/g2/test/tooling/setup_brick_log_test.dart: package and iOS rename logs describe actual changes only
+00:11 +1: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/c9040f3a-094e-4757-b5d0-3dd1371d6d3a/scratchpad/g2/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+00:11 +2: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/c9040f3a-094e-4757-b5d0-3dd1371d6d3a/scratchpad/g2/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks renamed project before writing
+00:20 +3: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/c9040f3a-094e-4757-b5d0-3dd1371d6d3a/scratchpad/g2/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks android-only project before writing
+00:28 +4: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/c9040f3a-094e-4757-b5d0-3dd1371d6d3a/scratchpad/g2/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks ios-only project before writing
+00:37 +5: All tests passed!

@@ -1,0 +1,1 @@
+6b2480f5 fix(tooling): skip setup brick tests in a manually renamed project (#1320)

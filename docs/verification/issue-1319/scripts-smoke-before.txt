@@ -1,0 +1,4 @@
+create_feature.sh == create_feature.ps1 (Windows) success
+fork-and-customize Option B (my_app, My App) + analyze + test + scaffold failure
+build_all.sh (production) success
+mason make flutter_starter_setup (acme_shop) + analyze + test success

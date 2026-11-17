@@ -1,0 +1,4 @@
+Commits in ceae85cff40..HEAD
+  ok    6b2480f5 fix(tooling): skip setup brick tests in a manually renamed project (#1320)
+
+OK: every message links with 'Refs koniz-dev/flutter-starter#N' and closes nothing.
