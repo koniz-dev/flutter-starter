@@ -265,7 +265,9 @@ class TasksListScreen extends ConsumerWidget {
           tooltip: l10n.taskActions(task.title),
           onSelected: (value) {
             if (value == 'edit') {
-              context.pushRoute('${AppRoutes.tasks}/${task.id}');
+              context.pushRoute(
+                '${AppRoutes.tasks}/${Uri.encodeComponent(task.id)}',
+              );
             } else if (value == 'delete') {
               unawaited(_showDeleteConfirmation(context, task, notifier, l10n));
             }
@@ -300,7 +302,9 @@ class TasksListScreen extends ConsumerWidget {
         ),
         onTap: isPending
             ? null
-            : () => context.pushRoute('${AppRoutes.tasks}/${task.id}'),
+            : () => context.pushRoute(
+                '${AppRoutes.tasks}/${Uri.encodeComponent(task.id)}',
+              ),
       ),
     );
   }

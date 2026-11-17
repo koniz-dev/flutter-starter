@@ -39,7 +39,11 @@ extension NavigationExtensions on BuildContext {
   void goToTasks() => go(AppRoutes.tasks);
 
   /// Navigate to task detail screen
-  void goToTaskDetail(String taskId) => go('${AppRoutes.tasks}/$taskId');
+  ///
+  /// The id is percent-encoded: interpolated as is, an id holding `/`, `?`
+  /// or `#` opened a different route.
+  void goToTaskDetail(String taskId) =>
+      go('${AppRoutes.tasks}/${Uri.encodeComponent(taskId)}');
 
   /// Push a new route (adds to navigation stack)
   void pushRoute(String location, {Object? extra}) {

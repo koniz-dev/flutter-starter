@@ -22,11 +22,13 @@ class RouteNotFoundScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.pageNotFoundTitle)),
+      // Scrolls: at a large text size, in landscape or with a long location
+      // the column overflowed.
       body: Center(
-        child: Padding(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
             children: [
               Icon(
                 Icons.explore_off_outlined,
@@ -49,12 +51,16 @@ class RouteNotFoundScreen extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 8),
+              // Truncated: the location is whatever the link said, and an
+              // arbitrarily long one filled the screen.
               Text(
                 location,
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: theme.colorScheme.onSurfaceVariant,
                 ),
                 textAlign: TextAlign.center,
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
               ),
               const SizedBox(height: 24),
               FilledButton(
