@@ -1,0 +1,743 @@
+Resolving dependencies...
+Downloading packages...
+  archive 4.0.9 (4.7.1 available)
+  async 2.13.0 (2.13.1 available)
+  build_daemon 4.1.1 (4.1.7 available)
+  built_collection 5.1.1 (6.0.0 available)
+  built_value 8.12.4 (8.13.0 available)
+  cli_util 0.4.2 (0.6.0 available)
+  code_assets 1.0.0 (2.2.0 available)
+  cupertino_ui 1.1.6 (1.1.7 available)
+  dio_web_adapter 2.1.2 (2.2.2 available)
+  flutter_dotenv 6.0.1 (6.0.2 available)
+  flutter_launcher_icons 0.13.1 (0.14.4 available)
+  glob 2.1.3 (2.2.0 available)
+  hooks 1.0.2 (2.2.0 available)
+  html 0.15.6 (0.15.7 available)
+  http_multi_server 3.2.2 (3.2.3 available)
+  image 4.8.0 (4.13.1 available)
+  io 1.0.5 (1.1.0 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  material_ui 1.11.0 (1.11.1 available)
+  mime 2.0.0 (2.1.0 available)
+  mustache_template 2.0.4 (2.0.6 available)
+  native_toolchain_c 0.17.6 (0.19.6 available)
+  objective_c 9.3.0 (9.6.4 available)
+  package_config 2.2.0 (3.0.0 available)
+  path_provider_android 2.2.22 (2.3.1 available)
+  path_provider_linux 2.2.1 (2.2.2 available)
+  path_provider_platform_interface 2.1.2 (2.1.3 available)
+  petitparser 7.0.2 (7.1.0 available)
+  platform 3.1.6 (3.2.0 available)
+  pool 1.5.2 (1.5.3 available)
+  posix 6.5.0 (6.5.4 available)
+  process 5.0.5 (5.0.6 available)
+  pub_semver 2.2.0 (2.2.1 available)
+  pubspec_parse 1.5.0 (1.7.0 available)
+  shared_preferences_android 2.4.21 (2.5.5 available)
+  shared_preferences_foundation 2.5.6 (2.6.2 available)
+  shared_preferences_platform_interface 2.4.1 (2.4.2 available)
+  shelf 1.4.2 (1.4.3 available)
+  stream_transform 2.1.1 (2.1.2 available)
+  test_api 0.7.14 (0.7.15 available)
+  uuid 4.5.3 (4.6.0 available)
+  vector_math 2.4.3 (2.4.4 available)
+  vm_service 15.0.2 (15.4.0 available)
+  web 1.1.1 (1.1.2 available)
+  webdriver 3.1.0 (3.2.0 available)
+  xml 6.6.1 (7.1.0 available)
+Got dependencies!
+46 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Shuffling test order with --test-randomize-ordering-seed=4213952330
+
+::group::✅ Passing tests
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/launcher_icons_config_test.dart: flutter_launcher_icons.yaml flattens alpha whenever it generates iOS icons
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/strip_markers_test.dart: a sample end marker with no start aborts too
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/text_literal_guard_test.dart: criterion 2: the scan itself passes a localized call and punctuation around a localized label
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/text_literal_guard_test.dart: criterion 2: the scan itself catches a planted multi-line literal, naming its line
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/text_literal_guard_test.dart: criterion 2: the scan itself catches a planted single-line literal
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/text_literal_guard_test.dart: criterion 2: the scan itself scopes to presentation code and shared widgets
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/text_literal_guard_test.dart: criterion 2: the scan itself honours the allow-list comment on the line or the line above
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/text_literal_guard_test.dart: criterion 2: the scan itself catches words around an interpolation
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/text_literal_guard_test.dart: criterion 1: no string literal is passed to Text( in presentation code
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/strip_markers_test.dart: a line marker drops only its line, and only for a stripped tag
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/dependabot_config_test.dart: pub: weekly, minor and patch grouped into one PR
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/dependabot_config_test.dart: the codegen stack has its own group and is excluded from minor-and-patch
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/dependabot_config_test.dart: uses the v2 config format
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/dependabot_config_test.dart: patrol is not bumped apart from the pinned patrol_cli
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/dependabot_config_test.dart: github-actions: commit messages pass the Conventional Commits hook
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/dependabot_config_test.dart: github-actions: weekly, minor and patch grouped into one PR
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/dependabot_config_test.dart: flutter_launcher_icons stays on 0.13.x
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/dependabot_config_test.dart: pub: commit messages pass the Conventional Commits hook
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/dependabot_config_test.dart: Patrol CLI pin matches the supported SDK pair and setup instructions
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/strip_markers_test.dart: --remove-bricks without the flag, bricks and their prose stay
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/audit_template_hash_tool_test.dart: refuses before any check when no SHA-256 tool exists
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/strip_markers_test.dart: --remove-bricks deletes bricks/ and mason.yaml, and the prose linking to them
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/strip_markers_test.dart: an unclosed sample marker aborts before anything is deleted
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/patrol_summary_guard_test.dart: output with no summary, or no log at all, is refused
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/patrol_summary_guard_test.dart: a summary-shaped line outside the summary block is ignored
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/patrol_summary_guard_test.dart: a run whose tests were all skipped is refused
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/patrol_summary_guard_test.dart: fewer successes than tests is refused even with no failure or skip reported
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/patrol_summary_guard_test.dart: the workflow and the local script both run the check
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/patrol_summary_guard_test.dart: the last summary in the log is the one that counts
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/patrol_summary_guard_test.dart: a run where every test passed is accepted
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/patrol_summary_guard_test.dart: an empty run is refused
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/patrol_summary_guard_test.dart: a NUL byte in the output does not hide the summary
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/patrol_summary_guard_test.dart: a failed test is refused
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/patrol_summary_guard_test.dart: one skipped test among passing ones is refused
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/build_all_analyze_size_test.dart: ENABLE_SSL_PINNING=" " is refused even with fingerprints
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/build_all_analyze_size_test.dart: staging without API_SSL_FINGERPRINTS is refused before anything is built
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/build_all_analyze_size_test.dart: ENABLE_SSL_PINNING="enabled" is refused even with fingerprints
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/build_all_analyze_size_test.dart: production without API_SSL_FINGERPRINTS is refused before anything is built
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/build_all_analyze_size_test.dart: criterion 3: the script no longer claims an ABI split it never does
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/build_all_analyze_size_test.dart: a staging run reports both the APK and the comparison bundle
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/build_all_analyze_size_test.dart: development is refused before anything is built
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/build_all_analyze_size_test.dart: ENABLE_SSL_PINNING=false builds without fingerprints and passes the opt-out to every build
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/build_all_analyze_size_test.dart: ENABLE_SSL_PINNING="o n" is refused even with fingerprints
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/build_all_analyze_size_test.dart: production: every flutter build carries the fingerprints
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/build_all_analyze_size_test.dart: a fingerprint that is not 64 hex digits is refused
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/strip_sample_prose_test.dart: criteria 2-3: kept markdown names no feature-flags symbol outside a strip:feature-flags marker
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/strip_sample_prose_test.dart: a fence nested in a longer fence does not end it
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/build_all_analyze_size_test.dart: a padded, upper-case opt-out still builds without fingerprints
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/strip_sample_prose_test.dart: criteria 2-3: kept markdown names no tasks symbol outside a strip:tasks marker
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/build_all_analyze_size_test.dart: staging: every flutter build carries the fingerprints
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/build_all_analyze_size_test.dart: criterion 2 (production): every flutter build carries the ENVIRONMENT and BASE_URL defines
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/build_all_analyze_size_test.dart: a fingerprint list of only separators is refused as empty
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/build_all_analyze_size_test.dart: criterion 2 (staging): every flutter build carries the ENVIRONMENT and BASE_URL defines
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/build_all_analyze_size_test.dart: criterion 1: production --analyze-size reports the AAB size
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/build_all_analyze_size_test.dart: ENABLE_SSL_PINNING="t r u e" is refused even with fingerprints
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/build_all_analyze_size_test.dart: ENABLE_SSL_PINNING=true without fingerprints is still refused
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/deploy_base_url_test.dart: .github/workflows/deploy-android.yml:deploy refuses invalid URLs before invoking flutter
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/deploy_base_url_test.dart: .github/workflows/deploy-web.yml:deploy-vercel refuses invalid URLs before invoking flutter
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/e2e_target_parity_test.dart: criterion 1: the CI target is the only E2E test, in the repo and in every strip golden
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/e2e_target_parity_test.dart: criterion 1: run_e2e_tests.sh and e2e-android.yml run the same target
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/deploy_base_url_test.dart: .github/workflows/deploy-ios.yml:deploy refuses invalid URLs before invoking flutter
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/deploy_base_url_test.dart: .github/workflows/deploy-web.yml:deploy-firebase refuses invalid URLs before invoking flutter
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/deploy_base_url_test.dart: Vercel deploys the built web directory
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/deploy_base_url_test.dart: all five commented deploy builds are exercised
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/deploy_base_url_test.dart: .github/workflows/deploy-web.yml:deploy-netlify refuses invalid URLs before invoking flutter
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_unreachable_pr_steps_test.dart: coverage.yml asks for no pull-requests scope
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_unreachable_pr_steps_test.dart: scripts-smoke.yml gates no step on a pull_request event it never gets
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_unreachable_pr_steps_test.dart: e2e-android.yml gates no step on a pull_request event it never gets
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_unreachable_pr_steps_test.dart: the trigger reader sees the triggers
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_unreachable_pr_steps_test.dart: release-scripts.yml gates no step on a pull_request event it never gets
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_unreachable_pr_steps_test.dart: deploy-ios.yml gates no step on a pull_request event it never gets
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_unreachable_pr_steps_test.dart: stress-git-archive.yml gates no step on a pull_request event it never gets
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_unreachable_pr_steps_test.dart: git-hooks.yml gates no step on a pull_request event it never gets
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_unreachable_pr_steps_test.dart: action-pins.yml gates no step on a pull_request event it never gets
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_unreachable_pr_steps_test.dart: strip-smoke.yml gates no step on a pull_request event it never gets
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_unreachable_pr_steps_test.dart: coverage.yml gates no step on a pull_request event it never gets
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_unreachable_pr_steps_test.dart: deploy-web.yml gates no step on a pull_request event it never gets
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_unreachable_pr_steps_test.dart: build.yml gates no step on a pull_request event it never gets
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_unreachable_pr_steps_test.dart: deploy-android.yml gates no step on a pull_request event it never gets
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_unreachable_pr_steps_test.dart: ci.yml gates no step on a pull_request event it never gets
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_unreachable_pr_steps_test.dart: docs-check.yml gates no step on a pull_request event it never gets
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/android_emulator_host_note_test.dart: docs/guides/configuration.md tells Android-emulator users to use 10.0.2.2
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/android_emulator_host_note_test.dart: docs/guides/onboarding/getting-started.md tells Android-emulator users to use 10.0.2.2
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/android_emulator_host_note_test.dart: .env.example tells Android-emulator users to use 10.0.2.2
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/shell_line_endings_test.dart: tracked hooks and shell entry points always check out with LF
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/ci_coverage_gate_test.dart: a coverage step fails the gate below a numeric floor
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/ci_coverage_gate_test.dart: the Quality gate collects coverage while it runs the suite
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/ci_coverage_gate_test.dart: test_coverage.sh drops every file coverage.yml removes keeps lib/core/test_mode/z.dart, which coverage.yml keeps
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/ci_coverage_gate_test.dart: test_coverage.sh drops every file coverage.yml removes test/**
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/ci_coverage_gate_test.dart: test_coverage.sh drops every file coverage.yml removes **/test_fixtures.dart
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/ci_coverage_gate_test.dart: test_coverage.sh drops every file coverage.yml removes **/*.g.dart
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/ci_coverage_gate_test.dart: test_coverage.sh drops every file coverage.yml removes **/test_helpers.dart
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/ci_coverage_gate_test.dart: test_coverage.sh drops every file coverage.yml removes **/*_test.dart
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/ci_coverage_gate_test.dart: test_coverage.sh drops every file coverage.yml removes coverage.yml still lists its exclusions
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/ci_coverage_gate_test.dart: test_coverage.sh drops every file coverage.yml removes keeps lib/features/x/test/y.dart, which coverage.yml keeps
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/android_floor_schedule_test.dart: only the floor job runs on the schedule, and only in the template
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/ci_coverage_gate_test.dart: test_coverage.sh drops every file coverage.yml removes **/*.freezed.dart
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/android_floor_schedule_test.dart: the Android floor job runs on a weekly schedule
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/ci_coverage_gate_test.dart: test_coverage.sh drops every file coverage.yml removes **/*.config.dart
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/ci_coverage_gate_test.dart: test_coverage.sh drops every file coverage.yml removes **/l10n/**
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/ci_coverage_gate_test.dart: test_coverage.sh drops every file coverage.yml removes **/main.dart
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/ci_coverage_gate_test.dart: test_coverage.sh drops every file coverage.yml removes **/generated/**
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/test_coverage_ps1_test.dart: the coverage helper runs before the tests and is removed after
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/test_coverage_ps1_test.dart: every native command is followed by a LASTEXITCODE check
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/pre_commit_staged_content_test.dart: an unstaged broken file does not block a clean staged change
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/pre_commit_staged_content_test.dart: a parent it cannot write to falls back to the temp directory and says so
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/pre_commit_staged_content_test.dart: `git commit <path>` checks the content that path commits
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/pre_commit_staged_content_test.dart: with a path dependency outside the repository a staged format or analyze violation still fails
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/pre_commit_staged_content_test.dart: with a path dependency outside the repository a clean staged change commits
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/pre_commit_staged_content_test.dart: inside a linked worktree it checks that worktree's index
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/pre_commit_staged_content_test.dart: a staged unformatted file is rejected though the working copy is fixed
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/pre_commit_staged_content_test.dart: an hour-old export a killed run left beside the repository is swept, a fresh one is kept
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/sdk_floor_test.dart: bricks/feature_clean/hooks/pubspec.yaml declares the SDK floor its lock needs
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/sdk_floor_test.dart: bricks/flutter_starter_setup/hooks/pubspec.yaml declares the SDK floor its lock needs
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/sdk_floor_test.dart: the floor check itself names both values when a declared floor is lower
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/sdk_floor_test.dart: the floor check itself accepts a declared floor equal to or above the lock
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/sdk_floor_test.dart: the floor check itself ignores an SDK the lock does not constrain
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/sdk_floor_test.dart: ./pubspec.yaml declares the SDK floor its lock needs
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/acceptance_container_test.dart: every acceptance test builds its container the production way
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/acceptance_container_test.dart: scanAcceptanceSource flags a ProviderScope that omits authModuleOverrides
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/acceptance_container_test.dart: scanAcceptanceSource allows createAppContainer, UncontrolledProviderScope and a scope that spreads authModuleOverrides
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/acceptance_container_test.dart: scanAcceptanceSource ignores ProviderContainer( written in a comment
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/acceptance_container_test.dart: scanAcceptanceSource flags a bare ProviderContainer, as the broken test had it
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: findStaleAcknowledgements says nothing when the acknowledged file is there
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: findStaleAcknowledgements treats every name on a missing directory as stale
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: findStaleAcknowledgements ignores a file entry, whose ack names nothing by design
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: findStaleAcknowledgements reports a name no file in the directory matches
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: findDeclaredSecretAssets ignores a commented-out example asset list
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: findDeclaredSecretAssets flags a bare .env in the flutter asset list
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: findDeclaredSecretAssets ignores an assets list belonging to another top-level key
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: findDeclaredSecretAssets stops at the end of the asset list
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: findDeclaredSecretAssets flags named key material and credential files too
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: findDeclaredSecretAssets flags any other env variant, including per-environment files
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: findDeclaredSecretAssets does not flag .env.example
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: findDeclaredSecretAssets treats an inline acknowledgement as reviewed, not as a failure
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: every asset spelling Flutter accepts `main` itself exits 1 on a map-form .env
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: every asset spelling Flutter accepts the acknowledgement on a map-form directory names its file
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: every asset spelling Flutter accepts a quoted path holding a `#` does not open a comment
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: every asset spelling Flutter accepts a map-form `- path: .env` entry fails the check
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: every asset spelling Flutter accepts one comment on a flow list does not cover every file in it
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: every asset spelling Flutter accepts an acknowledgement on the wrong line of a map entry covers nothing
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: every asset spelling Flutter accepts criterion 2: the failure advice does not claim web lacks dart-defines
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: every asset spelling Flutter accepts fails closed on what it cannot read assets is a string: exit 2, never 0
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: every asset spelling Flutter accepts fails closed on what it cannot read flutter is a list: exit 2, never 0
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: every asset spelling Flutter accepts fails closed on what it cannot read map entry without path: exit 2, never 0
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: every asset spelling Flutter accepts fails closed on what it cannot read entry is not a string: exit 2, never 0
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: every asset spelling Flutter accepts fails closed on what it cannot read a pubspec with no flutter section is still clean
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: every asset spelling Flutter accepts fails closed on what it cannot read invalid YAML: exit 2, never 0
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: every asset spelling Flutter accepts fails closed on what it cannot read empty entry: exit 2, never 0
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: every asset spelling Flutter accepts a map-form directory with a .env inside fails the check
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: every asset spelling Flutter accepts a flow-style `assets: [.env]` list fails the check
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: every asset spelling Flutter accepts a deferred component asset list is checked too
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: every asset spelling Flutter accepts the acknowledgement works on a map-form `path:` line
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: every asset spelling Flutter accepts a map-form entry whose `path:` is not its first key still counts
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: this repository's pubspec.yaml bundles no secrets file
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: parseAcknowledgedNames allows trailing prose after a semicolon or a dash
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: parseAcknowledgedNames takes the leading comma-separated run of bare file names
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: parseAcknowledgedNames returns nothing when there is no marker
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: parseAcknowledgedNames does not accept a path, only a bare file name
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: parseAcknowledgedNames reads a comment that opens with prose as naming nothing
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: parseAcknowledgedNames stops at the first comma segment that is not a file name
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: every spelling of an env file .envrc.local inside a declared directory is flagged
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: every spelling of an env file .envrc inside a declared directory is flagged
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: every spelling of an env file an acknowledgement naming a new-style file covers it
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: every spelling of an env file secretAssetReason flags each, and not near misses
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: every spelling of an env file app_config.env named in the asset list is flagged
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: every spelling of an env file .env-staging named in the asset list is flagged
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: every spelling of an env file .envrc.local named in the asset list is flagged
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: every spelling of an env file production.env inside a declared directory is flagged
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: every spelling of an env file app_config.env inside a declared directory is flagged
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: every spelling of an env file production.env named in the asset list is flagged
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: every spelling of an env file prod.ENV inside a declared directory is flagged
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: every spelling of an env file .env_prod inside a declared directory is flagged
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: every spelling of an env file .env_prod named in the asset list is flagged
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: every spelling of an env file prod.ENV named in the asset list is flagged
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: every spelling of an env file .env-staging inside a declared directory is flagged
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: every spelling of an env file .envrc named in the asset list is flagged
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: secretAssetReason leaves .env.example and ordinary configuration alone
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: secretAssetReason matches env files, key material and credential stores
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: findBundledDirectorySecrets an ack naming .env.example does not also cover a real .env
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: findBundledDirectorySecrets tolerates a declared directory that does not exist
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: findBundledDirectorySecrets passes on the directories as they ship, holding only .gitkeep
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: findBundledDirectorySecrets an acknowledgement naming the file is reviewed, not a failure
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: findBundledDirectorySecrets matches the acknowledged name case-insensitively
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: findBundledDirectorySecrets catches a .env the asset list never names - the gap this closes
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: findBundledDirectorySecrets flags key material and credential files, not ordinary config
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: findBundledDirectorySecrets does not report a sub-directory Flutter would not bundle
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: findBundledDirectorySecrets an ack naming several files covers each of them
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: findBundledDirectorySecrets an acknowledgement for one file does not cover another
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: findBundledDirectorySecrets an ack with prose after a dash still names its file
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/check_env_assets_test.dart: findBundledDirectorySecrets prose that merely mentions a file does not acknowledge it
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_brick_feature_rename_test.dart: criterion 1-2: the rewrite leaves no package:flutter_starter/ under bricks/feature_clean
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_brick_feature_rename_test.dart: mustache tags and filenames survive the rewrite
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_brick_feature_rename_test.dart: the setup hook calls the rewrite when it renames the package
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_brick_feature_rename_test.dart: the feature_clean templates import the template package today
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/coverage_helper_imports_every_library_test.dart: a library importing a web-only library is left out, and named
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/coverage_helper_imports_every_library_test.dart: the generated helper imports every library under lib/
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/import_rules_test.dart: rule predicates domain may import foundation.dart, and presentation material
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/import_rules_test.dart: rule predicates the route registry seam is permanently allowed
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/import_rules_test.dart: rule predicates go_router outside those places is a violation
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/import_rules_test.dart: rule predicates one feature importing another is a violation
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/import_rules_test.dart: rule predicates lib/core importing lib/features is a violation
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/import_rules_test.dart: rule predicates domain importing its own domain, core or a pub package is fine
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/import_rules_test.dart: rule predicates data importing presentation is outside this rule set
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/import_rules_test.dart: rule predicates lib/features importing lib/core is fine - that is the direction
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/import_rules_test.dart: rule predicates package:dio is allowed only under lib/core/network/
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/import_rules_test.dart: rule predicates domain importing a Flutter UI library is a violation
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/import_rules_test.dart: rule predicates domain importing its own data or presentation is a violation
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/import_rules_test.dart: rule predicates domain rejects standalone design libraries and their internals
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/import_rules_test.dart: rule predicates domain importing package:dio is a violation too
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/import_rules_test.dart: rule predicates a feature importing itself, core or shared is fine
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/import_rules_test.dart: rule predicates go_router is allowed in core routing and route modules
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/import_rules_test.dart: strippable sample paths do not cover files no strip variant removes
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/import_rules_test.dart: strippable sample paths cover what tool/strip_sample_features.dart deletes
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/import_rules_test.dart: directive parsing a commented-out directive is not a violation
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/import_rules_test.dart: directive parsing picks up import and export, with line numbers
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/import_rules_test.dart: directive parsing handles show/hide/as clauses and double quotes
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/import_rules_test.dart: import rules over lib/ no import-rule violation outside the allowlist
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/import_rules_test.dart: import rules over lib/ every rule has exactly one allowlist key
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/import_rules_test.dart: import rules over lib/ every allowlist path exists, unless it is a stripped sample
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/import_rules_test.dart: import rules over lib/ every allowlist key names a real rule
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/import_rules_test.dart: import rules over lib/ no stale allowlist entry
+::endgroup::
+::group::❌ /home/runner/work/flutter-starter/flutter-starter/test/tooling/test_readme_test.dart: criterion 2: the tree listing is exactly the top-level test/ directories (failed)
+Expected: Set:[
+            'tooling',
+            'helpers',
+            'shared',
+            'features',
+            'zz_stress',
+            'acceptance',
+            'docs',
+            'core'
+          ]
+  Actual: Set:['acceptance', 'core', 'docs', 'features', 'helpers', 'shared', 'tooling']
+   Which: does not contain 'zz_stress'
+
+package:matcher                                     expect
+package:flutter_test/src/widget_tester.dart 473:18  expect
+test/tooling/test_readme_test.dart 55:5             main.<fn>
+::endgroup::
+::group::✅ Passing tests
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/test_readme_test.dart: criterion 1: every relative link resolves to a file in the repo
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/claude_md_checks_table_test.dart: criterion 3: the table has one row per PR-triggered workflow
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/claude_md_checks_table_test.dart: criteria 1-2: each filtered row names every trigger path
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/claude_md_checks_table_test.dart: the Strip row counts the strip-smoke variants
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/claude_md_checks_table_test.dart: the trigger parser sees the workflows it should
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/no_dart_run_in_tests_test.dart: no test spawns dart run
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/pre_push_hook_cwd_test.dart: with the app at the top, it runs at the top as before
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/pre_push_hook_cwd_test.dart: in a monorepo, flutter test runs in the app, not the top
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/pre_push_hook_cwd_test.dart: a copy outside the working tree runs where git started it
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/tool_readme_check_count_test.dart: criterion 3: check_docs.dart's header states the wired count
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/tool_readme_check_count_test.dart: criteria 1 and 3: tool/README.md states the count and lists each check
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/tool_readme_check_count_test.dart: criterion 2: the README documents the Type.member directive form
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/tool_readme_check_count_test.dart: the scan sees the wired checks
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/android_toolchain_floor_test.dart: an unreadable version is a problem, not a pass
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/android_toolchain_floor_test.dart: compareVersions orders dotted versions numerically
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/android_toolchain_floor_test.dart: a commented-out version is ignored for the live one
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/android_toolchain_floor_test.dart: criterion 2: passes on the real android/ files
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/android_toolchain_floor_test.dart: the toolchain Flutter 3.50 refuses is reported, one message each
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/android_toolchain_floor_test.dart: fails on AGP and Kotlin below their floors, one message each
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/android_toolchain_floor_test.dart: criterion 2: fails on a fixture with gradle-8.14, naming it
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/android_toolchain_floor_test.dart: a version exactly at the floor passes
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_git_hooks_test.dart: a repository-local core.hooksPath elsewhere is not overwritten
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_git_hooks_test.dart: running it twice succeeds both times
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_git_hooks_test.dart: with a global core.hooksPath, the hooks still run afterwards
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_git_hooks_test.dart: names a hook in the repository's hooks directory that will stop running
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_git_hooks_test.dart: the PowerShell twin prefixes the path and restores on failure
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_git_hooks_test.dart: a failed verification puts the previous core.hooksPath back
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_git_hooks_test.dart: inside a linked worktree it installs, and hooks run there
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_git_hooks_test.dart: with the app in a subdirectory of a larger repository, hooks run
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_git_hooks_test.dart: says nothing about hooks when there are none to lose
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/test_helpers_used_test.dart: the declaration scan sees functions, classes and variables
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/test_helpers_used_test.dart: criterion 2: every public helper in test/helpers/ has a caller
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_brick_log_test.dart: package and iOS rename logs describe actual changes only
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/gitignore_golden_failures_test.dart: a failures/ directory under lib/ is not ignored
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/gitignore_golden_failures_test.dart: golden failure images under test/ are ignored
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/env_guard_before_build_test.dart: criterion 1: build.yml runs the guard in each job that builds
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/env_guard_before_build_test.dart: the scan sees the builds it should
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/env_guard_before_build_test.dart: the Fastfiles criterion 2: every flutter build in ios/fastlane/Fastfile follows the guard in its lane
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/env_guard_before_build_test.dart: the Fastfiles criterion 2: every flutter build in fastlane/Fastfile follows the guard in its lane
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/env_guard_before_build_test.dart: the Fastfiles the lane scan catches an unguarded lane
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/env_guard_before_build_test.dart: criterion 2: every flutter build in .github/workflows follows the guard in its job
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/ci_doc_tests_cover_markdown_readers_test.dart: every test that reads markdown runs on a docs-only change
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/shellcheck_test.dart: shellcheck -S warning passes on scripts/ and .githooks/
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/gate_scope_renames_test.dart: .github/workflows/strip-smoke.yml lists both sides of a rename
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/gate_scope_renames_test.dart: .github/workflows/ci.yml lists both sides of a rename
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/fastlane_artifact_paths_test.dart: ios/fastlane/Fastfile builds every artifact path with File.expand_path
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/fastlane_artifact_paths_test.dart: fastlane/Fastfile builds every artifact path with File.expand_path
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/demo_removal_steps_test.dart: only the files the steps delete or edit use the demo
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/demo_removal_steps_test.dart: the guide names every path it relies on
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/strip_unknown_flags_test.dart: --apply --remove-taks exits non-zero, names the flag and deletes nothing
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/strip_unknown_flags_test.dart: --apply --remove-feature-flag exits non-zero, names the flag and deletes nothing
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/strip_unknown_flags_test.dart: --help prints the usage and exits 0
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/strip_unknown_flags_test.dart: --apply --keep-sample --remove-bricks exits non-zero, names the flag and deletes nothing
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/test_coverage_script_test.dart: criterion 1: --analyze agrees with calculate_layer_coverage.sh the low-coverage list names the right file
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/test_coverage_script_test.dart: criterion 1: --analyze agrees with calculate_layer_coverage.sh per-layer counts are per file, not spilled
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/test_coverage_script_test.dart: criterion 2: --exclude removes files --exclude=lib/generated gives 2/6 = 33.33%
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/test_coverage_script_test.dart: criterion 2: --exclude removes files without it, generated code drops out as it does in CI
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/test_coverage_script_test.dart: criterion 2: --exclude removes files excluding the data file too gives 100%
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/scripts_smoke_after_strip_test.dart: every scripts-smoke step that needs Mason or the strip tool is skipped when the file it needs is gone
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/scripts_smoke_after_strip_test.dart: an unguarded Mason or strip step is reported
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/scripts_smoke_after_strip_test.dart: the notice step fails in the template repository
+::endgroup::
+::group::⏭️ Skipped tests
+⏭️ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_brick_display_name_test.dart: the Info.plist parses and carries the name (skipped)
+Skip: xmllint is not installed
+::endgroup::
+::group::✅ Passing tests
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/fastlane_release_environment_test.dart: every lane in fastlane/Fastfile validates its environment
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/fastlane_release_environment_test.dart: get_version in ios/fastlane/Fastfile reads "1.0.0-beta+7" as no match
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_brick_display_name_test.dart: fastlane/Fastfile APP_NAME evaluates to the name
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_brick_display_name_test.dart: pubspec's patrol app_name parses back to the name
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_brick_display_name_test.dart: every locale names the app, in appTitle and in welcome
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/fastlane_release_environment_test.dart: get_version in ios/fastlane/Fastfile reads "1.2.3+45" as 1.2.3 45
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_brick_display_name_test.dart: ios/fastlane/Fastfile APP_NAME evaluates to the name
+::endgroup::
+::group::⏭️ Skipped tests
+⏭️ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_brick_display_name_test.dart: the AndroidManifest parses and carries the name (skipped)
+Skip: xmllint is not installed
+::endgroup::
+::group::✅ Passing tests
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/fastlane_release_environment_test.dart: get_version in fastlane/Fastfile reads "1.2.3+45 # bumped" as 1.2.3 45
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_brick_display_name_test.dart: the tests that find the welcome sentence still parse
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/fastlane_release_environment_test.dart: get_version in ios/fastlane/Fastfile reads "1.2.3+45 # bumped" as 1.2.3 45
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/ci_generated_code_check_test.dart: it runs after pub get and before analyze
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/ci_generated_code_check_test.dart: criterion 2: the Quality gate regenerates and fails on drift
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/fastlane_release_environment_test.dart: a lane base URL must be set and not the example.com placeholder
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/fastlane_release_environment_test.dart: get_version in fastlane/Fastfile reads "1.2.3+45" as 1.2.3 45
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/fastlane_release_environment_test.dart: every lane in ios/fastlane/Fastfile validates its base URL
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/fastlane_release_environment_test.dart: every lane in ios/fastlane/Fastfile validates its environment
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/coverage_threshold_fail_closed_test.dart: coverage.yml's check_threshold a non-numeric target fails
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/coverage_threshold_fail_closed_test.dart: coverage.yml's check_threshold an empty or non-numeric measured percentage fails
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/coverage_threshold_fail_closed_test.dart: coverage.yml's check_threshold numbers still compare
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/coverage_threshold_fail_closed_test.dart: test_coverage.sh a numeric --min still passes and fails as before
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/fastlane_release_environment_test.dart: resolved environment chooses its URL with both variables set
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/coverage_threshold_fail_closed_test.dart: test_coverage.sh the threshold holds with bc missing from PATH
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/coverage_threshold_fail_closed_test.dart: test_coverage.sh a percentage it cannot measure fails the check
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/coverage_threshold_fail_closed_test.dart: test_coverage.sh --min=abc exits non-zero and says why
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/fastlane_release_environment_test.dart: only staging and production pass, trimmed and lowercased
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/fastlane_release_environment_test.dart: every lane in fastlane/Fastfile validates its base URL
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/fastlane_release_environment_test.dart: get_version in fastlane/Fastfile reads "1.2.3" as 1.2.3 1
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/fastlane_release_environment_test.dart: get_version in fastlane/Fastfile reads "1.0.0-beta+7" as no match
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_dispatch_inputs_test.dart: the check itself ignores a workflow without dispatch inputs
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_dispatch_inputs_test.dart: the check itself reports string and untyped inputs inside run:
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/fastlane_release_environment_test.dart: get_version in ios/fastlane/Fastfile reads "1.2.3" as 1.2.3 1
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_dispatch_inputs_test.dart: no run: script interpolates a free-text dispatch input
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/ci_random_order_test.dart: criterion 2: a failure names the seed with the command to reproduce
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/ci_random_order_test.dart: criterion 1: the Quality gate runs flutter test in a random order
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/ci_random_order_test.dart: no other step runs the suite in file order
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/release_builds_pass_pinning_test.dart: every mobile release build carries the pinning defines
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/release_builds_pass_pinning_test.dart: every file with such a build calls the pinning guard
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/release_builds_pass_pinning_test.dart: ssl_pinning_defines.sh validates what the app parses a space-separated fingerprint is refused
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/release_builds_pass_pinning_test.dart: ssl_pinning_defines.sh validates what the app parses a fingerprint, trimmed or colon-separated, is accepted
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/release_builds_pass_pinning_test.dart: ssl_pinning_defines.sh validates what the app parses a fingerprint with a line break inside is refused
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/release_builds_pass_pinning_test.dart: the scan finds the release builds it should
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/scaffold_routing_parity_test.dart: no comment line of the route module carries a templated name beyond a short prefix
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/scaffold_routing_parity_test.dart: create_feature.ps1 writes the same route module
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/scaffold_routing_parity_test.dart: the brick template is the same route module
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/scaffold_routing_parity_test.dart: create_feature.sh writes a route module that is not registered yet
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/release_base_url_test.dart: no build script or workflow carries a placeholder base URL
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/release_base_url_test.dart: an explicit URL wins over the variable
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/release_base_url_test.dart: a host that only resembles the placeholder is accepted
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/release_base_url_test.dart: the URL comes from the variable named after the environment
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/release_base_url_test.dart: every build.yml build resolves its URL through the helper
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/release_base_url_test.dart: a URL that is not absolute https is refused
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/release_base_url_test.dart: build_all.sh refuses before calling flutter when the URL is unset
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/release_base_url_test.dart: a missing URL is refused, naming the variable to set
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/coverage_helper_cleanup_test.dart: the helper test is gone after a run whose tests fails
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/coverage_helper_cleanup_test.dart: the helper test is gone after a run whose tests passes
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/release_base_url_test.dart: the example.com placeholder is refused in every spelling
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/release_base_url_test.dart: an environment that is not a release environment is refused
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/rasp_is_opt_in_test.dart: pubspec.yaml does not depend on freerasp
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/rasp_is_opt_in_test.dart: the adapter and its tests still ship as templates
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/rasp_is_opt_in_test.dart: the setup brick still rewrites the template identifiers
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/rasp_is_opt_in_test.dart: no compiled source imports freerasp
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/rasp_is_opt_in_test.dart: no lockfile resolves freerasp
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_action_pins_test.dart: the pin check itself accepts a pinned flow-mapping step
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_action_pins_test.dart: the pin check itself container images requires a digest for container and service images
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_action_pins_test.dart: the pin check itself container images reports images through checkActionPins
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_action_pins_test.dart: the pin check itself container images requires a full digest for uses: docker://
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_action_pins_test.dart: the pin check itself container images requires a digest for a Docker action image, not a Dockerfile
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_action_pins_test.dart: the pin check itself container images accepts container and service images by digest
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_action_pins_test.dart: the pin check itself names a version comment that is not a plain release tag
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_action_pins_test.dart: the pin check itself follows uses: ./path to a local action outside .github/
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_action_pins_test.dart: the pin check itself accepts release tags with a pre-release or build suffix
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_action_pins_test.dart: the pin check itself rejects a tag, a branch, a short SHA and a missing comment
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_action_pins_test.dart: the pin check itself scans composite actions under .github/
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_action_pins_test.dart: the pin check itself reports a local action that has no action.yml
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_action_pins_test.dart: the pin check itself reads case-variant file names
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_action_pins_test.dart: the pin check itself exempts local actions and docker images by digest
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_action_pins_test.dart: the pin check itself accepts a SHA with its version comment
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_action_pins_test.dart: the pin check itself finds uses however the key is spelled
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_action_pins_test.dart: the pin check itself finds a job-level reusable workflow
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_action_pins_test.dart: the pin check itself follows local actions that call local actions
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_action_pins_test.dart: the pin check itself takes the version only from the line comment
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_action_pins_test.dart: every workflow action is pinned to a commit SHA with its version
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/create_feature_ps1_culture_test.dart: identifiers are cased with the invariant culture
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/strip_bricks_prose_test.dart: every `mason make feature_clean` outside bricks/ is strip-marked
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_ci_test.dart: a --dir with no path exits 64 and writes nothing
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/assertionless_test_guard_test.dart: the scan itself accepts expect, verify, fail and expect-named helpers
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/assertionless_test_guard_test.dart: the scan itself ignores an assertion that only appears in a string or comment
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/assertionless_test_guard_test.dart: the scan itself skips skipped tests and honours the allow-list marker
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/assertionless_test_guard_test.dart: the scan itself flags a body with no assertion, naming its line
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_ci_test.dart: criterion 1: setup_ci.dart enables exactly one deploy option --deploy-trigger=tags enables tags and not branches
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/fastlane_ios_ipa_test.dart: the one exported IPA is found, whatever it is called
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/fastlane_ios_ipa_test.dart: no lane or upload step names Runner.ipa
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/fastlane_ios_ipa_test.dart: clear removes earlier exports
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/fastlane_ios_ipa_test.dart: more than one IPA is refused, naming them
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_ci_test.dart: criterion 1: setup_ci.dart enables exactly one deploy option --deploy-trigger=branch enables branches and not tags
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/fastlane_ios_ipa_test.dart: no IPA is refused, naming the directory
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_ci_test.dart: criterion 1: setup_ci.dart enables exactly one deploy option an unknown value is refused and writes nothing
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/deploy_upload_examples_test.dart: Google Play release notes are staged under the locale filename
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/deploy_upload_examples_test.dart: iOS upload receives private JSON with PEM content
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_ci_test.dart: criterion 1: setup_ci.dart enables exactly one deploy option without --deploy-trigger, no deploy workflow gets a push trigger
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_ci_test.dart: an unknown flag exits 64 and writes nothing
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_ci_test.dart: every deploy job uploads, failing on zero files deploy-ios.yml
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_ci_test.dart: every deploy job uploads, failing on zero files deploy-web.yml
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_ci_test.dart: every deploy job uploads, failing on zero files deploy-web.yml fails each job while it deploys nothing
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_ci_test.dart: every deploy job uploads, failing on zero files deploy-android.yml
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/gitignore_env_files_test.dart: every .env file is ignored except .env.example
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_ci_test.dart: the prompt and the report describe what exists declining changes nothing and says so
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/fastlane_pinning_test.dart: ios/fastlane/Fastfile loads the pinning helper
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/fastlane_pinning_test.dart: every flutter build in fastlane/Fastfile carries the pinning defines
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/fastlane_pinning_test.dart: fastlane/Fastfile loads the pinning helper
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/fastlane_pinning_test.dart: every call of a build lane in ios/fastlane/Fastfile forwards the pinning options
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/fastlane_pinning_test.dart: every flutter build in ios/fastlane/Fastfile carries the pinning defines
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/fastlane_pinning_test.dart: every call of a build lane in fastlane/Fastfile forwards the pinning options
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_ci_test.dart: the prompt and the report describe what exists a bare --yes names the deploy option it skipped
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_ci_test.dart: the prompt and the report describe what exists coverage.yml does not claim commented-out triggers
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_ci_test.dart: there are deploy workflows to check
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_ci_test.dart: criterion 2: every deploy upload fails on zero files deploy-ios.yml
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_ci_test.dart: criterion 2: every deploy upload fails on zero files deploy-android.yml
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_ci_test.dart: criterion 2: every deploy upload fails on zero files deploy-web.yml
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_ci_test.dart: --help prints the usage and exits 0
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_ci_test.dart: criterion 3: commented artifact paths use the flavorless layout deploy-ios.yml
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_ci_test.dart: criterion 3: commented artifact paths use the flavorless layout deploy-android.yml
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_ci_test.dart: criterion 3: commented artifact paths use the flavorless layout deploy-web.yml
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/mason_state_ignored_test.dart: criterion 1: git ignores .mason/bricks/feature_clean/brick.yaml
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/mason_state_ignored_test.dart: criterion 1: git ignores mason-lock.json
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/mason_state_ignored_test.dart: the bricks themselves are not ignored
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/mason_state_ignored_test.dart: criterion 1: git ignores .mason/bricks.json
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/ci_clean_tree_test.dart: criterion 2: it fails on a modified tracked file and names the fix
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/ci_clean_tree_test.dart: criterion 2: the check exists and runs after the tests
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/ci_clean_tree_test.dart: criterion 1: the committed analyzer excludes match the migration
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/strip_rerun_test.dart: protects assume-unchanged edits in a brick deletion target
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/strip_rerun_test.dart: a clean app nested in a monorepo resolves committed override paths
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/strip_rerun_test.dart: force permits an intentional overwrite of a dirty tree
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/strip_rerun_test.dart: refuses unstaged edits before deleting or overwriting anything
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/strip_rerun_test.dart: refuses skip-worktree edits before deleting or overwriting anything
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: pre_gen refuses a dependency name before anything is written
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: flutter_starter_setup application_id rejects "com.1app"
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: flutter_starter_setup application_id accepts com.example.my_app
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: flutter_starter_setup application_id rejects ".com.app"
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: flutter_starter_setup application_id rejects "com.app."
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: flutter_starter_setup application_id rejects "com.example.my-app"
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: flutter_starter_setup application_id rejects "myapp"
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: flutter_starter_setup application_id accepts io.acme.Shop2
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: flutter_starter_setup application_id rejects "com..app"
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: feature_clean class_name rejects "profile"
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: feature_clean class_name rejects "User-Profile"
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: feature_clean class_name accepts UserProfile
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: feature_clean class_name rejects "Order Item"
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: feature_clean class_name rejects ""
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: feature_clean class_name rejects "1Profile"
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: feature_clean class_name accepts Profile
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: feature_clean class_name accepts X1
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: feature_clean class_name rejects "User_Profile"
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: feature_clean class_name rejects "user_profile"
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: feature_clean class_name accepts SettingsV2
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: flutter_starter_setup package_name rejects "MyApp"
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: flutter_starter_setup package_name rejects "void"
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: flutter_starter_setup package_name accepts acme
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: flutter_starter_setup package_name accepts a_b_c
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: flutter_starter_setup package_name rejects ""
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: flutter_starter_setup package_name accepts my_app
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: flutter_starter_setup package_name accepts shop2
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: flutter_starter_setup package_name rejects "class"
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: flutter_starter_setup package_name rejects "1app"
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: flutter_starter_setup package_name rejects "my-app"
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: flutter_starter_setup package_name rejects "_app"
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: flutter_starter_setup package_name rejects "my app"
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: feature_clean existing feature an existing lib/features/<name> is refused
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: feature_clean existing feature the message is the one both create_feature scripts print
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: feature_clean existing feature an existing test/features/<name> alone is refused
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: feature_clean existing feature a file of that name is in the way too
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/strip_rerun_test.dart: a modified pubspec.lock alone is reported, not refused
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/strip_rerun_test.dart: a modified pubspec.lock alone is reported, not refused (nested in "my ứng app")
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/strip_rerun_test.dart: refuses assume-unchanged edits before deleting or overwriting anything
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/strip_rerun_test.dart: clean CRLF overwrite targets do not trigger the guard
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/strip_rerun_test.dart: refuses unrelated edits before deleting or overwriting anything
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/strip_rerun_test.dart: refuses staged edits before deleting or overwriting anything
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: feature_clean existing feature pre_gen refuses an existing feature and writes nothing
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: feature_clean existing feature nothing in the way is accepted
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: feature_clean existing feature a dangling link of that name is in the way too
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/strip_rerun_test.dart: protects skip-worktree edits in a sample deletion target
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/strip_rerun_test.dart: (a) a git-ignored file importing the sample does not fail the strip
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/strip_rerun_test.dart: a missing Git baseline refuses unless force is explicit
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/strip_rerun_test.dart: protects skip-worktree edits in a brick deletion target
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/strip_rerun_test.dart: refuses untracked edits before deleting or overwriting anything
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/strip_rerun_test.dart: protects assume-unchanged edits in a sample deletion target
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: feature_clean pre_gen refuses a bad class_name
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: flutter_starter_setup package_name against the dependencies crypto, a dependency, is refused
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: flutter_starter_setup package_name against the dependencies clock, a dependency, is refused
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: flutter_starter_setup package_name against the dependencies a name no dependency uses is accepted
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: flutter_starter_setup package_name against the dependencies the lock file lists the project's dependencies
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: flutter_starter_setup ios_bundle_id rejects "com..app"
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: flutter_starter_setup ios_bundle_id accepts com.example.myApp
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: flutter_starter_setup ios_bundle_id rejects "com.app."
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: flutter_starter_setup ios_bundle_id rejects "com.my app"
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: flutter_starter_setup ios_bundle_id rejects "myApp"
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: flutter_starter_setup ios_bundle_id accepts io.acme.Shop2
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: flutter_starter_setup ios_bundle_id accepts com.example.my-app
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: flutter_starter_setup ios_bundle_id rejects "com.example.my_app"
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: feature_clean feature_name rejects "1abc"
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: feature_clean feature_name rejects "user__profile"
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: feature_clean feature_name accepts user_profile
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: feature_clean feature_name rejects "UserProfile"
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: feature_clean feature_name rejects ""
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: feature_clean feature_name rejects "a b"
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: feature_clean feature_name accepts profile
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: feature_clean feature_name accepts x1
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: feature_clean feature_name rejects "_x"
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: feature_clean feature_name rejects "user-profile"
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: feature_clean feature_name accepts settings_v2
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: displayNameProblem rejects what cannot be escaped where the name lands
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/brick_input_rules_test.dart: displayNameProblem accepts any printable name
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/fastlane_ssl_pinning_rb_test.dart: an unrecognised flag is refused even with fingerprints
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/fastlane_ssl_pinning_rb_test.dart: valid fingerprints pass through as a define
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/fastlane_ssl_pinning_rb_test.dart: a fingerprint with a line break inside is refused
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/fastlane_ssl_pinning_rb_test.dart: staging and production without fingerprints are refused
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/fastlane_ssl_pinning_rb_test.dart: development passes through with nothing set
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/fastlane_ssl_pinning_rb_test.dart: an entry is trimmed at its ends, as the app trims it
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/strip_rerun_test.dart: a nested app allows staged sibling edits but protects its own edits
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/fastlane_ssl_pinning_rb_test.dart: a value that is not an opt-out is still refused
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/fastlane_ssl_pinning_rb_test.dart: a fingerprint that is not 64 hex digits is refused anywhere
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/fastlane_ssl_pinning_rb_test.dart: a space-separated fingerprint is refused, as the app could never match it
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/fastlane_ssl_pinning_rb_test.dart: the opt-out values the app reads as false build without fingerprints
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/strip_rerun_test.dart: bricks-only removal also refuses a dirty tree
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/android_release_signing_test.dart: the scan catches an unsigned release build and passes a keyed one
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/android_release_signing_test.dart: criterion 2: every Android release build in a workflow follows a signing key in its job
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_hardening_test.dart: criterion 1: release-scripts.yml declares top-level permissions
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/strip_rerun_test.dart: (c) a run from a subdirectory refuses and writes nothing
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_hardening_test.dart: criterion 3: build.yml uses no Node 20 action major
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_hardening_test.dart: criterion 1: git-hooks.yml declares top-level permissions
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_hardening_test.dart: criterion 3: release-scripts.yml uses no Node 20 action major
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_hardening_test.dart: criteria 1-2: deploy-ios.yml reads only, and never races or cancels a deploy
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_hardening_test.dart: criterion 1: deploy-ios.yml declares top-level permissions
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_hardening_test.dart: criterion 3: deploy-android.yml uses no Node 20 action major
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_hardening_test.dart: criterion 1: docs-check.yml declares top-level permissions
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_hardening_test.dart: criterion 3: strip-smoke.yml uses no Node 20 action major
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_hardening_test.dart: criterion 3: scripts-smoke.yml uses no Node 20 action major
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_hardening_test.dart: criterion 3: git-hooks.yml uses no Node 20 action major
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_hardening_test.dart: criteria 1-2: deploy-android.yml reads only, and never races or cancels a deploy
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_hardening_test.dart: criterion 1: stress-git-archive.yml declares top-level permissions
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_hardening_test.dart: criterion 3: deploy-web.yml uses no Node 20 action major
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_hardening_test.dart: criterion 1: ci.yml declares top-level permissions
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_hardening_test.dart: criterion 1: coverage.yml declares top-level permissions
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_hardening_test.dart: criterion 1: e2e-android.yml declares top-level permissions
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_hardening_test.dart: criterion 3: stress-git-archive.yml uses no Node 20 action major
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_hardening_test.dart: criterion 1: scripts-smoke.yml declares top-level permissions
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_hardening_test.dart: criterion 1: action-pins.yml declares top-level permissions
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_hardening_test.dart: criterion 3: docs-check.yml uses no Node 20 action major
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_hardening_test.dart: criterion 3: deploy-ios.yml uses no Node 20 action major
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_hardening_test.dart: criterion 3: ci.yml uses no Node 20 action major
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_hardening_test.dart: criterion 1: deploy-web.yml declares top-level permissions
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_hardening_test.dart: criterion 3: e2e-android.yml uses no Node 20 action major
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_hardening_test.dart: criterion 3: coverage.yml uses no Node 20 action major
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_hardening_test.dart: the scan sees the workflows
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_hardening_test.dart: criteria 1-2: deploy-web.yml reads only, and never races or cancels a deploy
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_hardening_test.dart: criterion 1: strip-smoke.yml declares top-level permissions
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_hardening_test.dart: criterion 1: build.yml declares top-level permissions
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_hardening_test.dart: criterion 1: deploy-android.yml declares top-level permissions
+::endgroup::
+::group::❌ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_hardening_test.dart: no workflow that runs on push cancels an in-progress push run (failed)
+Expected: contains '${{ github.event_name == \'pull_request\' && github.ref || github.sha }}'
+  Actual: '# Temporary: issue 1323. Lives only on the stress/1323-* branch; deleted with it.\n'
+            'name: Stress git archive (temporary)\n'
+            '\n'
+            'on:\n'
+            '  push:\n'
+            '    branches: [\'stress/1323-*\']\n'
+            '\n'
+            'permissions:\n'
+            '  contents: read\n'
+            '\n'
+            'jobs:\n'
+            '  stress:\n'
+            '    name: Stress shard ${{ matrix.shard }}\n'
+            '    runs-on: ubuntu-latest\n'
+            '    timeout-minutes: 60\n'
+            '    strategy:\n'
+            '      fail-fast: false\n'
+            '      matrix:\n'
+            '        shard: [1, 2, 3, 4, 5, 6, 7, 8]\n'
+            '    steps:\n'
+            '      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1\n'
+            '        with:\n'
+            '          fetch-depth: 0\n'
+            '      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0\n'
+            '        with:\n'
+            '          channel: \'stable\'\n'
+            '          cache: true\n'
+            '      - run: flutter pub get\n'
+            '      - name: Run test/tooling five times with the probe\n'
+            '        shell: bash\n'
+            '        run: |\n'
+            '          set +e\n'
+            '          failed=0\n'
+            '          for round in 1 2 3 4 5; do\n'
+            '            echo "=== round $round"\n'
+            '            flutter test --test-randomize-ordering-seed random \\\n'
+            '              test/tooling test/zz_stress > "round-$round.log" 2>&1\n'
+            '            status=$?\n'
+            '            grep -E "STRESS|Failed receiving notification|_copyOfHead|exited [0-9]+$|Some tests failed|All tests passed|seed=" "round-$round.log" | tail -20\n'
+            '            if [ "$status" -ne 0 ]; then failed=$((failed + 1)); fi\n'
+            '          done\n'
+            '          echo "rounds failed: $failed"\n'
+            '          echo "failed=$failed" >> "$GITHUB_OUTPUT"\n'
+            '          exit 0\n'
+            '        id: loop\n'
+            '      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2\n'
+            '        if: always()\n'
+            '        with:\n'
+            '          name: stress-logs-${{ matrix.shard }}\n'
+            '          path: round-*.log\n'
+            '          retention-days: 7\n'
+            '      - name: Fail if any round failed\n'
+            '        if: steps.loop.outputs.failed != \'0\'\n'
+            '        run: exit 1\n'
+            ''
+   Which: does not contain '${{ github.event_name == \'pull_request\' && github.ref || github.sha }}'
+.github/workflows/stress-git-archive.yml: group push runs per commit
+
+package:matcher                                     expect
+package:flutter_test/src/widget_tester.dart 473:18  expect
+test/tooling/workflow_hardening_test.dart 102:7     main.<fn>
+::endgroup::
+::group::✅ Passing tests
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/workflow_hardening_test.dart: criterion 3: action-pins.yml uses no Node 20 action major
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/test_coverage_no_install_test.dart: test_coverage.sh installs nothing; it names the install command
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/strip_rerun_test.dart: a modified pubspec.lock does not hide another edit
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/verify_action_pins_test.dart: ghTagResolver peels an annotated tag to its commit
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/verify_action_pins_test.dart: ghTagResolver returns null for a missing tag
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/verify_action_pins_test.dart: ghTagResolver throws, rather than passing, when the API cannot be asked
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/verify_action_pins_test.dart: ghTagResolver returns a lightweight tag commit
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/verify_action_pins_test.dart: verifyTags reads pins written with YAML escapes
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/verify_action_pins_test.dart: verifyTags accepts a pin that is its tag commit
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/verify_action_pins_test.dart: verifyTags resolves each repo@tag once
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/verify_action_pins_test.dart: verifyTags never asks the API about a comment that is not a release tag
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/verify_action_pins_test.dart: verifyTags checks the uses value, not a pin written in another key
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/verify_action_pins_test.dart: verifyTags rejects a version comment that is not a tag
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/verify_action_pins_test.dart: verifyTags rejects a SHA that is not the tag commit, naming both
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/verify_action_pins_test.dart: verifyTags checks every step on a line, not only the first
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/commit_msg_hook_test.dart: core.commentString sets the comment prefix
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/commit_msg_hook_test.dart: leading blank lines are skipped
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/commit_msg_hook_test.dart: a subject under a commit.template comment is read
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/commit_msg_hook_test.dart: a plain conventional subject still passes
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/commit_msg_hook_test.dart: a message of only comments is rejected
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/commit_msg_hook_test.dart: an unedited squash merge message is accepted
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/strip_rerun_test.dart: a nested app allows unstaged sibling edits but protects its own edits
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/strip_rerun_test.dart: a modified pubspec.lock alone is reported, not refused (nested in "app")
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/strip_rerun_test.dart: a nested app allows untracked sibling edits but protects its own edits
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/format_check_readonly_test.dart: criteria 1-2: scripts/test/format_check_test.sh passes
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/secure_storage_clear_not_on_logout_test.dart: no code in lib/ calls clear() on a secure storage service
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/strip_rerun_test.dart: (b) a re-run after a partial strip completes
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/android_kotlin_optout_test.dart: criterion 2: both directions fail opt-out removed while a plugin still applies KGP
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/android_kotlin_optout_test.dart: criterion 2: both directions fail opted out, but no resolved plugin applies KGP: migrate now
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/android_kotlin_optout_test.dart: criterion 2: both directions fail agreement either way passes
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/android_kotlin_optout_test.dart: criterion 2: the opt-out lasts exactly as long as a plugin applies KGP
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/android_kotlin_optout_test.dart: detection reads the flag only as a real, uncommented assignment
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/android_kotlin_optout_test.dart: detection recognises each way a build script applies KGP
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_brick_placeholder_test.dart: the placeholder is deleted from a CRLF checkout too
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks renamed project before writing
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_brick_placeholder_test.dart: the placeholder the brick writes is deleted
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks android-only project before writing
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_brick_placeholder_test.dart: a file of the same name the brick did not write is kept
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/fastlane_supply_options_test.dart: the generic upload points supply at the Android metadata root
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/fastlane_supply_options_test.dart: every Play upload call uses documented supply options
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/integration_test_readme_test.dart: a test file attributed to a golden variant is in that variant
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/integration_test_readme_test.dart: every tool/golden/ path the README names exists
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks ios-only project before writing
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_brick_rerun_test.dart: setup pre_gen checks fresh project before writing
+✅ /home/runner/work/flutter-starter/flutter-starter/test/zz_stress/git_archive_loop_test.dart: git archive of HEAD never exits non-zero
+STRESS git archive: 0 failure(s) in 300
+::endgroup::
+
+::error::587 tests passed, 2 failed, 2 skipped.

@@ -1,0 +1,8 @@
+Stress run 44086867809 on ubuntu-latest, branch stress/1323-git-archive (deleted after)
+rounds: 40 (8 shards x 5, full test/tooling + probe, random order)
+strip_rerun_test executions passed: 1000, failed: 0
+probe git archive:   40 STRESS git archive: 0 failure(s) in 300
+other failures (both caused by the temporary scaffolding itself):
+  40 tooling/test_readme_test.dart: criterion 2: the tree listing is exactly the top-level test/ directories
+  40 tooling/workflow_hardening_test.dart: no workflow that runs on push cancels an in-progress push run
+Dart child perror lines: 0
