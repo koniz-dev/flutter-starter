@@ -48,7 +48,9 @@ void main() {
     };
     final docs = (Process.runSync('git', ['ls-files', '*.md']).stdout as String)
         .split('\n')
-        .where((p) => p.isNotEmpty);
+        // A tracked file deleted but not yet committed (the strip tool's
+        // --remove-bricks leaves it so) has nothing left to check.
+        .where((p) => p.isNotEmpty && File(p).existsSync());
     final mismatched = [
       for (final path in docs)
         for (final m in activate.allMatches(File(path).readAsStringSync()))
