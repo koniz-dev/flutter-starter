@@ -1,0 +1,4 @@
+Commits in 8fe1730333b..HEAD
+  ok    3359e6d2 fix(logging): open the log file once when init runs twice (#1322)
+
+OK: every message links with 'Refs koniz-dev/flutter-starter#N' and closes nothing.

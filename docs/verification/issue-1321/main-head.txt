@@ -1,0 +1,1 @@
+3359e6d2 fix(logging): open the log file once when init runs twice (#1322)
