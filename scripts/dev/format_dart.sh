@@ -14,6 +14,15 @@
 # templates containing mustache, which is not valid Dart, so `dart format` exits
 # 65 on it. analysis_options.yaml excludes it for the same reason.
 set -euo pipefail
+# The paths are the project's, wherever this is run from: from a
+# subdirectory they named nothing, and --check passed having checked nothing.
+SCRIPT_DIR="$(CDPATH='' cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR/../.."
+if [[ ! -f pubspec.yaml ]]; then
+  echo "Error: $PWD is not the project root (no pubspec.yaml). Run" >&2
+  echo "scripts/dev/format_dart.sh by its path inside the project." >&2
+  exit 1
+fi
 paths=(lib test integration_test tool examples)
 if [[ "${1:-}" == "--print-paths" ]]; then
   echo "${paths[*]}"
