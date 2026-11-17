@@ -77,6 +77,55 @@ void main() {
       container.dispose();
     });
 
+    // A forced logout (clearSession) re-enables the sign-in buttons while a
+    // slow remote logout is still pending; a sign-in that succeeded in that
+    // window was undone when the logout finally returned.
+    group('a logout that completes after a newer sign-in', () {
+      for (final failed in [false, true]) {
+        test(
+          'does not overwrite it (logout ${failed ? 'failed' : 'ok'})',
+          () async {
+            final logoutReply = Completer<Result<void>>();
+            when(
+              () => mockLogoutUseCase(),
+            ).thenAnswer((_) => logoutReply.future);
+            const user = User(id: 'b', email: 'b@b.c');
+            when(
+              () => mockLoginUseCase(any(), any()),
+            ).thenAnswer((_) async => const Success(user));
+            final notifier = container.read(authProvider.notifier);
+
+            final logout = notifier.logout();
+            notifier.clearSession();
+            await notifier.login('b@b.c', 'pw');
+            expect(container.read(authProvider).user, user);
+
+            logoutReply.complete(
+              failed
+                  ? const ResultFailure(ServerFailure('late'))
+                  : const Success(null),
+            );
+            await logout;
+
+            expect(container.read(authProvider).user, user);
+            expect(container.read(authProvider).error, isNull);
+          },
+        );
+      }
+
+      test('a logout with nothing after it still settles its state', () async {
+        when(
+          () => mockLogoutUseCase(),
+        ).thenAnswer((_) async => const ResultFailure(ServerFailure('down')));
+        final notifier = container.read(authProvider.notifier);
+
+        await notifier.logout();
+
+        expect(container.read(authProvider).isLoading, isFalse);
+        expect(container.read(authProvider).error, 'down');
+      });
+    });
+
     group('clearSession during a sign-in', () {
       test('keeps the spinner of a sign-in still in flight', () async {
         final reply = Completer<Result<User>>();

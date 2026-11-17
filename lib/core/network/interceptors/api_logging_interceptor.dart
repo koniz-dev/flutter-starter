@@ -327,10 +327,12 @@ class ApiLoggingInterceptor extends Interceptor {
     final fragmentStart = path.indexOf('#');
     final base = fragmentStart < 0 ? path : path.substring(0, fragmentStart);
     final queryStart = base.indexOf('?');
-    final safeBase = queryStart < 0
-        ? base
-        : '${base.substring(0, queryStart + 1)}'
-              '${_redactParameters(base.substring(queryStart + 1))}';
+    final safeBase = _redactNestedParameters(
+      queryStart < 0
+          ? base
+          : '${base.substring(0, queryStart + 1)}'
+                '${_redactParameters(base.substring(queryStart + 1))}',
+    );
     if (fragmentStart < 0) return safeBase;
 
     final fragment = path.substring(fragmentStart + 1);
@@ -366,7 +368,37 @@ class ApiLoggingInterceptor extends Interceptor {
           return pair;
         })
         .join('&');
-    return '$safeBase#$safeQueries';
+    return '$safeBase#${_redactNestedParameters(safeQueries)}';
+  }
+
+  /// A parameter key: after `?`, `&`, `;` or `#`, up to its `=`.
+  static final RegExp _nestedKey = RegExp(r'(?<=[?&;#])([^=?&;#/\s]+)=');
+
+  /// [text] with the value of every sensitive `key=` redacted wherever it
+  /// sits, up to the next `&`, `;` or `#`.
+  ///
+  /// The splits above read one level: a URL inside a parameter value
+  /// (`?redirect=https://x/?code=...`, `?next=/y?token=...`) or a `;`
+  /// separator (`#/route?a=1;token=...`) passed its credential in clear.
+  static String _redactNestedParameters(String text) {
+    final out = StringBuffer();
+    var copied = 0;
+    for (final match in _nestedKey.allMatches(text)) {
+      if (match.start < copied) continue;
+      final key = _decodeKey(match.group(1)!);
+      if (key != null && !isSensitiveQueryKey(key)) continue;
+      var valueEnd = text.length;
+      for (final separator in const ['&', ';', '#']) {
+        final index = text.indexOf(separator, match.end);
+        if (index >= 0 && index < valueEnd) valueEnd = index;
+      }
+      out
+        ..write(text.substring(copied, match.end))
+        ..write(_redacted);
+      copied = valueEnd;
+    }
+    out.write(text.substring(copied));
+    return out.toString();
   }
 
   // All suffix keys share the same '='. Normalize each part once instead of

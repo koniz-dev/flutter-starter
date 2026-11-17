@@ -51,6 +51,13 @@ class AuthNotifier extends _$AuthNotifier {
   /// during a forced logout waits for it, and its spinner must stay up.
   int _signInsInFlight = 0;
 
+  /// Bumped by every logout and every successful sign-in. A logout's late
+  /// completion writes its state only if nothing replaced the session since
+  /// it started: a forced logout re-enables the sign-in buttons, and a user
+  /// who signed in before a slow remote logout returned was bounced back to
+  /// /login with their new credentials still stored.
+  int _sessionWrites = 0;
+
   /// Attempts to login with the given [email] and [password]
   Future<void> login(String email, String password) async {
     state = state.copyWith(isLoading: true, error: null, failure: null);
@@ -75,6 +82,7 @@ class AuthNotifier extends _$AuthNotifier {
 
     result.when(
       success: (user) {
+        _sessionWrites++;
         state = state.copyWith(
           user: user,
           isLoading: false,
@@ -116,6 +124,7 @@ class AuthNotifier extends _$AuthNotifier {
 
     result.when(
       success: (user) {
+        _sessionWrites++;
         state = state.copyWith(
           user: user,
           isLoading: false,
@@ -144,9 +153,11 @@ class AuthNotifier extends _$AuthNotifier {
   /// screens mounted while those credentials are already gone.
   Future<void> logout() async {
     state = const AuthState(isLoading: true);
+    final write = ++_sessionWrites;
 
     final logoutUseCase = ref.read(logoutUseCaseProvider);
     final result = await logoutUseCase();
+    if (write != _sessionWrites) return;
 
     result.when(
       success: (_) {
