@@ -116,8 +116,11 @@ class LoggingService {
       outputs.add(ConsoleOutput());
     }
 
-    // File output (if enabled)
-    if (_enableFileLogging) {
+    // File output (if enabled). Not on web: there is no app cache directory
+    // to write to, so the file sink never opened and production web, whose
+    // only output it was, buffered every line and emitted none. Without it
+    // the console fallback below applies.
+    if (_enableFileLogging && !kIsWeb) {
       _fileOutput = FileLogOutput();
       // init() is async and the logger must exist synchronously. Lines
       // emitted before it resolves are buffered by FileLogOutput and written
