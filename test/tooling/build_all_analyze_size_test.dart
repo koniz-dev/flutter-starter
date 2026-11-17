@@ -27,6 +27,7 @@ case "$1 $2" in
     mkdir -p build/app/outputs/flutter-apk
     head -c 8192 /dev/zero > build/app/outputs/flutter-apk/app-release.apk ;;
   "pub deps") echo "├── dio 5.0.0" ;;
+  "build ipa") exit "${STUB_IPA_EXIT:-0}" ;;
 esac
 exit 0
 ''';
@@ -291,4 +292,39 @@ void main() {
       expect(script, contains('--split-per-abi'));
     },
   );
+
+  // On a Mac without iOS signing, `flutter build ipa` failed and set -e
+  // stopped the script before the web build and the size report. Flutter
+  // finds a team in the project, an xcconfig or the keychain, so the script
+  // tries the IPA and falls back only when it fails.
+  group('production on macOS', () {
+    Map<String, String> mac({required bool signs}) => {
+      'OSTYPE': 'darwin23',
+      'API_SSL_FINGERPRINTS': _fingerprints,
+      'STUB_IPA_EXIT': signs ? '0' : '1',
+    };
+
+    test(
+      'an IPA that cannot be signed: an unsigned build, then the rest',
+      () async {
+        final run = await _run('production', env: mac(signs: false));
+
+        final ios = run.calls.where((c) => c.startsWith('flutter build ios'));
+        expect(run.calls.any((c) => c.startsWith('flutter build ipa')), isTrue);
+        expect(ios.single, contains('--no-codesign'));
+        expect(ios.single, contains('--release'));
+        expect(run.calls.any((c) => c.startsWith('flutter build web')), isTrue);
+        expect(run.output, contains('flutter build ipa failed'));
+        expect(run.output, contains('App Bundle Size:'));
+        expect(run.output, contains('iOS: build/ios/iphoneos/Runner.app'));
+      },
+    );
+
+    test('an IPA that signs is kept, with no unsigned build', () async {
+      final run = await _run('production', env: mac(signs: true));
+
+      expect(run.calls.any((c) => c.startsWith('flutter build ios')), isFalse);
+      expect(run.output, contains('iOS: build/ios/ipa/'));
+    });
+  });
 }

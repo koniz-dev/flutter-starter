@@ -138,17 +138,34 @@ fi
 echo ""
 
 # Build iOS (only on macOS)
+IOS_ARTIFACT=""
 if [[ "$OSTYPE" == "darwin"* ]]; then
     echo -e "${YELLOW}Building iOS...${NC}"
-    if [ "$ENVIRONMENT" == "production" ]; then
+    # An IPA needs signing. Flutter finds a team in the project, an xcconfig
+    # or a single keychain certificate; without one `flutter build ipa`
+    # fails, and set -e stopped the script before the web build and the size
+    # report on any Mac where iOS signing was not set up yet. Try the IPA, and
+    # on failure build the release unsigned so the rest still runs.
+    if [ "$ENVIRONMENT" == "production" ] &&
         flutter build ipa \
             --release \
-            "${DEFINES[@]}"
+            "${DEFINES[@]}"; then
+        IOS_ARTIFACT="build/ios/ipa/"
         echo -e "${GREEN}✓ iOS IPA built${NC}"
+    elif [ "$ENVIRONMENT" == "production" ]; then
+        echo -e "${YELLOW}⚠ flutter build ipa failed (no signing team or certificate?): building iOS unsigned instead.${NC}"
+        echo "  Set up signing (docs/deployment/ios-deployment.md) to get an IPA."
+        flutter build ios \
+            --release \
+            --no-codesign \
+            "${DEFINES[@]}"
+        IOS_ARTIFACT="build/ios/iphoneos/Runner.app (unsigned)"
+        echo -e "${GREEN}✓ iOS build completed (unsigned)${NC}"
     else
         flutter build ios \
             --no-codesign \
             "${DEFINES[@]}"
+        IOS_ARTIFACT="build/ios/iphoneos/Runner.app (unsigned)"
         echo -e "${GREEN}✓ iOS build completed${NC}"
     fi
     echo ""
@@ -223,10 +240,12 @@ if [ "$ANALYZE_SIZE" = true ]; then
 
     # Analyze dependencies
     echo "📊 Analyzing dependencies..."
-    flutter pub deps > /tmp/flutter_deps.txt
+    DEPS_FILE="$(mktemp)"
+    flutter pub deps > "$DEPS_FILE"
 
     # Count dependencies
-    DEP_COUNT=$(grep -c "├" /tmp/flutter_deps.txt || true)
+    DEP_COUNT=$(grep -c "├" "$DEPS_FILE" || true)
+    rm -f "$DEPS_FILE"
     echo "   Total dependencies: $DEP_COUNT"
     echo ""
 
@@ -282,7 +301,9 @@ echo -e "${GREEN}All builds completed!${NC}"
 echo ""
 echo "Build artifacts:"
 echo "  Android: build/app/outputs/"
-echo "  iOS: build/ios/ipa/"
+if [ -n "$IOS_ARTIFACT" ]; then
+    echo "  iOS: $IOS_ARTIFACT"
+fi
 echo "  Web: build/web/"
 
 
