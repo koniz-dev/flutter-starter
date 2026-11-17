@@ -380,7 +380,12 @@ from depends on pinning and on the build:
 ### Provider ownership and remote closure
 
 Override `realtimeClientFactoryProvider` to select a backend. The base provider
-creates one client per container and disconnects it when disposed:
+creates one client per session and disconnects it when disposed. It watches
+`sessionEpochProvider`, so logout, a forced logout and every sign-in
+disconnect the current client, and the next read gets a fresh one to connect
+as the new user - a socket authenticated as one user never outlives that
+user's session. Reconnect after a session change from whatever reads the
+client:
 
 ```dart
 final overrides = [
@@ -392,7 +397,12 @@ final overrides = [
 
 A direct override of `realtimeClientProvider` bypasses that factory and its
 cleanup; the override's owner must register `ref.onDispose(client.disconnect)`
-or disconnect the supplied client itself.
+or disconnect the supplied client itself, including when the session changes.
+
+`connect` takes only a URL, so on native the usual way to authenticate is a
+token in the query string. The client redacts it from its own logs, but a
+server or proxy access log records the full URL; prefer a short-lived ticket
+for the query, or authenticate with the first message after connecting.
 
 A server close, including a clean close, emits `RealtimeConnectionClosed` on the
 message stream's error channel after `isConnected` becomes false. Its `code` is
