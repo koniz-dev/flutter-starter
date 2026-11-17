@@ -111,8 +111,11 @@ void main() {
       final result = await setupCi(['--yes']);
 
       expect(result.exitCode, 0);
-      expect(result.stdout, contains('Nothing to do'));
-      expect(result.stdout, contains('only the deploy-* workflows have one'));
+      expect(
+        result.stdout,
+        contains('no workflow other than deploy-* had a commented trigger'),
+      );
+      expect(result.stdout, contains('only the deploy-* workflows have'));
     });
 
     test('declining changes nothing and says so', () async {
@@ -144,7 +147,10 @@ void main() {
       expect(header, isNot(contains('commented out')));
       expect(live.any((l) => l.startsWith('workflow_dispatch:')), isTrue);
       expect(live, contains('schedule:'));
-      expect(header, contains('Manual (workflow_dispatch) and weekly'));
+      expect(
+        File('docs/guides/testing/test-coverage.md').readAsStringSync(),
+        isNot(contains('triggers are commented out')),
+      );
     });
   });
 

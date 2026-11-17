@@ -202,12 +202,15 @@ int enableCi(
 
   print('');
   if (changed.isEmpty) {
-    print('Nothing to do: no workflow had a commented trigger in its `on:`.');
     if (deployTrigger == null) {
       print(
-        'As shipped, only the deploy-* workflows have one: pass '
-        '--deploy-trigger=tags or --deploy-trigger=branch to enable it.',
+        'Nothing to do: no workflow other than deploy-* had a commented '
+        'trigger in its `on:`. As shipped, only the deploy-* workflows have '
+        'one: pass --deploy-trigger=tags or --deploy-trigger=branch to '
+        'enable it.',
       );
+    } else {
+      print('Nothing to do: no workflow had a commented trigger in its `on:`.');
     }
     return 0;
   }

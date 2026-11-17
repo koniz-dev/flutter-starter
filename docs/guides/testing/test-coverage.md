@@ -139,8 +139,8 @@ Two workflows measure coverage, from the same files:
   step and delete **Enforce minimum coverage**.
 - **[`coverage.yml`](../../../.github/workflows/coverage.yml), manual plus
   weekly.** Its triggers are `workflow_dispatch` and a `schedule` (Mondays,
-  03:00 UTC); the `push` / `pull_request` triggers are commented out, waiting
-  for you to pick your branch names. A run is calculated over the whole
+  03:00 UTC). It has no `push` / `pull_request` trigger; add `pull_request:`
+  under its `on:` to enforce the per-layer targets on every PR. A run is calculated over the whole
   repository, enforced against the per-layer targets in its **Enforce coverage
   thresholds** step, and uploaded to Codecov.
 
