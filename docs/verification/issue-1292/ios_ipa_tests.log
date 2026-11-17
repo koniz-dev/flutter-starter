@@ -1,0 +1,11 @@
+00:00 +0: loading /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/c9040f3a-094e-4757-b5d0-3dd1371d6d3a/scratchpad/g2/test/tooling/fastlane_ios_ipa_test.dart
+00:00 +0: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/c9040f3a-094e-4757-b5d0-3dd1371d6d3a/scratchpad/g2/test/tooling/fastlane_ios_ipa_test.dart: the one exported IPA is found, whatever it is called
+00:00 +1: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/c9040f3a-094e-4757-b5d0-3dd1371d6d3a/scratchpad/g2/test/tooling/fastlane_ios_ipa_test.dart: no IPA is refused, naming the directory
+00:00 +2: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/c9040f3a-094e-4757-b5d0-3dd1371d6d3a/scratchpad/g2/test/tooling/fastlane_ios_ipa_test.dart: more than one IPA is refused, naming them
+00:00 +3: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/c9040f3a-094e-4757-b5d0-3dd1371d6d3a/scratchpad/g2/test/tooling/fastlane_artifact_paths_test.dart: fastlane/Fastfile builds every artifact path with File.expand_path
+00:00 +4: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/c9040f3a-094e-4757-b5d0-3dd1371d6d3a/scratchpad/g2/test/tooling/fastlane_ios_ipa_test.dart: clear removes earlier exports
+00:00 +5: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/c9040f3a-094e-4757-b5d0-3dd1371d6d3a/scratchpad/g2/test/tooling/fastlane_ios_ipa_test.dart: clear removes earlier exports
+00:00 +6: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/c9040f3a-094e-4757-b5d0-3dd1371d6d3a/scratchpad/g2/test/tooling/fastlane_ios_ipa_test.dart: no lane or upload step names Runner.ipa
+00:00 +7: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/c9040f3a-094e-4757-b5d0-3dd1371d6d3a/scratchpad/g2/test/tooling/deploy_upload_examples_test.dart: iOS upload receives private JSON with PEM content
+00:00 +8: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/c9040f3a-094e-4757-b5d0-3dd1371d6d3a/scratchpad/g2/test/tooling/deploy_upload_examples_test.dart: Google Play release notes are staged under the locale filename
+00:00 +9: All tests passed!

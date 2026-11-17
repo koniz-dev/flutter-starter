@@ -1,0 +1,54 @@
+00:00 +0: loading /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/c9040f3a-094e-4757-b5d0-3dd1371d6d3a/scratchpad/g2/test/features/auth/demo/demo_auth_test.dart
+00:00 +0: criterion 2: demo mode is on only in an unconfigured debug build no BASE_URL, development, debug build: on
+00:00 +1: criterion 2: demo mode is on only in an unconfigured debug build a configured BASE_URL turns it off
+00:00 +2: criterion 2: demo mode is on only in an unconfigured debug build a profile or release build can never enable it
+00:00 +3: criterion 2: demo mode is on only in an unconfigured debug build the staging environment turns it off
+00:00 +4: criterion 2: demo mode is on only in an unconfigured debug build the production environment turns it off
+00:00 +5: criterion 2: demo mode is on only in an unconfigured debug build whitespace is not a BASE_URL
+00:00 +6: the demo data source the demo account signs in and gets tokens
+00:00 +7: the demo data source a wrong password is an AuthException, like a 401
+00:00 +8: the demo data source a registered account can sign in again
+00:00 +9: the demo data source registering an existing email is a 409 and keeps the account
+00:00 +10: the demo data source a refresh token works once, then is spent
+00:00 +11: the demo data source the provider picks it only while demo mode is on
+00:00 +12: criterion 3: removing it is one folder and the files that import it only the provider and the login screen import the demo
+00:00 +13: criterion 3: login -> demo sign-in -> home, with no backend the fill button and Login reach the home screen
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home","previousRouteName":"login","previousRoutePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Removed | Context: {"routeName":"login","routePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:02 +14: criterion 3: login -> demo sign-in -> home, with no backend demo sign-in to home sends nothing over the network
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home","previousRouteName":"login","previousRoutePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Removed | Context: {"routeName":"login","routePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:03 +15: criterion 3: login -> demo sign-in -> home, with no backend with demo mode off the login screen shows no demo card
+00:03 +16: All tests passed!
