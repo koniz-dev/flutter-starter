@@ -150,7 +150,7 @@ The three slices have three shapes. Measured on `main` at `da030fa`:
 The `routing/` row corrects an earlier table, which recorded tasks as having no `routing/`. It has one; all three slices do.
 
 **`auth` is canonical.** It is the only slice that has every axis, it is the
-shape `bricks/feature_clean` generates,
+shape the feature generators produce,
 and it is the slice an adopter reads first because it is the one with a real
 network boundary. Per axis:
 
@@ -168,7 +168,9 @@ one. Feature flags also had a `presentation/examples/` screen that nothing
 constructed; it was removed because it opened the flag-override screen
 directly, around the debug-only route gate.
 
-`bricks/feature_clean` generates `data/{datasources,models,repositories}`,
+The feature generators (`scripts/dev/create_feature.sh` and its PowerShell
+twin, and the `feature_clean` brick while it is kept) produce
+`data/{datasources,models,repositories}`,
 `di/`, `domain/{entities,repositories,usecases}`,
 `presentation/{providers,screens}` and `routing/` - the auth shape. `routing/`
 was missing when this ADR was written and has been added since, to the brick
@@ -225,8 +227,8 @@ import `lib/features/`, and they have real consumers on both sides.
 
 - Every contract has a verdict, so "declared but unconsumed" becomes a
   detectable defect rather than an indefinite state.
-- A reviewer has a baseline for slice shape, and `mason make feature_clean`
-  generates the shape the ADR names.
+- A reviewer has a baseline for slice shape, and the feature generators
+  produce the shape the ADR names.
 - contracts-map.md and this ADR agree, and say different things: one is the
   wiring as it is, the other is the status as it should be.
 

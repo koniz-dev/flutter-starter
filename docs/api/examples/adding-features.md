@@ -10,9 +10,13 @@ name (snake_case) everywhere it appears.
 ./scripts/dev/create_feature.sh notes
 ```
 
+<!-- strip:bricks start -->
 `mason make feature_clean --feature_name notes --class_name Notes` produces the
 same files if you use Mason. `class_name` is not derived from `feature_name`:
-leave it out and the brick prompts for it, defaulting to `Profile`. Either way you get:
+leave it out and the brick prompts for it, defaulting to `Profile`.
+<!-- strip:bricks end -->
+
+You get:
 
 | File | What it is |
 |---|---|

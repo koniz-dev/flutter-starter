@@ -194,13 +194,22 @@ check on each request that the stored identity is the tab's user.
 
 ### Issues & Recommendations
 
-#### CRITICAL: No Code Obfuscation
+#### MEDIUM: Release builds are not obfuscated
 
-**Issue:** No obfuscation configured for release builds. Code is easily reverse-engineered.
+**Status:** Open - an adopter decision. No release path in the template
+(`scripts/ci/build_all.sh`, the fastlane lanes, `build.yml`, the deploy
+workflows) passes `--obfuscate`, so Dart class and function names survive in
+the binary and make it easier to read.
 
-**Risk:** Attackers can extract API endpoints, understand business logic, find security vulnerabilities, and extract hardcoded secrets.
+**Risk:** Obfuscation renames symbols; it does not hide strings. API
+endpoints and anything compiled in with `--dart-define` stay readable either
+way, so it is no substitute for keeping secrets out of the app.
 
-**Recommendation:** Enable code obfuscation. See [Security Implementation Guide](./implementation.md#2-code-obfuscation).
+**Recommendation:** Add `--obfuscate --split-debug-info=<dir>` to your release
+builds (for example `flutter build appbundle --release --obfuscate
+--split-debug-info=build/symbols`) and archive `<dir>` per release: without it
+crash stack traces cannot be symbolicated. See
+[Security Implementation Guide](./implementation.md#2-code-obfuscation).
 
 #### LOW: Release signing is enforced, but the keystore is yours to supply
 
@@ -237,21 +246,30 @@ test - it only means anything on a physical device.
 
 #### Issues & Recommendations
 
-#### CRITICAL: Missing Security Headers in AndroidManifest
+#### LOW: No network security config (defaults already strict)
 
-**Issue:** No security-related manifest configurations.
+**Status:** No gap in the shipped manifest. `AndroidManifest.xml` sets no
+`usesCleartextTraffic`, so cleartext HTTP is refused by default (API 28+), and
+only the launcher activity is exported. Backups are the separate entry above.
 
-**Recommendation:** Add security configurations. See [Security Implementation Guide](./implementation.md#6-network-security-config).
+**Recommendation:** Add a `network_security_config.xml` only when you need
+one - a debug-only trust anchor for a local proxy, or OS-level pins in
+addition to the app's own pinning. See
+[Security Implementation Guide](./implementation.md#6-network-security-config).
 
 ### iOS Security
 
 #### Issues & Recommendations
 
-#### MEDIUM: Missing Security Headers in Info.plist
+#### LOW: No ATS configuration (defaults already strict)
 
-**Issue:** No App Transport Security (ATS) configuration visible.
+**Status:** No gap in the shipped `Info.plist`. It declares no
+`NSAppTransportSecurity` exceptions, so App Transport Security's defaults
+apply: HTTPS with TLS 1.2+ for every connection.
 
-**Recommendation:** Configure ATS explicitly. See implementation guide for details.
+**Recommendation:** Keep it that way. Add an `NSAppTransportSecurity` entry
+only for a specific exception (a local development host, say), scoped to that
+domain rather than `NSAllowsArbitraryLoads`.
 
 ### Web Security
 
@@ -297,8 +315,8 @@ See [Security Checklist](./checklist.md) for a comprehensive checklist of all se
 
 ### Phase 1: Critical Security (Week 1)
 1. SSL pinning fingerprints (the code is shipped; supply `API_SSL_FINGERPRINTS`)
-2. Code Obfuscation
-3. Release signing keystore (the refusal ships; supply your key)
+2. Release signing keystore (the refusal ships; supply your key)
+3. Code obfuscation and archived debug symbols, if you want them
 4. Log sanitization coverage for your own header names and payload keys
 5. Security Headers
 
@@ -359,7 +377,8 @@ Your Flutter app has a **solid security foundation** with secure storage, proper
 1. **SSL pinning configuration** - the pinning code ships and is enabled by
    default outside development, but it is inert until you set
    `API_SSL_FINGERPRINTS`
-2. **Code Obfuscation** - Critical for protecting intellectual property
+2. **Code obfuscation** - an adopter decision; it renames symbols but does
+   not hide strings or secrets
 3. **Release signing keystore** - the build refuses a release until you supply it
 4. **Log sanitization gaps** - the interceptor redacts, but not everywhere
 5. **Security Headers** - Essential for web security

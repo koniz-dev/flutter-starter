@@ -152,8 +152,8 @@ gate always posts a conclusion, so it is safe to list in
 - Riverpod for DI and state; `very_good_analysis` lint rules.
 - Conventional Commits enforced by `.githooks/commit-msg`. Install hooks with
   `./scripts/dev/setup_git_hooks.sh`.
-- Tests mirror `lib/`. New feature slices: `mason make feature_clean` or
-  `./scripts/dev/create_feature.sh`.
+- Tests mirror `lib/`. New feature slices: `./scripts/dev/create_feature.sh`.
+  `mason make feature_clean` generates the same slice. <!-- strip:bricks line -->
 <!-- strip:strip-tool start -->
 - `tool/golden/` mirrors `lib/` for `strip_sample_features.dart`. Changing a
   file that has a `tool/golden/*` counterpart means updating that counterpart too,
