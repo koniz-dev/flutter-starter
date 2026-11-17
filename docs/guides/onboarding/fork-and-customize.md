@@ -6,7 +6,7 @@ Use this after you copy or fork the template into your own app.
 
 1. Skim [Repository layout](repository-layout.md) to see which directories matter for your fork.
 2. Remove optional sample modules if you do not need them:
-   - Prefer Mason toggles when generating a new app.
+   - Prefer Mason toggles when generating a new app. <!-- strip:bricks line -->
    - Or run `dart run tool/strip_sample_features.dart --apply` (see section 3) to remove both **tasks** and **feature_flags** while keeping **auth** and core. <!-- strip:strip-tool line -->
 3. Read [Choose your stack](../../architecture/choose-your-stack.md) to decide what to keep vs swap (network, storage, navigation adapters).
 4. Follow sections 1 and 2 below to rename the package, display name and native ids.
@@ -16,6 +16,7 @@ Use this after you copy or fork the template into your own app.
 
 The published package name is `flutter_starter`. Pick a **snake_case** name (e.g. `my_awesome_app`).
 
+<!-- strip:bricks start -->
 **Option A — Mason (recommended)**
 
 From the repository root (with [Mason CLI](https://pub.dev/packages/mason_cli) installed):
@@ -40,6 +41,7 @@ Run this setup once, before customizing the starter identifiers. It refuses an
 already customized package or platform id before generating or changing files.
 To correct an id afterwards, use Option B below and the application-id commands
 in section 2, substituting your current identifiers for the template defaults.
+<!-- strip:bricks end -->
 
 **Option B — Manual**
 
@@ -80,18 +82,19 @@ in section 2, substituting your current identifiers for the template defaults.
    after which `flutter pub get` fails version solving.
 
    `git grep -n 'package:flutter_starter/' -- '*.dart' '*.sh' '*.ps1'` should
-   then list only `bricks/flutter_starter_setup/` (the setup brick's own rename
-   source).
-4. Search `docs/` for `package:flutter_starter` in fenced code examples and update them if you care about copy-paste accuracy (the Mason brick does not rewrite Markdown).
+   then list nothing outside `bricks/flutter_starter_setup/`, the setup brick's
+   own rename source, if your copy still has it.
+4. Search `docs/` for `package:flutter_starter` in fenced code examples and update them if you care about copy-paste accuracy (no rename step rewrites Markdown).
 
-**If you never use Mason:** after renaming, you can remove **`bricks/`** and **`mason.yaml`**.
+**If you never use Mason:** after renaming, you can remove **`bricks/`** and **`mason.yaml`**. <!-- strip:bricks line -->
 Use `dart run tool/strip_sample_features.dart --apply --keep-samples --remove-bricks`, or add `--remove-bricks` to whichever strip you run: it also drops the passages in the docs that link into them, which deleting the two by hand leaves dangling. <!-- strip:strip-tool line -->
 
 ## 2. Display name and application ids
 
-Option A sets all of these. With Option B, choose the values and run this from
-the repository root once section 1 is done. It rewrites the same files the
-setup brick does: the Dart-side name, every locale's strings, the Android,
+Option A sets all of these; skip this section if you used it. <!-- strip:bricks line -->
+To rename by hand, choose the values and run this from
+the repository root once section 1 is done. It rewrites the Dart-side name,
+every locale's strings, the Android,
 iOS, macOS, Linux, Windows and web runners, the Patrol and fastlane configs,
 and the ids FreeRASP checks the running app against - left at the template
 values, a wired RASP flags your renamed app as repackaged.
@@ -164,7 +167,7 @@ bypasses that check and can discard your work. A Git repository with a committed
 baseline is required unless you use `--force`.
 
 
-- **With Mason:** set `include_tasks_sample` and/or `include_feature_flags_sample` to `false` when running `mason make flutter_starter_setup`.
+- **With Mason:** set `include_tasks_sample` and/or `include_feature_flags_sample` to `false` when running `mason make flutter_starter_setup`. <!-- strip:bricks line -->
 - **Without Mason:** from repo root:
 
 ```bash

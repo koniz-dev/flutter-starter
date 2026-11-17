@@ -210,6 +210,11 @@ particular API. Check two things before the first sign-in:
   which lists the file to change for each difference. A mismatch does not always fail loudly: a camelCase
   `refreshToken` parses as no refresh token, and the session then ends at the
   first access-token expiry.
+- **The forms check passwords before sending them.** Login and register both
+  require at least 8 characters (`Validators.isValidPassword` in
+  `lib/core/utils/validators.dart`). If your backend accepts shorter
+  passwords, existing users with one cannot sign in until you relax the login
+  screen's validator to match your server's rule.
 
 <!-- symbol: lib/core/constants/api_endpoints.dart ApiEndpoints.apiVersion -->
 
@@ -231,6 +236,11 @@ flutter run -d linux
 flutter run -d macos
 flutter run -d windows
 ```
+
+On Linux, `flutter_secure_storage` builds against libsecret: install its
+development package first (`sudo apt-get install libsecret-1-dev` on Debian
+and Ubuntu), or the build fails in CMake. The app also needs a running secret
+service (GNOME Keyring or KWallet) to store tokens.
 
 ### Hot Reload and Hot Restart
 

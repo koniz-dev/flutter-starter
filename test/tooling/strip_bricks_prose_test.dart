@@ -15,7 +15,7 @@ void main() {
       ? null
       : 'the strip tool has run; its markers are gone';
 
-  test('every `mason make feature_clean` outside bricks/ is strip-marked', () {
+  test('every `mason make` / `mason get` outside bricks/ is strip-marked', () {
     final files = Process.runSync('git', ['ls-files', '*.md']).stdout as String;
     final unmarked = <String>[];
     for (final path in files.split('\n')) {
@@ -28,7 +28,7 @@ void main() {
         final line = lines[i];
         if (line.contains('<!-- strip:bricks start -->')) inBlock = true;
         if (line.contains('<!-- strip:bricks end -->')) inBlock = false;
-        if (line.contains('mason make feature_clean') &&
+        if (RegExp(r'mason (make|get)\b').hasMatch(line) &&
             !inBlock &&
             !line.contains('<!-- strip:bricks line -->')) {
           unmarked.add('$path:${i + 1}');

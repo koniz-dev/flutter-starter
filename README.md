@@ -51,8 +51,8 @@ configured. The same code builds for Android, the web and desktop.</sub></p>
   `very_good_analysis`, the full test suite under a 94% line coverage floor,
   and checks that the docs' code, paths and commands still match the code
   ([Quality gates](#quality-gates)).
-- **Yours in a few commands.** A Mason brick renames the package, app name and
-  application ids, and one command removes the sample features
+- **Yours in a few commands.** Rename the package, app name and application
+  ids, and remove the sample features with one command
   ([Using this template](#using-this-template)).
 
 ## Quick start
