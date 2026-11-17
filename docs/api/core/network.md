@@ -417,11 +417,29 @@ Handle stream errors when subscribing, and apply your application's retry policy
 <!-- symbol: lib/core/network/realtime/realtime_providers.dart realtimeClientFactoryProvider -->
 <!-- symbol: lib/core/network/realtime/i_realtime_client.dart RealtimeConnectionClosed -->
 
-The message, reconnect and transport-error callbacks below are supplied by your app.
+The message, reconnect, transport-error and signed-in callbacks below are supplied by your app.
 
 ### Usage Example
+
+The client is per session, so take it from a provider that watches it: when
+the session changes, Riverpod rebuilds this provider with the new client and
+the old one is already disconnected. Connect only while signed in.
+
 ```dart
-final realtimeClient = ref.read(realtimeClientProvider);
+@riverpod
+Stream<dynamic> realtimeMessages(Ref ref) {
+  final realtimeClient = ref.watch(realtimeClientProvider);
+  // Your app's signed-in check; connect as the current user only.
+  if (!isSignedIn(ref)) return const Stream.empty();
+  unawaited(realtimeClient.connect('wss://example.com/socket'));
+  return realtimeClient.stream;
+}
+```
+
+The calls on a client, wherever you hold it:
+
+```dart
+final realtimeClient = ref.watch(realtimeClientProvider);
 
 // Connect
 await realtimeClient.connect('wss://example.com/socket');
