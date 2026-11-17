@@ -11,6 +11,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- [TLS and pinning failures name the certificate](https://github.com/koniz-dev/flutter-starter/issues/1326): a handshake rejected by certificate pinning or an untrusted CA surfaced as a generic connectivity error. `DioExceptionMapper` now maps a `TlsException` to `NetworkException` with code `BAD_CERTIFICATE` (a `SocketException` stays `NETWORK_ERROR`). Code that matched the old connectivity code for these failures should match `BAD_CERTIFICATE` too.
+- [Auth forms work from the keyboard](https://github.com/koniz-dev/flutter-starter/issues/1327): login and register move between fields with Next and submit with Done, offer email, password and name autofill hints inside an `AutofillGroup` (saved only on a successful sign-in), and have a show/hide password button with localized tooltips (new ARB keys `showPassword` and `hidePassword`). A whitespace-only name is rejected.
+- [v4 to v5 upgrade notes](https://github.com/koniz-dev/flutter-starter/issues/1328): the upgrade guide gains a "v4 to v5" section: add `material_ui` and `cupertino_ui` to `pubspec.yaml`, copy `UIApplicationSceneManifest` into `Info.plist`, and pass an API URL to release builds. The v5.0.0 release notes are corrected the same way.
+- [Audit P3 fixes](https://github.com/koniz-dev/flutter-starter/issues/1329):
+  - Network: a query value that cannot be percent-decoded is redacted whole in logs, and a URL carrying a redacted query parameter bypasses the HTTP cache (`sensitiveKeyRuleVersion` is now 4).
+  - Logging: `FileLogOutput` no longer installs a sink opened by an `init` that raced `destroy`, `clearLogs` or a rotation; production web builds log to the console instead of trying a file; `PerformanceScreenMixin` strips only a trailing `State` from the screen name.
+  - Tooling: `build_all.sh` production on macOS tries `flutter build ipa` and falls back to an unsigned `flutter build ios`, and uses a temporary file instead of a fixed `/tmp` path; `setup_branding.sh` restores the Xcode asset-symbol setting `flutter_launcher_icons` resets; the iOS and macOS workspace `Package.resolved` files are committed; the Gradle wrapper pins `distributionSha256Sum` (update it when you bump the wrapper) and `mason_cli` is pinned to 0.1.4 in `scripts-smoke.yml` and in the docs that tell you to install it.
+  - Docs: getting started lists libsecret on Linux and the 8-character password minimum; the realtime example uses `ref.watch`; Mason instructions are stripped with the bricks.
+
 ## [5.0.1] - 2026-11-17
 
 ### Fixed
