@@ -31,6 +31,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- [Let the strip run past pub's own lockfile re-pin](https://github.com/koniz-dev/flutter-starter/issues/1289): on a Flutter other than the one that resolved `pubspec.lock`, `tool/strip_sample_features.dart` (and the setup brick that runs it) no longer refuses the lock `dart run` just re-pinned; it notes the change and still refuses any other edit.
+
 - [Anchor Dart formatting to the project root](https://github.com/koniz-dev/flutter-starter/issues/1288): `scripts/dev/format_dart.sh` changes to the project root first, so `--check` run from a subdirectory checks the project instead of passing having checked nothing.
 
 - [Define phone, URL and integer conversion contracts](https://github.com/koniz-dev/flutter-starter/issues/1284): validate supported network URLs and basic formatted phone numbers, and return only exact target-representable signed 64-bit integers.
