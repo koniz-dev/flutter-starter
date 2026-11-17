@@ -880,8 +880,27 @@ bool _checkWorkingTree(
               '.',
             ]).stdout}'
             .trimRight();
-    final changes = <String>[if (status.isNotEmpty) status];
-    if (status.isEmpty) {
+    // `dart run` resolves dependencies before this tool starts, and on a
+    // Flutter other than the one that resolved the lock it re-pins the
+    // SDK-pinned entries: the run itself modified pubspec.lock. The strip
+    // never writes that file, so a modified lock cannot be lost - say so
+    // and go on, rather than refuse a change the user did not make.
+    final lock = RegExp('^[ M][ M] ${RegExp.escape(prefix)}pubspec\\.lock\$');
+    final statusLines = [
+      for (final line in status.split('\n'))
+        if (line.isNotEmpty) line,
+    ];
+    if (statusLines.any(lock.hasMatch)) {
+      stdout.writeln(
+        'Note: pubspec.lock is modified, usually by the `pub get` that '
+        '`dart run` performs on a Flutter other than the one the lock was '
+        'resolved on. The strip does not touch it; review it with '
+        '`git diff pubspec.lock` and keep or restore it.',
+      );
+    }
+    final remaining = statusLines.where((l) => !lock.hasMatch(l)).join('\n');
+    final changes = <String>[if (remaining.isNotEmpty) remaining];
+    if (remaining.isEmpty) {
       final targets = <String>{...overwritten};
       final entries = '${git(['ls-files', '-v', '-z']).stdout}'.split('\u0000');
       for (final entry in entries) {
