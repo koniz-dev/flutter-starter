@@ -67,6 +67,17 @@ class Validators {
   /// Maximum length of a single DNS label (RFC 1035 section 2.3.4).
   static const int _maxLabelOctets = 63;
 
+  static final _phoneGroups = RegExp(r'^\+?[0-9]+(?:[ -]+[0-9]+)*$');
+  static final _phoneSeparators = RegExp('[ -]');
+  static const _urlSchemes = {'http', 'https', 'ftp', 'ws', 'wss'};
+  static final _urlForbiddenCharacters = RegExp(r'[\s\\\x00-\x1f\x7f-\x9f]');
+  static final _urlHostLabel = RegExp(
+    r'^[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?$',
+  );
+  static final _dottedIpv4 = RegExp(r'^[0-9]+(?:\.[0-9]+){3}$');
+  static final _authorityEnd = RegExp('[/#?]');
+  static final _unsignedPort = RegExp(r'^:[0-9]*$');
+
   /// Validate an email address.
   ///
   /// See the class-level "Email standard" section for exactly what is
@@ -94,10 +105,19 @@ class Validators {
     return true;
   }
 
-  /// Validate phone number (basic validation)
+  /// Basic phone format: 7-15 ASCII digits, optional leading '+'.
+  ///
+  /// Surrounding whitespace is trimmed; spaces and hyphens may separate digit
+  /// groups. A local number may start with zero; an international '+' number
+  /// must start with a nonzero digit. Other punctuation/letters are rejected.
+  /// This checks format rather than a country's numbering/allocation rules.
   static bool isValidPhone(String phone) {
-    final phoneRegex = RegExp(r'^\+?[1-9]\d{1,14}$');
-    return phoneRegex.hasMatch(phone);
+    final text = phone.trim();
+    if (!_phoneGroups.hasMatch(text)) return false;
+    final compact = text.replaceAll(_phoneSeparators, '');
+    if (compact.startsWith('+0')) return false;
+    final count = compact.startsWith('+') ? compact.length - 1 : compact.length;
+    return count >= 7 && count <= 15;
   }
 
   /// Validate password length (at least 8 characters)
@@ -147,15 +167,68 @@ class Validators {
     return RegExp(r'^[a-zA-Z0-9]+$').hasMatch(s);
   }
 
-  /// Validate URL
+  /// Absolute http/https/ftp/ws/wss URL with an ASCII DNS or IP host.
+  ///
+  /// Hostnames allow single labels (e.g. localhost), a trailing root dot and
+  /// ASCII/punycode labels of 1-63 characters, at most 253 without a root dot.
+  /// IPv4 and bracketed IPv6 literals are accepted. Numeric ports use unsigned
+  /// decimal digits in 0-65535; an empty port separator is treated as omitted.
+  /// Raw whitespace, C0/C1 controls and backslashes are rejected; encode spaces.
+  /// Unicode hostnames must use their ASCII IDNA form. This is a syntax check,
+  /// not a reachability, public-address or authorization policy.
   static bool isValidUrl(String url) {
+    if (url.contains(_urlForbiddenCharacters)) return false;
     try {
       final uri = Uri.parse(url);
-      // Check that URL has both scheme and non-empty authority
-      return uri.hasScheme && uri.hasAuthority && uri.host.isNotEmpty;
+      if (!_urlSchemes.contains(uri.scheme) ||
+          !uri.hasAuthority ||
+          url.indexOf('://') != uri.scheme.length ||
+          uri.host.isEmpty) {
+        return false;
+      }
+      if (!_hasValidRawPort(url, uri.scheme.length + 3)) return false;
+      return _isValidUrlHost(uri.host);
     } on FormatException {
       return false;
     }
+  }
+
+  // Uri normalizes signed/default ports. Validate spelling before trusting
+  // its normalized hasPort/port properties, including userinfo/IPv6 shapes.
+  static bool _hasValidRawPort(String url, int authorityStart) {
+    final end = url.indexOf(_authorityEnd, authorityStart);
+    final authority = url.substring(
+      authorityStart,
+      end < 0 ? url.length : end,
+    );
+    final hostPort = authority.substring(authority.lastIndexOf('@') + 1);
+    final String suffix;
+    if (hostPort.startsWith('[')) {
+      final bracket = hostPort.indexOf(']');
+      if (bracket < 0) return false;
+      suffix = hostPort.substring(bracket + 1);
+    } else {
+      final colon = hostPort.lastIndexOf(':');
+      suffix = colon < 0 ? '' : hostPort.substring(colon);
+    }
+    if (suffix.isEmpty || suffix == ':') return true;
+    if (!_unsignedPort.hasMatch(suffix)) return false;
+    final port = int.tryParse(suffix.substring(1));
+    return port != null && port <= 65535;
+  }
+
+  static bool _isValidUrlHost(String host) {
+    if (host.contains(':')) {
+      Uri.parseIPv6Address(host);
+      return true;
+    }
+    final name = host.endsWith('.') ? host.substring(0, host.length - 1) : host;
+    if (name.isEmpty || name.length > 253) return false;
+    if (_dottedIpv4.hasMatch(name)) {
+      Uri.parseIPv4Address(name);
+      return true;
+    }
+    return name.split('.').every(_urlHostLabel.hasMatch);
   }
 
   /// Check if string is empty or null

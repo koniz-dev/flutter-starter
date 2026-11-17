@@ -86,10 +86,12 @@ jobs:
       #     KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
       #   run: |
       #     echo "$KEYSTORE_BASE64" | base64 -d > android/upload-keystore.jks
-      #     echo "storePassword=$KEYSTORE_PASSWORD" > android/key.properties
-      #     echo "keyPassword=$KEY_PASSWORD" >> android/key.properties
-      #     echo "keyAlias=$KEY_ALIAS" >> android/key.properties
-      #     echo "storeFile=upload-keystore.jks" >> android/key.properties
+      #     {
+      #       echo "storePassword=$KEYSTORE_PASSWORD"
+      #       echo "keyPassword=$KEY_PASSWORD"
+      #       echo "keyAlias=$KEY_ALIAS"
+      #       echo "storeFile=upload-keystore.jks"
+      #     } > android/key.properties
 
       - name: Determine environment
         id: env
@@ -116,15 +118,13 @@ jobs:
 
       # - name: Build App Bundle
       #   env:
-      #     BASE_URL: ${{ secrets.BASE_URL_PRODUCTION }}
+      #     BASE_URL_STAGING: ${{ vars.BASE_URL_STAGING || secrets.BASE_URL_STAGING }}
+      #     BASE_URL_PRODUCTION: ${{ vars.BASE_URL_PRODUCTION || secrets.BASE_URL_PRODUCTION }}
       #     API_SSL_FINGERPRINTS: ${{ vars.API_SSL_FINGERPRINTS }}
       #   run: |
       #     ENV="${{ steps.env.outputs.environment }}"
-      #     if [ "$ENV" == "staging" ]; then
-      #       BASE_URL="${{ secrets.BASE_URL_STAGING }}"
-      #     else
-      #       BASE_URL="${{ secrets.BASE_URL_PRODUCTION }}"
-      #     fi
+      #     . scripts/ci/release_base_url.sh
+      #     release_base_url "$ENV" || exit 1
           
       #     # Refuses an empty API_SSL_FINGERPRINTS unless ENABLE_SSL_PINNING
       #     # is false: a release with pinning on and nothing to pin refuses

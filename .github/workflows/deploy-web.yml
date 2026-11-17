@@ -109,14 +109,12 @@ jobs:
 
       # - name: Build Web
       #   env:
-      #     BASE_URL: ${{ secrets.BASE_URL_PRODUCTION }}
+      #     BASE_URL_STAGING: ${{ vars.BASE_URL_STAGING || secrets.BASE_URL_STAGING }}
+      #     BASE_URL_PRODUCTION: ${{ vars.BASE_URL_PRODUCTION || secrets.BASE_URL_PRODUCTION }}
       #   run: |
       #     ENV="${{ steps.env.outputs.environment }}"
-      #     if [ "$ENV" == "staging" ]; then
-      #       BASE_URL="${{ secrets.BASE_URL_STAGING }}"
-      #     else
-      #       BASE_URL="${{ secrets.BASE_URL_PRODUCTION }}"
-      #     fi
+      #     . scripts/ci/release_base_url.sh
+      #     release_base_url "$ENV" || exit 1
           
       #     flutter build web \
       #       --release \
@@ -188,14 +186,12 @@ jobs:
 
       # - name: Build Web
       #   env:
-      #     BASE_URL: ${{ secrets.BASE_URL_PRODUCTION }}
+      #     BASE_URL_STAGING: ${{ vars.BASE_URL_STAGING || secrets.BASE_URL_STAGING }}
+      #     BASE_URL_PRODUCTION: ${{ vars.BASE_URL_PRODUCTION || secrets.BASE_URL_PRODUCTION }}
       #   run: |
       #     ENV="${{ steps.env.outputs.environment }}"
-      #     if [ "$ENV" == "staging" ]; then
-      #       BASE_URL="${{ secrets.BASE_URL_STAGING }}"
-      #     else
-      #       BASE_URL="${{ secrets.BASE_URL_PRODUCTION }}"
-      #     fi
+      #     . scripts/ci/release_base_url.sh
+      #     release_base_url "$ENV" || exit 1
           
       #     flutter build web \
       #       --release \
@@ -269,14 +265,12 @@ jobs:
 
       # - name: Build Web
       #   env:
-      #     BASE_URL: ${{ secrets.BASE_URL_PRODUCTION }}
+      #     BASE_URL_STAGING: ${{ vars.BASE_URL_STAGING || secrets.BASE_URL_STAGING }}
+      #     BASE_URL_PRODUCTION: ${{ vars.BASE_URL_PRODUCTION || secrets.BASE_URL_PRODUCTION }}
       #   run: |
       #     ENV="${{ steps.env.outputs.environment }}"
-      #     if [ "$ENV" == "staging" ]; then
-      #       BASE_URL="${{ secrets.BASE_URL_STAGING }}"
-      #     else
-      #       BASE_URL="${{ secrets.BASE_URL_PRODUCTION }}"
-      #     fi
+      #     . scripts/ci/release_base_url.sh
+      #     release_base_url "$ENV" || exit 1
           
       #     flutter build web \
       #       --release \
@@ -299,7 +293,7 @@ jobs:
       #     vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
       #     vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
       #     vercel-args: '--prod'
-      #     working-directory: ./
+      #     working-directory: build/web
 
       # Delete this step once the build and deploy steps above are uncommented
       # and their secrets are set. Until then this job deploys nothing, and a

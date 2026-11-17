@@ -578,8 +578,8 @@ void main() {
         );
       });
 
-      test('getInt still converts finite numbers', () {
-        expect(JsonHelper.getInt({'a': 3.7}, 'a'), 3);
+      test('getInt only converts integral finite numbers', () {
+        expect(JsonHelper.getInt({'a': 3.7}, 'a'), isNull);
         expect(JsonHelper.getInt({'a': 42}, 'a'), 42);
         expect(JsonHelper.getInt({'a': '42'}, 'a'), 42);
       });

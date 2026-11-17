@@ -38,6 +38,9 @@ import 'dart:async';
 /// it invalidates, and a sign-in waits on [teardownsSettled] before it calls
 /// the server, so a teardown still running cannot delete the credentials of
 /// the sign-in that followed it.
+/// Sign-in persistence registers its entire local mutation too: an earlier
+/// user-blob write or failed-write cleanup must settle before the next sign-in
+/// can replace that session. The same bounded wait covers both operations.
 ///
 /// ## Observing a session change
 ///
@@ -94,9 +97,31 @@ class SessionGeneration {
   bool isCurrent(int generation) => generation == _current;
 
   final Set<Future<void>> _teardowns = {};
+  final Set<Future<void>> _persistence = {};
 
-  /// Records [teardown] - the clearing that follows an [invalidate] - until
-  /// it settles, so a sign-in can wait for it with [teardownsSettled].
+  /// Whether credentials/user data are currently being replaced or rolled back.
+  bool get hasPendingPersistence => _persistence.isNotEmpty;
+
+  /// Tracks a sign-in's complete local write/rollback operation.
+  ///
+  /// New sign-ins wait for it through [teardownsSettled]. Restore reads wait
+  /// through [persistenceSettled] so they cannot mistake the interval between
+  /// credential and user writes for an orphaned session and evict it. Those
+  /// reads do not wait for a logout's remote revocation acknowledgement.
+  /// The returned future completes after the restore/refresh guard is removed.
+  Future<void> trackPersistence(Future<void> operation) {
+    final settled = operation.then<void>((_) {}, onError: (Object _) {});
+    _persistence.add(settled);
+    trackTeardown(settled);
+    return settled.whenComplete(() => _persistence.remove(settled));
+  }
+
+  /// Waits for local sign-in persistence to settle, including rollback.
+  Future<bool> persistenceSettled(Duration limit) =>
+      _waitFor(_persistence, limit);
+
+  /// Records [teardown] - local session writes or clearing - until it settles,
+  /// so a sign-in can wait for it with [teardownsSettled].
   ///
   /// A teardown deletes whatever credentials are stored when its steps run,
   /// so a sign-in must not store its own while one is still running.
@@ -108,13 +133,15 @@ class SessionGeneration {
 
   /// Waits until no tracked teardown is running, including one tracked while
   /// waiting. False when that takes longer than [limit].
-  Future<bool> teardownsSettled(Duration limit) async {
+  Future<bool> teardownsSettled(Duration limit) => _waitFor(_teardowns, limit);
+
+  Future<bool> _waitFor(Set<Future<void>> pending, Duration limit) async {
     final waited = Stopwatch()..start();
-    while (_teardowns.isNotEmpty) {
+    while (pending.isNotEmpty) {
       final left = limit - waited.elapsed;
       if (left <= Duration.zero) return false;
       try {
-        await Future.wait(_teardowns.toList()).timeout(left);
+        await Future.wait(pending.toList()).timeout(left);
       } on TimeoutException {
         return false;
       }

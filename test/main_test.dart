@@ -50,11 +50,6 @@ void main() {
   });
 
   group('MyApp', () {
-    testWidgets('should create MyApp widget', (tester) async {
-      const myApp = MyApp();
-      expect(myApp, isA<ConsumerWidget>());
-    });
-
     testWidgets('should build MaterialApp with correct title', (tester) async {
       final container = ProviderContainer();
       addTearDown(container.dispose);

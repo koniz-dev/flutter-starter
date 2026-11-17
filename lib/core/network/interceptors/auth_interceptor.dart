@@ -377,6 +377,14 @@ class AuthInterceptor extends Interceptor {
         return super.onError(err, handler);
       }
 
+      // The credential pair is not committed yet. Its refresh callback refuses
+      // that partial state; treating the refusal as expired would force logout
+      // and destroy the sign-in still writing it. Fail only this request.
+      if (_sessionGeneration.hasPendingPersistence) {
+        _reject(handler, _selectionChanged(err));
+        return;
+      }
+
       // A 401 for a request sent under a session that has since ended - its
       // user signed out, and maybe someone else signed in - says nothing about
       // the session that is current now. Refreshing would rotate the *current*

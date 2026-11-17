@@ -36,6 +36,11 @@ keep it, or run the commands as `dart pub global run mason_cli:mason get` and
 
 Answer the prompts for `package_name`, Android `application_id`, iOS `ios_bundle_id`, `app_display_name`, and whether to include optional samples (`tasks`, `feature_flags`).
 
+Run this setup once, before customizing the starter identifiers. It refuses an
+already customized package or platform id before generating or changing files.
+To correct an id afterwards, use Option B below and the application-id commands
+in section 2, substituting your current identifiers for the template defaults.
+
 **Option B — Manual**
 
 1. Change `name:` in `pubspec.yaml`.

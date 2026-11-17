@@ -14,8 +14,8 @@ final localizationServiceProvider = Provider<LocalizationService>((ref) {
 
 /// Provider for current locale
 ///
-/// This provider watches the current locale from storage and updates
-/// when the locale changes.
+/// Reads the stored choice or current device fallback. MyApp invalidates this
+/// provider on platform locale changes while its widget is mounted.
 final currentLocaleProvider = FutureProvider<Locale>((ref) async {
   final localizationService = ref.watch(localizationServiceProvider);
   return await localizationService.getCurrentLocale();
@@ -23,17 +23,19 @@ final currentLocaleProvider = FutureProvider<Locale>((ref) async {
 
 /// Notifier for managing locale state
 class LocaleNotifier extends Notifier<Locale> {
+  Locale? _explicitLocale;
+
   @override
   Locale build() {
     // Initialize from storage when provider is first created
     ref.listen<AsyncValue<Locale>>(currentLocaleProvider, (previous, next) {
       next.whenData((locale) {
-        state = locale;
+        if (_explicitLocale == null) state = locale;
       });
     });
     // Until storage answers, follow the device rather than assuming
     // English.
-    return LocalizationService.deviceLocale();
+    return _explicitLocale ?? LocalizationService.deviceLocale();
   }
 
   /// Gets the current locale
@@ -46,7 +48,15 @@ class LocaleNotifier extends Notifier<Locale> {
   /// [LocalizationService.setCurrentLocale] - which writes the preference this
   /// notifier reads back at startup through [currentLocaleProvider].
   set locale(Locale locale) {
+    _explicitLocale = locale;
     state = locale;
+  }
+
+  /// Restores startup state without treating the device fallback as a choice.
+  ///
+  /// A user selection made while restoration was pending still wins.
+  void restoreLocale(Locale locale) {
+    if (_explicitLocale == null) state = locale;
   }
 }
 

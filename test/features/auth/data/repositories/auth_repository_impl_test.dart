@@ -692,7 +692,7 @@ void main() {
           when(() => mockLocalDataSource.getCachedUser())
               .thenAnswer((_) async => null);
           when(() => mockLocalDataSource.clearCache()).thenAnswer((_) {
-            entered.complete();
+            if (!entered.isCompleted) entered.complete();
             return release.future;
           });
           const user = UserModel(id: 'new', email: 'new@example.com');

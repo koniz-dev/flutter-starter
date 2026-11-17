@@ -180,16 +180,19 @@ void main() {
 
     test('login', () async {
       await container.read(authRepositoryProvider).login('a@b.c', 'pw123456');
-      expect(epochs, hasLength(2), reason: '$epochs');
-      expect(epochs.last, greaterThan(epochs.first));
+      // Request start and credential replacement each invalidate old work.
+      expect(epochs, hasLength(3), reason: '$epochs');
+      expect(epochs[1], greaterThan(epochs.first));
+      expect(epochs.last, greaterThan(epochs[1]));
     });
 
     test('register', () async {
       await container
           .read(authRepositoryProvider)
           .register('a@b.c', 'pw123456', 'A');
-      expect(epochs, hasLength(2), reason: '$epochs');
-      expect(epochs.last, greaterThan(epochs.first));
+      expect(epochs, hasLength(3), reason: '$epochs');
+      expect(epochs[1], greaterThan(epochs.first));
+      expect(epochs.last, greaterThan(epochs[1]));
     });
 
     test('forced logout raised inside AuthInterceptor', () async {
