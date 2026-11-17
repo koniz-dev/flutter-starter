@@ -9,6 +9,12 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  // A strip run keeps a kept tag's content but drops its markers, and then
+  // deletes itself: the markers mean something only in the template tree.
+  final skip = File('tool/strip_sample_features.dart').existsSync()
+      ? null
+      : 'the strip tool has run; its markers are gone';
+
   test('every `mason make feature_clean` outside bricks/ is strip-marked', () {
     final files = Process.runSync('git', ['ls-files', '*.md']).stdout as String;
     final unmarked = <String>[];
@@ -31,5 +37,5 @@ void main() {
     }
 
     expect(unmarked, isEmpty);
-  });
+  }, skip: skip);
 }
