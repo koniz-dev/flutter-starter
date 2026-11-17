@@ -31,6 +31,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- [Cache responses that vary only on Accept-Encoding or Origin](https://github.com/koniz-dev/flutter-starter/issues/1308): the URL cache refused every response with a `Vary` header, so against a real API (gzip, CDN, CORS) it stored nothing. Those two fields are now allowed; any other `Vary` still prevents storage.
+
+- [End the realtime client with the session](https://github.com/koniz-dev/flutter-starter/issues/1309): the client created through `realtimeClientFactoryProvider` is disconnected on logout, forced logout and every sign-in, and the next read gets a fresh one. If you enabled realtime, watch the client and reconnect when signed in (see the network API doc).
+
 - [Offer Home from a root tasks list](https://github.com/koniz-dev/flutter-starter/issues/1285): reached by a deep link or a sign-in redirect, the tasks list shows a Home button instead of leaving the user with no way out.
 
 - [Close the 2026-11-14 audit's documentation findings](https://github.com/koniz-dev/flutter-starter/issues/1268): configuration (unknown `ENVIRONMENT` refuses to start, empty `ENABLE_SSL_PINNING` is unset, configuration needs a fresh `flutter run`), localized image directories, device ids, the refresh selection step, and a new security-audit note that on web the session is per tab while the tokens are shared.
