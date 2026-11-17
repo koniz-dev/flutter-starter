@@ -12,10 +12,6 @@
   "@featureFlagsReady": {
     "description": "Message indicating feature flags are ready"
   },
-  "checkExamples": "Check the examples in feature_flags_example_screen.dart",
-  "@checkExamples": {
-    "description": "Hint to check examples"
-  },
   "login": "Login",
   "@login": {
     "description": "Login button and screen title"
