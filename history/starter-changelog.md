@@ -31,6 +31,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- [Ignore golden failure images](https://github.com/koniz-dev/flutter-starter/issues/1290): `.gitignore` ignores `/test/**/failures/`, where a failed golden comparison writes its diff images; a `failures/` directory under `lib/` stays tracked.
+
+- [Describe workflow triggers accurately](https://github.com/koniz-dev/flutter-starter/issues/1291): the `coverage.yml` header, `test-coverage.md` and `scripts/dev/setup_ci.dart`'s prompt and reports now say that only the `deploy-*` workflows ship a commented trigger, enabled with `--deploy-trigger`.
+
 - [Let the strip run past pub's own lockfile re-pin](https://github.com/koniz-dev/flutter-starter/issues/1289): on a Flutter other than the one that resolved `pubspec.lock`, `tool/strip_sample_features.dart` (and the setup brick that runs it) no longer refuses the lock `dart run` just re-pinned; it notes the change and still refuses any other edit.
 
 - [Anchor Dart formatting to the project root](https://github.com/koniz-dev/flutter-starter/issues/1288): `scripts/dev/format_dart.sh` changes to the project root first, so `--check` run from a subdirectory checks the project instead of passing having checked nothing.
