@@ -10,7 +10,7 @@ This directory holds **[Mason](https://pub.dev/packages/mason_cli) bricks** used
 
 ## Quick use
 
-From the repository root (after `dart pub global activate mason_cli`).
+From the repository root (after `dart pub global activate mason_cli 0.1.4`).
 `mason` must be on `PATH`: `dart pub global activate` puts it in
 `~/.pub-cache/bin`, so run `export PATH="$PATH":"$HOME/.pub-cache/bin"` first
 (or prefix each command with `dart pub global run mason_cli:`); otherwise

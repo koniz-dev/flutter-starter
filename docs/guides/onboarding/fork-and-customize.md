@@ -22,7 +22,7 @@ The published package name is `flutter_starter`. Pick a **snake_case** name (e.g
 From the repository root (with [Mason CLI](https://pub.dev/packages/mason_cli) installed):
 
 ```bash
-dart pub global activate mason_cli
+dart pub global activate mason_cli 0.1.4
 export PATH="$PATH":"$HOME/.pub-cache/bin"   # where pub puts global executables
 mason get
 mason make flutter_starter_setup
