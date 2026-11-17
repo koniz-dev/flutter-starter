@@ -125,9 +125,26 @@ class FileLogOutput extends LogOutput {
   @visibleForTesting
   Future<void> debugRotate() => _rotateLogs();
 
+  /// The [init] in progress, if any.
+  Future<void>? _initInFlight;
+
+  /// Opens the log file, once.
+  ///
+  /// `package:logger` calls `init()` from the `Logger` constructor (and
+  /// `MultiOutput.init()` calls each child's), so it runs after
+  /// `LoggingService` has already started one. A second open replaced the
+  /// sink without closing the first: lines still buffered in it were lost
+  /// and its file descriptor leaked. A concurrent call now shares the init
+  /// in progress, and a call with a sink open does nothing; after a failed
+  /// open, or after [destroy], it opens again.
   @override
-  Future<void> init() async {
-    await _initializeLogFile();
+  Future<void> init() {
+    final inFlight = _initInFlight;
+    if (inFlight != null) return inFlight;
+    if (_sink != null) return Future<void>.value();
+    return _initInFlight = _initializeLogFile().whenComplete(
+      () => _initInFlight = null,
+    );
   }
 
   /// Initialize the log file
