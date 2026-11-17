@@ -1,0 +1,14 @@
+golden cold_start_no_session.png replaced with cold_start_restored_session.png to force a comparison failure
+--- failures dirs:
+test/acceptance/failures
+--- files:
+test/acceptance/failures/cold_start_no_session_testImage.png
+test/acceptance/failures/cold_start_no_session_maskedDiff.png
+test/acceptance/failures/cold_start_no_session_isolatedDiff.png
+test/acceptance/failures/cold_start_no_session_masterImage.png
+--- git status --porcelain --untracked-files=all (failures/ must not appear):
+ M test/acceptance/goldens/cold_start_no_session.png
+--- git check-ignore -v:
+.gitignore:44:/test/**/failures/	test/acceptance/failures/cold_start_no_session_testImage.png
+.gitignore:44:/test/**/failures/	test/acceptance/failures/cold_start_no_session_maskedDiff.png
+.gitignore:44:/test/**/failures/	test/acceptance/failures/cold_start_no_session_isolatedDiff.png

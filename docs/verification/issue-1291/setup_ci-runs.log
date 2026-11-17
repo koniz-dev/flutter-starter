@@ -1,0 +1,23 @@
+$ dart scripts/dev/setup_ci.dart --yes
+  no commented triggers in `on:`, unchanged: action-pins.yml
+  no commented triggers in `on:`, unchanged: build.yml
+  no commented triggers in `on:`, unchanged: ci.yml
+  no commented triggers in `on:`, unchanged: coverage.yml
+  deploy workflow left manual-only: deploy-android.yml (pass --deploy-trigger=tags or --deploy-trigger=branch)
+  deploy workflow left manual-only: deploy-ios.yml (pass --deploy-trigger=tags or --deploy-trigger=branch)
+  deploy workflow left manual-only: deploy-web.yml (pass --deploy-trigger=tags or --deploy-trigger=branch)
+  no commented triggers in `on:`, unchanged: docs-check.yml
+  no commented triggers in `on:`, unchanged: e2e-android.yml
+  no commented triggers in `on:`, unchanged: git-hooks.yml
+  no commented triggers in `on:`, unchanged: release-scripts.yml
+  no commented triggers in `on:`, unchanged: scripts-smoke.yml
+  no commented triggers in `on:`, unchanged: strip-smoke.yml
+
+Nothing to do: no workflow other than deploy-* had a commented trigger in its `on:`. As shipped, only the deploy-* workflows have one: pass --deploy-trigger=tags or --deploy-trigger=branch to enable it.
+exit=0
+
+$ echo n | dart scripts/dev/setup_ci.dart
+--- GitHub Actions Configuration ---
+Enable the commented-out push/pull_request triggers in .github/workflows? The deploy-* workflows stay manual-only without --deploy-trigger. (y/N)
+Setup cancelled. No workflow was changed.
+exit=0

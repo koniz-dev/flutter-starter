@@ -1,0 +1,5 @@
+Commits in 711e1e6cc3b..HEAD
+  ok    651d42c0 docs(ci): describe active and optional workflow triggers accurately (#1302)
+  ok    9b96ff1a chore(tooling): ignore generated golden failure images (#1301)
+
+OK: every message links with 'Refs koniz-dev/flutter-starter#N' and closes nothing.
