@@ -1,0 +1,1 @@
+8b9b4a2c test(auth): the demo card fits 360dp at 2x text in every locale (#1339)

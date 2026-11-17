@@ -1,0 +1,39 @@
+18:## Overview
+25:## Version Upgrade Process
+27:### Step 1: Check Current Version
+49:### Step 2: Review Breaking Changes
+56:### Step 3: Backup Your Project
+71:### Step 4: Update Dependencies
+84:### Step 5: Run Migration Scripts (if any)
+95:### Step 6: Fix Breaking Changes
+99:### Step 7: Test Your Application
+112:## Breaking Changes by Version
+114:### v4 to v5 (starter v5.0.0)
+145:#### Standalone UI libraries on Flutter 3.50
+183:### Already current: riverpod_generator 4 and Freezed 4
+200:### Already current: Riverpod 3 and `failureCallback:`
+207:#### Riverpod 3.0 Migration
+233:#### Result Pattern Update
+259:## Migration Scripts
+261:### Creating Migration Scripts
+299:### Running Migration Scripts
+312:## Common Upgrade Scenarios
+314:### Scenario 1: Minor Version Update (e.g., 1.0.0 → 1.1.0)
+322:### Scenario 2: Major Version Update (e.g., 1.0.0 → 2.0.0)
+335:### Scenario 3: Flutter SDK Update
+344:### Scenario 4: Dependency Update
+354:## Automated Upgrade Checklist
+393:## Version-Specific Guides
+402:## Troubleshooting Upgrades
+404:### Issue: Dependency Conflicts
+415:### Issue: Compilation Errors
+423:### Issue: Tests Failing
+431:### Issue: Runtime Errors
+439:## Best Practices
+441:### 1. Stay Up-to-Date
+447:### 2. Incremental Upgrades
+453:### 3. Use Version Control
+459:### 4. Document Custom Changes
+465:### 5. Test Thoroughly
+471:## Getting Help
+489:## Related Documentation

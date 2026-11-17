@@ -1,0 +1,12 @@
+Commits in c91c9a87efd..HEAD
+  ok    8b9b4a2c test(auth): the demo card fits 360dp at 2x text in every locale (#1339)
+  ok    838405c6 fix(docs): pin mason_cli where the docs install it (#1337)
+  ok    26d05980 test(auth): Next moves focus and Done in flight sends once (#1338)
+  ok    524ddea4 fix(logging): close an init's sink after destroy, and log to console on web (#1335)
+  ok    09e4f30c fix(tooling): close the tooling findings of the second 2026-11-17 audit (#1334)
+  ok    c71ff8a8 fix(auth): keyboard submit, autofill and password visibility on the auth forms (#1331)
+  ok    5e4bdec8 docs: complete the v4 to v5 upgrade steps and the audit's doc findings (#1333)
+  ok    17c4443f fix(network): redact undecodable nested URLs and cache by the same rule (#1332)
+  ok    18aca504 fix(errors): show the insecure-connection message for TLS failures (#1330)
+
+OK: every message links with 'Refs koniz-dev/flutter-starter#N' and closes nothing.

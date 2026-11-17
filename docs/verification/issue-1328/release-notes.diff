@@ -1,0 +1,10 @@
+6c6
+< - Forks with custom iOS AppDelegate code must follow the UIScene lifecycle migration: conform to FlutterImplicitEngineDelegate and register plugins through the engine bridge in didInitializeImplicitFlutterEngine. Preserve custom native lifecycle behavior when merging; see docs/deployment/ios-deployment.md. Existing deployment targets and signing settings are unchanged.
+---
+> - Forks with custom iOS AppDelegate code must follow the UIScene lifecycle migration: conform to FlutterImplicitEngineDelegate and register plugins through the engine bridge in didInitializeImplicitFlutterEngine. Also copy the `UIApplicationSceneManifest` dictionary from the starter's `ios/Runner/Info.plist` into yours: without it the app does not adopt scenes. Preserve custom native lifecycle behavior when merging; see docs/deployment/ios-deployment.md and the "v4 to v5" section of docs/guides/migration/upgrading-this-starter.md. Existing deployment targets and signing settings are unchanged.
+22c22
+< - **Dependency floors moved after v4.0.0.** `patrol` ^4.11.0 needs `patrol_cli` 4.9.0 (reinstall the CLI); `equatable` ^3.0.0 removes `EquatableMixin`, so write `with Equatable` where your code said `with EquatableMixin`; `go_router` ^18.1.4, `material_ui` ^1.11.0 and the code generators (`build_runner` 2.17.1, `build` 5.0.0) are routine: run `flutter pub get` and regenerate.
+---
+> - **Dependency floors moved after v4.0.0.** `patrol` ^4.11.0 needs `patrol_cli` 4.9.0 (reinstall the CLI); `equatable` ^3.0.0 removes `EquatableMixin`, so write `with Equatable` where your code said `with EquatableMixin`; `material_ui` ^1.11.0 and `cupertino_ui` ^1.1.6 are new direct dependencies: add both to your `pubspec.yaml` (see the "v4 to v5" section of docs/guides/migration/upgrading-this-starter.md); `go_router` ^18.1.4 and the code generators (`build_runner` 2.17.1, `build` 5.0.0) are routine: run `flutter pub get` and regenerate.
+137a138
+> 

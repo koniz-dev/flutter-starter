@@ -1,0 +1,54 @@
+00:00 +0: loading /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/c9040f3a-094e-4757-b5d0-3dd1371d6d3a/scratchpad/g2/test/core/errors/tls_failure_mapping_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: a pinning mismatch is an insecure connection, not a connectivity problem
+SSL Pinning failure for 127.0.0.1: 
+Expected one of: [AA:BB]
+Got: 7e5280038f79f91f435914d16d3ea383b361fa4cdec75cd77af1898a7bd85d82
+00:00 +0 -1: a pinning mismatch is an insecure connection, not a connectivity problem [E]
+  Expected: 'BAD_CERTIFICATE'
+    Actual: 'UNKNOWN_NETWORK_ERROR'
+     Which: is different.
+            Expected: BAD_CERTIF ...
+              Actual: UNKNOWN_NE ...
+                      ^
+             Differ at offset 0
+  
+  package:matcher                                      expect
+  package:flutter_test/src/widget_tester.dart 473:18   expect
+  test/core/errors/tls_failure_mapping_test.dart 98:9  main.<fn>
+  
+00:00 +0 -1: an untrusted certificate is an insecure connection, not a connectivity problem
+00:00 +0 -2: an untrusted certificate is an insecure connection, not a connectivity problem [E]
+  Expected: 'BAD_CERTIFICATE'
+    Actual: 'UNKNOWN_NETWORK_ERROR'
+     Which: is different.
+            Expected: BAD_CERTIF ...
+              Actual: UNKNOWN_NE ...
+                      ^
+             Differ at offset 0
+  
+  package:matcher                                      expect
+  package:flutter_test/src/widget_tester.dart 473:18   expect
+  test/core/errors/tls_failure_mapping_test.dart 98:9  main.<fn>
+  
+00:00 +0 -2: a socket error with a null message is a connection error
+00:00 +0 -3: a socket error with a null message is a connection error [E]
+  Expected: 'NETWORK_ERROR'
+    Actual: 'UNKNOWN_NETWORK_ERROR'
+     Which: is different.
+            Expected: NETWORK_ER ...
+              Actual: UNKNOWN_NE ...
+                      ^
+             Differ at offset 0
+  
+  package:matcher                                       expect
+  package:flutter_test/src/widget_tester.dart 473:18    expect
+  test/core/errors/tls_failure_mapping_test.dart 116:5  main.<fn>
+  
+00:00 +0 -3: (tearDownAll)
+00:00 +0 -3: Some tests failed.
+
+Failing tests:
+  /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/c9040f3a-094e-4757-b5d0-3dd1371d6d3a/scratchpad/g2/test/core/errors/tls_failure_mapping_test.dart: a pinning mismatch is an insecure connection, not a connectivity problem
+  /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/c9040f3a-094e-4757-b5d0-3dd1371d6d3a/scratchpad/g2/test/core/errors/tls_failure_mapping_test.dart: a socket error with a null message is a connection error
+  /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/c9040f3a-094e-4757-b5d0-3dd1371d6d3a/scratchpad/g2/test/core/errors/tls_failure_mapping_test.dart: an untrusted certificate is an insecure connection, not a connectivity problem

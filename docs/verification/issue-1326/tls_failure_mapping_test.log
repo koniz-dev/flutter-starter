@@ -1,0 +1,10 @@
+00:00 +0: loading /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/c9040f3a-094e-4757-b5d0-3dd1371d6d3a/scratchpad/g2/test/core/errors/tls_failure_mapping_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: a pinning mismatch is an insecure connection, not a connectivity problem
+SSL Pinning failure for 127.0.0.1: 
+Expected one of: [AA:BB]
+Got: 8faca741129982e44df5761636bf6b34c5f8967b625db6e7ba107728eddbc17a
+00:00 +1: an untrusted certificate is an insecure connection, not a connectivity problem
+00:00 +2: a socket error with a null message is a connection error
+00:00 +3: (tearDownAll)
+00:00 +3: All tests passed!

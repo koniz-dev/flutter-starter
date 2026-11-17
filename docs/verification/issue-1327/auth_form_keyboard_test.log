@@ -1,0 +1,15 @@
+00:00 +0: loading /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/c9040f3a-094e-4757-b5d0-3dd1371d6d3a/scratchpad/g2/test/features/auth/presentation/screens/auth_form_keyboard_test.dart
+00:00 +0: login Done on the password field signs in
+00:02 +1: login fields carry keyboard actions and autofill hints
+00:02 +2: login the password can be shown and hidden again
+00:02 +3: register Done on the password field registers
+00:02 +4: register fields carry keyboard actions and autofill hints
+00:02 +5: register a whitespace-only name is required, not too short
+00:03 +6: autofill context and unmounting leaving while the sign-in runs does not throw
+00:03 +7: autofill context and unmounting a rejected sign-in, then leaving, saves nothing
+00:03 +8: autofill context and unmounting a successful sign-in commits the credentials
+00:03 +9: keyboard flow login: Next on the email moves to the password
+00:03 +10: keyboard flow register: Next goes name, email, password
+00:04 +11: keyboard flow login: Done while signing in does not send again
+00:04 +12: keyboard flow register: Done while registering does not send again
+00:04 +13: All tests passed!
