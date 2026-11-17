@@ -82,8 +82,18 @@ class CacheConfig {
 /// `no-cache` allows storing only if every reuse is revalidated, and this
 /// cache serves a fresh entry without asking the network, so it does not
 /// store one at all.
-/// Any nonempty `Vary` field also prevents storage: the URL-only key covers
-/// no request headers, so it cannot distinguish the requested variants.
+/// A `Vary` field naming any other request header also prevents storage: the
+/// URL-only key covers no request headers, so it cannot distinguish the
+/// requested variants. `Accept-Encoding` and `Origin` are the exceptions:
+/// the HTTP stack negotiates the encoding and hands over the decoded body,
+/// and an app's origin never changes, so neither selects a different body
+/// here. Servers behind gzip or a CDN send `Vary: Accept-Encoding` on every
+/// response, and refusing it disabled the cache against real APIs.
+///
+/// On web, a cross-origin response exposes `Vary` to script only when the
+/// server lists it in `Access-Control-Expose-Headers`; otherwise the rule
+/// above sees no `Vary` and stores the response. Mark responses that differ
+/// per request header `Cache-Control: private` on the server instead.
 ///
 /// The `Set-Cookie` rule has **no effect on Flutter web**. Browsers never
 /// expose `Set-Cookie` to script (the Fetch spec lists it as a forbidden
@@ -376,9 +386,18 @@ class CacheInterceptor extends Interceptor implements IHttpResponseCache {
     }
   }
 
+  /// `Vary` fields that cannot select a different body for this client:
+  /// the HTTP stack decodes the content encoding before the body arrives, and
+  /// the app's origin is fixed.
+  static const Set<String> _varyFieldsTheKeyCovers = {
+    'accept-encoding',
+    'origin',
+  };
+
   /// Whether the server marked [response] as not for this cache: a
   /// `Cache-Control` of `no-store`, `private` or `no-cache`, a
-  /// `Pragma: no-cache`, a `Set-Cookie`, or any nonempty `Vary` field.
+  /// `Pragma: no-cache`, a `Set-Cookie`, or a `Vary` field naming a request
+  /// header other than [_varyFieldsTheKeyCovers].
   static bool _responseForbidsStorage(Response<dynamic> response) {
     List<String> directives(String header) =>
         (response.headers[header] ?? const <String>[])
@@ -388,11 +407,15 @@ class CacheInterceptor extends Interceptor implements IHttpResponseCache {
     const refusing = {'no-store', 'private', 'no-cache'};
     if (directives('cache-control').any(refusing.contains)) return true;
     if (directives('pragma').contains('no-cache')) return true;
-    // Every request-header field is outside this cache's URL-only key.
-    // This includes Vary: *, multiple lines and mixed-case field names.
+    // Every other request-header field is outside this cache's URL-only
+    // key. This includes Vary: *, multiple lines and mixed-case field names.
     if ((response.headers['vary'] ?? const <String>[])
         .expand((value) => value.split(','))
-        .any((field) => field.trim().isNotEmpty)) {
+        .map((field) => field.trim().toLowerCase())
+        .any(
+          (field) =>
+              field.isNotEmpty && !_varyFieldsTheKeyCovers.contains(field),
+        )) {
       return true;
     }
     return response.headers['set-cookie']?.isNotEmpty ?? false;
