@@ -1,0 +1,4 @@
+format_dart.sh --check: exit 1, working tree unchanged: yes
+format_dart.sh --check from lib/: exit 1
+format_dart.sh (no --check): formatted the file
+OK
