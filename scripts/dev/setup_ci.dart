@@ -1,7 +1,9 @@
 #!/usr/bin/env dart
 
 // Enables the commented-out `push:` / `pull_request:` triggers in
-// `.github/workflows/*.yml`.
+// `.github/workflows/*.yml`. As shipped, only the deploy-* workflows carry
+// one - every other workflow's triggers are already live - so a run without
+// --deploy-trigger has nothing to enable until you comment a trigger out.
 //
 // Usage:
 //   dart scripts/dev/setup_ci.dart              # asks first
@@ -126,13 +128,16 @@ void main(List<String> args) {
 
   if (!assumeYes) {
     print('--- GitHub Actions Configuration ---');
+    final deployNote = deployTrigger == null
+        ? 'The deploy-* workflows stay manual-only without --deploy-trigger. '
+        : '';
     print(
-      'Do you want to enable automatic CI/CD triggers on push/pull_request? '
-      '(y/N)',
+      'Enable the commented-out push/pull_request triggers in $dirPath? '
+      '$deployNote(y/N)',
     );
     final input = stdin.readLineSync()?.trim().toLowerCase();
     if (input != 'y' && input != 'yes') {
-      print('Setup cancelled. CI defaults to manual dispatch.');
+      print('Setup cancelled. No workflow was changed.');
       return;
     }
   }
@@ -198,6 +203,12 @@ int enableCi(
   print('');
   if (changed.isEmpty) {
     print('Nothing to do: no workflow had a commented trigger in its `on:`.');
+    if (deployTrigger == null) {
+      print(
+        'As shipped, only the deploy-* workflows have one: pass '
+        '--deploy-trigger=tags or --deploy-trigger=branch to enable it.',
+      );
+    }
     return 0;
   }
   final deploys = changed.where((f) => f.startsWith('deploy-')).toList();
