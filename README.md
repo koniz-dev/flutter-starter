@@ -187,7 +187,7 @@ this starter", and the Support section below.
    which release your copy came from and how to take in later ones.
 
 <!-- strip:bricks start -->
-The rename can also be done with Mason: `dart pub global activate mason_cli`,
+The rename can also be done with Mason: `dart pub global activate mason_cli 0.1.4`,
 `mason get`, then `mason make flutter_starter_setup` ([bricks/README.md](bricks/README.md)).
 If you rename by hand instead, drop the bricks with `dart run tool/strip_sample_features.dart --apply --keep-samples --remove-bricks`, or add `--remove-bricks` to whichever strip you run. <!-- strip:strip-tool line -->
 <!-- strip:bricks end -->

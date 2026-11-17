@@ -198,7 +198,7 @@ If you changed iOS bundle id or signing, open `ios/Runner.xcworkspace` and verif
 
 **Solutions:**
 ```bash
-dart pub global activate mason_cli
+dart pub global activate mason_cli 0.1.4
 mason --version
 mason get
 ```

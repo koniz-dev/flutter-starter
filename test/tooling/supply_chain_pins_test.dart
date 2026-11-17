@@ -1,7 +1,8 @@
 // Two downloads ran unpinned: the Gradle wrapper fetched its distribution
 // without a checksum, so a tampered or truncated zip was used as is, and CI
-// activated whatever mason_cli was latest. Both are pinned now; these keep
-// the pins from being dropped on the next bump.
+// activated whatever mason_cli was latest - as did the docs that tell an
+// adopter to install it. All are pinned now; these keep the pins from being
+// dropped or drifting apart on the next bump.
 
 import 'dart:io';
 
@@ -35,6 +36,31 @@ void main() {
     ];
 
     expect(unpinned, isEmpty);
+  });
+
+  test('docs activate the mason_cli version the workflows pin', () {
+    final activate = RegExp(r'activate mason_cli(?: ([0-9][^\s`)]*))?');
+    final pinned = {
+      for (final file in Directory('.github/workflows').listSync())
+        if (file is File && file.path.endsWith('.yml'))
+          for (final m in activate.allMatches(file.readAsStringSync()))
+            m.group(1),
+    };
+    final docs = (Process.runSync('git', ['ls-files', '*.md']).stdout as String)
+        .split('\n')
+        // A tracked file deleted but not yet committed (the strip tool's
+        // --remove-bricks leaves it so) has nothing left to check.
+        .where((p) => p.isNotEmpty && File(p).existsSync());
+    final mismatched = [
+      for (final path in docs)
+        for (final m in activate.allMatches(File(path).readAsStringSync()))
+          if (pinned.isEmpty
+              ? m.group(1) == null
+              : pinned.length > 1 || m.group(1) != pinned.single)
+            '$path: ${m.group(0)}',
+    ];
+
+    expect(mismatched, isEmpty, reason: 'workflows pin $pinned');
   });
 
   // Xcode writes the workspace's Package.resolved on the first iOS or macOS
