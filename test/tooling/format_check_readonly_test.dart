@@ -25,6 +25,7 @@ void main() {
       );
       expect(result.stdout, contains('working tree unchanged: yes'));
       expect(result.stdout, contains('formatted the file'));
+      expect(result.stdout, contains('--check from lib/: exit 1'));
     },
     timeout: const Timeout(Duration(minutes: 3)),
   );

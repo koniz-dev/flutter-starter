@@ -7,7 +7,8 @@
 #      --porcelain` exactly as it was;
 #   2. the acceptance runner's format gate is format_dart.sh --check, so (1)
 #      covers it;
-#   3. format_dart.sh without --check still formats the file.
+#   3. --check run from a subdirectory still checks the project;
+#   4. format_dart.sh without --check still formats the file.
 #
 # Usage: scripts/test/format_check_test.sh   (from the repository root)
 set -uo pipefail
@@ -46,6 +47,16 @@ if [[ "$(cat tool/zz_format_probe.dart)" != 'void   probe( ) {}' ]]; then
   fail "format_dart.sh --check rewrote tool/zz_format_probe.dart"
 fi
 echo "format_dart.sh --check: exit $rc, working tree unchanged: $([[ "$before" == "$after" ]] && echo yes || echo no)"
+
+# Run from a subdirectory, the scope is still the project's: the relative
+# paths once named nothing there and the check exited 0.
+(cd lib && ../scripts/dev/format_dart.sh --check >/dev/null 2>&1)
+sub_rc=$?
+if [[ $sub_rc -eq 0 ]]; then
+  fail "format_dart.sh --check from lib/ exited 0 on a misformatted tree"
+else
+  echo "format_dart.sh --check from lib/: exit $sub_rc"
+fi
 
 ./scripts/dev/format_dart.sh >/dev/null 2>&1
 if [[ "$(cat tool/zz_format_probe.dart)" != 'void probe() {}' ]]; then
