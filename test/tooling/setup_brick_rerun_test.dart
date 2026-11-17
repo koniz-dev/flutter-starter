@@ -5,10 +5,21 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 
+/// Whether this tree is still the unrenamed starter. The setup brick renames
+/// only that, and a manual rename (fork-and-customize.md, Option B) also
+/// rewrites the template ids in this file's fixtures, but not in the brick's
+/// hooks, which it leaves alone: the tests would compare two different ids.
+bool _unrenamedStarter() => RegExp(
+  r'^name: flutter_starter\s*$',
+  multiLine: true,
+).hasMatch(File('pubspec.yaml').readAsStringSync());
+
 void main() {
   const hookPath = 'bricks/flutter_starter_setup/hooks/pre_gen.dart';
   final skip = !File(hookPath).existsSync()
       ? 'the setup brick has been removed'
+      : !_unrenamedStarter()
+      ? 'the project is renamed; the setup brick no longer applies'
       : null;
 
   for (final state in ['fresh', 'renamed', 'android-only', 'ios-only']) {
