@@ -79,7 +79,8 @@ void main() {
 
   // `cancel-in-progress: true` keyed on the ref also cancelled pushes to
   // main, so commits merged close together never got a full run there (7 of
-  // 40 main runs were cancelled).
+  // 40 main runs were cancelled); a pending one is cancelled by the next
+  // run in its group either way.
   test('no workflow that runs on push cancels an in-progress push run', () {
     for (final file in Directory('.github/workflows').listSync()) {
       if (file is! File || !file.path.endsWith('.yml')) continue;
@@ -95,6 +96,16 @@ void main() {
         text,
         isNot(contains('cancel-in-progress: true')),
         reason: '${file.path} runs on push; cancel only pull_request runs',
+      );
+      // Keyed on the ref, a pending push run is still cancelled when the
+      // next one queues, cancel-in-progress or not; per commit it is not.
+      expect(
+        text,
+        contains(
+          r"${{ github.event_name == 'pull_request' && github.ref "
+          '|| github.sha }}',
+        ),
+        reason: '${file.path}: group push runs per commit',
       );
     }
   });

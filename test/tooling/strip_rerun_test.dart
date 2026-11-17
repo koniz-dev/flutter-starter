@@ -63,11 +63,10 @@ Directory _copyOfHead() {
       'package:$fixturePackage/',
     ),
   );
-  final init = Process.runSync('git', [
-    'init',
-    '-q',
-  ], workingDirectory: root.path);
-  expect(init.exitCode, 0, reason: '${init.stderr}');
+  check(
+    Process.runSync('git', ['init', '-q'], workingDirectory: root.path),
+    'git init',
+  );
   for (final args in [
     ['add', '--all'],
     [
@@ -82,8 +81,10 @@ Directory _copyOfHead() {
       'baseline',
     ],
   ]) {
-    final result = Process.runSync('git', args, workingDirectory: root.path);
-    expect(result.exitCode, 0, reason: '${result.stderr}');
+    check(
+      Process.runSync('git', args, workingDirectory: root.path),
+      'git ${args.join(' ')}',
+    );
   }
   return root;
 }

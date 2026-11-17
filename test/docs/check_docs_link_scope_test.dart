@@ -154,9 +154,13 @@ void main() {
     write('docs/pic.png', '');
     write(
       'docs/forms.md',
-      'See [the guide][g] and [it](<a guide.md>).\n'
-          '<a href="index.md">index</a> <img src="pic.png" alt="x">\n\n'
-          '[g]: index.md\n',
+      'See [the guide][g], [it](<a guide.md>) and [this](<index.md>).\n'
+          '<a href="index.md">index</a> <img src="pic.png" alt="x">\n'
+          '<img src="data:image/png;base64,AAAA" alt="inline">\n'
+          'A note.[^1]\n\n'
+          '[g]: index.md\n'
+          '[h]: <a guide.md> "A title"\n'
+          '[^1]: A footnote, not a link.\n',
     );
 
     final result = links();

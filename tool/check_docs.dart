@@ -230,23 +230,24 @@ class _Link {
   final int line;
 }
 
-/// Inline markdown links `[text](target)`, with the 1-based source line.
-///
-/// Titles (`[t](url "title")`) and angle-bracketed targets are handled; image
-/// links are included because a broken image path is just as broken.
 /// Every link target in [body]: inline `[t](target)`, the angle-bracket
 /// form `[t](<target with spaces>)`, a reference definition
 /// `[ref]: target` (which every `[t][ref]` use resolves through), and an
 /// HTML `href` or `src` attribute. Only the first form used to be read, so a
-/// broken link written any other way passed.
+/// broken link written any other way passed. Titles are allowed; image
+/// links are included because a broken image path is just as broken; a
+/// footnote definition (`[^1]: text`) is not a link.
 Iterable<_Link> _inlineLinks(String body) sync* {
   final patterns = [
     RegExp(
-      r'\[[^\]\n]*\]\(([^()\s<]*(?:\([^()]*\))?[^()\s]*)'
+      r'\[[^\]\n]*\]\((?!<)([^()\s]*(?:\([^()]*\))?[^()\s]*)'
       r'(?:\s+"[^"]*")?\)',
     ),
     RegExp(r'\[[^\]\n]*\]\(<([^<>\n]*)>(?:\s+"[^"]*")?\)'),
-    RegExp(r'^ {0,3}\[[^\]\n]+\]:[ \t]*<?([^\s<>]+)>?', multiLine: true),
+    RegExp(
+      r'^ {0,3}\[(?!\^)[^\]\n]+\]:[ \t]*(?:<([^<>\n]+)>|([^\s<>]+))',
+      multiLine: true,
+    ),
     RegExp(
       r'''<(?:a|img)\s[^>]*?\b(?:href|src)\s*=\s*["']([^"']+)["']''',
       caseSensitive: false,
@@ -255,7 +256,8 @@ Iterable<_Link> _inlineLinks(String body) sync* {
   final found = <(int, String)>[];
   for (final pattern in patterns) {
     for (final match in pattern.allMatches(body)) {
-      found.add((match.start, match.group(1)!.trim()));
+      final target = match.group(1) ?? match.group(2)!;
+      found.add((match.start, target.trim()));
     }
   }
   found.sort((a, b) => a.$1.compareTo(b.$1));
@@ -270,6 +272,7 @@ bool _isExternal(String target) {
   return lower.startsWith('http://') ||
       lower.startsWith('https://') ||
       lower.startsWith('mailto:') ||
+      lower.startsWith('data:') ||
       lower.startsWith('tel:') ||
       lower.startsWith('ftp://');
 }

@@ -31,8 +31,10 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: release-scripts-${{ github.ref }}
-  # A push to main is never cancelled: every merged commit gets its full run.
+  # A pull request's newer run replaces its older one. Pushes and manual runs
+  # are grouped per commit, so none waits behind or displaces another: keyed
+  # on the ref, a run pending on main was cancelled when the next one queued.
+  group: release-scripts-${{ github.event_name == 'pull_request' && github.ref || github.sha }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 permissions:
