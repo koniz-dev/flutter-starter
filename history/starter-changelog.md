@@ -31,6 +31,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- [Offer Home from a root tasks list](https://github.com/koniz-dev/flutter-starter/issues/1285): reached by a deep link or a sign-in redirect, the tasks list shows a Home button instead of leaving the user with no way out.
+
+- [Close the 2026-11-14 audit's documentation findings](https://github.com/koniz-dev/flutter-starter/issues/1268): configuration (unknown `ENVIRONMENT` refuses to start, empty `ENABLE_SSL_PINNING` is unset, configuration needs a fresh `flutter run`), localized image directories, device ids, the refresh selection step, and a new security-audit note that on web the session is per tab while the tokens are shared.
+
 - [Reject duplicate demo registration](https://github.com/koniz-dev/flutter-starter/issues/1286): the offline demo answers an already-registered email with a 409, as a backend would, instead of overwriting the account and breaking the demo card's credentials.
 
 - [Remove the unused `checkExamples` key](https://github.com/koniz-dev/flutter-starter/issues/1287): dropped from the four ARB files; `AppLocalizations.checkExamples` no longer exists.
