@@ -77,6 +77,15 @@ class DemoAuthRemoteDataSource implements AuthRemoteDataSource {
     String name,
   ) async {
     final key = email.trim().toLowerCase();
+    // A backend answers 409 for an email it already holds. Overwriting the
+    // account instead broke the demo card's credentials for the rest of
+    // the run.
+    if (_accounts.containsKey(key)) {
+      throw const ServerException(
+        'Conflict. The resource already exists.',
+        statusCode: 409,
+      );
+    }
     _accounts[key] = (password: password, name: name);
     return _signIn(key, name);
   }

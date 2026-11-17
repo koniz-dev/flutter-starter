@@ -109,6 +109,26 @@ void main() {
       expect(response.user.name, 'New');
     });
 
+    test(
+      'registering an existing email is a 409 and keeps the account',
+      () async {
+        final source = DemoAuthRemoteDataSource();
+        await expectLater(
+          source.register(' Demo@Example.com ', 'other-pass', 'Intruder'),
+          throwsA(
+            isA<ServerException>().having(
+              (e) => e.statusCode,
+              'statusCode',
+              409,
+            ),
+          ),
+        );
+        final response = await source.login(DemoAuth.email, DemoAuth.password);
+        expect(response.user.email, DemoAuth.email);
+        expect(response.user.name, isNot('Intruder'));
+      },
+    );
+
     test('a refresh token works once, then is spent', () async {
       final source = DemoAuthRemoteDataSource();
       final first = await source.login(DemoAuth.email, DemoAuth.password);
