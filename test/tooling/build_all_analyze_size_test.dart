@@ -49,9 +49,15 @@ Future<({int exitCode, String output, List<String> calls})> _run(
   String environment, {
   Map<String, String>? env,
   bool expectSuccess = true,
+  String? pbxproj,
 }) async {
   final dir = Directory.systemTemp.createTempSync('build_all_');
   addTearDown(() => dir.deleteSync(recursive: true));
+  if (pbxproj != null) {
+    File('${dir.path}/ios/Runner.xcodeproj/project.pbxproj')
+      ..createSync(recursive: true)
+      ..writeAsStringSync(pbxproj);
+  }
   final bin = Directory('${dir.path}/bin')..createSync();
   for (final (name, body) in [('flutter', _stubFlutter), ('dart', _stubDart)]) {
     final file = File('${bin.path}/$name')..writeAsStringSync(body);
@@ -291,4 +297,47 @@ void main() {
       expect(script, contains('--split-per-abi'));
     },
   );
+
+  // On a Mac without iOS signing, `flutter build ipa` failed and set -e
+  // stopped the script before the web build and the size report.
+  group('production on macOS', () {
+    Map<String, String> mac() => {
+      'OSTYPE': 'darwin23',
+      'API_SSL_FINGERPRINTS': _fingerprints,
+    };
+
+    test(
+      'without a signing team: an unsigned iOS build, then the rest',
+      () async {
+        final run = await _run(
+          'production',
+          env: mac(),
+          pbxproj: 'PRODUCT_BUNDLE_IDENTIFIER = com.example.app;\n',
+        );
+
+        final ios = run.calls.where((c) => c.startsWith('flutter build ios'));
+        expect(
+          run.calls.any((c) => c.startsWith('flutter build ipa')),
+          isFalse,
+        );
+        expect(ios.single, contains('--no-codesign'));
+        expect(ios.single, contains('--release'));
+        expect(run.calls.any((c) => c.startsWith('flutter build web')), isTrue);
+        expect(run.output, contains('No DEVELOPMENT_TEAM'));
+        expect(run.output, contains('App Bundle Size:'));
+        expect(run.output, contains('iOS: build/ios/iphoneos/Runner.app'));
+      },
+    );
+
+    test('with a signing team: an IPA', () async {
+      final run = await _run(
+        'production',
+        env: mac(),
+        pbxproj: 'DEVELOPMENT_TEAM = ABCDE12345;\n',
+      );
+
+      expect(run.calls.any((c) => c.startsWith('flutter build ipa')), isTrue);
+      expect(run.output, contains('iOS: build/ios/ipa/'));
+    });
+  });
 }

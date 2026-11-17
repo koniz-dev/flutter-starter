@@ -174,7 +174,8 @@ this starter", and the Support section below.
 - **Rename** the package, display name and application ids:
    [Fork and customize](docs/guides/onboarding/fork-and-customize.md).
 - **Brand** it: put your logo at `assets/images/logo.png` and run
-   `./scripts/dev/setup_branding.sh` for launcher icons and splash screens.
+   `./scripts/dev/setup_branding.sh` for launcher icons (Android, iOS, web)
+   and splash screens (Android, iOS).
 - **Drop what you do not need.** `dart run tool/strip_sample_features.dart --apply` removes both sample features; see [`tool/README.md`](tool/README.md) for the variants. <!-- strip:strip-tool line -->
 - **Connect your backend** by setting `BASE_URL`, which also turns the demo
    sign-in off ([how to remove it](docs/guides/onboarding/getting-started.md#signing-in-before-you-have-a-backend)).

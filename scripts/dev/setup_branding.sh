@@ -36,8 +36,21 @@ echo -e "${GREEN}Logo found at $LOGO_PATH${NC}"
 echo -e "\n${YELLOW}Generating App Icons...${NC}"
 dart run flutter_launcher_icons
 
+# flutter_launcher_icons 0.13.1 rewrites every build-setting line that
+# mentions ASSETCATALOG to `= AppIcon;`, including
+# ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS, which must stay
+# YES. Put it back so the only pbxproj change is the icon itself.
+PBXPROJ="ios/Runner.xcodeproj/project.pbxproj"
+if grep -q 'ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = AppIcon;' "$PBXPROJ" 2>/dev/null; then
+    perl -pi -e 's/(ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = )AppIcon;/${1}YES;/' "$PBXPROJ"
+    echo "Restored ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES in $PBXPROJ"
+fi
+
 echo -e "\n${YELLOW}Generating Native Splash Screens...${NC}"
 dart run flutter_native_splash:create
 
 echo -e "\n${GREEN}Branding setup complete!${NC}"
-echo "Your app now has custom icons and splash screens tailored for iOS, Android, and Web."
+echo "Launcher icons: Android, iOS and web. Splash screens: Android and iOS."
+echo "macOS and Windows keep the default icon; add macos:/windows: entries to"
+echo "flutter_launcher_icons.yaml for them. Review the diff before committing:"
+echo "the generators also reformat ios/Runner/Info.plist."

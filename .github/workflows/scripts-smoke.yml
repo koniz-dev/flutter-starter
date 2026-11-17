@@ -234,7 +234,7 @@ jobs:
 
       - name: Install Mason CLI
         if: hashFiles('mason.yaml') != ''
-        run: dart pub global activate mason_cli
+        run: dart pub global activate mason_cli 0.1.4
 
       # Non-default answers on purpose: the default `my_app` happens to need
       # the same repairs, but a name that sorts elsewhere than
@@ -380,7 +380,7 @@ jobs:
 
       - name: Install Mason CLI
         if: hashFiles('mason.yaml') != ''
-        run: dart pub global activate mason_cli
+        run: dart pub global activate mason_cli 0.1.4
 
       # `my_app` sorts after `mocktail`, unlike `flutter_starter`, so the
       # import re-sort in step 3 is exercised rather than a no-op.
