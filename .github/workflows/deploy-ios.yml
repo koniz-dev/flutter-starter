@@ -179,9 +179,17 @@ jobs:
       #     APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
       #     APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
       #   run: |
+      #     # Xcode names the export after the app, not Runner: take the
+      #     # one .ipa the build wrote.
+      #     set -- build/ios/ipa/*.ipa
+      #     if [ "$#" -ne 1 ] || [ ! -f "$1" ]; then
+      #       echo "::error::Expected one IPA in build/ios/ipa, found: $*"
+      #       exit 1
+      #     fi
+      #     ipa="$PWD/$1"
       #     cd ios
       #     fastlane deliver \
-      #       --ipa "../build/ios/ipa/Runner.ipa" \
+      #       --ipa "$ipa" \
       #       --skip_screenshots \
       #       --skip_metadata \
       #       --force \

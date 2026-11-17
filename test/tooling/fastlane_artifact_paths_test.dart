@@ -17,14 +17,20 @@ void main() {
       final source = File(fastfile).readAsStringSync();
       final artifacts = [
         for (final m in _assignment.allMatches(source))
-          if (RegExp(r'\.(aab|apk|ipa)"').hasMatch(m.group(2)!)) m,
+          if (RegExp(r'\.(aab|apk|ipa)"').hasMatch(m.group(2)!) ||
+              m.group(2)!.startsWith('IosIpa.'))
+            m,
       ];
 
       expect(artifacts, isNotEmpty, reason: 'no artifact path found');
       for (final m in artifacts) {
+        // The iOS lanes look the IPA up under an absolute repository root.
         expect(
           m.group(2),
-          startsWith('File.expand_path('),
+          anyOf(
+            startsWith('File.expand_path('),
+            startsWith('IosIpa.lane_path(File.expand_path('),
+          ),
           reason: '${m.group(1)} in $fastfile',
         );
       }
