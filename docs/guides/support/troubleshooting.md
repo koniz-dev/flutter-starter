@@ -175,12 +175,12 @@ flutter test
 **Problem**: Changes not reflected after hot reload.
 
 **Solutions:**
-1. Some changes require hot restart:
-   - Configuration changes
+1. Some changes require hot restart (`R` in the terminal):
    - Provider changes
    - Static variable changes
-2. Use hot restart (`R` in terminal) instead
-3. If still not working, do a full restart
+2. Configuration (`.env`, `--dart-define`) is compiled in as constants, so
+   neither hot reload nor hot restart picks it up: stop the app and run
+   `flutter run` again.
 
 ### 11. GoRouter redirects / “stuck on login” / unexpected navigation
 

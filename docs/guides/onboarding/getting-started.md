@@ -216,11 +216,12 @@ particular API. Check two things before the first sign-in:
 ### Platform-Specific
 
 ```bash
-# Android
-flutter run -d android
+# List connected devices and emulators, with their ids
+flutter devices
 
-# iOS (macOS only)
-flutter run -d ios
+# Run on one of them (an Android device or emulator, or on macOS an iOS
+# simulator or device)
+flutter run -d <device-id>
 
 # Web
 flutter run -d chrome

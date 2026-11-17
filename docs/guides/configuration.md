@@ -61,9 +61,10 @@ page, not the app, would then decide the scheme. For the same reason
 `RawWebSocketClientImpl` refuses a realtime URL that is not `wss://` in such a
 release.
 `ENABLE_SSL_PINNING` accepts `true`, `1`, `yes`, `on` and `false`, `0`,
-`no`, `off`, in any case. Any other value - a typo such as `ture`, or a blank -
-keeps the environment's default, and a release refuses to start on it rather
-than guess whether it should be pinned.
+`no`, `off`, in any case. Empty means unset: the environment's default applies.
+Any other value - a typo such as `ture`, or only whitespace - also keeps the
+default, and a release refuses to start on it rather than guess whether it
+should be pinned.
 Profile builds (`--profile`) are not refused.
 
 A release APK needs a signing key first; without `android/key.properties`
@@ -104,13 +105,14 @@ never a platform limitation: dart2js resolves the const `DartDefines` table the
 same way the native compilers do, and the guard is gone.
 
 `tool/check_env_assets.dart` fails when a secrets file would be bundled. It
-runs in four places:
+runs in:
 
 - `./scripts/dev/audit_template.sh`, as its own step;
 - `test/tooling/check_env_assets_test.dart`, so `flutter test` - and therefore
   the CI **Quality gate** - fails on a commit that adds one;
 - `scripts/ci/build_all.sh`, after `flutter pub get` and before the first
   build, so a local tree that never reached CI cannot produce an artifact; and
+- the four jobs of `build.yml`, before they build; and
 - `deploy-android.yml`, `deploy-ios.yml` and all three jobs of
   `deploy-web.yml`, as a **Guard against a bundled secrets file** step placed
   after every step that writes into the working tree and before the build.
@@ -513,7 +515,7 @@ print(config);
 
 | Variable | Type | Default | Description |
 |----------|------|---------|-------------|
-| `ENVIRONMENT` | String | `development` | Environment name: `development`, `staging`, or `production`, trimmed and case-insensitive. Any other value sets `AppConfig.environmentMisconfigured` and falls back to the development base URL with no SSL pinning; `printConfig` warns about it. Add a new environment to `AppConfig.knownEnvironments` |
+| `ENVIRONMENT` | String | `development` | Environment name: `development`, `staging`, or `production`, trimmed and case-insensitive. Any other value sets `AppConfig.environmentMisconfigured`, and the app refuses to start, showing the startup failure screen. Add a new environment to `AppConfig.knownEnvironments` |
 | `BASE_URL` | String | Environment-aware | API base URL. Every request goes to `BASE_URL` + `ApiEndpoints.apiVersion` (`/v1`) + the endpoint path, so `BASE_URL=https://api.example.com` signs in at `https://api.example.com/v1/auth/login`. For an unversioned API set `apiVersion` to `''` in `lib/core/constants/api_endpoints.dart`; it is read by `ApiClient` and by `AuthInterceptor`'s refresh call. The auth endpoints and keys are the [auth wire format](../api/features/auth/models.md#wire-format) |
 | `API_TIMEOUT` | int | `30` | End-to-end deadline per request, in seconds: the whole call, retries and a 401 refresh-and-replay included. When it passes the request is cancelled and fails as a timeout. Zero or negative disables the total deadline. For receive-timeout retries set `API_TIMEOUT > API_RECEIVE_TIMEOUT` with room for backoff and later attempts. Applied by `DioNetworkClient.send` |
 | `API_CONNECT_TIMEOUT` | int | `10` | Dio connect timeout per attempt, in seconds |

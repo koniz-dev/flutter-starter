@@ -163,6 +163,22 @@ response header, keep access tokens short-lived, and keep the refresh token in
 an `httpOnly`, `Secure`, `SameSite` cookie set by the server rather than in
 client storage. See [Storage - Web](../../api/core/storage.md#platform-specific-behavior).
 
+#### LOW: On web, the session is per tab while the tokens are shared
+
+**Status:** Open - a documented limitation for any app that ships the web
+target.
+
+The in-memory session (`AuthState` and `SessionGeneration` in
+`lib/core/session/session_generation.dart`) belongs to one browser tab, while
+the tokens sit in the origin's shared `localStorage`. Signing out, then in as
+another user, in one tab leaves a second open tab showing the first user's
+screens while its requests carry the second user's token. Native platforms run
+one instance and are unaffected.
+
+**Recommendation:** where users may share a browser, listen for the `storage`
+event and end the tab's in-memory session when the stored tokens change, or
+check on each request that the stored identity is the tab's user.
+
 ## 3. Code Security
 
 ### Current Strengths
