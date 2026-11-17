@@ -226,7 +226,7 @@ if [ "$ANALYZE_SIZE" = true ]; then
     flutter pub deps > /tmp/flutter_deps.txt
 
     # Count dependencies
-    DEP_COUNT=$(grep -c "├" /tmp/flutter_deps.txt || echo "0")
+    DEP_COUNT=$(grep -c "├" /tmp/flutter_deps.txt || true)
     echo "   Total dependencies: $DEP_COUNT"
     echo ""
 

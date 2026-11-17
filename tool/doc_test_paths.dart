@@ -1,4 +1,5 @@
-// Checker for documented `flutter test <path>` commands that name no file.
+// Checker for documented `flutter test <path>` (or `dart test <path>`)
+// commands that name no file.
 //
 // CONTRIBUTING told contributors to run
 // `flutter test test/features/auth/domain/usecases/login_test.dart`; the file
@@ -38,7 +39,7 @@ class MissingTestPath {
       '$file:$line: `flutter test $path` names no file or directory';
 }
 
-final RegExp _flutterTest = RegExp(r'\bflutter\s+test\b(.*)');
+final RegExp _flutterTest = RegExp(r'\b(?:flutter|dart)\s+test\b(.*)');
 final RegExp _commandEnd = RegExp(r'&&|\|\||\||;|\s#');
 
 /// `flutter test` flags whose value is the next argument.

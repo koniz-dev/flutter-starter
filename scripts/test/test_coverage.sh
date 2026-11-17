@@ -64,6 +64,16 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
+# genhtml comes with lcov. Installing it is the user's call (this used to run
+# `brew install` or `sudo apt-get install` without asking), and the check
+# runs before the tests, not minutes into them.
+if [[ "$GENERATE_HTML" == true ]] && ! command -v genhtml &> /dev/null; then
+  echo -e "${RED}genhtml not found: --html needs lcov. Install it, then re-run:${NC}"
+  echo "  macOS:  brew install lcov"
+  echo "  Linux:  sudo apt-get install lcov"
+  exit 1
+fi
+
 # A percentage, e.g. 80 or 79.5. Anything else is refused before it reaches a
 # comparison.
 is_percent() {
@@ -143,18 +153,6 @@ COVERAGE_EXCLUDES=$(printf '%s\n' "${EXCLUDE_PATHS[@]}") awk '
 if [ "$GENERATE_HTML" = true ]; then
   echo -e "${YELLOW}Generating HTML coverage report...${NC}"
 
-  # Check if lcov is installed
-  if ! command -v genhtml &> /dev/null; then
-    echo -e "${YELLOW}Warning: genhtml not found. Installing lcov...${NC}"
-    if [[ "$OSTYPE" == "darwin"* ]]; then
-      brew install lcov
-    elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
-      sudo apt-get update && sudo apt-get install -y lcov
-    else
-      echo -e "${RED}Please install lcov manually${NC}"
-      exit 1
-    fi
-  fi
 
   # Create HTML report directory
   mkdir -p coverage/html

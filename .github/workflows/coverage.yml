@@ -119,10 +119,10 @@ jobs:
           # coverage report look like a real defect. Per-layer percentages come
           # from the
           # layer_coverage step above.
-          DOMAIN_FILES=$(grep -c "^SF:.*lib/features/.*/domain" coverage/lcov.info || echo "0")
-          DATA_FILES=$(grep -c "^SF:.*lib/features/.*/data" coverage/lcov.info || echo "0")
-          PRESENTATION_FILES=$(grep -c "^SF:.*lib/features/.*/presentation" coverage/lcov.info || echo "0")
-          CORE_FILES=$(grep -c "^SF:.*lib/core" coverage/lcov.info || echo "0")
+          DOMAIN_FILES=$(grep -c "^SF:.*lib/features/.*/domain" coverage/lcov.info || true)
+          DATA_FILES=$(grep -c "^SF:.*lib/features/.*/data" coverage/lcov.info || true)
+          PRESENTATION_FILES=$(grep -c "^SF:.*lib/features/.*/presentation" coverage/lcov.info || true)
+          CORE_FILES=$(grep -c "^SF:.*lib/core" coverage/lcov.info || true)
 
           {
             echo "overall=$OVERALL"

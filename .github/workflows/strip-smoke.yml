@@ -30,8 +30,11 @@ on:
   workflow_dispatch: {}
 
 concurrency:
-  group: strip-smoke-${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  # A pull request's newer run replaces its older one. Pushes and manual runs
+  # are grouped per commit, so none waits behind or displaces another: keyed
+  # on the ref, a run pending on main was cancelled when the next one queued.
+  group: strip-smoke-${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.ref || github.sha }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 permissions:
   contents: read

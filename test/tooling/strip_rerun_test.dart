@@ -23,10 +23,28 @@ final String _packages = File(
 Directory _copyOfHead() {
   final root = Directory.systemTemp.createTempSync('strip_rerun_');
   final archive = '${root.path}.tar';
-  final made = Process.runSync('git', ['archive', '-o', archive, 'HEAD']);
-  expect(made.exitCode, 0, reason: '${made.stderr}');
-  final unpacked = Process.runSync('tar', ['-xf', archive, '-C', root.path]);
-  expect(unpacked.exitCode, 0, reason: '${unpacked.stderr}');
+  // A CI run once failed here with `git archive` exiting 1 and printing
+  // nothing; the reason showed only stderr, which was empty. Report the
+  // whole result, and remove what this call created before failing.
+  void check(ProcessResult result, String what) {
+    if (result.exitCode == 0) return;
+    root.deleteSync(recursive: true);
+    final tar = File(archive);
+    if (tar.existsSync()) tar.deleteSync();
+    fail(
+      '$what exited ${result.exitCode}\n'
+      'stdout: ${result.stdout}\nstderr: ${result.stderr}',
+    );
+  }
+
+  check(
+    Process.runSync('git', ['archive', '-o', archive, 'HEAD']),
+    'git archive -o $archive HEAD',
+  );
+  check(
+    Process.runSync('tar', ['-xf', archive, '-C', root.path]),
+    'tar -xf $archive',
+  );
   File(archive).deleteSync();
   // Keep deletion-target cases meaningful after an adopter has committed a
   // bricks-only strip: their HEAD no longer contains the original bricks.
@@ -45,11 +63,10 @@ Directory _copyOfHead() {
       'package:$fixturePackage/',
     ),
   );
-  final init = Process.runSync('git', [
-    'init',
-    '-q',
-  ], workingDirectory: root.path);
-  expect(init.exitCode, 0, reason: '${init.stderr}');
+  check(
+    Process.runSync('git', ['init', '-q'], workingDirectory: root.path),
+    'git init',
+  );
   for (final args in [
     ['add', '--all'],
     [
@@ -64,8 +81,10 @@ Directory _copyOfHead() {
       'baseline',
     ],
   ]) {
-    final result = Process.runSync('git', args, workingDirectory: root.path);
-    expect(result.exitCode, 0, reason: '${result.stderr}');
+    check(
+      Process.runSync('git', args, workingDirectory: root.path),
+      'git ${args.join(' ')}',
+    );
   }
   return root;
 }
@@ -151,12 +170,19 @@ void main() {
       ? null
       : 'the strip tool has been removed';
 
+  // Nullable and reset each test: a failed setUp used to leave the previous
+  // test's directory here, and tearDown then deleted that one a second time
+  // (PathNotFoundException), hiding the real error.
   late Directory root;
+  Directory? current;
   setUp(() {
-    if (skip == null) root = _copyOfHead();
+    current = null;
+    if (skip == null) root = current = _copyOfHead();
   });
   tearDown(() {
-    if (skip == null) root.deleteSync(recursive: true);
+    final dir = current;
+    current = null;
+    if (dir != null && dir.existsSync()) dir.deleteSync(recursive: true);
   });
 
   test(
