@@ -50,6 +50,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
             _passwordController.text,
             _nameController.text.trim(),
           );
+      if (!mounted) return;
       if (ref.read(authNotifierProvider).user != null) {
         TextInput.finishAutofillContext();
       }
@@ -67,6 +68,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
         child: Form(
           key: _formKey,
           child: AutofillGroup(
+            onDisposeAction: AutofillContextAction.cancel,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

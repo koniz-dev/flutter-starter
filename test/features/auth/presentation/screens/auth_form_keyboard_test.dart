@@ -2,7 +2,10 @@
 // Next did not move on), gave password managers no autofill hints, and had
 // no way to reveal a typed password.
 
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_starter/core/errors/failures.dart';
 import 'package:flutter_starter/core/localization/localization_service.dart';
 import 'package:flutter_starter/core/routing/app_routes.dart';
 import 'package:flutter_starter/core/utils/result.dart';
@@ -40,8 +43,10 @@ void main() {
     ).thenAnswer((_) async => const Success(_user));
   });
 
+  late GoRouter router;
+
   Future<void> pump(WidgetTester tester, String location) async {
-    final router = GoRouter(
+    router = GoRouter(
       initialLocation: location,
       routes: [
         GoRoute(
@@ -177,6 +182,75 @@ void main() {
 
       expect(find.text(_l10n.nameRequired), findsOneWidget);
       expect(find.text(_l10n.nameMinLength(2)), findsNothing);
+    });
+  });
+
+  // Pre-merge review: the screen can be popped while the request runs, and
+  // the autofill group must not commit credentials a server rejected.
+  group('autofill context and unmounting', () {
+    /// The `finishAutofillContext` calls the platform received.
+    List<bool> finished(WidgetTester tester) => [
+      for (final call in tester.testTextInput.log)
+        if (call.method == 'TextInput.finishAutofillContext')
+          call.arguments as bool,
+    ];
+
+    Future<void> fill(WidgetTester tester) async {
+      await tester.enterText(
+        find.widgetWithText(TextFormField, _l10n.email),
+        'a@b.co',
+      );
+      await tester.enterText(
+        find.widgetWithText(TextFormField, _l10n.password),
+        'password123',
+      );
+    }
+
+    testWidgets('leaving while the sign-in runs does not throw', (
+      tester,
+    ) async {
+      final reply = Completer<Result<User>>();
+      when(() => login(any(), any())).thenAnswer((_) => reply.future);
+      await pump(tester, AppRoutes.login);
+      await fill(tester);
+      await tester.tap(find.widgetWithText(ElevatedButton, _l10n.login));
+      await tester.pump();
+
+      router.go(AppRoutes.register);
+      // Not pumpAndSettle: the shared loading state keeps a spinner going.
+      await tester.pump(const Duration(milliseconds: 500));
+      reply.complete(const Success(_user));
+      await tester.pump(const Duration(milliseconds: 500));
+
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('a rejected sign-in, then leaving, saves nothing', (
+      tester,
+    ) async {
+      when(
+        () => login(any(), any()),
+      ).thenAnswer((_) async => const ResultFailure(AuthFailure('no')));
+      await pump(tester, AppRoutes.login);
+      await fill(tester);
+      await tester.tap(find.widgetWithText(ElevatedButton, _l10n.login));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text(_l10n.dontHaveAccount));
+      await tester.pumpAndSettle();
+
+      expect(finished(tester), isNot(contains(true)));
+    });
+
+    testWidgets('a successful sign-in commits the credentials', (
+      tester,
+    ) async {
+      await pump(tester, AppRoutes.login);
+      await fill(tester);
+      await tester.tap(find.widgetWithText(ElevatedButton, _l10n.login));
+      await tester.pumpAndSettle();
+
+      expect(finished(tester), contains(true));
     });
   });
 }

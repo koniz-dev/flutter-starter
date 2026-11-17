@@ -46,7 +46,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       await ref
           .read(authNotifierProvider.notifier)
           .login(_emailController.text.trim(), _passwordController.text);
-      // Lets the platform's password manager offer to save the credentials.
+      // The screen can be popped while the request runs; `ref` is unusable
+      // after that.
+      if (!mounted) return;
+      // Lets the platform's password manager offer to save the credentials,
+      // on success only.
       if (ref.read(authNotifierProvider).user != null) {
         TextInput.finishAutofillContext();
       }
@@ -63,7 +67,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       body: AuthFormBody(
         child: Form(
           key: _formKey,
+          // Cancel, not the default commit, when the form goes away: leaving
+          // after a failed sign-in offered to save rejected credentials.
           child: AutofillGroup(
+            onDisposeAction: AutofillContextAction.cancel,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
