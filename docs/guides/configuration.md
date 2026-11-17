@@ -572,6 +572,17 @@ sign-out, and the operating system may clear the cache directory when storage
 runs low. Logs are redacted, but if your app must not keep them past a
 sign-out, delete the `logs` directory there yourself.
 
+- **Web** has no app cache directory, so there is no log file: a production
+  web build logs to the browser console instead.
+- **When the file cannot be opened** (an unwritable cache directory), lines are
+  held in memory, up to the latest 1000, and nothing reaches a file or the
+  console; the error reporter still receives errors.
+- **Desktop permissions.** The directory and file are created with the
+  process umask, typically readable by other local users on Linux and macOS
+  (`~/.cache/<app id>/logs` on Linux). Mobile platforms sandbox the cache, and
+  Windows `%LOCALAPPDATA%` is per user. On a shared desktop, tighten the umask
+  or the directory's mode if that matters for your app.
+
 Production used to default `ENABLE_LOGGING` to `false`, so the file output it
 was meant to use never ran and every production error was dropped.
 A release build with no file output also had

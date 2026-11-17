@@ -128,6 +128,12 @@ class FileLogOutput extends LogOutput {
   /// The [init] in progress, if any.
   Future<void>? _initInFlight;
 
+  /// Bumped whenever the current sink is given up: [destroy], [clearLogs]
+  /// and a rotation. An open that started before the bump closes the sink it
+  /// made instead of installing it - a `destroy()` while `init()` was still
+  /// opening the file left that sink open and installed.
+  int _sinkEpoch = 0;
+
   /// Opens the log file, once.
   ///
   /// `package:logger` calls `init()` from the `Logger` constructor (and
@@ -149,6 +155,7 @@ class FileLogOutput extends LogOutput {
 
   /// Initialize the log file
   Future<void> _initializeLogFile() async {
+    final epoch = _sinkEpoch;
     try {
       // The app's cache directory, not its documents: iOS backs documents up
       // to iCloud, and on Windows and Linux they are the user's shared
@@ -181,6 +188,10 @@ class FileLogOutput extends LogOutput {
       // lands in this try.
       sink.add(const <int>[]);
       await sink.flush();
+      if (epoch != _sinkEpoch) {
+        await sink.close();
+        return;
+      }
       _sink = sink;
       _openFailed = false;
       _flushPending();
@@ -335,6 +346,7 @@ class FileLogOutput extends LogOutput {
     if (_isRotating) return;
     _isRotating = true;
 
+    _sinkEpoch++;
     try {
       // Close current file
       final sink = _sink;
@@ -389,6 +401,7 @@ class FileLogOutput extends LogOutput {
 
   @override
   Future<void> destroy() async {
+    _sinkEpoch++;
     final sink = _sink;
     _sink = null;
     await _closeSink(sink);
@@ -424,6 +437,7 @@ class FileLogOutput extends LogOutput {
   /// Omitting that leaked one file descriptor per call.
   Future<void> clearLogs() async {
     if (_logDirectory == null) return;
+    _sinkEpoch++;
 
     final sink = _sink;
     _sink = null;

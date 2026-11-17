@@ -62,7 +62,12 @@ mixin PerformanceScreenMixin<T extends StatefulWidget> on State<T> {
   /// The name of the screen for performance tracking
   /// Override this to provide a custom screen name
   String get screenName {
-    return widget.runtimeType.toString().replaceAll('State', '');
+    // Only a trailing `State`: replacing every occurrence turned
+    // `StatementScreen` into `mentScreen`.
+    final name = widget.runtimeType.toString();
+    return name.endsWith('State')
+        ? name.substring(0, name.length - 'State'.length)
+        : name;
   }
 
   /// The route name of the screen (optional)
