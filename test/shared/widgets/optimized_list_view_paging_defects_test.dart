@@ -9,6 +9,7 @@
 import 'package:flutter_starter/core/localization/localization_service.dart';
 import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:flutter_starter/l10n/app_localizations_en.dart';
+import 'package:flutter_starter/shared/widgets/error_widget.dart';
 import 'package:flutter_starter/shared/widgets/optimized_list_view.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
@@ -120,5 +121,77 @@ void main() {
     );
     await tester.pumpAndSettle();
     expect(find.text(_l10n.noItemsFound), findsOneWidget);
+  });
+
+  // Pre-merge review of the fixes above.
+  testWidgets('with itemExtent and no padding, items clear the system insets', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      _wrap(
+        MediaQuery(
+          data: const MediaQueryData(padding: EdgeInsets.only(top: 40)),
+          child: OptimizedListView<int>(
+            items: List.generate(3, (i) => i),
+            itemBuilder: (c, i, _) => Text('row $i'),
+            itemExtent: 56,
+          ),
+        ),
+      ),
+    );
+
+    expect(tester.getTopLeft(find.text('row 0')).dy, greaterThanOrEqualTo(40));
+  });
+
+  testWidgets("a parent's Retry also lets prefetch resume", (tester) async {
+    var calls = 0;
+    await tester.pumpWidget(
+      _wrap(
+        OptimizedListView<int>(
+          items: List.generate(30, (i) => i),
+          itemBuilder: (c, i, _) => SizedBox(height: 50, child: Text('$i')),
+          hasMore: true,
+          onRetry: () {},
+          onLoadMore: () async {
+            calls++;
+            throw Exception('offline');
+          },
+        ),
+      ),
+    );
+    await tester.drag(find.byType(Scrollable), const Offset(0, -1400));
+    await tester.pumpAndSettle();
+    expect(calls, 1);
+
+    await tester.ensureVisible(find.text(_l10n.retry));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text(_l10n.retry));
+    await tester.pumpAndSettle();
+    // Already at the end: scroll back a little, then down again.
+    await tester.drag(find.byType(Scrollable), const Offset(0, 100));
+    await tester.pumpAndSettle();
+    await tester.drag(find.byType(Scrollable), const Offset(0, -100));
+    await tester.pumpAndSettle();
+
+    expect(calls, 2);
+  });
+
+  testWidgets('an empty list with an error still shows the full error', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      _wrap(
+        OptimizedListView<int>(
+          items: const [],
+          itemBuilder: (c, i, _) => Text('$i'),
+          hasMore: true,
+          error: 'down',
+          onLoadMore: () async => (<int>[], false),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.byType(AppErrorWidget), findsOneWidget);
   });
 }

@@ -234,11 +234,12 @@ class _OptimizedListViewState<T> extends State<OptimizedListView<T>> {
 
     // An empty list that can still load is not "no items": it falls through
     // to the list, whose trailing slot offers Load More for the first page.
+    // An error still takes the whole screen.
     final canLoadFirstPage = _hasMore && widget.onLoadMore != null;
     if (_items.isEmpty &&
         !widget.isLoading &&
         !_isLoadingMore &&
-        !canLoadFirstPage) {
+        (effectiveError != null || !canLoadFirstPage)) {
       // "Failed, so there is nothing to show" and "loaded, genuinely empty"
       // must not render identically: an empty list with an error shows the
       // error and a retry affordance, never the empty state.
@@ -264,11 +265,19 @@ class _OptimizedListViewState<T> extends State<OptimizedListView<T>> {
     // A fixed extent is for the items only: applied to the trailing slot too,
     // it squeezed the error message and its Retry button into one item's
     // height and overflowed.
-    return CustomScrollView(
+    // ListView pads a null `padding` with the MediaQuery's vertical insets
+    // (status bar, notch, home indicator) and removes them below it; a
+    // CustomScrollView does neither, so do it here.
+    final mediaQuery = MediaQuery.maybeOf(context);
+    final padding =
+        widget.padding ??
+        mediaQuery?.padding.copyWith(left: 0, right: 0) ??
+        EdgeInsets.zero;
+    final list = CustomScrollView(
       controller: _scrollController,
       slivers: [
         SliverPadding(
-          padding: widget.padding ?? EdgeInsets.zero,
+          padding: padding,
           sliver: SliverMainAxisGroup(
             slivers: [
               SliverFixedExtentList(
@@ -285,6 +294,14 @@ class _OptimizedListViewState<T> extends State<OptimizedListView<T>> {
         ),
       ],
     );
+    return widget.padding == null && mediaQuery != null
+        ? MediaQuery.removePadding(
+            context: context,
+            removeTop: true,
+            removeBottom: true,
+            child: list,
+          )
+        : list;
   }
 
   Widget _item(BuildContext context, int index) =>
@@ -353,8 +370,14 @@ class _OptimizedListViewState<T> extends State<OptimizedListView<T>> {
   /// the pagination callback itself, but only when that callback could
   /// actually do something (a button that no-ops is worse than no button).
   VoidCallback? get _effectiveOnRetry {
-    if (widget.onRetry != null) {
-      return widget.onRetry;
+    final parentRetry = widget.onRetry;
+    if (parentRetry != null) {
+      // Clear a prefetch failure too, or prefetch, paused on it, never
+      // resumed when the parent's retry produced the same items.
+      return () {
+        if (_loadMoreError != null) setState(() => _loadMoreError = null);
+        parentRetry();
+      };
     }
     if (widget.onLoadMore != null && _hasMore) {
       return _retry;
