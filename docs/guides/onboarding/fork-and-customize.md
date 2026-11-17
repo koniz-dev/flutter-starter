@@ -51,7 +51,7 @@ in section 2, substituting your current identifiers for the template defaults.
    - `scripts/dev/create_feature.sh` and `scripts/dev/create_feature.ps1` -
      they write the import lines of every feature you scaffold, so a missed
      script produces features that do not compile.
-   - `bricks/feature_clean/__brick__/` - the same, for `mason make feature_clean`.
+   - `bricks/feature_clean/__brick__/` - the same, for `mason make feature_clean`. <!-- strip:bricks line -->
    - `CONTRIBUTING.md` - its example test imports the package, and your team
      copies it.
 
