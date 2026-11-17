@@ -7,6 +7,8 @@
   "register": "Registrarse",
   "email": "Correo electrónico",
   "password": "Contraseña",
+  "showPassword": "Mostrar contraseña",
+  "hidePassword": "Ocultar contraseña",
   "name": "Nombre",
   "emailRequired": "Por favor ingresa tu correo electrónico",
   "emailInvalid": "Por favor ingresa un correo electrónico válido",

@@ -28,6 +28,14 @@
   "@password": {
     "description": "Password field label"
   },
+  "showPassword": "Show password",
+  "@showPassword": {
+    "description": "Tooltip of the button that reveals the password field"
+  },
+  "hidePassword": "Hide password",
+  "@hidePassword": {
+    "description": "Tooltip of the button that hides the password field again"
+  },
   "name": "Name",
   "@name": {
     "description": "Name field label"

@@ -28,6 +28,14 @@
   "@password": {
     "description": "Password field label"
   },
+  "showPassword": "Hiện mật khẩu",
+  "@showPassword": {
+    "description": "Tooltip of the button that reveals the password field"
+  },
+  "hidePassword": "Ẩn mật khẩu",
+  "@hidePassword": {
+    "description": "Tooltip of the button that hides the password field again"
+  },
   "name": "Tên",
   "@name": {
     "description": "Name field label"
