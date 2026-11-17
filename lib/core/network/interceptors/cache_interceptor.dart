@@ -339,8 +339,10 @@ class CacheInterceptor extends Interceptor implements IHttpResponseCache {
 
     // A secret in the query - a verification or reset token, a presigned
     // URL's signature - means the response is about that secret, and the
-    // store is plaintext. Same rule as the log redaction, so the two lists
-    // cannot drift. A query that does not parse is treated the same way.
+    // store is plaintext. The log redaction's own rule, applied to the whole
+    // URL, so the two cannot drift: anything it would redact (a nested
+    // `?redirect=...?token=`, a `;token=`, userinfo) bypasses the cache. A
+    // query that does not parse is treated the same way.
     if (_querySecret(options)) return true;
 
     // Secondary guard: a credential the caller attached directly to the
@@ -353,14 +355,20 @@ class CacheInterceptor extends Interceptor implements IHttpResponseCache {
     return await _hasSessionCredential();
   }
 
-  /// Whether [options]' query has a key
-  /// [ApiLoggingInterceptor.isSensitiveQueryKey]
-  /// treats as a secret, or cannot be parsed.
+  /// Whether [options]' URL carries anything the log redaction would hide - a
+  /// query key [ApiLoggingInterceptor.isSensitiveQueryKey] treats as a
+  /// secret, or a nested one [ApiLoggingInterceptor.redactUrl] finds - or
+  /// cannot be parsed.
   static bool _querySecret(RequestOptions options) {
     try {
-      return options.uri.queryParametersAll.keys.any(
+      final uri = options.uri;
+      if (uri.queryParametersAll.keys.any(
         ApiLoggingInterceptor.isSensitiveQueryKey,
-      );
+      )) {
+        return true;
+      }
+      final url = uri.toString();
+      return ApiLoggingInterceptor.redactUrl(url) != url;
     } on FormatException {
       return true;
     }

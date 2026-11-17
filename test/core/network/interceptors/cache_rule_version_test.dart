@@ -41,7 +41,7 @@ void main() {
     // Changed the sensitive-key sets in ApiLoggingInterceptor? Bump
     // sensitiveKeyRuleVersion and update both values here: the cache then
     // drops the responses an earlier rule let it store.
-    expect(ApiLoggingInterceptor.sensitiveKeyRuleVersion, 3);
+    expect(ApiLoggingInterceptor.sensitiveKeyRuleVersion, 4);
     expect(
       ApiLoggingInterceptor.debugKeyRuleFingerprint,
       'accesskey,apikey,appkey,authkey,authorization,cardnumber,clientkey,'

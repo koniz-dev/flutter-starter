@@ -181,6 +181,26 @@ void main() {
     });
   }
 
+  // The cache read only top-level query keys while the log redaction also
+  // finds nested and `;`-separated ones, so these URLs were cached under a
+  // key built from a token.
+  for (final path in [
+    '/feed?redirect=https%3A%2F%2Fx%2F%3Ftoken%3Dabc',
+    '/feed;token=abc',
+  ]) {
+    test('$path names a secret and is not cached', () async {
+      final client = build();
+      await client.get(path);
+      await client.get(path);
+
+      expect(transport.hits, 2);
+      expect(
+        storage.values.keys.where((key) => key.startsWith('http_cache_')),
+        isEmpty,
+      );
+    });
+  }
+
   test('anonymous GETs without Vary still reuse the cached body', () async {
     final client = build();
     expect((await client.get('/feed')).data, {'hit': 1});
