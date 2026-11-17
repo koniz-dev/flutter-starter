@@ -27,7 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Android builds on Flutter 3.50 need the newer toolchain.** Flutter 3.50 refuses Android Gradle Plugin below 9.1.1 and Kotlin below 2.4.10. Copy the three versions: Gradle 9.5.0 in `android/gradle/wrapper/gradle-wrapper.properties`, AGP 9.3.1 and Kotlin 2.4.20 in `android/settings.gradle.kts`. `tool/check_android_toolchain.dart` now enforces these floors; they also build on Flutter 3.47.
 
-- **Dependency floors moved after v4.0.0.** `patrol` ^4.11.0 needs `patrol_cli` 4.9.0 (reinstall the CLI); `equatable` ^3.0.0 removes `EquatableMixin`, so write `with Equatable` where your code said `with EquatableMixin`; `go_router` ^18.1.3 and the code generators (`build_runner` 2.17.1, `build` 5.0.0) are routine: run `flutter pub get` and regenerate.
+- **Dependency floors moved after v4.0.0.** `patrol` ^4.11.0 needs `patrol_cli` 4.9.0 (reinstall the CLI); `equatable` ^3.0.0 removes `EquatableMixin`, so write `with Equatable` where your code said `with EquatableMixin`; `go_router` ^18.1.4, `material_ui` ^1.11.0 and the code generators (`build_runner` 2.17.1, `build` 5.0.0) are routine: run `flutter pub get` and regenerate.
 
 ### Fixed
 
