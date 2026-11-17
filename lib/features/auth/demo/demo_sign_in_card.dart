@@ -31,10 +31,13 @@ class DemoSignInCard extends StatelessWidget {
                   color: colors.onSecondaryContainer,
                 ),
                 const SizedBox(width: 8),
-                Text(
-                  l10n.demoModeTitle,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: colors.onSecondaryContainer,
+                // Wraps: Arabic at 2x text overflowed a 360dp screen.
+                Flexible(
+                  child: Text(
+                    l10n.demoModeTitle,
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      color: colors.onSecondaryContainer,
+                    ),
                   ),
                 ),
               ],

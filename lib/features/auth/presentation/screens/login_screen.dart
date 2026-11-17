@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart' show TextInput;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/constants/ui_keys.dart';
 import 'package:flutter_starter/core/localization/failure_localizations.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_starter/features/auth/demo/demo_sign_in_card.dart';
 import 'package:flutter_starter/features/auth/presentation/auth_redirect.dart';
 import 'package:flutter_starter/features/auth/presentation/providers/auth_provider.dart';
 import 'package:flutter_starter/features/auth/presentation/widgets/auth_form_body.dart';
+import 'package:flutter_starter/features/auth/presentation/widgets/password_form_field.dart';
 import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -38,10 +40,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   Future<void> _handleLogin() async {
+    // The keyboard's Done reaches here too: not while a request is running.
+    if (ref.read(authNotifierProvider).isLoading) return;
     if (_formKey.currentState!.validate()) {
       await ref
           .read(authNotifierProvider.notifier)
           .login(_emailController.text.trim(), _passwordController.text);
+      // Lets the platform's password manager offer to save the credentials.
+      if (ref.read(authNotifierProvider).user != null) {
+        TextInput.finishAutofillContext();
+      }
     }
   }
 
@@ -55,97 +63,100 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       body: AuthFormBody(
         child: Form(
           key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if (DemoAuth.enabled) ...[
-                DemoSignInCard(
-                  onFill: () {
-                    _emailController.text = DemoAuth.email;
-                    _passwordController.text = DemoAuth.password;
+          child: AutofillGroup(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (DemoAuth.enabled) ...[
+                  DemoSignInCard(
+                    onFill: () {
+                      _emailController.text = DemoAuth.email;
+                      _passwordController.text = DemoAuth.password;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                ],
+                TextFormField(
+                  controller: _emailController,
+                  decoration: InputDecoration(
+                    labelText: l10n.email,
+                    border: const OutlineInputBorder(),
+                  ),
+                  keyboardType: TextInputType.emailAddress,
+                  textInputAction: TextInputAction.next,
+                  autofillHints: const [AutofillHints.email],
+                  validator: (value) {
+                    final email = value?.trim() ?? '';
+                    if (email.isEmpty) {
+                      return l10n.emailRequired;
+                    }
+                    if (!Validators.isValidEmail(email)) {
+                      return l10n.emailInvalid;
+                    }
+                    return null;
                   },
                 ),
                 const SizedBox(height: 16),
-              ],
-              TextFormField(
-                controller: _emailController,
-                decoration: InputDecoration(
-                  labelText: l10n.email,
-                  border: const OutlineInputBorder(),
-                ),
-                keyboardType: TextInputType.emailAddress,
-                validator: (value) {
-                  final email = value?.trim() ?? '';
-                  if (email.isEmpty) {
-                    return l10n.emailRequired;
-                  }
-                  if (!Validators.isValidEmail(email)) {
-                    return l10n.emailInvalid;
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _passwordController,
-                decoration: InputDecoration(
+                PasswordFormField(
+                  controller: _passwordController,
                   labelText: l10n.password,
-                  border: const OutlineInputBorder(),
+                  autofillHints: const [AutofillHints.password],
+                  textInputAction: TextInputAction.done,
+                  onFieldSubmitted: (_) => _handleLogin(),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return l10n.passwordRequired;
+                    }
+                    if (!Validators.isValidPassword(value)) {
+                      return l10n.passwordMinLength(8);
+                    }
+                    return null;
+                  },
                 ),
-                obscureText: true,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return l10n.passwordRequired;
-                  }
-                  if (!Validators.isValidPassword(value)) {
-                    return l10n.passwordMinLength(8);
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 24),
-              if (authState.error != null)
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 16),
-                  child: Text(
-                    // The failure in the user's language, never the log
-                    // text in `error`.
-                    authState.failure?.localizedMessage(l10n) ??
-                        authState.error!,
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.error,
+                const SizedBox(height: 24),
+                if (authState.error != null)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 16),
+                    child: Text(
+                      // The failure in the user's language, never the log
+                      // text in `error`.
+                      authState.failure?.localizedMessage(l10n) ??
+                          authState.error!,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.error,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                    textAlign: TextAlign.center,
                   ),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  key: UiKeys.loginSubmit,
+                  onPressed: authState.isLoading ? null : _handleLogin,
+                  child: authState.isLoading
+                      ? const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : Text(l10n.login),
                 ),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                key: UiKeys.loginSubmit,
-                onPressed: authState.isLoading ? null : _handleLogin,
-                child: authState.isLoading
-                    ? const SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
-                    : Text(l10n.login),
-              ),
-              const SizedBox(height: 16),
-              TextButton(
-                onPressed: authState.isLoading
-                    ? null
-                    : () {
-                        ref.read(authNotifierProvider.notifier).clearError();
-                        context.replaceRoute(
-                          authLocationKeepingRedirect(
-                            AppRoutes.register,
-                            widget.redirect,
-                          ),
-                        );
-                      },
-                child: Text(l10n.dontHaveAccount),
-              ),
-            ],
+                const SizedBox(height: 16),
+                TextButton(
+                  onPressed: authState.isLoading
+                      ? null
+                      : () {
+                          ref.read(authNotifierProvider.notifier).clearError();
+                          context.replaceRoute(
+                            authLocationKeepingRedirect(
+                              AppRoutes.register,
+                              widget.redirect,
+                            ),
+                          );
+                        },
+                  child: Text(l10n.dontHaveAccount),
+                ),
+              ],
+            ),
           ),
         ),
       ),
