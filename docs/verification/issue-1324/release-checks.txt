@@ -1,0 +1,15 @@
+E2E Android (Patrol) head=3359e6d2f17 success
+  Patrol on Android emulator success
+Build (Manual) head=3359e6d2f17 success
+  Android on JDK 25 (toolchain floor + debug build) success
+  Build Android success
+  Build Web success
+  Build iOS (no codesign) success
+📝 Total: 2
+✅ Successful: 2
+❌ Failed: 0
+⏩ Skipped: 0
+
+v5.0.1	Latest	v5.0.1	2026-11-17T13:26:43Z
+v5.0.0		v5.0.0	2026-11-17T10:23:55Z
+v4.0.0		v4.0.0	2026-11-08T15:15:37Z
