@@ -71,16 +71,24 @@ Directory _copyOfHead() {
 }
 
 /// Nests the fixture app in an enclosing repository with an optional sibling.
-Directory _nestedApp(Directory root, {bool trackedSibling = false}) {
-  final app = Directory('${root.path}/app')..createSync();
+///
+/// [dir] other than `app` skips the CRLF attribute, whose pattern names it.
+Directory _nestedApp(
+  Directory root, {
+  bool trackedSibling = false,
+  String dir = 'app',
+}) {
+  final app = Directory('${root.path}/$dir')..createSync();
   for (final entry in root.listSync()) {
     final name = entry.uri.pathSegments.where((part) => part.isNotEmpty).last;
-    if (name == '.git' || name == 'app') continue;
+    if (name == '.git' || name == dir) continue;
     entry.renameSync('${app.path}/$name');
   }
-  File('${root.path}/.gitattributes').writeAsStringSync(
-    'app/lib/core/routing/app_routes.dart text eol=crlf\n',
-  );
+  if (dir == 'app') {
+    File('${root.path}/.gitattributes').writeAsStringSync(
+      'app/lib/core/routing/app_routes.dart text eol=crlf\n',
+    );
+  }
   if (trackedSibling) {
     File('${root.path}/sibling_notes.txt').writeAsStringSync('baseline\n');
   }
@@ -307,6 +315,40 @@ void main() {
     );
     final result = _strip(root, root, ['--remove-tasks']);
     expect(result.exitCode, 0, reason: _out(result));
+  }, skip: skip);
+
+  // `dart run` re-pins the SDK-pinned lock entries on a Flutter other than
+  // the one that resolved the lock, so the run itself modified pubspec.lock
+  // and the strip refused a change the user never made.
+  // Git quotes a status path holding a space or a non-ASCII character.
+  for (final nested in [null, 'app', 'my \u1EE9ng app']) {
+    test('a modified pubspec.lock alone is reported, not refused'
+        '${nested == null ? '' : ' (nested in "$nested")'}', () {
+      final app = nested == null ? root : _nestedApp(root, dir: nested);
+      final lock = File('${app.path}/pubspec.lock');
+      final repinned = '${lock.readAsStringSync()}# re-pinned\n';
+      lock.writeAsStringSync(repinned);
+
+      final result = _strip(app, app, ['--remove-tasks']);
+
+      expect(result.exitCode, 0, reason: _out(result));
+      expect('${result.stdout}', contains('pubspec.lock is modified'));
+      expect(lock.readAsStringSync(), repinned);
+      expect(Directory('${app.path}/lib/features/tasks').existsSync(), isFalse);
+    }, skip: skip);
+  }
+
+  test('a modified pubspec.lock does not hide another edit', () {
+    final lock = File('${root.path}/pubspec.lock');
+    lock.writeAsStringSync('${lock.readAsStringSync()}# re-pinned\n');
+    File('${root.path}/custom.txt').writeAsStringSync('my work');
+
+    final result = _strip(root, root, ['--remove-tasks']);
+
+    expect(result.exitCode, 2, reason: _out(result));
+    expect('${result.stderr}', contains('custom.txt'));
+    expect('${result.stderr}', isNot(contains('pubspec.lock')));
+    expect(Directory('${root.path}/lib/features/tasks').existsSync(), isTrue);
   }, skip: skip);
 
   test('bricks-only removal also refuses a dirty tree', () {

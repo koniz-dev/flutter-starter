@@ -870,18 +870,47 @@ bool _checkWorkingTree(
   try {
     git(['rev-parse', '--verify', 'HEAD']);
     final prefix = '${git(['rev-parse', '--show-prefix']).stdout}'.trimRight();
+    // -z: paths unquoted, so one holding a space or a non-ASCII character
+    // still compares equal below.
     final status =
         '${git([
               'status',
               '--porcelain',
+              '-z',
               '--untracked-files=normal',
               // Status otherwise includes sibling projects in a monorepo.
               '--',
               '.',
             ]).stdout}'
-            .trimRight();
-    final changes = <String>[if (status.isNotEmpty) status];
-    if (status.isEmpty) {
+            .split('\u0000');
+    final statusLines = <String>[];
+    for (var i = 0; i < status.length; i++) {
+      final entry = status[i];
+      if (entry.length < 4) continue;
+      statusLines.add(entry);
+      // A rename or copy is followed by its source path.
+      if (entry.startsWith('R') || entry.startsWith('C')) i++;
+    }
+    // `dart run` resolves dependencies before this tool starts, and on a
+    // Flutter other than the one that resolved the lock it re-pins the
+    // SDK-pinned entries: the run itself modified pubspec.lock. The strip
+    // never writes that file, so a modified lock cannot be lost - say so
+    // and go on, rather than refuse a change the user did not make.
+    final lockPath = '${prefix}pubspec.lock';
+    bool isLock(String line) =>
+        const {' M', 'M ', 'MM'}.contains(line.substring(0, 2)) &&
+        line.substring(3) == lockPath;
+    if (statusLines.any(isLock)) {
+      stdout.writeln(
+        'Note: pubspec.lock is modified, usually by the `pub get` that '
+        '`dart run` performs on a Flutter other than the one the lock was '
+        'resolved on. The strip does not touch it; review it with '
+        '`git diff pubspec.lock` and keep or restore it.',
+      );
+    }
+    final remaining = statusLines.where((l) => !isLock(l)).join('\n');
+    final changes = <String>[if (remaining.isNotEmpty) remaining];
+    if (remaining.isEmpty) {
       final targets = <String>{...overwritten};
       final entries = '${git(['ls-files', '-v', '-z']).stdout}'.split('\u0000');
       for (final entry in entries) {
