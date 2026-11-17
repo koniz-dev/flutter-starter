@@ -842,7 +842,8 @@ Interceptor for converting DioException to domain exceptions.
 
 - 4xx/5xx status codes → `ServerException`
 - Network errors (timeout, connection) → `NetworkException`
-- Everything else (cancel, bad certificate, unknown) → `NetworkException`, with a `code` such as `UNKNOWN_NETWORK_ERROR` (`lib/core/errors/dio_exception_mapper.dart:13-75`). There is no `UnknownException` type.
+- A rejected certificate - an SSL-pinning mismatch, or an untrusted or expired certificate, which dio reports as `unknown` with a `TlsException` - → `NetworkException` with code `BAD_CERTIFICATE`, shown as the insecure-connection message; a `SocketException` → `NETWORK_ERROR`.
+- Everything else (cancel, other unknown errors) → `NetworkException`, with a `code` such as `UNKNOWN_NETWORK_ERROR` (`DioExceptionMapper.map` in `lib/core/errors/dio_exception_mapper.dart`). There is no `UnknownException` type.
 
 ---
 
