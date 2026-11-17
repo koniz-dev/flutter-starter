@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+## [5.0.2] - 2026-11-18
+
+### Fixed
+
 - [TLS and pinning failures name the certificate](https://github.com/koniz-dev/flutter-starter/issues/1326): a handshake rejected by certificate pinning or an untrusted CA surfaced as a generic connectivity error. `DioExceptionMapper` now maps a `TlsException` to `NetworkException` with code `BAD_CERTIFICATE` (a `SocketException` stays `NETWORK_ERROR`). Code that matched the old connectivity code for these failures should match `BAD_CERTIFICATE` too.
 - [Auth forms work from the keyboard](https://github.com/koniz-dev/flutter-starter/issues/1327): login and register move between fields with Next and submit with Done, offer email, password and name autofill hints inside an `AutofillGroup` (saved only on a successful sign-in), and have a show/hide password button with localized tooltips (new ARB keys `showPassword` and `hidePassword`). A whitespace-only name is rejected.
 - [v4 to v5 upgrade notes](https://github.com/koniz-dev/flutter-starter/issues/1328): the upgrade guide gains a "v4 to v5" section: add `material_ui` and `cupertino_ui` to `pubspec.yaml`, copy `UIApplicationSceneManifest` into `Info.plist`, and pass an API URL to release builds. The v5.0.0 release notes are corrected the same way.
