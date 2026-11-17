@@ -76,4 +76,26 @@ void main() {
       expect(text, contains('cancel-in-progress: false'));
     });
   }
+
+  // `cancel-in-progress: true` keyed on the ref also cancelled pushes to
+  // main, so commits merged close together never got a full run there (7 of
+  // 40 main runs were cancelled).
+  test('no workflow that runs on push cancels an in-progress push run', () {
+    for (final file in Directory('.github/workflows').listSync()) {
+      if (file is! File || !file.path.endsWith('.yml')) continue;
+      final text = file.readAsStringSync();
+      final on = RegExp(
+        r'^on:\n((?:[ #].*\n|\n)*)',
+        multiLine: true,
+      ).firstMatch(text)?.group(1);
+      if (on == null || !RegExp('^  push:', multiLine: true).hasMatch(on)) {
+        continue;
+      }
+      expect(
+        text,
+        isNot(contains('cancel-in-progress: true')),
+        reason: '${file.path} runs on push; cancel only pull_request runs',
+      );
+    }
+  });
 }

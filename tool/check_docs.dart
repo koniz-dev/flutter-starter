@@ -234,17 +234,33 @@ class _Link {
 ///
 /// Titles (`[t](url "title")`) and angle-bracketed targets are handled; image
 /// links are included because a broken image path is just as broken.
+/// Every link target in [body]: inline `[t](target)`, the angle-bracket
+/// form `[t](<target with spaces>)`, a reference definition
+/// `[ref]: target` (which every `[t][ref]` use resolves through), and an
+/// HTML `href` or `src` attribute. Only the first form used to be read, so a
+/// broken link written any other way passed.
 Iterable<_Link> _inlineLinks(String body) sync* {
-  final pattern = RegExp(
-    r'\[[^\]\n]*\]\(([^()\s]*(?:\([^()]*\))?[^()\s]*)'
-    r'(?:\s+"[^"]*")?\)',
-  );
-  for (final match in pattern.allMatches(body)) {
-    var target = match.group(1)!.trim();
-    if (target.startsWith('<') && target.endsWith('>')) {
-      target = target.substring(1, target.length - 1);
+  final patterns = [
+    RegExp(
+      r'\[[^\]\n]*\]\(([^()\s<]*(?:\([^()]*\))?[^()\s]*)'
+      r'(?:\s+"[^"]*")?\)',
+    ),
+    RegExp(r'\[[^\]\n]*\]\(<([^<>\n]*)>(?:\s+"[^"]*")?\)'),
+    RegExp(r'^ {0,3}\[[^\]\n]+\]:[ \t]*<?([^\s<>]+)>?', multiLine: true),
+    RegExp(
+      r'''<(?:a|img)\s[^>]*?\b(?:href|src)\s*=\s*["']([^"']+)["']''',
+      caseSensitive: false,
+    ),
+  ];
+  final found = <(int, String)>[];
+  for (final pattern in patterns) {
+    for (final match in pattern.allMatches(body)) {
+      found.add((match.start, match.group(1)!.trim()));
     }
-    final line = '\n'.allMatches(body.substring(0, match.start)).length + 1;
+  }
+  found.sort((a, b) => a.$1.compareTo(b.$1));
+  for (final (start, target) in found) {
+    final line = '\n'.allMatches(body.substring(0, start)).length + 1;
     yield _Link(target, line);
   }
 }

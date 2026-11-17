@@ -507,6 +507,9 @@ reads higher than the gate.
 
 ### Generate HTML Coverage Report
 
+`--html` needs `genhtml`, from lcov (`brew install lcov` or
+`sudo apt-get install lcov`); without it the script stops and says so.
+
 ```bash
 ./scripts/test/test_coverage.sh --html
 ```

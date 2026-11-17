@@ -85,6 +85,15 @@ flutter test test/features/auth/domain/usecases/login_test.dart
     ]);
   });
 
+  test('a `dart test` command is checked too', () {
+    const markdown = '''
+```bash
+dart test test/nope_test.dart
+```
+''';
+    expect(missing(markdown), ['test/nope_test.dart']);
+  });
+
   test('criterion 2: the real path passes', () {
     const after = '''
 ```bash

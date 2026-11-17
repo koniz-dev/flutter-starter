@@ -29,7 +29,8 @@ on:
 
 concurrency:
   group: git-hooks-${{ github.ref }}
-  cancel-in-progress: true
+  # A push to main is never cancelled: every merged commit gets its full run.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 permissions:
   contents: read

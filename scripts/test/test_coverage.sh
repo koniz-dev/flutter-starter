@@ -143,17 +143,13 @@ COVERAGE_EXCLUDES=$(printf '%s\n' "${EXCLUDE_PATHS[@]}") awk '
 if [ "$GENERATE_HTML" = true ]; then
   echo -e "${YELLOW}Generating HTML coverage report...${NC}"
 
-  # Check if lcov is installed
+  # genhtml comes with lcov. Installing it is the user's call: this used to
+  # run `brew install` or `sudo apt-get install` without asking.
   if ! command -v genhtml &> /dev/null; then
-    echo -e "${YELLOW}Warning: genhtml not found. Installing lcov...${NC}"
-    if [[ "$OSTYPE" == "darwin"* ]]; then
-      brew install lcov
-    elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
-      sudo apt-get update && sudo apt-get install -y lcov
-    else
-      echo -e "${RED}Please install lcov manually${NC}"
-      exit 1
-    fi
+    echo -e "${RED}genhtml not found: --html needs lcov. Install it, then re-run:${NC}"
+    echo "  macOS:  brew install lcov"
+    echo "  Linux:  sudo apt-get install lcov"
+    exit 1
   fi
 
   # Create HTML report directory

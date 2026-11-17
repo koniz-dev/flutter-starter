@@ -130,6 +130,40 @@ void main() {
     expect(result.stderr, isNot(contains('lib/x.md')));
   });
 
+  // Only `[t](target)` was read, so a broken link written as a reference
+  // definition, in angle brackets or as HTML passed the check.
+  for (final (form, body) in [
+    ('a reference definition', 'See [the guide][g].\n\n[g]: gone.md\n'),
+    ('an angle-bracket target', 'See [the guide](<gone guide.md>).\n'),
+    ('an HTML href', '<a href="gone.md">the guide</a>\n'),
+    ('an HTML img src', '<img src="gone.png" alt="x">\n'),
+  ]) {
+    test('a broken link written as $form fails', () {
+      write('docs/forms.md', body);
+
+      final result = links();
+
+      expect(result.exitCode, 1, reason: '${result.stdout}${result.stderr}');
+      expect(result.stderr, contains('docs/forms.md:'));
+      expect(result.stderr, contains('missing path -> gone'));
+    });
+  }
+
+  test('the same forms pass when their targets exist', () {
+    write('docs/a guide.md', '# A guide\n');
+    write('docs/pic.png', '');
+    write(
+      'docs/forms.md',
+      'See [the guide][g] and [it](<a guide.md>).\n'
+          '<a href="index.md">index</a> <img src="pic.png" alt="x">\n\n'
+          '[g]: index.md\n',
+    );
+
+    final result = links();
+
+    expect(result.exitCode, 0, reason: '${result.stdout}${result.stderr}');
+  });
+
   // "The repository itself passes" is the Docs check's job on main, not a
   // unit test's: strip-smoke's keep-samples job deletes bricks/ and
   // mason.yaml, which leaves links dangling in that tree.
