@@ -1,0 +1,5 @@
+Commits in f62242a4a15..HEAD
+  ok    be2197da fix(network): end the realtime client with the session (#1312)
+  ok    2346ad03 fix(network): cache responses that vary only on Accept-Encoding or Origin (#1311)
+
+OK: every message links with 'Refs koniz-dev/flutter-starter#N' and closes nothing.

@@ -1,0 +1,31 @@
+00:00 +0: loading /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/c9040f3a-094e-4757-b5d0-3dd1371d6d3a/scratchpad/g2/test/core/network/cache_header_isolation_test.dart
+00:00 +0: X-Api-Key bypasses cache reads and writes across credentials
+00:00 +1: Authorization bypasses cache reads and writes across credentials
+00:00 +2: X-Auth-Token bypasses cache reads and writes across credentials
+00:00 +3: Proxy-Authorization bypasses cache reads and writes across credentials
+00:00 +4: Cookie bypasses cache reads and writes across credentials
+00:00 +5: Set-Cookie bypasses cache reads and writes across credentials
+00:00 +6: Api-Key bypasses cache reads and writes across credentials
+00:00 +7: X-Refresh-Token bypasses cache reads and writes across credentials
+00:00 +8: X-Csrf-Token bypasses cache reads and writes across credentials
+00:00 +9: x_CUSTOM_session_key bypasses cache reads and writes across credentials
+00:00 +10: sensitive headers cannot read or replace an anonymous cached body
+00:00 +11: Vary [X-Api-Key] is not represented by the URL key and is not stored
+00:00 +12: Vary [Accept-Language] is not represented by the URL key and is not stored
+00:00 +13: Vary [*] is not represented by the URL key and is not stored
+00:00 +14: Vary [Accept-Encoding, X-Region] is not represented by the URL key and is not stored
+00:00 +15: Vary [  ACCEPT  , X-Region] is not represented by the URL key and is not stored
+00:00 +16: Vary [Accept-Encoding] is covered and the anonymous GET is reused
+00:00 +17: Vary [Origin] is covered and the anonymous GET is reused
+00:00 +18: Vary [accept-encoding, ORIGIN] is covered and the anonymous GET is reused
+00:00 +19: Vary [Accept-Encoding,  Origin ] is covered and the anonymous GET is reused
+00:00 +20: anonymous GETs without Vary still reuse the cached body
+00:00 +21: upgrade purges bodies admitted by the former header policy
+00:00 +22: an unindexed legacy body is not replayed (sibling: false)
+00:00 +23: an unindexed legacy body is not replayed (sibling: true)
+00:00 +24: a refused upgrade purge cannot replay old data and retries later
+Cache legacy purge error: Bad state: Cache purge deletion refused
+Cache legacy purge error: Bad state: Cache purge deletion refused
+00:00 +25: a refused replacement write cannot admit an orphaned private body
+00:00 +26: a Vary response evicts a previously cached body at its URL
+00:00 +27: All tests passed!
