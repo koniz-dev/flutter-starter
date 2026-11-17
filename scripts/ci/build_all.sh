@@ -141,18 +141,19 @@ echo ""
 IOS_ARTIFACT=""
 if [[ "$OSTYPE" == "darwin"* ]]; then
     echo -e "${YELLOW}Building iOS...${NC}"
-    # An IPA needs a signing team. Without one, `flutter build ipa` failed and
-    # set -e stopped the script before the web build and the size report, on
-    # any Mac where iOS signing was not set up yet.
+    # An IPA needs signing. Flutter finds a team in the project, an xcconfig
+    # or a single keychain certificate; without one `flutter build ipa`
+    # fails, and set -e stopped the script before the web build and the size
+    # report on any Mac where iOS signing was not set up yet. Try the IPA, and
+    # on failure build the release unsigned so the rest still runs.
     if [ "$ENVIRONMENT" == "production" ] &&
-        grep -q 'DEVELOPMENT_TEAM' ios/Runner.xcodeproj/project.pbxproj 2>/dev/null; then
         flutter build ipa \
             --release \
-            "${DEFINES[@]}"
+            "${DEFINES[@]}"; then
         IOS_ARTIFACT="build/ios/ipa/"
         echo -e "${GREEN}✓ iOS IPA built${NC}"
     elif [ "$ENVIRONMENT" == "production" ]; then
-        echo -e "${YELLOW}⚠ No DEVELOPMENT_TEAM in ios/Runner.xcodeproj: building iOS unsigned, not an IPA.${NC}"
+        echo -e "${YELLOW}⚠ flutter build ipa failed (no signing team or certificate?): building iOS unsigned instead.${NC}"
         echo "  Set up signing (docs/deployment/ios-deployment.md) to get an IPA."
         flutter build ios \
             --release \
