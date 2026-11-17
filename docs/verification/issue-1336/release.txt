@@ -1,0 +1,4 @@
+v5.0.2
+7c1e42df58ac69f1d59174fa019ab075ba2de7b2
+2026-11-17T23:32:00Z
+https://github.com/koniz-dev/flutter-starter/releases/tag/v5.0.2

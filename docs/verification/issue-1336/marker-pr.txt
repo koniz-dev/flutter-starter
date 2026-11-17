@@ -1,0 +1,8 @@
+PR 1340 MERGED 7c1e42df58a
+Quality gate=SUCCESS
+Docs check=SUCCESS
+Strip both-samples-removed + analyze + test=SUCCESS
+Strip tasks-removed + analyze + test=SUCCESS
+Strip feature-flags-removed + analyze + test=SUCCESS
+Strip renamed-both + analyze + test=SUCCESS
+Strip keep-samples + analyze + test=SUCCESS

@@ -1,0 +1,5 @@
+44137027902 E2E Android (Patrol) 7c1e42df58a success | Patrol on Android emulator=success
+44137034821 Scripts smoke 7c1e42df58a success | build_all.sh (production)=success, fork-and-customize Option B (my_app, My App) + analyze + test + scaffold=success, create_feature.sh == create_feature.ps1 (Windows)=success, mason make flutter_starter_setup (acme_shop) + analyze + test=success
+44137041504 Build (Manual) 7c1e42df58a success | Build Android=success, Android on JDK 25 (toolchain floor + debug build)=success, Build Web=skipped, Build iOS (no codesign)=skipped
+44137047550 Build (Manual) 7c1e42df58a success | Build iOS (no codesign)=success, Android on JDK 25 (toolchain floor + debug build)=skipped, Build Web=skipped, Build Android=skipped
+44137054103 Build (Manual) 7c1e42df58a success | Build Web=success, Build Android=skipped, Android on JDK 25 (toolchain floor + debug build)=skipped, Build iOS (no codesign)=skipped
