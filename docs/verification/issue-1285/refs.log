@@ -1,0 +1,5 @@
+Commits in 2526cefb2d7..HEAD
+  ok    f62242a4 docs: close the documentation findings of the 2026-11-14 audit (#1307)
+  ok    591ad409 fix(tasks): offer Home when the list is opened as a root deep link (#1306)
+
+OK: every message links with 'Refs koniz-dev/flutter-starter#N' and closes nothing.

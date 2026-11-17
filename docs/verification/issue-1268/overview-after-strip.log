@@ -1,0 +1,13 @@
+strip exit=0
+--- overview.md "On pure Dart" paragraph after removing feature flags:
+**On "pure Dart".** The rule is *no framework behaviour in the domain layer*,
+not *no Flutter import at all*. The domain entities
+(`lib/features/*/domain/entities/`, such as
+`lib/features/auth/domain/entities/user.dart:1`) each import
+`package:flutter/foundation.dart` for `@immutable`, a compile-time annotation
+re-exported from `package:meta` that contributes nothing at runtime.
+These are the only Flutter imports anywhere under `lib/features/*/domain/`;
+use cases and repository interfaces are framework-free. This guide states what the code does - it previously claimed
+an absolute purity the code has never had.
+--- feature_flags mentions left in overview.md:
+0

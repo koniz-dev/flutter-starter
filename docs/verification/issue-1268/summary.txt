@@ -1,0 +1,6 @@
+audit_template exit=0
+epic_coverage exit=0
+deliverable exit=0
+refs exit=0
+tasks_root_home_test exit=0
+check_docs exit=0
