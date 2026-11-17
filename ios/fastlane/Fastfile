@@ -10,6 +10,7 @@
 require 'shellwords'
 require_relative '../../fastlane/ssl_pinning'
 require_relative '../../fastlane/release_environment'
+require_relative '../../fastlane/ios_ipa'
 
 # Default platform
 default_platform(:ios)
@@ -73,6 +74,7 @@ platform :ios do
     # build has neither fingerprints nor an explicit opt-out - such a release
     # refuses to start. See fastlane/ssl_pinning.rb.
     pinning = SslPinning.lane_defines(environment, options)
+    IosIpa.clear(File.expand_path(REPO_ROOT))
     sh("cd #{REPO_ROOT} && flutter build ipa " \
        "--release " \
        "--export-method app-store " \
@@ -84,9 +86,8 @@ platform :ios do
     # Absolute: lane code runs in ios/fastlane/, but fastlane runs every
     # action from ios/, so the relative path would name a file outside the
     # repository by the time upload_to_testflight / upload_to_app_store read it.
-    ipa_path = File.expand_path("#{REPO_ROOT}/build/ios/ipa/Runner.ipa")
-
-    UI.user_error!("IPA not found at #{ipa_path}") unless File.exist?(ipa_path)
+    # Looked up, not named: Xcode names the export after the app's product.
+    ipa_path = IosIpa.lane_path(File.expand_path(REPO_ROOT))
 
     UI.success("IPA built successfully: #{ipa_path}")
     ipa_path
@@ -110,6 +111,7 @@ platform :ios do
     # build has neither fingerprints nor an explicit opt-out - such a release
     # refuses to start. See fastlane/ssl_pinning.rb.
     pinning = SslPinning.lane_defines(environment, options)
+    IosIpa.clear(File.expand_path(REPO_ROOT))
     sh("cd #{REPO_ROOT} && flutter build ipa " \
        "--release " \
        "--export-method ad-hoc " \
@@ -120,9 +122,8 @@ platform :ios do
     # Absolute: lane code runs in ios/fastlane/, but fastlane runs every
     # action from ios/, so the relative path would name a file outside the
     # repository by the time upload_to_testflight / upload_to_app_store read it.
-    ipa_path = File.expand_path("#{REPO_ROOT}/build/ios/ipa/Runner.ipa")
-
-    UI.user_error!("IPA not found at #{ipa_path}") unless File.exist?(ipa_path)
+    # Looked up, not named: Xcode names the export after the app's product.
+    ipa_path = IosIpa.lane_path(File.expand_path(REPO_ROOT))
 
     UI.success("IPA built successfully: #{ipa_path}")
     ipa_path
