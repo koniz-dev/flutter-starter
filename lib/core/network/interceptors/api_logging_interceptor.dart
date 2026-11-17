@@ -221,10 +221,12 @@ class ApiLoggingInterceptor extends Interceptor {
   /// changes: a response cached before a key joined the rules was cached for
   /// a URL that now names a secret, and is never read or evicted again.
   /// Version 3 also rejects sensitive request headers and header-dependent
-  /// Vary responses from the URL-only cache. Bump it when cache admission
+  /// Vary responses from the URL-only cache. Version 4 also rejects a URL
+  /// whose nested or `;`-separated parameters name a secret - any URL that
+  /// [redactUrl] changes. Bump it when cache admission
   /// becomes stricter or any of these sets changes;
   /// `cache_rule_version_test.dart` fails until you do.
-  static const int sensitiveKeyRuleVersion = 3;
+  static const int sensitiveKeyRuleVersion = 4;
 
   /// The key rules as one comparable string, for the version test.
   @visibleForTesting
@@ -410,6 +412,13 @@ class ApiLoggingInterceptor extends Interceptor {
       try {
         decoded = Uri.decodeComponent(value);
       } on FormatException {
+        // A nested URL that does not decode (a Latin-1 escape such as `%E9`)
+        // cannot be read, so it cannot be cleared either: redact all of it.
+        // Skipping it left its credential in clear.
+        out
+          ..write(text.substring(copied, match.end))
+          ..write(_redacted);
+        copied = valueEnd;
         continue;
       }
       final safe = _redactNestedParameters(decoded, depth: depth - 1);

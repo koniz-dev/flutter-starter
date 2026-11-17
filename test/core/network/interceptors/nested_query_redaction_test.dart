@@ -73,4 +73,15 @@ void main() {
     // seconds at this size.
     expect(watch.elapsed, lessThan(const Duration(seconds: 3)));
   });
+
+  // An encoded nested URL holding one non-UTF-8 escape made the decode throw,
+  // and the pass skipped the whole value, credential included.
+  test('an undecodable nested URL is redacted whole, not skipped', () {
+    final redacted = ApiLoggingInterceptor.redactUrl(
+      '/a?redirect=https%3A%2F%2Fx%2F%3Fname%3Dcaf%E9%26token%3Dsecret&lang=en',
+    );
+
+    expect(redacted, isNot(contains('secret')));
+    expect(redacted, '/a?redirect=***REDACTED***&lang=en');
+  });
 }
