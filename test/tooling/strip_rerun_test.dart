@@ -71,16 +71,24 @@ Directory _copyOfHead() {
 }
 
 /// Nests the fixture app in an enclosing repository with an optional sibling.
-Directory _nestedApp(Directory root, {bool trackedSibling = false}) {
-  final app = Directory('${root.path}/app')..createSync();
+///
+/// [dir] other than `app` skips the CRLF attribute, whose pattern names it.
+Directory _nestedApp(
+  Directory root, {
+  bool trackedSibling = false,
+  String dir = 'app',
+}) {
+  final app = Directory('${root.path}/$dir')..createSync();
   for (final entry in root.listSync()) {
     final name = entry.uri.pathSegments.where((part) => part.isNotEmpty).last;
-    if (name == '.git' || name == 'app') continue;
+    if (name == '.git' || name == dir) continue;
     entry.renameSync('${app.path}/$name');
   }
-  File('${root.path}/.gitattributes').writeAsStringSync(
-    'app/lib/core/routing/app_routes.dart text eol=crlf\n',
-  );
+  if (dir == 'app') {
+    File('${root.path}/.gitattributes').writeAsStringSync(
+      'app/lib/core/routing/app_routes.dart text eol=crlf\n',
+    );
+  }
   if (trackedSibling) {
     File('${root.path}/sibling_notes.txt').writeAsStringSync('baseline\n');
   }
@@ -312,10 +320,11 @@ void main() {
   // `dart run` re-pins the SDK-pinned lock entries on a Flutter other than
   // the one that resolved the lock, so the run itself modified pubspec.lock
   // and the strip refused a change the user never made.
-  for (final nested in [false, true]) {
+  // Git quotes a status path holding a space or a non-ASCII character.
+  for (final nested in [null, 'app', 'my \u1EE9ng app']) {
     test('a modified pubspec.lock alone is reported, not refused'
-        '${nested ? ' (nested app)' : ''}', () {
-      final app = nested ? _nestedApp(root) : root;
+        '${nested == null ? '' : ' (nested in "$nested")'}', () {
+      final app = nested == null ? root : _nestedApp(root, dir: nested);
       final lock = File('${app.path}/pubspec.lock');
       final repinned = '${lock.readAsStringSync()}# re-pinned\n';
       lock.writeAsStringSync(repinned);
