@@ -31,6 +31,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- [Reject duplicate demo registration](https://github.com/koniz-dev/flutter-starter/issues/1286): the offline demo answers an already-registered email with a 409, as a backend would, instead of overwriting the account and breaking the demo card's credentials.
+
+- [Remove the unused `checkExamples` key](https://github.com/koniz-dev/flutter-starter/issues/1287): dropped from the four ARB files; `AppLocalizations.checkExamples` no longer exists.
+
+- [Find the exported IPA by glob](https://github.com/koniz-dev/flutter-starter/issues/1292): the iOS build lanes clear `build/ios/ipa/` and take the single `.ipa` Xcode exported (new `fastlane/ios_ipa.rb`) instead of assuming `Runner.ipa`; the commented App Store upload step in `deploy-ios.yml` does the same.
+
 - [Ignore golden failure images](https://github.com/koniz-dev/flutter-starter/issues/1290): `.gitignore` ignores `/test/**/failures/`, where a failed golden comparison writes its diff images; a `failures/` directory under `lib/` stays tracked.
 
 - [Describe workflow triggers accurately](https://github.com/koniz-dev/flutter-starter/issues/1291): the `coverage.yml` header, `test-coverage.md` and `scripts/dev/setup_ci.dart`'s prompt and reports now say that only the `deploy-*` workflows ship a commented trigger, enabled with `--deploy-trigger`.
