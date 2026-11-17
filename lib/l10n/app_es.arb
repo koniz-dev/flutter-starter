@@ -3,7 +3,6 @@
   "appTitle": "Flutter Starter",
   "welcome": "¡Bienvenido a Flutter Starter con Arquitectura Limpia!",
   "featureFlagsReady": "¡El Sistema de Feature Flags está listo!",
-  "checkExamples": "Consulta los ejemplos en feature_flags_example_screen.dart",
   "login": "Iniciar sesión",
   "register": "Registrarse",
   "email": "Correo electrónico",

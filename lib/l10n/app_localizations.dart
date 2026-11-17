@@ -128,12 +128,6 @@ abstract class AppLocalizations {
   /// **'Feature Flags System is ready!'**
   String get featureFlagsReady;
 
-  /// Hint to check examples
-  ///
-  /// In en, this message translates to:
-  /// **'Check the examples in feature_flags_example_screen.dart'**
-  String get checkExamples;
-
   /// Login button and screen title
   ///
   /// In en, this message translates to:

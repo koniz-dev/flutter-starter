@@ -27,10 +27,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get featureFlagsReady => 'نظام Feature Flags جاهز!';
 
   @override
-  String get checkExamples =>
-      'تحقق من الأمثلة في feature_flags_example_screen.dart';
-
-  @override
   String get login => 'تسجيل الدخول';
 
   @override

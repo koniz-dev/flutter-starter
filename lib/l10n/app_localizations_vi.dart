@@ -28,10 +28,6 @@ class AppLocalizationsVi extends AppLocalizations {
   String get featureFlagsReady => 'Hệ thống Feature Flags đã sẵn sàng!';
 
   @override
-  String get checkExamples =>
-      'Xem các ví dụ trong feature_flags_example_screen.dart';
-
-  @override
   String get login => 'Đăng nhập';
 
   @override
