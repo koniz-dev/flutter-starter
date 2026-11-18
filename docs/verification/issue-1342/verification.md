@@ -1,0 +1,10 @@
+Verified in PR #1349.
+
+| Acceptance criterion | Result and artifact |
+|---|---|
+| Every documented Mason removal names --remove-bricks; fork guide explains manual deletion breaks analyze/test, guarded by regression tests | PASS — [focused.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1342/focused.log). Two new guards fail original docs (missing option in repository table and missing analyzer/test warning). Both pass after correction; existing strip-marker prose test passes. Repo-wide Markdown scan treats table rows as separate instructions. No runtime strip mechanism changes. |
+| Affected mechanism passes regression evidence and required host/CI gates | PASS — [self-qa.md](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1342/self-qa.md). Final host4724/14, all7 CI green; Quality4723/16, coverage96.87%, tracked tree clean. Independent review and three stripped fixtures pass. Final docs checker and fresh postmerge9-test G2 audit pass; root inspected source, raw artifacts, ownership/status and whole-tree parity. |
+
+Format, analyzer and full suite passed: [format.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1342/format.log), [analyze.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1342/analyze.log), [tests.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1342/tests.log). All actual PR checks passed. The accepted source tree is identical to merged main: [tree-parity.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1342/tree-parity.log).
+
+Independent reviews: [review.md](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1342/review.md). Self-QA inspected the named artifacts, source assertions, refs and status labels before closing. No screenshots were collected (`--no-goldens`); no criterion rests on standing goldens or device/live-backend/store assurance.

@@ -1,0 +1,412 @@
+
+$ flutter test test/docs/bricks_removal_instructions_test.dart test/tooling/strip_bricks_prose_test.dart --reporter expanded
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/bricks_removal_instructions_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_bricks_prose_test.dart: every `mason make` / `mason get` outside bricks/ is strip-marked
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/bricks_removal_instructions_test.dart: Mason removal instructions name the strip option
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/bricks_removal_instructions_test.dart: manual Mason deletion warns about analyzer and test imports
+00:00 +3: All tests passed!
+EXIT 0
+
+$ git clone --quiet --shared --no-hardlinks /Users/nguyenanhkiet/Playground/flutter-starter /var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/review-1342-actual-base-rczif18s
+EXIT 0
+
+$ git checkout --quiet --detach 1b8bef170d4f457af7e7f6f3b6c96c20e8093eb9
+EXIT 0
+
+$ flutter test test/docs/bricks_removal_instructions_test.dart --reporter expanded
+Resolving dependencies...
+Downloading packages...
+  archive 4.0.9 (4.7.1 available)
+  async 2.13.0 (2.13.1 available)
+  build_daemon 4.1.1 (4.1.7 available)
+  built_collection 5.1.1 (6.0.0 available)
+  built_value 8.12.4 (8.13.0 available)
+  cli_util 0.4.2 (0.6.0 available)
+  code_assets 1.0.0 (2.2.0 available)
+  cupertino_ui 1.1.6 (1.1.7 available)
+  dio_web_adapter 2.1.2 (2.2.2 available)
+  flutter_dotenv 6.0.1 (6.0.2 available)
+  flutter_launcher_icons 0.13.1 (0.14.4 available)
+  glob 2.1.3 (2.2.0 available)
+  hooks 1.0.2 (2.2.0 available)
+  html 0.15.6 (0.15.7 available)
+  http_multi_server 3.2.2 (3.2.3 available)
+  image 4.8.0 (4.13.1 available)
+  io 1.0.5 (1.1.0 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  material_ui 1.11.0 (1.11.1 available)
+  mime 2.0.0 (2.1.0 available)
+  mustache_template 2.0.4 (2.0.6 available)
+  native_toolchain_c 0.17.6 (0.19.6 available)
+  objective_c 9.3.0 (9.6.4 available)
+  package_config 2.2.0 (3.0.0 available)
+  path_provider_android 2.2.22 (2.3.1 available)
+  path_provider_linux 2.2.1 (2.2.2 available)
+  path_provider_platform_interface 2.1.2 (2.1.3 available)
+  petitparser 7.0.2 (7.1.0 available)
+  platform 3.1.6 (3.2.0 available)
+  pool 1.5.2 (1.5.3 available)
+  posix 6.5.0 (6.5.4 available)
+  process 5.0.5 (5.0.6 available)
+  pub_semver 2.2.0 (2.2.1 available)
+  pubspec_parse 1.5.0 (1.7.0 available)
+  shared_preferences_android 2.4.21 (2.5.5 available)
+  shared_preferences_foundation 2.5.6 (2.6.2 available)
+  shared_preferences_platform_interface 2.4.1 (2.4.2 available)
+  shelf 1.4.2 (1.4.3 available)
+  stream_transform 2.1.1 (2.1.2 available)
+  test_api 0.7.14 (0.7.15 available)
+  uuid 4.5.3 (4.6.0 available)
+  vector_math 2.4.3 (2.4.4 available)
+  vm_service 15.0.2 (15.4.0 available)
+  web 1.1.1 (1.1.2 available)
+  webdriver 3.1.0 (3.2.0 available)
+  xml 6.6.1 (7.1.0 available)
+Got dependencies!
+46 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading /private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/review-1342-actual-base-rczif18s/test/docs/bricks_removal_instructions_test.dart
+00:00 +0: Mason removal instructions name the strip option
+00:00 +0 -1: Mason removal instructions name the strip option [E]
+  Expected: empty
+    Actual: [
+              'docs/guides/onboarding/repository-layout.md: | [`bricks/`](../../../bricks/) | Optional [Mason](https://pub.dev/packages/mason_cli) brick(s) for fork setup (rename package / native ids); see [`bricks/README.md`](../../../bricks/README.md) and [`mason.yaml`](../../../mason.yaml). If you rename manually and do not use Mason, you can remove both. <!-- strip:bricks line --> |'
+            ]
+  
+  package:matcher                                       expect
+  package:flutter_test/src/widget_tester.dart 473:18    expect
+  test/docs/bricks_removal_instructions_test.dart 34:5  main.<fn>
+  
+00:00 +0 -1: manual Mason deletion warns about analyzer and test imports
+00:00 +0 -2: manual Mason deletion warns about analyzer and test imports [E]
+  Expected: contains 'flutter analyze'
+    Actual: '**If you never use Mason:** after renaming, you can remove **`bricks/`** and **`mason.yaml`**. <!-- strip:bricks line -->\n'
+              'Use `dart run tool/strip_sample_features.dart --apply --keep-samples --remove-bricks`, or add `--remove-bricks` to whichever strip you run: it also drops the passages in the docs that link into them, which deleting the two by hand leaves dangling. <!-- strip:strip-tool line -->'
+     Which: does not contain 'flutter analyze'
+  
+  package:matcher                                       expect
+  package:flutter_test/src/widget_tester.dart 473:18    expect
+  test/docs/bricks_removal_instructions_test.dart 49:7  main.<fn>
+  
+00:00 +0 -2: Some tests failed.
+
+Failing tests:
+  /private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/review-1342-actual-base-rczif18s/test/docs/bricks_removal_instructions_test.dart: Mason removal instructions name the strip option
+  /private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/review-1342-actual-base-rczif18s/test/docs/bricks_removal_instructions_test.dart: manual Mason deletion warns about analyzer and test imports
+EXIT 1
+FIXTURE PASS actual-base
+
+$ git clone --quiet --shared --no-hardlinks /Users/nguyenanhkiet/Playground/flutter-starter /var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/review-1342-tasks-retain-bricks-0fw3xhxk
+EXIT 0
+
+$ git checkout --quiet --detach bdc5279d47b64568652870af8f7f37a9dffabaae
+EXIT 0
+
+$ dart tool/strip_sample_features.dart --apply --remove-tasks --force
+Dropped 1 marked section(s) or line(s) from docs/README.md.
+Dropped 4 marked section(s) or line(s) from docs/architecture/design-decisions.md.
+Dropped 1 marked section(s) or line(s) from docs/api/features/auth/models.md.
+Dropped 3 marked section(s) or line(s) from README.md.
+Dropped 1 marked section(s) or line(s) from bricks/README.md.
+Dropped 1 marked section(s) or line(s) from bricks/flutter_starter_setup/README.md.
+Dropped 1 marked section(s) or line(s) from integration_test/README.md.
+Dropped 1 marked section(s) or line(s) from docs/architecture/super-starter-hub.md.
+Dropped 1 marked section(s) or line(s) from docs/architecture/contracts-map.md.
+Dropped 1 marked section(s) or line(s) from docs/guides/migration/customization-guide.md.
+Dropped 4 marked section(s) or line(s) from docs/guides/onboarding/fork-and-customize.md.
+Dropped 1 marked section(s) or line(s) from docs/guides/onboarding/repository-layout.md.
+Dropped 2 marked section(s) or line(s) from README.md.
+Dropped 4 marked section(s) or line(s) from CLAUDE.md.
+Dropped 3 marked section(s) or line(s) from tool/README.md.
+Removed tool/strip_sample_features.dart: it only serves this strip.
+Removed tool/golden: it only serves this strip.
+Removed .github/workflows/strip-smoke.yml: it only serves this strip.
+Removed test/tooling/strip_markers_test.dart: it only serves this strip.
+Removed test/tooling/strip_sample_prose_test.dart: it only serves this strip.
+Removed test/tooling/strip_rerun_test.dart: it only serves this strip.
+Removed test/tooling/strip_unknown_flags_test.dart: it only serves this strip.
+Strip complete. Run: flutter pub get && flutter analyze && flutter test
+EXIT 0
+
+$ flutter test test/docs/bricks_removal_instructions_test.dart --reporter expanded
+Resolving dependencies...
+Downloading packages...
+  archive 4.0.9 (4.7.1 available)
+  async 2.13.0 (2.13.1 available)
+  build_daemon 4.1.1 (4.1.7 available)
+  built_collection 5.1.1 (6.0.0 available)
+  built_value 8.12.4 (8.13.0 available)
+  cli_util 0.4.2 (0.6.0 available)
+  code_assets 1.0.0 (2.2.0 available)
+  cupertino_ui 1.1.6 (1.1.7 available)
+  dio_web_adapter 2.1.2 (2.2.2 available)
+  flutter_dotenv 6.0.1 (6.0.2 available)
+  flutter_launcher_icons 0.13.1 (0.14.4 available)
+  glob 2.1.3 (2.2.0 available)
+  hooks 1.0.2 (2.2.0 available)
+  html 0.15.6 (0.15.7 available)
+  http_multi_server 3.2.2 (3.2.3 available)
+  image 4.8.0 (4.13.1 available)
+  io 1.0.5 (1.1.0 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  material_ui 1.11.0 (1.11.1 available)
+  mime 2.0.0 (2.1.0 available)
+  mustache_template 2.0.4 (2.0.6 available)
+  native_toolchain_c 0.17.6 (0.19.6 available)
+  objective_c 9.3.0 (9.6.4 available)
+  package_config 2.2.0 (3.0.0 available)
+  path_provider_android 2.2.22 (2.3.1 available)
+  path_provider_linux 2.2.1 (2.2.2 available)
+  path_provider_platform_interface 2.1.2 (2.1.3 available)
+  petitparser 7.0.2 (7.1.0 available)
+  platform 3.1.6 (3.2.0 available)
+  pool 1.5.2 (1.5.3 available)
+  posix 6.5.0 (6.5.4 available)
+  process 5.0.5 (5.0.6 available)
+  pub_semver 2.2.0 (2.2.1 available)
+  pubspec_parse 1.5.0 (1.7.0 available)
+  shared_preferences_android 2.4.21 (2.5.5 available)
+  shared_preferences_foundation 2.5.6 (2.6.2 available)
+  shared_preferences_platform_interface 2.4.1 (2.4.2 available)
+  shelf 1.4.2 (1.4.3 available)
+  stream_transform 2.1.1 (2.1.2 available)
+  test_api 0.7.14 (0.7.15 available)
+  uuid 4.5.3 (4.6.0 available)
+  vector_math 2.4.3 (2.4.4 available)
+  vm_service 15.0.2 (15.4.0 available)
+  web 1.1.1 (1.1.2 available)
+  webdriver 3.1.0 (3.2.0 available)
+  xml 6.6.1 (7.1.0 available)
+Got dependencies!
+46 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading /private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/review-1342-tasks-retain-bricks-0fw3xhxk/test/docs/bricks_removal_instructions_test.dart
+00:00 +0: Mason removal instructions name the strip option
+00:00 +1: manual Mason deletion warns about analyzer and test imports
+  Skip: Mason removal instructions have been stripped
+00:00 +1 ~1: All tests passed!
+EXIT 0
+
+$ dart run tool/check_docs.dart
+links: checked 685 relative link(s) in 75 file(s); 0 broken
+emoji: scanned 62 file(s); 0 line(s) with emoji
+signatures: checked 13 documented constructor(s); 0 mismatched
+symbols: checked 114 directive(s); 0 unresolved
+env runs: scanned 64 file(s); 0 run(s) ignoring the copied .env
+dart-defines: scanned 62 file(s) against 14 known key(s); 0 unknown
+test paths: scanned 64 file(s); 0 missing
+
+OK: documentation checks passed.
+EXIT 0
+FIXTURE PASS tasks-retain-bricks
+
+$ git clone --quiet --shared --no-hardlinks /Users/nguyenanhkiet/Playground/flutter-starter /var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/review-1342-keep-samples-remove-bricks-islz8r9x
+EXIT 0
+
+$ git checkout --quiet --detach bdc5279d47b64568652870af8f7f37a9dffabaae
+EXIT 0
+
+$ dart tool/strip_sample_features.dart --apply --keep-samples --remove-bricks --force
+Removed bricks (--remove-bricks).
+Removed mason.yaml (--remove-bricks).
+Removed test/tooling/brick_input_rules_test.dart (--remove-bricks).
+Dropped 1 marked section(s) or line(s) from docs/README.md.
+Dropped 1 marked section(s) or line(s) from docs/guides/support/troubleshooting.md.
+Dropped 6 marked section(s) or line(s) from docs/guides/onboarding/fork-and-customize.md.
+Dropped 1 marked section(s) or line(s) from docs/guides/onboarding/repository-layout.md.
+Dropped 1 marked section(s) or line(s) from docs/api/examples/adding-features.md.
+Dropped 1 marked section(s) or line(s) from README.md.
+Dropped 1 marked section(s) or line(s) from CLAUDE.md.
+Dropped 1 marked section(s) or line(s) from tool/README.md.
+Bricks removed; both samples kept. Run: flutter pub get && flutter analyze && flutter test
+EXIT 0
+
+$ flutter test test/docs/bricks_removal_instructions_test.dart --reporter expanded
+Resolving dependencies...
+Downloading packages...
+  archive 4.0.9 (4.7.1 available)
+  async 2.13.0 (2.13.1 available)
+  build_daemon 4.1.1 (4.1.7 available)
+  built_collection 5.1.1 (6.0.0 available)
+  built_value 8.12.4 (8.13.0 available)
+  cli_util 0.4.2 (0.6.0 available)
+  code_assets 1.0.0 (2.2.0 available)
+  cupertino_ui 1.1.6 (1.1.7 available)
+  dio_web_adapter 2.1.2 (2.2.2 available)
+  flutter_dotenv 6.0.1 (6.0.2 available)
+  flutter_launcher_icons 0.13.1 (0.14.4 available)
+  glob 2.1.3 (2.2.0 available)
+  hooks 1.0.2 (2.2.0 available)
+  html 0.15.6 (0.15.7 available)
+  http_multi_server 3.2.2 (3.2.3 available)
+  image 4.8.0 (4.13.1 available)
+  io 1.0.5 (1.1.0 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  material_ui 1.11.0 (1.11.1 available)
+  mime 2.0.0 (2.1.0 available)
+  mustache_template 2.0.4 (2.0.6 available)
+  native_toolchain_c 0.17.6 (0.19.6 available)
+  objective_c 9.3.0 (9.6.4 available)
+  package_config 2.2.0 (3.0.0 available)
+  path_provider_android 2.2.22 (2.3.1 available)
+  path_provider_linux 2.2.1 (2.2.2 available)
+  path_provider_platform_interface 2.1.2 (2.1.3 available)
+  petitparser 7.0.2 (7.1.0 available)
+  platform 3.1.6 (3.2.0 available)
+  pool 1.5.2 (1.5.3 available)
+  posix 6.5.0 (6.5.4 available)
+  process 5.0.5 (5.0.6 available)
+  pub_semver 2.2.0 (2.2.1 available)
+  pubspec_parse 1.5.0 (1.7.0 available)
+  shared_preferences_android 2.4.21 (2.5.5 available)
+  shared_preferences_foundation 2.5.6 (2.6.2 available)
+  shared_preferences_platform_interface 2.4.1 (2.4.2 available)
+  shelf 1.4.2 (1.4.3 available)
+  stream_transform 2.1.1 (2.1.2 available)
+  test_api 0.7.14 (0.7.15 available)
+  uuid 4.5.3 (4.6.0 available)
+  vector_math 2.4.3 (2.4.4 available)
+  vm_service 15.0.2 (15.4.0 available)
+  web 1.1.1 (1.1.2 available)
+  webdriver 3.1.0 (3.2.0 available)
+  xml 6.6.1 (7.1.0 available)
+Got dependencies!
+46 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading /private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/review-1342-keep-samples-remove-bricks-islz8r9x/test/docs/bricks_removal_instructions_test.dart
+00:00 +0: Mason removal instructions name the strip option
+00:00 +1: manual Mason deletion warns about analyzer and test imports
+  Skip: Mason removal instructions have been stripped
+00:00 +1 ~1: All tests passed!
+EXIT 0
+
+$ dart run tool/check_docs.dart
+links: checked 679 relative link(s) in 71 file(s); 0 broken
+emoji: scanned 62 file(s); 0 line(s) with emoji
+signatures: checked 13 documented constructor(s); 0 mismatched
+symbols: checked 114 directive(s); 0 unresolved
+env runs: scanned 64 file(s); 0 run(s) ignoring the copied .env
+dart-defines: scanned 62 file(s) against 14 known key(s); 0 unknown
+test paths: scanned 64 file(s); 0 missing
+
+OK: documentation checks passed.
+EXIT 0
+FIXTURE PASS keep-samples-remove-bricks
+
+$ git clone --quiet --shared --no-hardlinks /Users/nguyenanhkiet/Playground/flutter-starter /var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/review-1342-both-remove-bricks-qi4yj9j6
+EXIT 0
+
+$ git checkout --quiet --detach bdc5279d47b64568652870af8f7f37a9dffabaae
+EXIT 0
+
+$ dart tool/strip_sample_features.dart --apply --remove-bricks --force
+Removed bricks (--remove-bricks).
+Removed mason.yaml (--remove-bricks).
+Removed test/tooling/brick_input_rules_test.dart (--remove-bricks).
+Dropped 4 marked section(s) or line(s) from docs/README.md.
+Dropped 1 marked section(s) or line(s) from docs/architecture/overview.md.
+Dropped 1 marked section(s) or line(s) from docs/architecture/riverpod-retry-policy.md.
+Dropped 4 marked section(s) or line(s) from docs/architecture/design-decisions.md.
+Dropped 1 marked section(s) or line(s) from docs/architecture/contracts-map.md.
+Dropped 1 marked section(s) or line(s) from docs/guides/support/troubleshooting.md.
+Dropped 1 marked section(s) or line(s) from docs/guides/configuration.md.
+Dropped 6 marked section(s) or line(s) from docs/guides/onboarding/fork-and-customize.md.
+Dropped 1 marked section(s) or line(s) from docs/guides/onboarding/repository-layout.md.
+Dropped 1 marked section(s) or line(s) from docs/api/features/auth/models.md.
+Dropped 1 marked section(s) or line(s) from docs/api/README.md.
+Dropped 1 marked section(s) or line(s) from docs/api/examples/adding-features.md.
+Dropped 6 marked section(s) or line(s) from README.md.
+Dropped 1 marked section(s) or line(s) from CLAUDE.md.
+Dropped 1 marked section(s) or line(s) from tool/README.md.
+Dropped 3 symbol directive(s) naming a stripped path from docs/architecture/contracts-map.md.
+Dropped 1 marked section(s) or line(s) from integration_test/README.md.
+Dropped 1 marked section(s) or line(s) from docs/architecture/super-starter-hub.md.
+Dropped 1 marked section(s) or line(s) from docs/architecture/contracts-map.md.
+Dropped 1 marked section(s) or line(s) from docs/guides/migration/customization-guide.md.
+Dropped 3 marked section(s) or line(s) from docs/guides/onboarding/fork-and-customize.md.
+Dropped 1 marked section(s) or line(s) from README.md.
+Dropped 4 marked section(s) or line(s) from CLAUDE.md.
+Dropped 3 marked section(s) or line(s) from tool/README.md.
+Removed tool/strip_sample_features.dart: it only serves this strip.
+Removed tool/golden: it only serves this strip.
+Removed .github/workflows/strip-smoke.yml: it only serves this strip.
+Removed test/tooling/strip_markers_test.dart: it only serves this strip.
+Removed test/tooling/strip_sample_prose_test.dart: it only serves this strip.
+Removed test/tooling/strip_rerun_test.dart: it only serves this strip.
+Removed test/tooling/strip_unknown_flags_test.dart: it only serves this strip.
+Strip complete. Run: flutter pub get && flutter analyze && flutter test
+EXIT 0
+
+$ flutter test test/docs/bricks_removal_instructions_test.dart --reporter expanded
+Resolving dependencies...
+Downloading packages...
+  archive 4.0.9 (4.7.1 available)
+  async 2.13.0 (2.13.1 available)
+  build_daemon 4.1.1 (4.1.7 available)
+  built_collection 5.1.1 (6.0.0 available)
+  built_value 8.12.4 (8.13.0 available)
+  cli_util 0.4.2 (0.6.0 available)
+  code_assets 1.0.0 (2.2.0 available)
+  cupertino_ui 1.1.6 (1.1.7 available)
+  dio_web_adapter 2.1.2 (2.2.2 available)
+  flutter_dotenv 6.0.1 (6.0.2 available)
+  flutter_launcher_icons 0.13.1 (0.14.4 available)
+  glob 2.1.3 (2.2.0 available)
+  hooks 1.0.2 (2.2.0 available)
+  html 0.15.6 (0.15.7 available)
+  http_multi_server 3.2.2 (3.2.3 available)
+  image 4.8.0 (4.13.1 available)
+  io 1.0.5 (1.1.0 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  material_ui 1.11.0 (1.11.1 available)
+  mime 2.0.0 (2.1.0 available)
+  mustache_template 2.0.4 (2.0.6 available)
+  native_toolchain_c 0.17.6 (0.19.6 available)
+  objective_c 9.3.0 (9.6.4 available)
+  package_config 2.2.0 (3.0.0 available)
+  path_provider_android 2.2.22 (2.3.1 available)
+  path_provider_linux 2.2.1 (2.2.2 available)
+  path_provider_platform_interface 2.1.2 (2.1.3 available)
+  petitparser 7.0.2 (7.1.0 available)
+  platform 3.1.6 (3.2.0 available)
+  pool 1.5.2 (1.5.3 available)
+  posix 6.5.0 (6.5.4 available)
+  process 5.0.5 (5.0.6 available)
+  pub_semver 2.2.0 (2.2.1 available)
+  pubspec_parse 1.5.0 (1.7.0 available)
+  shared_preferences_android 2.4.21 (2.5.5 available)
+  shared_preferences_foundation 2.5.6 (2.6.2 available)
+  shared_preferences_platform_interface 2.4.1 (2.4.2 available)
+  shelf 1.4.2 (1.4.3 available)
+  stream_transform 2.1.1 (2.1.2 available)
+  test_api 0.7.14 (0.7.15 available)
+  uuid 4.5.3 (4.6.0 available)
+  vector_math 2.4.3 (2.4.4 available)
+  vm_service 15.0.2 (15.4.0 available)
+  web 1.1.1 (1.1.2 available)
+  webdriver 3.1.0 (3.2.0 available)
+  xml 6.6.1 (7.1.0 available)
+Got dependencies!
+46 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading /private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/review-1342-both-remove-bricks-qi4yj9j6/test/docs/bricks_removal_instructions_test.dart
+00:00 +0: Mason removal instructions name the strip option
+00:00 +1: manual Mason deletion warns about analyzer and test imports
+  Skip: Mason removal instructions have been stripped
+00:00 +1 ~1: All tests passed!
+EXIT 0
+
+$ dart run tool/check_docs.dart
+links: checked 672 relative link(s) in 71 file(s); 0 broken
+emoji: scanned 62 file(s); 0 line(s) with emoji
+signatures: checked 13 documented constructor(s); 0 mismatched
+symbols: checked 111 directive(s); 0 unresolved
+env runs: scanned 64 file(s); 0 run(s) ignoring the copied .env
+dart-defines: scanned 62 file(s) against 14 known key(s); 0 unknown
+test paths: scanned 64 file(s); 0 missing
+
+OK: documentation checks passed.
+EXIT 0
+FIXTURE PASS both-remove-bricks
+
+INDEPENDENT CHECKS COMPLETE

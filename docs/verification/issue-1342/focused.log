@@ -1,0 +1,5 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/bricks_removal_instructions_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/bricks_removal_instructions_test.dart: Mason removal instructions name the strip option
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_bricks_prose_test.dart: every `mason make` / `mason get` outside bricks/ is strip-marked
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_bricks_prose_test.dart: every `mason make` / `mason get` outside bricks/ is strip-marked
+00:00 +3: All tests passed!

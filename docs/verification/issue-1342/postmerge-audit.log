@@ -1,0 +1,20 @@
+==> env asset guard
+OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+==> generated code (skipped: AUDIT_SKIP_CODEGEN=1)
+==> format (lib test integration_test tool examples)
+Formatted 660 files (0 changed) in 2.45 seconds.
+==> flutter analyze
+Analyzing flutter-starter...                                    
+No issues found! (ran in 7.2s)
+==> flutter test
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/bricks_removal_instructions_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/bricks_removal_instructions_test.dart: Mason removal instructions name the strip option
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_bricks_prose_test.dart: every `mason make` / `mason get` outside bricks/ is strip-marked
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_bricks_prose_test.dart: every `mason make` / `mason get` outside bricks/ is strip-marked
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/doc_links_test.dart: every relative link and anchor in the markdown resolves
+00:01 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:01 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: the scan itself flags a body with no assertion, naming its line
+00:01 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: the scan itself accepts expect, verify, fail and expect-named helpers
+00:01 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: the scan itself ignores an assertion that only appears in a string or comment
+00:01 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: the scan itself skips skipped tests and honours the allow-list marker
+00:01 +9: All tests passed!

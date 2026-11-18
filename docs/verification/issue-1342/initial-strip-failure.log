@@ -1,0 +1,44 @@
+2026-11-18T15:34:01.5268661Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/security/rasp_providers_test.dart: raspServiceProvider can be overridden in ProviderContainer
+2026-11-18T15:34:01.7282185Z ##[endgroup]
+2026-11-18T15:34:01.7283672Z ##[group]❌ /home/runner/work/flutter-starter/flutter-starter/test/docs/bricks_removal_instructions_test.dart: Mason removal instructions name the strip option (failed)
+2026-11-18T15:34:01.7284516Z Expected: empty
+2026-11-18T15:34:01.7284790Z   Actual: [
+2026-11-18T15:34:01.7285637Z             'bricks/README.md: You can remove the whole **`bricks/`** folder and **`mason.yaml`** after you finish renaming manually (see [Fork and customize](../docs/guides/onboarding/fork-and-customize.md)).\n'
+2026-11-18T15:34:01.7286815Z               'That shrinks the tree.',
+2026-11-18T15:34:01.7287992Z             'bricks/flutter_starter_setup/README.md: Use the manual steps in [Fork and customize](../../docs/guides/onboarding/fork-and-customize.md). Afterwards you may remove **`bricks/`** and **`mason.yaml`** if you want a slimmer tree.'
+2026-11-18T15:34:01.7288842Z           ]
+2026-11-18T15:34:01.7289000Z 
+2026-11-18T15:34:01.7291780Z package:matcher                                       expect
+2026-11-18T15:34:01.7282185Z ##[endgroup]
+2026-11-18T15:34:01.7283672Z ##[group]❌ /home/runner/work/flutter-starter/flutter-starter/test/docs/bricks_removal_instructions_test.dart: Mason removal instructions name the strip option (failed)
+2026-11-18T15:34:01.7284516Z Expected: empty
+2026-11-18T15:34:01.7284790Z   Actual: [
+2026-11-18T15:34:01.7285637Z             'bricks/README.md: You can remove the whole **`bricks/`** folder and **`mason.yaml`** after you finish renaming manually (see [Fork and customize](../docs/guides/onboarding/fork-and-customize.md)).\n'
+2026-11-18T15:34:01.7286815Z               'That shrinks the tree.',
+2026-11-18T15:34:01.7287992Z             'bricks/flutter_starter_setup/README.md: Use the manual steps in [Fork and customize](../../docs/guides/onboarding/fork-and-customize.md). Afterwards you may remove **`bricks/`** and **`mason.yaml`** if you want a slimmer tree.'
+2026-11-18T15:34:01.7288842Z           ]
+2026-11-18T15:34:01.7289000Z 
+2026-11-18T15:34:01.7291780Z package:matcher                                       expect
+2026-11-18T15:34:01.7292172Z package:flutter_test/src/widget_tester.dart 473:18    expect
+2026-11-18T15:36:43.7502648Z ##[endgroup]
+2026-11-18T15:36:43.7502843Z 
+2026-11-18T15:36:43.7536439Z ##[error]4279 tests passed, 1 failed, 20 skipped.
+2026-11-18T15:36:43.8383148Z ##[error]Process completed with exit code 1.
+2026-11-18T15:36:43.8509960Z Post job cleanup.
+2026-11-18T15:36:43.8512983Z ##[start-action display=Cache pub dependencies;id=__b343c390-bb5e-4739-8f2e-0f782fe86c02.cache-pub]
+2026-11-18T15:36:43.8514601Z ##[end-action id=__b343c390-bb5e-4739-8f2e-0f782fe86c02.cache-pub;outcome=skipped;conclusion=skipped;duration_ms=0]
+2026-11-18T15:36:43.8516063Z ##[start-action display=Cache Flutter;id=__b343c390-bb5e-4739-8f2e-0f782fe86c02.cache-flutter]
+2026-11-18T15:36:43.8517526Z ##[end-action id=__b343c390-bb5e-4739-8f2e-0f782fe86c02.cache-flutter;outcome=skipped;conclusion=skipped;duration_ms=0]
+2026-11-18T15:36:43.8565148Z Post job cleanup.
+2026-11-18T15:36:43.9240743Z [command]/usr/bin/git version
+2026-11-18T15:36:43.7502843Z 
+2026-11-18T15:36:43.7536439Z ##[error]4279 tests passed, 1 failed, 20 skipped.
+2026-11-18T15:36:43.8383148Z ##[error]Process completed with exit code 1.
+2026-11-18T15:36:43.8509960Z Post job cleanup.
+2026-11-18T15:36:43.8512983Z ##[start-action display=Cache pub dependencies;id=__b343c390-bb5e-4739-8f2e-0f782fe86c02.cache-pub]
+2026-11-18T15:36:43.8514601Z ##[end-action id=__b343c390-bb5e-4739-8f2e-0f782fe86c02.cache-pub;outcome=skipped;conclusion=skipped;duration_ms=0]
+2026-11-18T15:36:43.8516063Z ##[start-action display=Cache Flutter;id=__b343c390-bb5e-4739-8f2e-0f782fe86c02.cache-flutter]
+2026-11-18T15:36:43.8517526Z ##[end-action id=__b343c390-bb5e-4739-8f2e-0f782fe86c02.cache-flutter;outcome=skipped;conclusion=skipped;duration_ms=0]
+2026-11-18T15:36:43.8565148Z Post job cleanup.
+2026-11-18T15:36:43.9240743Z [command]/usr/bin/git version
+2026-11-18T15:36:43.9272984Z git version 2.56.1

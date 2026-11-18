@@ -1,0 +1,28 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/bricks_removal_instructions_test.dart
+00:00 +0: Mason removal instructions name the strip option
+00:00 +0 -1: Mason removal instructions name the strip option [E]
+  Expected: empty
+    Actual: [
+              'docs/guides/onboarding/repository-layout.md: | [`bricks/`](../../../bricks/) | Optional [Mason](https://pub.dev/packages/mason_cli) brick(s) for fork setup (rename package / native ids); see [`bricks/README.md`](../../../bricks/README.md) and [`mason.yaml`](../../../mason.yaml). If you rename manually and do not use Mason, you can remove both. <!-- strip:bricks line --> |'
+            ]
+  
+  package:matcher                                       expect
+  package:flutter_test/src/widget_tester.dart 473:18    expect
+  test/docs/bricks_removal_instructions_test.dart 30:5  main.<fn>
+  
+00:00 +0 -1: manual Mason deletion warns about analyzer and test imports
+00:00 +0 -2: manual Mason deletion warns about analyzer and test imports [E]
+  Expected: contains 'flutter analyze'
+    Actual: '**If you never use Mason:** after renaming, you can remove **`bricks/`** and **`mason.yaml`**. <!-- strip:bricks line -->\n'
+              'Use `dart run tool/strip_sample_features.dart --apply --keep-samples --remove-bricks`, or add `--remove-bricks` to whichever strip you run: it also drops the passages in the docs that link into them, which deleting the two by hand leaves dangling. <!-- strip:strip-tool line -->'
+     Which: does not contain 'flutter analyze'
+  
+  package:matcher                                       expect
+  package:flutter_test/src/widget_tester.dart 473:18    expect
+  test/docs/bricks_removal_instructions_test.dart 41:5  main.<fn>
+  
+00:00 +0 -2: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/bricks_removal_instructions_test.dart: Mason removal instructions name the strip option
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/bricks_removal_instructions_test.dart: manual Mason deletion warns about analyzer and test imports
