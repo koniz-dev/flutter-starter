@@ -7,7 +7,7 @@ set -euo pipefail
 saw_ref=false
 has_branch_update=false
 if [[ ! -t 0 ]]; then
-  while read -r pushed_local_ref pushed_local_oid pushed_remote_ref pushed_remote_oid; do
+  while read -r _pushed_local_ref pushed_local_oid pushed_remote_ref _pushed_remote_oid; do
     saw_ref=true
     case "$pushed_remote_ref" in
       refs/tags/*) ;;

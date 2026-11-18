@@ -38,6 +38,8 @@ new_repo() {
     local dir="$WORK/$1"
     mkdir -p "$dir/scripts/ci" "$dir/scripts/dev"
     cp "$SCRIPTS"/generate_changelog.sh "$SCRIPTS"/release.sh "$SCRIPTS"/bump_version.sh "$dir/scripts/ci/"
+    # Expand this variable when the fixture formatter runs, not while creating it.
+    # shellcheck disable=SC2016
     printf '#!/usr/bin/env bash\nexit "${FORMAT_FIXTURE_STATUS:-0}"\n' > "$dir/scripts/dev/format_dart.sh"
     chmod +x "$dir/scripts/dev/format_dart.sh"
     cat > "$dir/CHANGELOG.md" <<'MD'
