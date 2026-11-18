@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- [Remove Mason through the strip tool](https://github.com/koniz-dev/flutter-starter/issues/1342): onboarding instructions name --remove-bricks and explain that deleting bricks/mason.yaml by hand leaves broken test imports as well as documentation links; regression guards keep this warning in place.
+
 - [Clarify release TLS configuration](https://github.com/koniz-dev/flutter-starter/issues/1341): document that direct API and realtime TLS handshakes in staging/production release use the default or pinned context, and explain where to load private CAs and client certificates instead of relying on HttpOverrides.
 
 ## [5.0.2] - 2026-11-18
