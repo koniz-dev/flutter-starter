@@ -50,6 +50,10 @@ void main() {
       expect(passage, contains('flutter test'));
       expect(passage, contains('by hand'));
     },
-    skip: !Directory('bricks').existsSync() ? 'Mason has been stripped' : null,
+    skip:
+        !Directory('bricks').existsSync() ||
+            !File('tool/strip_sample_features.dart').existsSync()
+        ? 'Mason removal instructions have been stripped'
+        : null,
   );
 }

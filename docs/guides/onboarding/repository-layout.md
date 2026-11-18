@@ -13,7 +13,7 @@ This document describes **template-owned directories** only. Flutter **platform*
 | [`scripts/`](../../../scripts/) | Shell automation: `dev/` (hooks, format, features), `test/` (coverage, E2E). Index: [scripts/README.md](../../../scripts/README.md). |
 | [`tool/`](../../../tool/) | Dart maintenance scripts (e.g. strip sample features). |
 | [`examples/`](../../../examples/) | Non-shipping Dart snippets; see [`examples/README.md`](../../../examples/README.md). |
-| [`bricks/`](../../../bricks/) | Optional [Mason](https://pub.dev/packages/mason_cli) brick(s) for fork setup (rename package / native ids); see [`bricks/README.md`](../../../bricks/README.md) and [`mason.yaml`](../../../mason.yaml). After a manual rename, remove both with `dart run tool/strip_sample_features.dart --apply --keep-samples --remove-bricks`, which also removes dependent tests and documentation. <!-- strip:bricks line --> |
+| [`bricks/`](../../../bricks/) | Optional [Mason](https://pub.dev/packages/mason_cli) brick(s) for fork setup (rename package / native ids); see [`bricks/README.md`](../../../bricks/README.md) and [`mason.yaml`](../../../mason.yaml). After a manual rename, remove both with `dart run tool/strip_sample_features.dart --apply --keep-samples --remove-bricks`, which also removes dependent tests and documentation. <!-- strip:bricks line --> <!-- strip:strip-tool line --> |
 | [`.github/workflows/`](../../../.github/workflows/) | CI, optional manual E2E, deploy templates. |
 | [`.githooks/`](../../../.githooks/) | Canonical hook scripts in repo; [`setup_git_hooks.sh`](../../../scripts/dev/setup_git_hooks.sh) points `core.hooksPath` at them. |
 
