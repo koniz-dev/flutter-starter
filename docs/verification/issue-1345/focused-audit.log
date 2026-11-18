@@ -1,0 +1,49 @@
+==> env asset guard
+OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+==> generated code (skipped: AUDIT_SKIP_CODEGEN=1)
+==> format (lib test integration_test tool examples)
+Formatted 660 files (0 changed) in 2.31 seconds.
+==> flutter analyze
+Analyzing flutter-starter...                                    
+No issues found! (ran in 5.9s)
+==> flutter test
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_form_keyboard_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_form_keyboard_test.dart: login Done on the password field signs in
+00:02 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_form_keyboard_test.dart: login Done on the password field signs in
+00:02 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_form_keyboard_test.dart: login Done on the password field signs in
+00:02 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_form_keyboard_test.dart: login Done on the password field signs in
+00:02 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should show validation error for empty name
+00:02 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should show validation error for empty name
+00:02 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/login_screen_test.dart: LoginScreen should show validation error for invalid email
+00:02 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_form_keyboard_test.dart: login the password can be shown and hidden again
+00:03 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should show validation error for short name
+00:03 +9: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should show validation error for short name
+00:03 +10: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_form_keyboard_test.dart: register Done on the password field registers
+00:03 +11: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_form_keyboard_test.dart: register Done on the password field registers
+00:03 +12: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should show validation error for invalid email
+00:03 +13: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/login_screen_test.dart: LoginScreen should call login when form is valid
+00:03 +14: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/login_screen_test.dart: LoginScreen should call login when form is valid
+00:03 +15: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should show validation error for short password
+00:03 +16: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_form_keyboard_test.dart: register a whitespace-only name is required, not too short
+00:03 +17: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/login_screen_test.dart: LoginScreen should display error message on login failure
+00:03 +18: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should call register use case with correct parameters
+00:04 +19: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_form_keyboard_test.dart: autofill context and unmounting leaving while the sign-in runs does not throw
+00:04 +20: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_form_keyboard_test.dart: autofill context and unmounting leaving while the sign-in runs does not throw
+00:04 +21: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should show loading indicator during registration
+00:04 +22: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/login_screen_test.dart: LoginScreen should disable button during loading
+00:04 +23: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_form_keyboard_test.dart: autofill context and unmounting leaving while registration runs does not throw
+00:04 +24: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should show error message when registration fails
+00:04 +25: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/login_screen_test.dart: LoginScreen should navigate to RegisterScreen when register button is tapped
+00:04 +26: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_form_keyboard_test.dart: autofill context and unmounting a rejected sign-in, then leaving, saves nothing
+00:05 +27: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should navigate back to login when back button is tapped
+00:05 +28: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_form_keyboard_test.dart: autofill context and unmounting a successful sign-in commits the credentials
+00:05 +29: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_form_keyboard_test.dart: keyboard flow login: Next on the email moves to the password
+00:05 +30: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_form_keyboard_test.dart: keyboard flow register: Next goes name, email, password
+00:05 +31: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_form_keyboard_test.dart: keyboard flow login: Done while signing in does not send again
+00:05 +32: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_form_keyboard_test.dart: keyboard flow register: Done while registering does not send again
+00:05 +33: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:06 +34: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: the scan itself flags a body with no assertion, naming its line
+00:06 +35: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: the scan itself accepts expect, verify, fail and expect-named helpers
+00:06 +36: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: the scan itself ignores an assertion that only appears in a string or comment
+00:06 +37: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: the scan itself skips skipped tests and honours the allow-list marker
+00:06 +38: All tests passed!

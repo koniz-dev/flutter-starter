@@ -1,0 +1,28 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_form_keyboard_test.dart
+00:00 +0: autofill context and unmounting leaving while registration runs does not throw
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following StateError was thrown running a test:
+Bad state: Using "ref" when a widget is about to or has been unmounted is unsafe.
+Ref relies on BuildContext, and BuildContext is unsafe to use when the widget is deactivated.
+To safely refer to the state of providers inside State.dispose(), save the provider state in a field
+of your State class.
+
+When the exception was thrown, this was the stack:
+#0      ConsumerStatefulElement._assertNotDisposed (package:flutter_riverpod/src/core/consumer.dart:471:7)
+#1      ConsumerStatefulElement.read (package:flutter_riverpod/src/core/consumer.dart:563:5)
+#2      _RegisterScreenState._handleRegister (package:flutter_starter/features/auth/presentation/screens/register_screen.dart:53:15)
+<asynchronous suspension>
+
+The test description was:
+  leaving while registration runs does not throw
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:02 +0 -1: autofill context and unmounting leaving while registration runs does not throw [E]
+  Test failed. See exception logs above.
+  The test description was: leaving while registration runs does not throw
+  
+00:03 +0 -1: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_form_keyboard_test.dart: autofill context and unmounting leaving while registration runs does not throw
+
+exit: 1

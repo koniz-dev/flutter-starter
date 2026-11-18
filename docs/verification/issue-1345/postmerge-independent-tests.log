@@ -1,0 +1,75 @@
+Accepted and merged trees identical:6a22382e302225cf3ec6ab9fbf81ff4e7fb5e1b7
+Command: flutter test test/features/auth/presentation/screens/auth_form_keyboard_test.dart test/features/auth/presentation/screens/auth_forms_keyboard_test.dart --reporter expanded
+
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_form_keyboard_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_form_keyboard_test.dart: login Done on the password field signs in
+00:01 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_forms_keyboard_test.dart: /login criterion 1: no overflow at 360x640 with a 300px keyboard, before and after a failed submit
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:194:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:02 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_forms_keyboard_test.dart: /login criterion 1: no overflow at 360x640 with a 300px keyboard, before and after a failed submit
+00:02 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_forms_keyboard_test.dart: /login criterion 1: no overflow at 360x640 with a 300px keyboard, before and after a failed submit
+00:03 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_forms_keyboard_test.dart: /login criterion 1: no overflow at 360x640 with a 300px keyboard, before and after a failed submit
+00:03 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_form_keyboard_test.dart: register Done on the password field registers
+00:03 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_forms_keyboard_test.dart: /login criterion 2: no overflow at 640x360, and submit can be scrolled to and hit-tested
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:194:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:03 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_form_keyboard_test.dart: register Done on the password field registers
+00:03 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_forms_keyboard_test.dart: /register criterion 1: no overflow at 360x640 with a 300px keyboard, before and after a failed submit
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:194:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:194:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"register","routePath":"register","previousRouteName":"login","previousRoutePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:194:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Removed | Context: {"routeName":"login","routePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:03 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_forms_keyboard_test.dart: /register criterion 1: no overflow at 360x640 with a 300px keyboard, before and after a failed submit
+00:03 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_form_keyboard_test.dart: register a whitespace-only name is required, not too short
+00:03 +9: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_forms_keyboard_test.dart: /register criterion 2: no overflow at 640x360, and submit can be scrolled to and hit-tested
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:194:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:194:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"register","routePath":"register","previousRouteName":"login","previousRoutePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:194:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Removed | Context: {"routeName":"login","routePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:04 +10: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_form_keyboard_test.dart: autofill context and unmounting leaving while the sign-in runs does not throw
+00:04 +11: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_form_keyboard_test.dart: autofill context and unmounting leaving while registration runs does not throw
+00:04 +12: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_form_keyboard_test.dart: autofill context and unmounting a rejected sign-in, then leaving, saves nothing
+00:05 +13: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_form_keyboard_test.dart: autofill context and unmounting a successful sign-in commits the credentials
+00:05 +14: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_form_keyboard_test.dart: keyboard flow login: Next on the email moves to the password
+00:05 +15: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_form_keyboard_test.dart: keyboard flow register: Next goes name, email, password
+00:05 +16: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_form_keyboard_test.dart: keyboard flow login: Done while signing in does not send again
+00:06 +17: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_form_keyboard_test.dart: keyboard flow register: Done while registering does not send again
+00:06 +18: All tests passed!
+
+exit: 0

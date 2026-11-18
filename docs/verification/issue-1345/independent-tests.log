@@ -1,0 +1,318 @@
+# Independent review raw test output
+Accepted:98a16be36b5db4768aed4f8b225652bca3ab4318; base:797573efca9fdb8cc1788bee66ff6f5566ad0ff5
+SDK: isolated Flutter3.50/Dart3.14
+Focused command: flutter test auth_form_keyboard_test.dart auth_forms_keyboard_test.dart login_screen_test.dart register_screen_test.dart auth_error_navigation_test.dart email_whitespace_test.dart --reporter expanded (all paths under test/features/auth/presentation/screens/)
+Temporary clone discrimination and adjacent commands: 1345-independent-check.py. Expected nonzero test exits below are successful discrimination, not a failing accepted tree.
+
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_form_keyboard_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_form_keyboard_test.dart: login Done on the password field signs in
+00:03 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_forms_keyboard_test.dart: /login criterion 1: no overflow at 360x640 with a 300px keyboard, before and after a failed submit
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:194:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:05 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_form_keyboard_test.dart: login Done on the password field signs in
+00:06 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_forms_keyboard_test.dart: /login criterion 1: no overflow at 360x640 with a 300px keyboard, before and after a failed submit
+00:07 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_forms_keyboard_test.dart: /login criterion 1: no overflow at 360x640 with a 300px keyboard, before and after a failed submit
+00:07 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_forms_keyboard_test.dart: /login criterion 1: no overflow at 360x640 with a 300px keyboard, before and after a failed submit
+00:07 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/login_screen_test.dart: LoginScreen should show validation error for invalid email
+00:07 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_forms_keyboard_test.dart: /login criterion 2: no overflow at 640x360, and submit can be scrolled to and hit-tested
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:194:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:08 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_form_keyboard_test.dart: login the password can be shown and hidden again
+00:08 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_form_keyboard_test.dart: login the password can be shown and hidden again
+00:08 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_forms_keyboard_test.dart: /register criterion 1: no overflow at 360x640 with a 300px keyboard, before and after a failed submit
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:194:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:08 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/login_screen_test.dart: LoginScreen should show validation error for empty password
+00:08 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_forms_keyboard_test.dart: /register criterion 1: no overflow at 360x640 with a 300px keyboard, before and after a failed submit
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:194:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"register","routePath":"register","previousRouteName":"login","previousRoutePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:194:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Removed | Context: {"routeName":"login","routePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:08 +9: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_forms_keyboard_test.dart: /register criterion 1: no overflow at 360x640 with a 300px keyboard, before and after a failed submit
+00:08 +10: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_forms_keyboard_test.dart: /register criterion 1: no overflow at 360x640 with a 300px keyboard, before and after a failed submit
+00:09 +11: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/login_screen_test.dart: LoginScreen should show validation error for short password
+00:09 +12: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_form_keyboard_test.dart: register fields carry keyboard actions and autofill hints
+00:09 +13: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_forms_keyboard_test.dart: /register criterion 2: no overflow at 640x360, and submit can be scrolled to and hit-tested
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:194:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:194:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"register","routePath":"register","previousRouteName":"login","previousRoutePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:194:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Removed | Context: {"routeName":"login","routePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:09 +14: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_forms_keyboard_test.dart: /register criterion 2: no overflow at 640x360, and submit can be scrolled to and hit-tested
+00:10 +15: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_forms_keyboard_test.dart: /register criterion 2: no overflow at 640x360, and submit can be scrolled to and hit-tested
+00:10 +16: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/login_screen_test.dart: LoginScreen should display error message on login failure
+00:10 +17: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_form_keyboard_test.dart: autofill context and unmounting leaving while the sign-in runs does not throw
+00:11 +18: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/login_screen_test.dart: LoginScreen should show loading indicator during login
+00:11 +19: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_form_keyboard_test.dart: autofill context and unmounting leaving while registration runs does not throw
+00:12 +20: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_form_keyboard_test.dart: autofill context and unmounting leaving while registration runs does not throw
+00:12 +21: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/login_screen_test.dart: LoginScreen should navigate to RegisterScreen when register button is tapped
+00:12 +22: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_form_keyboard_test.dart: autofill context and unmounting a rejected sign-in, then leaving, saves nothing
+00:13 +23: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_form_keyboard_test.dart: autofill context and unmounting a successful sign-in commits the credentials
+00:13 +24: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_form_keyboard_test.dart: keyboard flow login: Next on the email moves to the password
+00:13 +25: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should display registration form fields
+00:14 +26: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should display registration form fields
+00:15 +27: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should display registration form fields
+00:16 +28: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should display registration form fields
+00:19 +29: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_error_navigation_test.dart: criterion 1: a login error does not follow the user to RegisterScreen
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:194:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:20 +30: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_error_navigation_test.dart: criterion 1: a login error does not follow the user to RegisterScreen
+00:21 +31: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_error_navigation_test.dart: criterion 1: a login error does not follow the user to RegisterScreen
+00:22 +32: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_error_navigation_test.dart: criterion 1: a login error does not follow the user to RegisterScreen
+00:23 +33: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_error_navigation_test.dart: criterion 1: a login error does not follow the user to RegisterScreen
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:194:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"register","routePath":"register","previousRouteName":"login","previousRoutePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:194:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Removed | Context: {"routeName":"login","routePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:24 +34: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_error_navigation_test.dart: criterion 1: a login error does not follow the user to RegisterScreen
+00:25 +35: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/email_whitespace_test.dart: login accepts a trailing-space email and submits it trimmed
+00:25 +36: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/email_whitespace_test.dart: login accepts a trailing-space email and submits it trimmed
+00:25 +36: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_error_navigation_test.dart: criterion 2: a register error does not follow the user back to LoginScreen
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:194:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:194:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"register","routePath":"register","previousRouteName":"login","previousRoutePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:194:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Removed | Context: {"routeName":"login","routePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:25 +37: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/email_whitespace_test.dart: login accepts a trailing-space email and submits it trimmed
+00:26 +37: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_error_navigation_test.dart: criterion 2: a register error does not follow the user back to LoginScreen
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:194:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login","previousRouteName":"register","previousRoutePath":"register"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:194:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Removed | Context: {"routeName":"register","routePath":"register"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:27 +38: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/email_whitespace_test.dart: login accepts a trailing-space email and submits it trimmed
+00:27 +39: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/email_whitespace_test.dart: login accepts a trailing-space email and submits it trimmed
+00:27 +39: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_error_navigation_test.dart: criterion 3: a fresh submit still raises and replaces the error
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:194:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:27 +40: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_error_navigation_test.dart: criterion 3: a fresh submit still raises and replaces the error
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:194:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"register","routePath":"register","previousRouteName":"login","previousRoutePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:194:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Removed | Context: {"routeName":"login","routePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:28 +41: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_error_navigation_test.dart: criterion 3: a fresh submit still raises and replaces the error
+00:29 +42: All tests passed!
+00:00 +0: loading /private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/flutter-review-1345-mxuh_w64/test/features/auth/presentation/screens/auth_form_keyboard_test.dart
+00:00 +0: login fields carry keyboard actions and autofill hints
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: ['username', 'email']
+  Actual: ['email']
+   Which: at location [0] is 'email' instead of 'username'
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure>.<anonymous closure> (file:///private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/flutter-review-1345-mxuh_w64/test/features/auth/presentation/screens/auth_form_keyboard_test.dart:115:7)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1968:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/flutter-review-1345-mxuh_w64/test/features/auth/presentation/screens/auth_form_keyboard_test.dart line 115
+The test description was:
+  fields carry keyboard actions and autofill hints
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:02 +0 -1: login fields carry keyboard actions and autofill hints [E]
+  Test failed. See exception logs above.
+  The test description was: fields carry keyboard actions and autofill hints
+  
+00:02 +0 -1: register fields carry keyboard actions and autofill hints
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: ['username', 'email']
+  Actual: ['email']
+   Which: at location [0] is 'email' instead of 'username'
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure>.<anonymous closure> (file:///private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/flutter-review-1345-mxuh_w64/test/features/auth/presentation/screens/auth_form_keyboard_test.dart:167:7)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1968:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/flutter-review-1345-mxuh_w64/test/features/auth/presentation/screens/auth_form_keyboard_test.dart line 167
+The test description was:
+  fields carry keyboard actions and autofill hints
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:03 +0 -2: register fields carry keyboard actions and autofill hints [E]
+  Test failed. See exception logs above.
+  The test description was: fields carry keyboard actions and autofill hints
+  
+00:03 +0 -2: Some tests failed.
+
+Failing tests:
+  /private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/flutter-review-1345-mxuh_w64/test/features/auth/presentation/screens/auth_form_keyboard_test.dart: login fields carry keyboard actions and autofill hints
+  /private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/flutter-review-1345-mxuh_w64/test/features/auth/presentation/screens/auth_form_keyboard_test.dart: register fields carry keyboard actions and autofill hints
+
+EXIT 1
+DISCRIMINATION PASS: both final username-hint assertions fail original source
+
+$ git reset --hard 98a16be36b5db4768aed4f8b225652bca3ab4318
+HEAD is now at 98a16be36b5 fix(auth): identify autofill usernames and prove unmount guards
+
+EXIT 0
+
+$ flutter test --no-pub test/features/auth/presentation/screens/auth_form_keyboard_test.dart --plain-name leaving while the sign-in runs does not throw --reporter expanded
+00:00 +0: loading /private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/flutter-review-1345-mxuh_w64/test/features/auth/presentation/screens/auth_form_keyboard_test.dart
+00:00 +0: autofill context and unmounting leaving while the sign-in runs does not throw
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following StateError was thrown running a test:
+Bad state: Using "ref" when a widget is about to or has been unmounted is unsafe.
+Ref relies on BuildContext, and BuildContext is unsafe to use when the widget is deactivated.
+To safely refer to the state of providers inside State.dispose(), save the provider state in a field
+of your State class.
+
+When the exception was thrown, this was the stack:
+#0      ConsumerStatefulElement._assertNotDisposed (package:flutter_riverpod/src/core/consumer.dart:471:7)
+#1      ConsumerStatefulElement.read (package:flutter_riverpod/src/core/consumer.dart:563:5)
+#2      _LoginScreenState._handleLogin (package:flutter_starter/features/auth/presentation/screens/login_screen.dart:53:15)
+<asynchronous suspension>
+
+The test description was:
+  leaving while the sign-in runs does not throw
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:03 +0 -1: autofill context and unmounting leaving while the sign-in runs does not throw [E]
+  Test failed. See exception logs above.
+  The test description was: leaving while the sign-in runs does not throw
+  
+00:04 +0 -1: Some tests failed.
+
+Failing tests:
+  /private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/flutter-review-1345-mxuh_w64/test/features/auth/presentation/screens/auth_form_keyboard_test.dart: autofill context and unmounting leaving while the sign-in runs does not throw
+
+EXIT 1
+DISCRIMINATION PASS: login unmount test detects missing mounted guard
+
+$ flutter test --no-pub test/features/auth/presentation/screens/auth_form_keyboard_test.dart --plain-name leaving while registration runs does not throw --reporter expanded
+00:00 +0: loading /private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/flutter-review-1345-mxuh_w64/test/features/auth/presentation/screens/auth_form_keyboard_test.dart
+00:00 +0: autofill context and unmounting leaving while registration runs does not throw
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following StateError was thrown running a test:
+Bad state: Using "ref" when a widget is about to or has been unmounted is unsafe.
+Ref relies on BuildContext, and BuildContext is unsafe to use when the widget is deactivated.
+To safely refer to the state of providers inside State.dispose(), save the provider state in a field
+of your State class.
+
+When the exception was thrown, this was the stack:
+#0      ConsumerStatefulElement._assertNotDisposed (package:flutter_riverpod/src/core/consumer.dart:471:7)
+#1      ConsumerStatefulElement.read (package:flutter_riverpod/src/core/consumer.dart:563:5)
+#2      _RegisterScreenState._handleRegister (package:flutter_starter/features/auth/presentation/screens/register_screen.dart:53:15)
+<asynchronous suspension>
+
+The test description was:
+  leaving while registration runs does not throw
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:04 +0 -1: autofill context and unmounting leaving while registration runs does not throw [E]
+  Test failed. See exception logs above.
+  The test description was: leaving while registration runs does not throw
+  
+00:04 +0 -1: Some tests failed.
+
+Failing tests:
+  /private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/flutter-review-1345-mxuh_w64/test/features/auth/presentation/screens/auth_form_keyboard_test.dart: autofill context and unmounting leaving while registration runs does not throw
+
+EXIT 1
+DISCRIMINATION PASS: register unmount test detects missing mounted guard
+
+$ flutter test --no-pub test/features/auth/presentation/screens/auth_form_keyboard_test.dart --plain-name leaving while --reporter expanded
+00:00 +0: loading /private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/flutter-review-1345-mxuh_w64/test/features/auth/presentation/screens/auth_form_keyboard_test.dart
+00:00 +0: autofill context and unmounting leaving while the sign-in runs does not throw
+00:02 +1: autofill context and unmounting leaving while registration runs does not throw
+00:03 +2: All tests passed!
+
+EXIT 0
+ADJACENT CONTROLS PASS: both disposed screens tolerate failed late replies
+
+$ flutter test --no-pub test/features/auth/presentation/screens/auth_form_keyboard_test.dart --plain-name independent registration autofill --reporter expanded
+00:00 +0: loading /private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/flutter-review-1345-mxuh_w64/test/features/auth/presentation/screens/auth_form_keyboard_test.dart
+00:00 +0: autofill context and unmounting independent registration autofill save=true
+00:02 +1: autofill context and unmounting independent registration autofill save=false
+00:03 +2: All tests passed!
+
+EXIT 0
+ADJACENT CONTROLS PASS: registration commits on success and cancels rejected credentials
+INDEPENDENT DISCRIMINATION COMPLETE

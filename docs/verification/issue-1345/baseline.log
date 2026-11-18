@@ -1,0 +1,70 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_form_keyboard_test.dart
+00:00 +0: login Done on the password field signs in
+00:02 +1: login fields carry keyboard actions and autofill hints
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: ['username', 'email']
+  Actual: ['email']
+   Which: at location [0] is 'email' instead of 'username'
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure>.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_form_keyboard_test.dart:115:7)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1968:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_form_keyboard_test.dart line 115
+The test description was:
+  fields carry keyboard actions and autofill hints
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:02 +1 -1: login fields carry keyboard actions and autofill hints [E]
+  Test failed. See exception logs above.
+  The test description was: fields carry keyboard actions and autofill hints
+  
+00:02 +1 -1: login the password can be shown and hidden again
+00:03 +2 -1: register Done on the password field registers
+00:03 +3 -1: register fields carry keyboard actions and autofill hints
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: ['username', 'email']
+  Actual: ['email']
+   Which: at location [0] is 'email' instead of 'username'
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure>.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_form_keyboard_test.dart:164:7)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1968:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_form_keyboard_test.dart line 164
+The test description was:
+  fields carry keyboard actions and autofill hints
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:03 +3 -2: register fields carry keyboard actions and autofill hints [E]
+  Test failed. See exception logs above.
+  The test description was: fields carry keyboard actions and autofill hints
+  
+00:03 +3 -2: register a whitespace-only name is required, not too short
+00:03 +4 -2: autofill context and unmounting leaving while the sign-in runs does not throw
+00:04 +5 -2: autofill context and unmounting leaving while registration runs does not throw
+00:04 +6 -2: autofill context and unmounting a rejected sign-in, then leaving, saves nothing
+00:04 +7 -2: autofill context and unmounting a successful sign-in commits the credentials
+00:04 +8 -2: keyboard flow login: Next on the email moves to the password
+00:05 +9 -2: keyboard flow register: Next goes name, email, password
+00:05 +10 -2: keyboard flow login: Done while signing in does not send again
+00:05 +11 -2: keyboard flow register: Done while registering does not send again
+00:05 +12 -2: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_form_keyboard_test.dart: login fields carry keyboard actions and autofill hints
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_form_keyboard_test.dart: register fields carry keyboard actions and autofill hints
