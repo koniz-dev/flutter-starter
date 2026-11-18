@@ -1,0 +1,4 @@
+Commits in e85e16314c8e01a7e43a66965c4462ea888e8fa6..HEAD
+  ok    7ee7aa0c fix(tasks): disable Edit while task mutations are pending (#1352)
+
+OK: every message links with 'Refs koniz-dev/flutter-starter#N' and closes nothing.

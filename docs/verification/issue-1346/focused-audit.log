@@ -1,0 +1,121 @@
+==> env asset guard
+OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+==> generated code (skipped: AUDIT_SKIP_CODEGEN=1)
+==> format (lib test integration_test tool examples)
+Formatted 660 files (0 changed) in 1.88 seconds.
+==> flutter analyze
+Analyzing flutter-starter...                                    
+No issues found! (ran in 5.3s)
+==> flutter test
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_navigation_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: (setUpAll)
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: Edit waits for a toggle and a title save preserves completion
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: Edit waits for a toggle and a title save preserves completion
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: Edit waits for a toggle and a title save preserves completion
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: Edit waits for a toggle and a title save preserves completion
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: Edit waits for a toggle and a title save preserves completion
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: Edit waits for a toggle and a title save preserves completion
+00:00 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: Edit waits for a toggle and a title save preserves completion
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:194:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:01 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: Edit waits for a toggle and a title save preserves completion
+00:01 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: Edit waits for a toggle and a title save preserves completion
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:194:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"tasks","routePath":"tasks","previousRouteName":"home","previousRoutePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:194:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Removed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:01 +9: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: Edit waits for a toggle and a title save preserves completion
+00:02 +10: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: Edit waits for a toggle and a title save preserves completion
+00:02 +11: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: Edit waits for a toggle and a title save preserves completion
+00:02 +12: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: Edit waits for a toggle and a title save preserves completion
+00:02 +13: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: Edit waits for a toggle and a title save preserves completion
+00:02 +14: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: Edit waits for a toggle and a title save preserves completion
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:194:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":null,"routePath":"_PopupMenu)➩_Linearₒₙ/Interval(0.0⋯0.6666666666666666))","previousRouteName":"tasks","previousRoutePath":"tasks"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:194:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Popped | Context: {"routeName":null,"routePath":"_PopupMenu)➩_Linear/Interval(0.0⋯0.6666666666666666)ₒₙ)","previousRouteName":"tasks","previousRoutePath":"tasks"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:02 +15: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: Edit waits for a toggle and a title save preserves completion
+00:02 +16: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: Edit waits for a toggle and a title save preserves completion
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:194:13)
+[... 114 lines elided ...]
+│ 💡 Navigation: Route Removed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:194:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"task-detail","routePath":"task-detail","previousRouteName":"tasks","previousRoutePath":"tasks"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:04 +34: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_provider_test.dart: TasksNotifier edge cases should handle createTask with null description
+00:04 +35: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: a failed save keeps the editor open a successful retry after a failure still pops to the list
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:194:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Popped | Context: {"routeName":"task-detail","routePath":"task-detail","previousRouteName":"tasks","previousRoutePath":"tasks"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:04 +36: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: a failed save keeps the editor open a successful retry after a failure still pops to the list
+00:04 +37: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_provider_test.dart: TasksNotifier edge cases should handle updateTask with null description
+00:04 +38: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_provider_test.dart: TasksNotifier edge cases should handle updateTask with null description
+00:04 +39: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should display completed and incomplete tasks separately
+00:04 +40: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_provider_test.dart: TasksNotifier edge cases should handle multiple rapid operations
+00:04 +41: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_provider_test.dart: TasksNotifier edge cases should handle multiple rapid operations
+00:04 +42: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_provider_test.dart: TasksNotifier edge cases should handle multiple rapid operations
+00:05 +43: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_provider_test.dart: TasksNotifier edge cases should handle multiple rapid operations
+00:05 +44: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should display task without description
+00:05 +45: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_provider_test.dart: TasksNotifier edge cases should handle updateTask loading state
+00:05 +46: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_provider_test.dart: TasksNotifier edge cases should handle updateTask loading state
+00:05 +47: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should create task with description in dialog
+00:05 +48: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_provider_test.dart: TasksNotifier edge cases should handle deleteTask loading state
+00:05 +49: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_provider_test.dart: TasksNotifier edge cases should handle deleteTask loading state
+00:05 +50: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:05 +51: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:05 +52: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_provider_test.dart: TasksNotifier edge cases should handle toggleTaskCompletion loading state
+00:05 +53: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_provider_test.dart: TasksNotifier edge cases should handle toggleTaskCompletion loading state
+00:05 +54: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_provider_test.dart: TasksNotifier edge cases should handle toggleTaskCompletion loading state
+00:05 +55: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_provider_test.dart: TasksNotifier edge cases should handle toggleTaskCompletion loading state
+00:05 +56: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_provider_test.dart: TasksNotifier edge cases should handle toggleTaskCompletion loading state
+00:05 +57: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_provider_test.dart: TasksNotifier edge cases should handle toggleTaskCompletion loading state
+00:06 +58: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen mutation races and refresh a failed mutation keeps the loaded list on screen
+00:06 +59: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_provider_test.dart: TasksNotifier edge cases should handle large tasks list
+00:06 +60: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen mutation races and refresh pull-to-refresh works in the empty state
+00:06 +61: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen mutation races and refresh pull-to-refresh works in the empty state
+00:06 +62: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_provider_test.dart: TasksNotifier TasksState should create state with custom values
+00:06 +63: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen mutation races and refresh pull-to-refresh works in the error state
+00:06 +64: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen mutation races and refresh pull-to-refresh works in the error state
+00:06 +65: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen mutation races and refresh pull-to-refresh works in the error state
+00:06 +66: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen mutation races and refresh pull-to-refresh works in the error state
+00:06 +67: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen mutation races and refresh pull-to-refresh works in the error state
+00:06 +68: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen mutation races and refresh pull-to-refresh works in the error state
+00:06 +69: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen mutation races and refresh pull-to-refresh works in the error state
+00:06 +70: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen mutation races and refresh pull-to-refresh works in the error state
+00:06 +71: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen mutation races and refresh pull-to-refresh works in the error state
+00:06 +72: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen mutation races and refresh pull-to-refresh works in the error state
+00:06 +73: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen mutation races and refresh pull-to-refresh works in the error state
+00:06 +74: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen mutation races and refresh pull-to-refresh works in the error state
+00:06 +75: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen date rendering every task row renders its createdAt using the screen locale
+00:06 +76: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen date rendering the date is rendered, not the raw DateTime.toString()
+00:06 +77: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen date rendering Vietnamese task dates use the resolved screen locale
+00:06 +78: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen date rendering a row without a description still shows its date
+00:06 +79: All tests passed!
