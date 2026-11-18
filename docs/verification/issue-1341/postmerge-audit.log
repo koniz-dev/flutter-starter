@@ -1,0 +1,111 @@
+==> env asset guard
+OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+==> generated code (skipped: AUDIT_SKIP_CODEGEN=1)
+==> format (lib test integration_test tool examples)
+Formatted 659 files (0 changed) in 2.29 seconds.
+==> flutter analyze
+Analyzing flutter-starter...                                    
+No issues found! (ran in 6.9s)
+==> flutter test
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/ssl_pinning_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/ssl_pinning_test.dart: SslPinning is effective only when enabled with fingerprints
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/ssl_pinning_test.dart: SslPinning builds a pinned adapter when fingerprints are present
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/ssl_pinning_test.dart: SslPinning returns no adapter when pinning is disabled
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/ssl_pinning_test.dart: SslPinning the pinned adapter installs a certificate check
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/ssl_pinning_test.dart: SslPinning accepts a certificate whose fingerprint is pinned
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/ssl_pinning_test.dart: SslPinning rejects a certificate whose fingerprint is not pinned
+SSL Pinning failure for api.example.com: 
+Expected one of: [0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef]
+Got: fdeab9acf3710362bd2658cdc9a29e8f9c757fcf9811603a8c447cd1d9151108
+00:00 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/ssl_pinning_test.dart: SslPinning rejects every certificate when the pin list is empty
+SSL Pinning failure for : 
+Expected one of: []
+Got: fdeab9acf3710362bd2658cdc9a29e8f9c757fcf9811603a8c447cd1d9151108
+00:00 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/ssl_pinning_test.dart: SslPinning fails loudly when enabled with no fingerprints
+SSL PINNING MISCONFIGURED: SSL pinning is enabled (by ENABLE_SSL_PINNING or the environment default) but API_SSL_FINGERPRINTS is empty. Nothing is pinned: every certificate the system trust store accepts would be accepted. Configure API_SSL_FINGERPRINTS or set ENABLE_SSL_PINNING=false.
+00:00 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/ssl_pinning_test.dart: 401 replay transport installs the pinned adapter, and only when pinning is on
+00:00 +9: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/ssl_pinning_test.dart: 401 replay transport replays through the main client pinned adapter
+00:00 +10: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/ssl_pinning_test.dart: 401 replay transport follows the main client transport when it is swapped
+00:00 +11: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/ssl_pinning_test.dart: 401 replay transport inherits the main client base url and timeouts
+00:00 +12: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_redirect_test.dart: (setUpAll)
+00:00 +12: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_redirect_test.dart: (setUpAll)
+00:00 +12: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_redirect_test.dart: production release rejects HTTPS to HTTP before the plain request
+00:00 +12: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_redirect_test.dart: a production release refuses a redirect to cleartext
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.connect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:111:13)
+│ #1   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_redirect_test.dart:177:22)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 Connecting to WebSocket at: wss://127.0.0.1:55584/to-cleartext?token=***REDACTED***
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+[38;5;196m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m│ #0   RawWebSocketClientImpl.connect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:136:15)[0m
+[38;5;196m│ #1   <asynchronous suspension>[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ ⛔ Failed to open WebSocket connection to wss://127.0.0.1:55584/to-cleartext?token=***REDACTED***: WebSocketChannelException[0m
+[38;5;196m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:00 +13: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_redirect_test.dart: production release rejects HTTPS to HTTP before the plain request
+00:00 +13: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_redirect_test.dart: a production release still follows a redirect that stays on TLS
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.connect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:111:13)
+│ #1   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_redirect_test.dart:203:22)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 Connecting to WebSocket at: wss://127.0.0.1:55584/to-tls?token=***REDACTED***
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:00 +14: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_redirect_test.dart: a production release still follows a redirect that stays on TLS
+00:00 +15: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_redirect_test.dart: a production release still follows a redirect that stays on TLS
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.disconnect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:248:13)
+│ #1   new Future.sync (dart:async/future.dart:325:27)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 Disconnected from WebSocket.
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:00 +16: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_redirect_test.dart: production release follows HTTPS to HTTPS with the same pins
+00:00 +16: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_redirect_test.dart: a debug build follows the redirect as before
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.connect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:111:13)
+│ #1   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_redirect_test.dart:214:20)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 Connecting to WebSocket at: wss://127.0.0.1:55584/to-cleartext?token=***REDACTED***
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.disconnect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:248:13)
+│ #1   new Future.sync (dart:async/future.dart:325:27)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 Disconnected from WebSocket.
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:00 +17: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_redirect_test.dart: production release follows HTTPS to HTTPS with the same pins
+00:00 +17: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_redirect_test.dart: a production release still goes through a configured proxy, pinned
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.connect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:111:13)
+│ #1   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_redirect_test.dart:231:22)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 Connecting to WebSocket at: wss://127.0.0.1:55584/socket?token=***REDACTED***
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:00 +18: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_redirect_test.dart: a production release still goes through a configured proxy, pinned
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.disconnect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:248:13)
+│ #1   new Future.sync (dart:async/future.dart:325:27)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 Disconnected from WebSocket.
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:00 +19: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_redirect_test.dart: a production release still goes through a configured proxy, pinned
+00:00 +20: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_redirect_test.dart: HTTPS through CONNECT retains pinning and redirect scheme checks
+00:00 +21: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_redirect_test.dart: scheme guard also applies without pinning to an initial HTTP URL
+00:00 +22: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_redirect_test.dart: (tearDownAll)
+00:01 +22: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/doc_symbols_test.dart: documented symbols every <!-- symbol: --> directive resolves
+Shell: symbols: checked 114 directive(s); 0 unresolved
+00:01 +23: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/doc_symbols_test.dart: documented symbols contracts-map.md still carries its directives
+00:01 +24: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/doc_symbols_test.dart: documented symbols a directive naming a missing identifier fails, with file and line
+00:01 +25: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/doc_symbols_test.dart: documented symbols a directive inside a fenced block is documentation, not a directive
+00:01 +26: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/doc_symbols_test.dart: a directive inside an inner fence of a four-backtick block is an example, not a directive
+00:01 +27: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/doc_symbols_test.dart: malformed directives are reported with file and line; inline code and fences are not
+00:01 +28: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/doc_symbols_test.dart: declaresSymbol accepts every declaration form this repository uses
+00:01 +29: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/doc_symbols_test.dart: declaresSymbol rejects a mention that is not a declaration
+00:01 +30: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/doc_symbols_test.dart: declaresSymbol ignores a declaration inside a block comment or a string
+00:01 +31: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/doc_symbols_test.dart: declaresSymbol does not match a longer identifier that contains the name
+00:01 +32: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/doc_symbols_test.dart: declaresSymbol finds the real providers in this repository, including generated
+00:01 +33: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/doc_symbols_test.dart: declaresMember criterion 2: UserModel.fromJson and UserModel.toJson resolve
+00:01 +34: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/doc_symbols_test.dart: declaresMember criterion 2: UserModel.toEntity does not
+00:01 +35: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/doc_symbols_test.dart: declaresMember an initializer or expression body declares nothing
+00:01 +36: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/doc_symbols_test.dart: declaresMember reads each member form, at the type body top level only
+00:01 +37: All tests passed!

@@ -1,0 +1,99 @@
+2026-11-18T15:18:52.2783071Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/env_guard_before_build_test.dart: the Fastfiles criterion 2: every flutter build in ios/fastlane/Fastfile follows the guard in its lane
+2026-11-18T15:18:52.2798602Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/env_guard_before_build_test.dart: the Fastfiles the lane scan catches an unguarded lane
+2026-11-18T15:18:52.3526624Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/pre_commit_staged_content_test.dart: an hour-old export a killed run left beside the repository is swept, a fresh one is kept
+2026-11-18T15:18:52.6717038Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/gitignore_env_files_test.dart: every .env file is ignored except .env.example
+2026-11-18T15:18:52.8919052Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/pre_commit_staged_content_test.dart: a parent it cannot write to falls back to the temp directory and says so
+2026-11-18T15:18:53.0356495Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/mason_state_ignored_test.dart: criterion 1: git ignores .mason/bricks.json
+2026-11-18T15:18:53.0425965Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/mason_state_ignored_test.dart: criterion 1: git ignores .mason/bricks/feature_clean/brick.yaml
+2026-11-18T15:18:53.0479792Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/mason_state_ignored_test.dart: criterion 1: git ignores mason-lock.json
+2026-11-18T15:18:53.0537185Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/mason_state_ignored_test.dart: the bricks themselves are not ignored
+2026-11-18T15:18:53.5107215Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/pre_commit_staged_content_test.dart: inside a linked worktree it checks that worktree's index
+2026-11-18T15:18:53.5525489Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/gate_scope_renames_test.dart: .github/workflows/ci.yml lists both sides of a rename
+2026-11-18T15:18:53.5599834Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/gate_scope_renames_test.dart: .github/workflows/strip-smoke.yml lists both sides of a rename
+2026-11-18T15:18:54.0097258Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/test_coverage_no_install_test.dart: test_coverage.sh installs nothing; it names the install command
+2026-11-18T15:18:54.1519646Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/scripts_smoke_after_strip_test.dart: an unguarded Mason or strip step is reported
+2026-11-18T15:18:54.1701403Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/scripts_smoke_after_strip_test.dart: every scripts-smoke step that needs Mason or the strip tool is skipped when the file it needs is gone
+2026-11-18T15:18:54.1783994Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/scripts_smoke_after_strip_test.dart: the notice step fails in the template repository
+2026-11-18T15:18:54.4081515Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/shell_line_endings_test.dart: tracked hooks and shell entry points always check out with LF
+2026-11-18T15:18:54.8022082Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_ci_test.dart: an unknown flag exits 64 and writes nothing
+2026-11-18T15:18:54.8523442Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/no_dart_run_in_tests_test.dart: no test spawns dart run
+2026-11-18T15:18:55.1450044Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_ci_test.dart: a --dir with no path exits 64 and writes nothing
+2026-11-18T15:18:55.4137238Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/config/enable_toggles_have_readers_test.dart: the guide documents the ENABLE_* toggles
+2026-11-18T15:18:55.4544113Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/config/enable_toggles_have_readers_test.dart: ENABLE_LOGGING: has a reader of AppConfig.enableLogging
+2026-11-18T15:18:55.4690180Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/config/enable_toggles_have_readers_test.dart: ENABLE_ANALYTICS: marked reserved, and nothing reads it
+2026-11-18T15:18:55.4821689Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/config/enable_toggles_have_readers_test.dart: ENABLE_CRASH_REPORTING: marked reserved, and nothing reads it
+2026-11-18T15:18:55.4936689Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/config/enable_toggles_have_readers_test.dart: ENABLE_PERFORMANCE_MONITORING: has a reader of AppConfig.enablePerformanceMonitoring
+2026-11-18T15:18:55.5058162Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/config/enable_toggles_have_readers_test.dart: ENABLE_DEBUG_FEATURES: has a reader of AppConfig.enableDebugFeatures
+2026-11-18T15:18:55.5366672Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/config/enable_toggles_have_readers_test.dart: ENABLE_HTTP_LOGGING: has a reader of AppConfig.enableHttpLogging
+2026-11-18T15:18:55.5577069Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_ci_test.dart: --help prints the usage and exits 0
+2026-11-18T15:18:55.5614603Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_ci_test.dart: there are deploy workflows to check
+2026-11-18T15:18:55.8643245Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_ci_test.dart: the prompt and the report describe what exists a bare --yes names the deploy option it skipped
+2026-11-18T15:18:56.0220786Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/errors/http_status_failures_test.dart: criterion 1: the four statuses map to their typed failures 401 -> AuthFailure
+2026-11-18T15:18:56.0238775Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/errors/http_status_failures_test.dart: criterion 1: the four statuses map to their typed failures 403 -> PermissionFailure
+2026-11-18T15:18:56.0260640Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/errors/http_status_failures_test.dart: criterion 1: the four statuses map to their typed failures 404 -> NotFoundFailure
+2026-11-18T15:18:56.0274623Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/errors/http_status_failures_test.dart: criterion 1: the four statuses map to their typed failures 422 -> ValidationFailure
+2026-11-18T15:18:56.0313285Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/errors/http_status_failures_test.dart: criterion 1: the four statuses map to their typed failures any other status stays a ServerFailure and keeps its status
+2026-11-18T15:18:56.0338232Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/errors/http_status_failures_test.dart: criterion 1: the four statuses map to their typed failures a 500 and a 503 with the same message are no longer equal
+2026-11-18T15:18:56.0353726Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/errors/http_status_failures_test.dart: criterion 1: the four statuses map to their typed failures copyWith keeps the status
+2026-11-18T15:18:56.0443435Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/errors/http_status_failures_test.dart: criterion 3: every failure type docs/api/core/errors.md documents is reachable from a real producer
+2026-11-18T15:18:56.1227242Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_ci_test.dart: the prompt and the report describe what exists declining changes nothing and says so
+2026-11-18T15:18:56.1287456Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_ci_test.dart: the prompt and the report describe what exists coverage.yml does not claim commented-out triggers
+2026-11-18T15:18:56.3920674Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_ci_test.dart: criterion 1: setup_ci.dart enables exactly one deploy option without --deploy-trigger, no deploy workflow gets a push trigger
+2026-11-18T15:18:56.9090974Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_ci_test.dart: criterion 1: setup_ci.dart enables exactly one deploy option --deploy-trigger=tags enables tags and not branches
+2026-11-18T15:18:57.4339332Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_ci_test.dart: criterion 1: setup_ci.dart enables exactly one deploy option --deploy-trigger=branch enables branches and not tags
+2026-11-18T15:18:57.6733903Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_ci_test.dart: criterion 1: setup_ci.dart enables exactly one deploy option an unknown value is refused and writes nothing
+2026-11-18T15:18:57.6773499Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_ci_test.dart: criterion 2: every deploy upload fails on zero files deploy-android.yml
+2026-11-18T15:18:57.6799295Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_ci_test.dart: criterion 2: every deploy upload fails on zero files deploy-ios.yml
+2026-11-18T15:18:57.6826550Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_ci_test.dart: criterion 2: every deploy upload fails on zero files deploy-web.yml
+2026-11-18T15:18:57.6853119Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_ci_test.dart: every deploy job uploads, failing on zero files deploy-android.yml
+2026-11-18T15:18:57.6874691Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_ci_test.dart: every deploy job uploads, failing on zero files deploy-ios.yml
+2026-11-18T15:18:57.6895286Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_ci_test.dart: every deploy job uploads, failing on zero files deploy-web.yml
+2026-11-18T15:18:57.6919371Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_ci_test.dart: every deploy job uploads, failing on zero files deploy-web.yml fails each job while it deploys nothing
+2026-11-18T15:18:57.6941439Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_ci_test.dart: criterion 3: commented artifact paths use the flavorless layout deploy-android.yml
+2026-11-18T15:18:57.6963018Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_ci_test.dart: criterion 3: commented artifact paths use the flavorless layout deploy-ios.yml
+2026-11-18T15:18:57.6985025Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_ci_test.dart: criterion 3: commented artifact paths use the flavorless layout deploy-web.yml
+2026-11-18T15:18:57.7096282Z ##[endgroup]
+2026-11-18T15:18:57.7096422Z 
+2026-11-18T15:18:57.7100391Z 🎉 797 tests passed, 2 skipped.
+2026-11-18T15:18:57.7849426Z Post job cleanup.
+2026-11-18T15:18:57.7852685Z ##[start-action display=Cache pub dependencies;id=__c5fb9abb-f06f-4e3f-a816-02f38497b5e1.cache-pub]
+2026-11-18T15:18:57.8900786Z Post job cleanup.
+2026-11-18T15:18:57.9846094Z Cache hit occurred on the primary key flutter-pub-linux-stable-3.50.0-x64-ab2912035e160d9cad6306df307576da6128ebdb-351206474889457369ba80c1db01f677a0b06868fcdeae51d848ed2eb17b054b, not saving cache.
+2026-11-18T15:18:57.9890828Z ##[end-action id=__c5fb9abb-f06f-4e3f-a816-02f38497b5e1.cache-pub;outcome=success;conclusion=success;duration_ms=203]
+2026-11-18T15:18:57.9893068Z ##[start-action display=Cache Flutter;id=__c5fb9abb-f06f-4e3f-a816-02f38497b5e1.cache-flutter]
+2026-11-18T15:18:57.9920403Z Post job cleanup.
+2026-11-18T15:18:58.0902479Z Cache hit occurred on the primary key flutter-linux-stable-3.50.0-x64-ab2912035e160d9cad6306df307576da6128ebdb, not saving cache.
+2026-11-18T15:18:58.0956257Z ##[end-action id=__c5fb9abb-f06f-4e3f-a816-02f38497b5e1.cache-flutter;outcome=success;conclusion=success;duration_ms=106]
+2026-11-18T15:18:58.1009981Z Post job cleanup.
+2026-11-18T15:18:58.1647024Z [command]/usr/bin/git version
+2026-11-18T15:18:58.1679178Z git version 2.56.1
+2026-11-18T15:18:58.1703304Z Temporarily overriding HOME='/home/runner/work/_temp/7210a5db-a7de-4fdb-8b74-74a365314c80' before making global git config changes
+2026-11-18T15:18:58.1704720Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-18T15:18:58.1706963Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/flutter-starter/flutter-starter
+2026-11-18T15:18:58.1733620Z Removing SSH command configuration
+2026-11-18T15:18:58.1738795Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-18T15:18:58.1771339Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-18T15:18:58.2068364Z Removing HTTP extra header
+2026-11-18T15:18:58.2069039Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-18T15:18:58.2128030Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-18T15:18:58.2368046Z Removing includeIf entries pointing to credentials config files
+2026-11-18T15:18:58.2373387Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-18T15:18:58.2393131Z includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git.path
+2026-11-18T15:18:58.2393659Z includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git/worktrees/*.path
+2026-11-18T15:18:58.2394121Z includeif.gitdir:/github/workspace/.git.path
+2026-11-18T15:18:58.2394461Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-11-18T15:18:58.2400531Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git.path
+2026-11-18T15:18:58.2417574Z /home/runner/work/_temp/git-credentials-0f21a70f-37e3-40c8-91d0-b1237c58eb45.config
+2026-11-18T15:18:58.2425742Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-0f21a70f\-37e3\-40c8\-91d0\-b1237c58eb45\.config
+2026-11-18T15:18:58.2451925Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git/worktrees/*.path
+2026-11-18T15:18:58.2476828Z /home/runner/work/_temp/git-credentials-0f21a70f-37e3-40c8-91d0-b1237c58eb45.config
+2026-11-18T15:18:58.2484303Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-0f21a70f\-37e3\-40c8\-91d0\-b1237c58eb45\.config
+2026-11-18T15:18:58.2507999Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-11-18T15:18:58.2524445Z /github/runner_temp/git-credentials-0f21a70f-37e3-40c8-91d0-b1237c58eb45.config
+2026-11-18T15:18:58.2530342Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-0f21a70f\-37e3\-40c8\-91d0\-b1237c58eb45\.config
+2026-11-18T15:18:58.2553317Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-11-18T15:18:58.2569441Z /github/runner_temp/git-credentials-0f21a70f-37e3-40c8-91d0-b1237c58eb45.config
+2026-11-18T15:18:58.2575395Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-0f21a70f\-37e3\-40c8\-91d0\-b1237c58eb45\.config
+2026-11-18T15:18:58.2599284Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-18T15:18:58.2770987Z Removing credentials config '/home/runner/work/_temp/git-credentials-0f21a70f-37e3-40c8-91d0-b1237c58eb45.config'
+2026-11-18T15:18:58.2890036Z Cleaning up orphan processes

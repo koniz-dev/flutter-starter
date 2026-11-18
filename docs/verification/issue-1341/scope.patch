@@ -1,0 +1,30 @@
+diff --git a/docs/api/core/network.md b/docs/api/core/network.md
+index 856286e7563..ab677879ca7 100644
+--- a/docs/api/core/network.md
++++ b/docs/api/core/network.md
+@@ -367,12 +367,19 @@ from depends on pinning and on the build:
+   the client certificate there at startup
+   (`SecurityContext.defaultContext.useCertificateChainBytes(...)` and
+   `usePrivateKeyBytes(...)`), and both present it.
+-- **A context installed through `HttpOverrides`** reaches `ApiClient`, but
+-  not the realtime handshake in a staging or production release. There the
+-  handshake opens each TLS hop itself, with `SslPinning.secureConnect`, so
+-  that it can refuse a redirect that leaves TLS. That hop uses
+-  `SecurityContext.defaultContext` when pinning is off, so put the
+-  certificate there rather than only in your override.
++- **Overrides in a staging or production release:** both `ApiClient` and
++  the realtime handshake open direct TLS hops through
++  `SslPinning.secureConnect` to refuse redirects that leave TLS. Those hops
++  use the default context when pinning is off, or the fresh pinned context
++  when pinning is on; they do not consult a context or
++  `badCertificateCallback` installed through `HttpOverrides`. An override
++  that works in debug or profile therefore does not configure release TLS.
++  With pinning off, load a private CA with
++  `SecurityContext.defaultContext.setTrustedCertificatesBytes(...)`, and
++  load your client chain and key into that same default context before
++  making requests. With pinning on, customize the contexts in `SslPinning`
++  instead. Do not rely on an override to bypass the release certificate
++  policy.
+ 
+ <!-- symbol: lib/core/network/ssl_pinning.dart SslPinning.secureConnect -->
+ <!-- symbol: lib/core/network/realtime/raw_websocket_client.dart RawWebSocketClientImpl._transport -->
