@@ -112,7 +112,10 @@ void main() {
       final email = field(tester, _l10n.email);
       final password = field(tester, _l10n.password);
       expect(email.textInputAction, TextInputAction.next);
-      expect(email.autofillHints, [AutofillHints.email]);
+      expect(email.autofillHints, [
+        AutofillHints.username,
+        AutofillHints.email,
+      ]);
       expect(password.textInputAction, TextInputAction.done);
       expect(password.autofillHints, [AutofillHints.password]);
       expect(find.byType(AutofillGroup), findsOneWidget);
@@ -161,7 +164,10 @@ void main() {
 
       expect(field(tester, _l10n.name).autofillHints, [AutofillHints.name]);
       expect(field(tester, _l10n.name).textInputAction, TextInputAction.next);
-      expect(field(tester, _l10n.email).autofillHints, [AutofillHints.email]);
+      expect(field(tester, _l10n.email).autofillHints, [
+        AutofillHints.username,
+        AutofillHints.email,
+      ]);
       expect(
         field(tester, _l10n.password).autofillHints,
         [AutofillHints.newPassword],
@@ -216,12 +222,41 @@ void main() {
       await tester.tap(find.widgetWithText(ElevatedButton, _l10n.login));
       await tester.pump();
 
+      final leaving = tester.state(find.byType(LoginScreen));
       router.go(AppRoutes.register);
-      // Not pumpAndSettle: the shared loading state keeps a spinner going.
+      // First start the transition, then advance its clock. Loading spins.
+      await tester.pump();
       await tester.pump(const Duration(milliseconds: 500));
+      expect(leaving.mounted, isFalse);
+      expect(find.byType(LoginScreen, skipOffstage: false), findsNothing);
       reply.complete(const Success(_user));
       await tester.pump(const Duration(milliseconds: 500));
 
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('leaving while registration runs does not throw', (
+      tester,
+    ) async {
+      final reply = Completer<Result<User>>();
+      when(() => register(any(), any(), any())).thenAnswer((_) => reply.future);
+      await pump(tester, AppRoutes.register);
+      await tester.enterText(
+        find.widgetWithText(TextFormField, _l10n.name),
+        'Ann',
+      );
+      await fill(tester);
+      await tester.tap(find.widgetWithText(ElevatedButton, _l10n.register));
+      await tester.pump();
+
+      final leaving = tester.state(find.byType(RegisterScreen));
+      router.go(AppRoutes.login);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+      expect(leaving.mounted, isFalse);
+      expect(find.byType(RegisterScreen, skipOffstage: false), findsNothing);
+      reply.complete(const Success(_user));
+      await tester.pump(const Duration(milliseconds: 500));
       expect(tester.takeException(), isNull);
     });
 
