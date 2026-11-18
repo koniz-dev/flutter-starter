@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 # Runs before each commit. Keeps scope aligned with CI (see .github/workflows/ci.yml).
+# Every commit exports the whole tracked repository to a temporary tree,
+# including unrelated monorepo assets. Time and temporary disk use scale
+# with the entire tracked tree, even when only the app changes.
 set -euo pipefail
 
 echo "Running pre-commit checks..."

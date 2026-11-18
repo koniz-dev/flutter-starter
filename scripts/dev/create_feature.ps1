@@ -1,3 +1,4 @@
+# Requires PowerShell 7+ (pwsh), not Windows PowerShell 5.1.
 # Scaffolds a Clean Architecture feature slice under lib/features/, plus its
 # mirrored test under test/features/.
 #

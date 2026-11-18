@@ -80,7 +80,9 @@ while [ $# -gt 0 ]; do
 done
 
 if [ -z "$VERSION" ]; then
-    VERSION=$(grep "^version:" pubspec.yaml | sed 's/version: //' | cut -d'+' -f1)
+    VERSION=$(grep -m1 '^version:' pubspec.yaml \
+        | sed -e 's/^version:[[:space:]]*//' -e 's/[[:space:]]*#.*$//' -e 's/[[:space:]]*$//' -e 's/\r$//' \
+        | cut -d'+' -f1)
 fi
 if [ -z "$VERSION" ]; then
     echo -e "${RED}Error: no version given and none found in pubspec.yaml${NC}" >&2
