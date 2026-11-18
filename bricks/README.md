@@ -24,11 +24,13 @@ mason make flutter_starter_setup
 
 Then `flutter pub get && flutter analyze && flutter test`.
 
+<!-- strip:strip-tool start -->
 ## If you do not use Mason
 
 You can remove the whole **`bricks/`** folder and **`mason.yaml`** after you finish renaming manually (see [Fork and customize](../docs/guides/onboarding/fork-and-customize.md)).
-Use `dart run tool/strip_sample_features.dart --apply --keep-samples --remove-bricks`, which also drops the docs that link into them. <!-- strip:strip-tool line -->
+Use `dart run tool/strip_sample_features.dart --apply --keep-samples --remove-bricks`, which also drops the docs that link into them.
 That shrinks the tree.
+<!-- strip:strip-tool end -->
 
 ## Developing or changing a brick
 

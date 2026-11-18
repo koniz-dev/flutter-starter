@@ -112,10 +112,12 @@ copyright line) becomes everything in `application_id` before its last segment.
 | `include_feature_flags_sample` | If false, removes the sample feature flags module |
 | `strip_sample_features` | Legacy switch; if true, removes both tasks + feature_flags (see tool script) |
 
+<!-- strip:strip-tool start -->
 ## Not using Mason
 
 Use the manual steps in [Fork and customize](../../docs/guides/onboarding/fork-and-customize.md). Afterwards you may remove **`bricks/`** and **`mason.yaml`** if you want a slimmer tree.
-Use `dart run tool/strip_sample_features.dart --apply --keep-samples --remove-bricks`; deleting them by hand leaves links to them dangling in the docs. <!-- strip:strip-tool line -->
+Use `dart run tool/strip_sample_features.dart --apply --keep-samples --remove-bricks`; deleting them by hand leaves links to them dangling in the docs.
+<!-- strip:strip-tool end -->
 
 ## Developing this brick
 
