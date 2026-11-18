@@ -86,8 +86,8 @@ in section 2, substituting your current identifiers for the template defaults.
    own rename source, if your copy still has it.
 4. Search `docs/` for `package:flutter_starter` in fenced code examples and update them if you care about copy-paste accuracy (no rename step rewrites Markdown).
 
-**If you never use Mason:** after renaming, you can remove **`bricks/`** and **`mason.yaml`**. <!-- strip:bricks line -->
-Use `dart run tool/strip_sample_features.dart --apply --keep-samples --remove-bricks`, or add `--remove-bricks` to whichever strip you run: it also drops the passages in the docs that link into them, which deleting the two by hand leaves dangling. <!-- strip:strip-tool line -->
+**If you never use Mason:** after renaming, remove **`bricks/`** and **`mason.yaml`** with `dart run tool/strip_sample_features.dart --apply --keep-samples --remove-bricks`. Deleting them by hand breaks `flutter analyze` and `flutter test` because tests import the brick helpers, and leaves dangling documentation links. <!-- strip:bricks line -->
+You can also add `--remove-bricks` to whichever strip mode you run; it removes the dependent tests and documentation along with the bricks. <!-- strip:strip-tool line -->
 
 ## 2. Display name and application ids
 
