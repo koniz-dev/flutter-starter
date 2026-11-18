@@ -275,6 +275,7 @@ class TasksListScreen extends ConsumerWidget {
           itemBuilder: (context) => [
             PopupMenuItem(
               value: 'edit',
+              enabled: !isPending,
               child: Row(
                 children: [
                   const Icon(Icons.edit, size: 20),
