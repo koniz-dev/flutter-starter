@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- [Prevent editing a pending task snapshot](https://github.com/koniz-dev/flutter-starter/issues/1346): disable the Edit menu item while that task is being mutated, so a title edit opened after a pending toggle completes keeps the updated completion state.
+
 - [Prove auth screen disposal and identify autofill usernames](https://github.com/koniz-dev/flutter-starter/issues/1345): login/register email fields advertise username before email for credential pairing. Pending-submit navigation tests verify the old screen is disposed before completing the request, and detect removal of either mounted guard.
 
 - [Remove Mason through the strip tool](https://github.com/koniz-dev/flutter-starter/issues/1342): onboarding instructions name --remove-bricks and explain that deleting bricks/mason.yaml by hand leaves broken test imports as well as documentation links; regression guards keep this warning in place.
