@@ -36,8 +36,10 @@ git_q() { git -c user.email=test@example.com -c user.name=test -c commit.gpgsign
 # preamble, `## [Unreleased]` with content, then a released version.
 new_repo() {
     local dir="$WORK/$1"
-    mkdir -p "$dir/scripts/ci"
+    mkdir -p "$dir/scripts/ci" "$dir/scripts/dev"
     cp "$SCRIPTS"/generate_changelog.sh "$SCRIPTS"/release.sh "$SCRIPTS"/bump_version.sh "$dir/scripts/ci/"
+    printf '#!/usr/bin/env bash\nexit "${FORMAT_FIXTURE_STATUS:-0}"\n' > "$dir/scripts/dev/format_dart.sh"
+    chmod +x "$dir/scripts/dev/format_dart.sh"
     cat > "$dir/CHANGELOG.md" <<'MD'
 # Changelog
 
@@ -344,6 +346,37 @@ if [ "$got" = 'version: 1.2.4   # spaced  note' ]; then
     pass "bump_version.sh keeps the comment's spacing exactly"
 else
     fail "bump_version.sh keeps the comment's spacing exactly, got: $got"
+fi
+
+
+# Formatting must refuse before tests or any release mutation.
+repo=$(new_repo format-preflight)
+mkdir -p "$repo/lib"
+printf 'void main(){print(1);}' > "$repo/lib/bad.dart"
+(cd "$repo" && git_q add lib/bad.dart && git_q commit -q -m 'fix: fixture source' && git_q tag v1.0.0)
+before=$(cd "$repo" && git rev-parse HEAD)
+: > "$WORK/flutter-calls"
+printf '#!/usr/bin/env bash\necho "$*" >> "%s"\nexit 0\n' "$WORK/flutter-calls" > "$WORK/bin/flutter"
+out=$(cd "$repo" && FORMAT_FIXTURE_STATUS=1 PATH="$WORK/bin:$PATH" bash scripts/ci/release.sh patch < /dev/null 2>&1); rc=$?
+if [ $rc -ne 0 ] && [ ! -s "$WORK/flutter-calls" ] \
+    && [ "$(cd "$repo" && git branch --show-current)" = main ] \
+    && [ "$(cd "$repo" && git rev-parse HEAD)" = "$before" ] \
+    && [ -z "$(cd "$repo" && git status --porcelain)" ] \
+    && ! printf '%s' "$out" | grep -q 'Step 1:'; then
+    pass "format failure refuses before step1 and leaves main, files and history unchanged"
+else
+    fail "format failure did not refuse before release mutations (exit $rc: $(printf '%s' "$out" | tail -3))"
+fi
+
+repo=$(new_repo implicit-comment)
+(cd "$repo" && git_q tag v1.0.0)
+printf 'name: fixture\nversion: 1.0.1 # first public build\n' > "$repo/pubspec.yaml"
+(cd "$repo" && git_q add pubspec.yaml && git_q commit -q -m 'fix: version fixture')
+out=$(cd "$repo" && bash scripts/ci/generate_changelog.sh 2>&1); rc=$?
+if [ $rc -eq 0 ] && grep -q '^## \[1\.0\.1\] - ' "$repo/CHANGELOG.md"; then
+    pass "implicit changelog version excludes its trailing comment"
+else
+    fail "implicit changelog version retains a comment (exit $rc: $out)"
 fi
 
 echo

@@ -1,6 +1,28 @@
 #!/usr/bin/env bash
-# Runs before push. Matches CI spirit without building platform targets.
+# Tests the working tree, not the pushed commit tips, for branch updates.
+# Pushes containing only remote tags or deletions skip the suite.
+# A manual invocation without stdin refs still tests the working tree.
 set -euo pipefail
+
+saw_ref=false
+has_branch_update=false
+if [[ ! -t 0 ]]; then
+  while read -r pushed_local_ref pushed_local_oid pushed_remote_ref pushed_remote_oid; do
+    saw_ref=true
+    case "$pushed_remote_ref" in
+      refs/tags/*) ;;
+      *)
+        if [[ ! "$pushed_local_oid" =~ ^0+$ ]]; then
+          has_branch_update=true
+        fi
+        ;;
+    esac
+  done
+fi
+if $saw_ref && ! $has_branch_update; then
+  echo "Skipping tests: push contains only tags or deletions."
+  exit 0
+fi
 
 echo "Running pre-push checks..."
 
