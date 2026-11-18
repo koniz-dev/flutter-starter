@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- [Clarify release TLS configuration](https://github.com/koniz-dev/flutter-starter/issues/1341): document that direct API and realtime TLS handshakes in staging/production release use the default or pinned context, and explain where to load private CAs and client certificates instead of relying on HttpOverrides.
+
 ## [5.0.2] - 2026-11-18
 
 ### Fixed
