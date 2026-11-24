@@ -1,0 +1,11 @@
+Reproduced warning-level shellcheck on actual initial commit faeadb27f8b (before ignored-field follow-up). Initial fullhost was stopped after this gate failure; no completion is claimed.
+
+In /var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/initial-hook-1347-4_ovndli/pre-push line 10:
+  while read -r pushed_local_ref pushed_local_oid pushed_remote_ref pushed_remote_oid; do
+                ^--------------^ SC2034 (warning): pushed_local_ref appears unused. Verify use (or export if used externally).
+                                                                    ^---------------^ SC2034 (warning): pushed_remote_oid appears unused. Verify use (or export if used externally).
+
+For more information:
+  https://www.shellcheck.net/wiki/SC2034 -- pushed_local_ref appears unused. ...
+
+exit: 1

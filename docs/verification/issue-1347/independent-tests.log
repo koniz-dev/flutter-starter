@@ -1,0 +1,240 @@
+
+$ /bin/bash --version
+GNU bash, version 3.2.57(1)-release (x86_64-apple-darwin24)
+Copyright (C) 2007 Free Software Foundation, Inc.
+
+EXIT 0
+
+$ /bin/bash scripts/test/release_scripts_test.sh
+ok    generate_changelog.sh 1.2.3 exits 0
+ok    the new section sits below Unreleased and above 1.0.0+1
+ok    commits after the tag are listed
+ok    commits before the tag are not listed
+ok    the Unreleased section is kept intact
+ok    with no tag it refuses and names --since
+ok    a refused run leaves CHANGELOG.md untouched
+ok    --since <ref> lists exactly the commits in <ref>..HEAD
+ok    a missing CHANGELOG.md is created with the section
+ok    release.sh fails when the changelog step fails
+ok    after the failure git status --short is empty
+ok    no release branch or tag was created
+ok    an existing tag stops release.sh with a clean tree
+ok    an existing tag is caught before the tests run
+ok    an existing branch stops release.sh with a clean tree
+ok    an existing branch is caught before the tests run
+ok    an existing tag stops release.sh with a clean tree
+ok    an existing tag is caught before the tests run
+ok    with the tag trigger commented out, the summary claims no deploy
+ok    with a live tag trigger, the summary says the tag deploys once pushed
+ok    a tags: key outside on.push is not a tag trigger
+ok    with no tag release.sh refuses before the tests and names RELEASE_CHANGELOG_SINCE
+ok    a RELEASE_CHANGELOG_SINCE that is not a commit is refused before the tests
+ok    with RELEASE_CHANGELOG_SINCE a first release completes
+ok    generate_changelog.sh from a subdirectory reads and writes the root files
+ok    release.sh from a subdirectory releases the root project
+ok    generate_changelog.sh finds the root with CDPATH exported
+ok    release.sh finds the root with CDPATH exported
+ok    a script reached through a symlink says it is not at the project root
+ok    bump_version.sh patch keeps the version line's trailing comment
+ok    bump_version.sh patch on a line with no comment adds nothing
+ok    bump_version.sh keeps the comment's spacing exactly
+ok    format failure refuses before step1 and leaves main, files and history unchanged
+ok    implicit changelog version excludes its trailing comment
+
+All release-script tests passed.
+
+EXIT 0
+
+$ shellcheck -S warning -s bash .githooks/pre-push .githooks/pre-commit scripts/ci/release.sh scripts/ci/generate_changelog.sh scripts/test/release_scripts_test.sh
+
+EXIT 0
+
+$ flutter test test/tooling/pre_push_refs_test.dart test/tooling/setup_git_hooks_test.dart test/tooling/create_feature_ps1_culture_test.dart test/tooling/scaffold_routing_parity_test.dart --reporter expanded
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/pre_push_refs_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/create_feature_ps1_culture_test.dart: identifiers are cased with the invariant culture
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/pre_push_refs_test.dart: pre-push branch update
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_git_hooks_test.dart: with a global core.hooksPath, the hooks still run afterwards
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_git_hooks_test.dart: with a global core.hooksPath, the hooks still run afterwards
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_git_hooks_test.dart: with a global core.hooksPath, the hooks still run afterwards
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_git_hooks_test.dart: with a global core.hooksPath, the hooks still run afterwards
+00:00 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_git_hooks_test.dart: with a global core.hooksPath, the hooks still run afterwards
+00:01 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_git_hooks_test.dart: with a global core.hooksPath, the hooks still run afterwards
+00:01 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_git_hooks_test.dart: with a global core.hooksPath, the hooks still run afterwards
+00:01 +9: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_git_hooks_test.dart: with a global core.hooksPath, the hooks still run afterwards
+00:01 +10: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_git_hooks_test.dart: with a global core.hooksPath, the hooks still run afterwards
+00:01 +11: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_git_hooks_test.dart: with a global core.hooksPath, the hooks still run afterwards
+00:01 +12: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/pre_push_refs_test.dart: pre-push manual invocation without refs
+00:02 +13: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_git_hooks_test.dart: a repository-local core.hooksPath elsewhere is not overwritten
+00:02 +14: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_git_hooks_test.dart: with the app in a subdirectory of a larger repository, hooks run
+00:03 +15: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_git_hooks_test.dart: a failed verification puts the previous core.hooksPath back
+00:05 +16: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_git_hooks_test.dart: the PowerShell twin prefixes the path and restores on failure
+00:05 +17: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_git_hooks_test.dart: running it twice succeeds both times
+00:07 +18: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_git_hooks_test.dart: inside a linked worktree it installs, and hooks run there
+00:08 +19: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_git_hooks_test.dart: names a hook in the repository's hooks directory that will stop running
+00:08 +20: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_git_hooks_test.dart: says nothing about hooks when there are none to lose
+00:09 +21: All tests passed!
+
+EXIT 0
+
+$ /bin/bash scripts/test/release_scripts_test.sh
+ok    generate_changelog.sh 1.2.3 exits 0
+ok    the new section sits below Unreleased and above 1.0.0+1
+ok    commits after the tag are listed
+ok    commits before the tag are not listed
+ok    the Unreleased section is kept intact
+ok    with no tag it refuses and names --since
+ok    a refused run leaves CHANGELOG.md untouched
+ok    --since <ref> lists exactly the commits in <ref>..HEAD
+ok    a missing CHANGELOG.md is created with the section
+ok    release.sh fails when the changelog step fails
+ok    after the failure git status --short is empty
+ok    no release branch or tag was created
+ok    an existing tag stops release.sh with a clean tree
+ok    an existing tag is caught before the tests run
+ok    an existing branch stops release.sh with a clean tree
+ok    an existing branch is caught before the tests run
+ok    an existing tag stops release.sh with a clean tree
+ok    an existing tag is caught before the tests run
+ok    with the tag trigger commented out, the summary claims no deploy
+ok    with a live tag trigger, the summary says the tag deploys once pushed
+ok    a tags: key outside on.push is not a tag trigger
+ok    with no tag release.sh refuses before the tests and names RELEASE_CHANGELOG_SINCE
+ok    a RELEASE_CHANGELOG_SINCE that is not a commit is refused before the tests
+ok    with RELEASE_CHANGELOG_SINCE a first release completes
+ok    generate_changelog.sh from a subdirectory reads and writes the root files
+ok    release.sh from a subdirectory releases the root project
+ok    generate_changelog.sh finds the root with CDPATH exported
+ok    release.sh finds the root with CDPATH exported
+ok    a script reached through a symlink says it is not at the project root
+ok    bump_version.sh patch keeps the version line's trailing comment
+ok    bump_version.sh patch on a line with no comment adds nothing
+ok    bump_version.sh keeps the comment's spacing exactly
+FAIL  format failure did not refuse before release mutations (exit 1: [0;32m✓ Tag created: v1.0.1[0m
+
+[1;33mStep 8: Pushing to remote...[0m)
+FAIL  implicit changelog version retains a comment (exit 0: [0;32mGenerating changelog from v1.0.0 to HEAD[0m
+[0;32mChangelog generated successfully![0m
+  [1;33mVersion:[0m 1.0.1 # first public build
+  [1;33mDate:[0m 2026-11-24
+  [1;33mRange:[0m v1.0.0..HEAD
+
+Review CHANGELOG.md and commit if satisfied.)
+
+2 release-script test(s) failed.
+
+EXIT 1
+BASELINE PASS exactly2 new release failures
+
+$ /bin/bash /var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/review-1347-9f4byafh/mono/packages/app/.githooks/pre-push
+Skipping tests: push contains only tags or deletions.
+
+EXIT 0
+INDEPENDENT HOOK PASS tag64
+
+$ /bin/bash /var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/review-1347-9f4byafh/mono/packages/app/.githooks/pre-push
+Skipping tests: push contains only tags or deletions.
+
+EXIT 0
+INDEPENDENT HOOK PASS delete64
+
+$ /bin/bash /var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/review-1347-9f4byafh/mono/packages/app/.githooks/pre-push
+Skipping tests: push contains only tags or deletions.
+
+EXIT 0
+INDEPENDENT HOOK PASS mixed tag/delete
+
+$ /bin/bash /var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/review-1347-9f4byafh/mono/packages/app/.githooks/pre-push
+Running pre-push checks...
+🧱 Running flutter test (compact reporter, 15m timeout)...
+✅ Pre-push checks passed.
+
+EXIT 0
+INDEPENDENT HOOK PASS branch64
+
+$ /bin/bash /var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/review-1347-9f4byafh/mono/packages/app/.githooks/pre-push
+Running pre-push checks...
+🧱 Running flutter test (compact reporter, 15m timeout)...
+✅ Pre-push checks passed.
+
+EXIT 0
+INDEPENDENT HOOK PASS delete then branch
+
+$ /bin/bash /var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/review-1347-9f4byafh/mono/packages/app/.githooks/pre-push
+Running pre-push checks...
+🧱 Running flutter test (compact reporter, 15m timeout)...
+✅ Pre-push checks passed.
+
+EXIT 0
+INDEPENDENT HOOK PASS branch then delete
+
+$ /bin/bash /var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/review-1347-9f4byafh/mono/packages/app/.githooks/pre-push
+Running pre-push checks...
+🧱 Running flutter test (compact reporter, 15m timeout)...
+✅ Pre-push checks passed.
+
+EXIT 0
+INDEPENDENT HOOK PASS localtag remote branch
+
+$ /bin/bash /var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/review-1347-9f4byafh/mono/packages/app/.githooks/pre-push
+Running pre-push checks...
+🧱 Running flutter test (compact reporter, 15m timeout)...
+✅ Pre-push checks passed.
+
+EXIT 0
+INDEPENDENT HOOK PASS emptyEOF
+
+$ /bin/bash /var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/review-1347-9f4byafh/mono/packages/app/.githooks/pre-push
+Running pre-push checks...
+🧱 Running flutter test (compact reporter, 15m timeout)...
+❌ flutter test failed.
+
+EXIT 1
+TTY OUTPUT
+Running pre-push checks...
+🧱 Running flutter test (compact reporter, 15m timeout)...
+✅ Pre-push checks passed.
+EXIT 0
+INDEPENDENT HOOK PASS TTY does not block
+
+$ /bin/bash /var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/review-1347-9f4byafh/mono/packages/app/.githooks/pre-push
+Running pre-push checks...
+🧱 Running flutter test (compact reporter, 15m timeout)...
+✅ Pre-push checks passed.
+
+EXIT 0
+BASE DISCRIMINATION tag wrongly called Flutter
+
+$ /bin/bash /var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/review-1347-9f4byafh/mono/packages/app/.githooks/pre-push
+Running pre-push checks...
+🧱 Running flutter test (compact reporter, 15m timeout)...
+✅ Pre-push checks passed.
+
+EXIT 0
+BASE DISCRIMINATION deletion wrongly called Flutter
+
+$ /bin/bash /var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/review-1347-9f4byafh/mono/packages/app/.githooks/pre-push
+Running pre-push checks...
+🧱 Running flutter test (compact reporter, 15m timeout)...
+✅ Pre-push checks passed.
+
+EXIT 0
+BASE DISCRIMINATION both wrongly called Flutter
+
+$ /bin/bash scripts/ci/release.sh patch
+Changed lib/bad.dart
+Formatted 1 file (1 changed) in 0.02 seconds.
+[0;31mFormatting failed. Nothing was changed; format the source before releasing.[0m
+
+EXIT 1
+REAL FORMATTER PASS rejection before Step1, source/branch/history unchanged
+
+$ /bin/bash scripts/ci/release.sh patch
+Formatted 1 file (0 changed) in 0.00 seconds.
+[0;34mStarting release process...[0m
+
+[1;33mStep 1: Running tests...[0m
+
+EXIT 9
+REAL FORMATTER PASS clean source reaches Step1, failed Flutter stops without mutation
+
+INDEPENDENT REVIEW CHECKS COMPLETE

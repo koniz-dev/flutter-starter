@@ -1,0 +1,244 @@
+diff --git a/.githooks/pre-commit b/.githooks/pre-commit
+index 2a5fe05c3e6..398d88a040e 100755
+--- a/.githooks/pre-commit
++++ b/.githooks/pre-commit
+@@ -1,5 +1,8 @@
+ #!/usr/bin/env bash
+ # Runs before each commit. Keeps scope aligned with CI (see .github/workflows/ci.yml).
++# Every commit exports the whole tracked repository to a temporary tree,
++# including unrelated monorepo assets. Time and temporary disk use scale
++# with the entire tracked tree, even when only the app changes.
+ set -euo pipefail
+ 
+ echo "Running pre-commit checks..."
+diff --git a/.githooks/pre-push b/.githooks/pre-push
+index cc2ad9165ce..b07fbd41641 100755
+--- a/.githooks/pre-push
++++ b/.githooks/pre-push
+@@ -1,7 +1,29 @@
+ #!/usr/bin/env bash
+-# Runs before push. Matches CI spirit without building platform targets.
++# Tests the working tree, not the pushed commit tips, for branch updates.
++# Pushes containing only remote tags or deletions skip the suite.
++# A manual invocation without stdin refs still tests the working tree.
+ set -euo pipefail
+ 
++saw_ref=false
++has_branch_update=false
++if [[ ! -t 0 ]]; then
++  while read -r _pushed_local_ref pushed_local_oid pushed_remote_ref _pushed_remote_oid; do
++    saw_ref=true
++    case "$pushed_remote_ref" in
++      refs/tags/*) ;;
++      *)
++        if [[ ! "$pushed_local_oid" =~ ^0+$ ]]; then
++          has_branch_update=true
++        fi
++        ;;
++    esac
++  done
++fi
++if $saw_ref && ! $has_branch_update; then
++  echo "Skipping tests: push contains only tags or deletions."
++  exit 0
++fi
++
+ echo "Running pre-push checks..."
+ 
+ if ! command -v flutter >/dev/null 2>&1; then
+diff --git a/docs/guides/support/troubleshooting.md b/docs/guides/support/troubleshooting.md
+index ee36d55b356..234b226b25c 100644
+--- a/docs/guides/support/troubleshooting.md
++++ b/docs/guides/support/troubleshooting.md
+@@ -141,7 +141,10 @@ flutter test
+ - Widget tests must not depend on external URLs. Use `HttpOverrides` or mock the network image loading to make tests deterministic.
+ 
+ **If `git push` fails with “failed to push some refs” but the real reason is tests:**
+-- Your repo likely has a pre-push hook that runs `flutter test`. Scroll up in the terminal output: the first failing test is the root cause.
++- The pre-push hook runs `flutter test` on the current working tree for branch updates, not on the pushed commit tips. Uncommitted edits can therefore affect the result. A push containing only tags or branch deletions skips the suite; a mixed push that updates a branch still runs it. Scroll up: the first failing test is the root cause.
++
++**If commits are slow in a large repository:**
++- The pre-commit hook exports the entire tracked repository to a temporary tree before checking staged app source. In a monorepo this includes unrelated tracked assets: runtime and temporary disk usage scale with the whole tracked tree, not just the changed app files.
+ 
+ ### 8. Import Errors
+ 
+diff --git a/scripts/README.md b/scripts/README.md
+index def1135641d..b6551dd3157 100644
+--- a/scripts/README.md
++++ b/scripts/README.md
+@@ -11,7 +11,7 @@ Shell utilities grouped by purpose. **Platform folders** (`android/`, `ios/`, 
+ | [`setup_git_hooks.sh`](dev/setup_git_hooks.sh) | Point this repository's `core.hooksPath` at `.githooks/`, so the committed hooks run in place (nothing is copied into `.git/hooks/`). Refuses, and says so, when `core.hooksPath` already points elsewhere. |
+ | [`setup_branding.sh`](dev/setup_branding.sh) | Splash / launcher assets (see root README). |
+ | [`create_feature.sh`](dev/create_feature.sh) | Scaffold a feature slice under `lib/features/<name>/` plus its mirrored test under `test/features/<name>/`. Output passes `flutter analyze` and `dart format --set-exit-if-changed` as generated. |
+-| [`create_feature.ps1`](dev/create_feature.ps1) | Windows equivalent of `create_feature.sh`. Writes byte-identical files (LF, UTF-8 without BOM); the parity is checked by the `scaffold-parity` job in [`scripts-smoke.yml`](../.github/workflows/scripts-smoke.yml). |
++| [`create_feature.ps1`](dev/create_feature.ps1) | Windows equivalent of `create_feature.sh`; requires PowerShell 7+ (`pwsh`), not Windows PowerShell 5.1. Writes byte-identical files (LF, UTF-8 without BOM); the parity is checked by the `scaffold-parity` job in [`scripts-smoke.yml`](../.github/workflows/scripts-smoke.yml). |
+ | [`setup_ci.dart`](dev/setup_ci.dart) | Uncomment the `push:` / `pull_request:` triggers inside each workflow's top-level `on:` block; as shipped, only the `deploy-*` workflows have one, every other workflow's triggers are already live. `--dry-run` shows what it would change; `--yes` skips the prompt. The `deploy-*` workflows stay manual-only unless you pass `--deploy-trigger=tags` (deploy on version tags) or `--deploy-trigger=branch` (deploy on every push to main); exactly that one option is enabled. |
+ 
+ ## `scripts/ci/`
+diff --git a/scripts/ci/generate_changelog.sh b/scripts/ci/generate_changelog.sh
+index 4d9eae66ce1..524a68e8934 100755
+--- a/scripts/ci/generate_changelog.sh
++++ b/scripts/ci/generate_changelog.sh
+@@ -80,7 +80,9 @@ while [ $# -gt 0 ]; do
+ done
+ 
+ if [ -z "$VERSION" ]; then
+-    VERSION=$(grep "^version:" pubspec.yaml | sed 's/version: //' | cut -d'+' -f1)
++    VERSION=$(grep -m1 '^version:' pubspec.yaml \
++        | sed -e 's/^version:[[:space:]]*//' -e 's/[[:space:]]*#.*$//' -e 's/[[:space:]]*$//' -e 's/\r$//' \
++        | cut -d'+' -f1)
+ fi
+ if [ -z "$VERSION" ]; then
+     echo -e "${RED}Error: no version given and none found in pubspec.yaml${NC}" >&2
+diff --git a/scripts/ci/release.sh b/scripts/ci/release.sh
+index 69631317ec1..726d3b9b53f 100755
+--- a/scripts/ci/release.sh
++++ b/scripts/ci/release.sh
+@@ -99,6 +99,12 @@ elif ! git describe --tags --abbrev=0 >/dev/null 2>&1; then
+     exit 1
+ fi
+ 
++# Refuse before tests and before creating/changing release files or branches.
++if ! ./scripts/dev/format_dart.sh --check; then
++    echo -e "${RED}Formatting failed. Nothing was changed; format the source before releasing.${NC}"
++    exit 1
++fi
++
+ echo -e "${BLUE}Starting release process...${NC}"
+ echo ""
+ 
+diff --git a/scripts/dev/create_feature.ps1 b/scripts/dev/create_feature.ps1
+index a475ce3c859..4ae2e14b871 100644
+--- a/scripts/dev/create_feature.ps1
++++ b/scripts/dev/create_feature.ps1
+@@ -1,3 +1,4 @@
++# Requires PowerShell 7+ (pwsh), not Windows PowerShell 5.1.
+ # Scaffolds a Clean Architecture feature slice under lib/features/, plus its
+ # mirrored test under test/features/.
+ #
+diff --git a/scripts/test/release_scripts_test.sh b/scripts/test/release_scripts_test.sh
+index ed572b34373..732b5e17213 100755
+--- a/scripts/test/release_scripts_test.sh
++++ b/scripts/test/release_scripts_test.sh
+@@ -36,8 +36,12 @@ git_q() { git -c user.email=test@example.com -c user.name=test -c commit.gpgsign
+ # preamble, `## [Unreleased]` with content, then a released version.
+ new_repo() {
+     local dir="$WORK/$1"
+-    mkdir -p "$dir/scripts/ci"
++    mkdir -p "$dir/scripts/ci" "$dir/scripts/dev"
+     cp "$SCRIPTS"/generate_changelog.sh "$SCRIPTS"/release.sh "$SCRIPTS"/bump_version.sh "$dir/scripts/ci/"
++    # Expand this variable when the fixture formatter runs, not while creating it.
++    # shellcheck disable=SC2016
++    printf '#!/usr/bin/env bash\nexit "${FORMAT_FIXTURE_STATUS:-0}"\n' > "$dir/scripts/dev/format_dart.sh"
++    chmod +x "$dir/scripts/dev/format_dart.sh"
+     cat > "$dir/CHANGELOG.md" <<'MD'
+ # Changelog
+ 
+@@ -346,6 +350,37 @@ else
+     fail "bump_version.sh keeps the comment's spacing exactly, got: $got"
+ fi
+ 
++
++# Formatting must refuse before tests or any release mutation.
++repo=$(new_repo format-preflight)
++mkdir -p "$repo/lib"
++printf 'void main(){print(1);}' > "$repo/lib/bad.dart"
++(cd "$repo" && git_q add lib/bad.dart && git_q commit -q -m 'fix: fixture source' && git_q tag v1.0.0)
++before=$(cd "$repo" && git rev-parse HEAD)
++: > "$WORK/flutter-calls"
++printf '#!/usr/bin/env bash\necho "$*" >> "%s"\nexit 0\n' "$WORK/flutter-calls" > "$WORK/bin/flutter"
++out=$(cd "$repo" && FORMAT_FIXTURE_STATUS=1 PATH="$WORK/bin:$PATH" bash scripts/ci/release.sh patch < /dev/null 2>&1); rc=$?
++if [ $rc -ne 0 ] && [ ! -s "$WORK/flutter-calls" ] \
++    && [ "$(cd "$repo" && git branch --show-current)" = main ] \
++    && [ "$(cd "$repo" && git rev-parse HEAD)" = "$before" ] \
++    && [ -z "$(cd "$repo" && git status --porcelain)" ] \
++    && ! printf '%s' "$out" | grep -q 'Step 1:'; then
++    pass "format failure refuses before step1 and leaves main, files and history unchanged"
++else
++    fail "format failure did not refuse before release mutations (exit $rc: $(printf '%s' "$out" | tail -3))"
++fi
++
++repo=$(new_repo implicit-comment)
++(cd "$repo" && git_q tag v1.0.0)
++printf 'name: fixture\nversion: 1.0.1 # first public build\n' > "$repo/pubspec.yaml"
++(cd "$repo" && git_q add pubspec.yaml && git_q commit -q -m 'fix: version fixture')
++out=$(cd "$repo" && bash scripts/ci/generate_changelog.sh 2>&1); rc=$?
++if [ $rc -eq 0 ] && grep -q '^## \[1\.0\.1\] - ' "$repo/CHANGELOG.md"; then
++    pass "implicit changelog version excludes its trailing comment"
++else
++    fail "implicit changelog version retains a comment (exit $rc: $out)"
++fi
++
+ echo
+ if [ "$FAILURES" -eq 0 ]; then
+     echo "All release-script tests passed."
+diff --git a/test/tooling/pre_push_refs_test.dart b/test/tooling/pre_push_refs_test.dart
+new file mode 100644
+index 00000000000..624ba2b2943
+--- /dev/null
++++ b/test/tooling/pre_push_refs_test.dart
+@@ -0,0 +1,64 @@
++import 'dart:convert';
++import 'dart:io';
++
++import 'package:flutter_test/flutter_test.dart';
++
++void main() {
++  final zero = '0' * 40;
++  final sha = '1' * 40;
++  final branch = 'refs/heads/main $sha refs/heads/main $zero\n';
++  final tag = 'refs/tags/v1 $sha refs/tags/v1 $zero\n';
++  final deletion = '(delete) $zero refs/heads/old $sha\n';
++  for (final entry in [
++    ('branch update', branch, true),
++    ('tag only', tag, false),
++    ('deletion only', deletion, false),
++    ('tag and deletion', '$tag$deletion', false),
++    ('branch mixed with tag', '$tag$branch', true),
++    (
++      'tag pushed to a branch',
++      'refs/tags/v1 $sha refs/heads/new $zero\n',
++      true,
++    ),
++    ('manual invocation without refs', '', true),
++  ]) {
++    test('pre-push ${entry.$1}', () async {
++      final root = Directory.systemTemp.createTempSync('pre-push-refs-');
++      addTearDown(() => root.deleteSync(recursive: true));
++      final hooks = Directory('${root.path}/.githooks')..createSync();
++      final bin = Directory('${root.path}/bin')..createSync();
++      final hook = File('${hooks.path}/pre-push')
++        ..writeAsStringSync(File('.githooks/pre-push').readAsStringSync());
++      final calls = File('${root.path}/calls');
++      final flutter = File('${bin.path}/flutter')
++        ..writeAsStringSync(
++          '#!/usr/bin/env bash\nprintf \'%s\\n\' "\$*" >> "\$HOOK_CALLS_FILE"\n',
++        );
++      expect(Process.runSync('chmod', ['+x', flutter.path]).exitCode, 0);
++      final process = await Process.start(
++        '/bin/bash',
++        [hook.path],
++        workingDirectory: root.path,
++        environment: {
++          'PATH': '${bin.path}:${Platform.environment['PATH']}',
++          'HOOK_CALLS_FILE': calls.path,
++        },
++      );
++      final output = process.stdout.transform(utf8.decoder).join();
++      final errors = process.stderr.transform(utf8.decoder).join();
++      process.stdin.write(entry.$2);
++      await process.stdin.close();
++      expect(
++        await process.exitCode,
++        0,
++        reason: '${await output}\n${await errors}',
++      );
++      expect(calls.existsSync(), entry.$3);
++      if (entry.$3) {
++        expect(calls.readAsLinesSync(), [
++          'test --reporter compact --timeout 15m',
++        ]);
++      }
++    }, skip: Platform.isWindows ? 'Bash hooks are tested on Unix hosts' : null);
++  }
++}

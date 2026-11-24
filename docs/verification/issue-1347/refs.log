@@ -1,0 +1,4 @@
+Commits in 7ee7aa0cc01fac2ba8510639290b9a368ea4e7eb..HEAD
+  ok    e2f8901d fix(tooling): verify release formatting and classify pushed refs (#1353)
+
+OK: every message links with 'Refs koniz-dev/flutter-starter#N' and closes nothing.

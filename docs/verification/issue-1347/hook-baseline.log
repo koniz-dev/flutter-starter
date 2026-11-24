@@ -1,0 +1,38 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/pre_push_refs_test.dart
+00:00 +0: pre-push branch update
+00:00 +1: pre-push tag only
+00:00 +1 -1: pre-push tag only [E]
+  Expected: <false>
+    Actual: <true>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/tooling/pre_push_refs_test.dart 45:7           main.<fn>
+  
+00:00 +1 -1: pre-push deletion only
+00:01 +1 -2: pre-push deletion only [E]
+  Expected: <false>
+    Actual: <true>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/tooling/pre_push_refs_test.dart 45:7           main.<fn>
+  
+00:01 +1 -2: pre-push tag and deletion
+00:01 +1 -3: pre-push tag and deletion [E]
+  Expected: <false>
+    Actual: <true>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/tooling/pre_push_refs_test.dart 45:7           main.<fn>
+  
+00:01 +1 -3: pre-push branch mixed with tag
+00:01 +2 -3: pre-push tag pushed to a branch
+00:02 +3 -3: pre-push manual invocation without refs
+00:02 +4 -3: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/pre_push_refs_test.dart: pre-push deletion only
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/pre_push_refs_test.dart: pre-push tag and deletion
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/pre_push_refs_test.dart: pre-push tag only
