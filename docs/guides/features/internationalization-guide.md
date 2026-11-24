@@ -22,7 +22,7 @@ The internationalization system supports:
 - **Pluralization**: ICU message format for plural forms
 - **Formatting**: Date, time, number, and currency formatting
 - **Persistent Preferences**: Language selection saved to storage
-- **Device Language by Default**: With no stored choice, the app uses the first language in the device's preference list that it ships, and English when none matches (`LocalizationService.deviceLocale`). A stored choice always wins. The example storage migration no longer seeds a `language` value on a fresh install, so a first launch follows the device too
+- **Device Language by Default**: With no stored choice, the app uses the first language in the device's preference list that it ships, and English when none matches (`LocalizationService.deviceLocale`). A stored choice always wins. Either way the device's region is kept: only the language is stored, and an `en_GB` device gets `en_GB` rather than the `en_US` of `SupportedLocale.en`, so its dates, numbers and default currency are British (`LocalizationService.withDeviceRegion`). `MyApp` passes `LocalizationService.resolveLocale` as `localeListResolutionCallback`, so `Localizations.localeOf` reports that region too. The example storage migration no longer seeds a `language` value on a fresh install, so a first launch follows the device too
 - **Runtime Switching**: Change language without app restart
 
 ## Setup
@@ -245,7 +245,9 @@ digits, as intl's `ar_SA` data specifies.
 Without `currencyCode`, `formatCurrency` uses the currency of the locale's
 country (`USD`, `EUR`, `SAR`, `VND` for the four supported locales), from a
 table in `LocalizedFormatters`; add the country of any locale you add, or intl
-falls back to the language's default currency (Egyptian pounds for `ar`).
+falls back to the language's default currency (Egyptian pounds for `ar`). A
+device region outside the table keeps intl's currency for that region:
+`en_GB` prints pounds and `es_MX` pesos.
 
 ### Percentage Formatting
 
