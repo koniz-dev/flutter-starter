@@ -99,6 +99,12 @@ elif ! git describe --tags --abbrev=0 >/dev/null 2>&1; then
     exit 1
 fi
 
+# Refuse before tests and before creating/changing release files or branches.
+if ! ./scripts/dev/format_dart.sh --check; then
+    echo -e "${RED}Formatting failed. Nothing was changed; format the source before releasing.${NC}"
+    exit 1
+fi
+
 echo -e "${BLUE}Starting release process...${NC}"
 echo ""
 

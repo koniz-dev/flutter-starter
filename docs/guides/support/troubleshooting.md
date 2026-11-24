@@ -141,7 +141,10 @@ flutter test
 - Widget tests must not depend on external URLs. Use `HttpOverrides` or mock the network image loading to make tests deterministic.
 
 **If `git push` fails with “failed to push some refs” but the real reason is tests:**
-- Your repo likely has a pre-push hook that runs `flutter test`. Scroll up in the terminal output: the first failing test is the root cause.
+- The pre-push hook runs `flutter test` on the current working tree for branch updates, not on the pushed commit tips. Uncommitted edits can therefore affect the result. A push containing only tags or branch deletions skips the suite; a mixed push that updates a branch still runs it. Scroll up: the first failing test is the root cause.
+
+**If commits are slow in a large repository:**
+- The pre-commit hook exports the entire tracked repository to a temporary tree before checking staged app source. In a monorepo this includes unrelated tracked assets: runtime and temporary disk usage scale with the whole tracked tree, not just the changed app files.
 
 ### 8. Import Errors
 
