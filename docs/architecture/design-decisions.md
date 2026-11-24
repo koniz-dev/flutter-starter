@@ -972,11 +972,11 @@ The subsections below are **illustrative migration sketches** (hypothetical file
      return LoginUseCase(repository);
    });
    
-   // After (Provider)
-   final loginUseCaseProvider = Provider<LoginUseCase>((ref) {
-     final repository = ref.watch(authRepositoryProvider);
-     return LoginUseCase(repository);
-   });
+   // After (Provider) - an entry in the MultiProvider's `providers` list
+   // (step 4), below the Provider<AuthRepository> it reads
+   ProxyProvider<AuthRepository, LoginUseCase>(
+     update: (_, repository, _) => LoginUseCase(repository),
+   ),
    ```
 
 3. **Update widgets**
@@ -1011,93 +1011,154 @@ The subsections below are **illustrative migration sketches** (hypothetical file
    runApp(
      MultiProvider(
        providers: [
-         Provider<LoginUseCase>(create: (_) => LoginUseCase(...)),
+         Provider<AuthRepository>(create: (_) => AuthRepositoryImpl(...)),
+         ProxyProvider<AuthRepository, LoginUseCase>(
+           update: (_, repository, _) => LoginUseCase(repository),
+         ),
        ],
        child: const MyApp(),
      ),
    );
    ```
 
-#### From Riverpod to BLoC
-
-See the migration guidance in `docs/guides/migration/README.md` and apply equivalent reverse steps.
-
 ### Using Different HTTP Client
 
 #### From Dio to http
 
-1. **Replace dependencies**
+Swap the transport behind `INetworkClient`, as
+[ADR 0001](adr/0001-network-boundary.md) and
+[the network API reference](../api/core/network.md) describe: a new adapter
+takes the place of `DioNetworkClient`, and `ApiClient` keeps its verbs, which
+return `NetworkResponse`. No data source changes. Do not rewrite `ApiClient`
+to return `http.Response`: that puts the transport back in every data source.
+
+1. **Add the dependency**
    ```yaml
    dependencies:
-     # dio: ^5.11.1  # Remove
-     http: ^1.0.0  # Add
+     http: ^1.0.0  # Add; remove dio only once step 4 is done
    ```
 
-2. **Create HTTP client wrapper**
+2. **Write the adapter**
    ```dart
-   // lib/core/network/api_client.dart
+   // lib/core/network/adapters/http_network_client.dart
+   import 'dart:convert';
+
+   import 'package:flutter_starter/core/contracts/network_contracts.dart';
+   import 'package:flutter_starter/core/errors/exceptions.dart';
    import 'package:http/http.dart' as http;
-   
-   class ApiClient {
+
+   class HttpNetworkClient implements INetworkClient {
+     HttpNetworkClient(this._client, {required this.baseUrl});
+
+     final http.Client _client;
      final String baseUrl;
-     
-     ApiClient({required this.baseUrl});
-     
-     Future<http.Response> get(String path) async {
-       final uri = Uri.parse('$baseUrl$path');
-       return await http.get(uri);
+
+     @override
+     Future<NetworkResponse<dynamic>> send(NetworkRequest request) async {
+       final uri = Uri.parse('$baseUrl${request.path}').replace(
+         queryParameters: request.queryParameters.isEmpty
+             ? null
+             : request.queryParameters.map((k, v) => MapEntry(k, '$v')),
+       );
+       final httpRequest =
+           http.Request(request.method.name.toUpperCase(), uri)
+             ..headers.addAll({
+               'Content-Type': 'application/json',
+               'Accept': 'application/json',
+               ...request.headers,
+             });
+       if (request.body != null) httpRequest.body = jsonEncode(request.body);
+
+       final http.Response response;
+       try {
+         final streamed = await _client.send(httpRequest);
+         response = await http.Response.fromStream(streamed);
+       } on http.ClientException catch (e) {
+         // Only the transport failure is caught here.
+         throw NetworkException(
+           'Connection error: ${e.message}',
+           code: 'CONNECTION_ERROR',
+         );
+       }
+
+       // Outside the try, so a 4xx/5xx is not re-labelled a network error.
+       if (response.statusCode >= 400) {
+         throw ServerException(
+           'Server error',
+           statusCode: response.statusCode,
+         );
+       }
+       return NetworkResponse<dynamic>(
+         statusCode: response.statusCode,
+         data: response.body.isEmpty ? null : jsonDecode(response.body),
+         headers: response.headers.map((k, v) => MapEntry(k, [v])),
+       );
      }
-     
-     // ... other methods
    }
    ```
+   `ApiClient._send` rethrows an `AppException` - both of the above - as it
+   is, and wraps any other exception in an uncoded `NetworkException`.
 
-3. **Remove interceptors**
-   - Interceptors are Dio-specific
-   - Implement equivalent logic in ApiClient methods
-   - Or use middleware pattern
+3. **Bind it in `ApiClient`**
+   - Type `_networkClient` as `INetworkClient` and construct
+     `HttpNetworkClient(client, baseUrl: AppConfig.baseUrl + ApiEndpoints.apiVersion)`
+     in place of `DioNetworkClient`. `get`, `post`, `put`, `patch` and
+     `delete` keep returning `NetworkResponse`.
+   - `_send` passes `cancellation:`, which only `DioNetworkClient.send`
+     accepts. Add it to your adapter or drop it.
+   - The `dio` getter goes; `responseCache` stays only if you rebuild the
+     cache (step 4), because session teardown calls `clearCache()` on it.
 
-4. **Update error handling**
-   ```dart
-   // Before (Dio)
-   try {
-     return await _dio.get(path);
-   } on DioException catch (e) {
-     throw ServerException(e.message);
-   }
-   
-   // After (http)
-   try {
-     final response = await http.get(uri);
-     if (response.statusCode >= 400) {
-       throw ServerException('Server error', statusCode: response.statusCode);
-     }
-     return response;
-   } catch (e) {
-     throw NetworkException(e.toString());
-   }
-   ```
+4. **Re-implement the interceptor chain, or knowingly give it up.** Dio's
+   interceptors and adapter, wired in `ApiClient._createDio`, carry
+   behaviour `package:http` has no equivalent for. Each one you drop is lost
+   silently: nothing fails, the app just stops doing it.
+
+   | Lost with the Dio chain | Where it lives now | With `package:http` |
+   |---|---|---|
+   | SSL certificate pinning (`ENABLE_SSL_PINNING`, `API_SSL_FINGERPRINTS`) | `SslPinning.createAdapter` | wrap `SslPinning.createHttpClient(...)` in `IOClient` from `package:http/io_client.dart` |
+   | Release HTTPS-only policy, refusing a cleartext redirect hop | `createAdapter(requireHttps: ...)` | pass the same `requireHttps` to `createHttpClient` |
+   | Bearer token on each request, 401 refresh and replay, forced logout when the refresh fails | `AuthInterceptor` | a wrapping `http.BaseClient` that does all three |
+   | Response cache, and its guard that never reads or writes it while a session credential exists | `CacheInterceptor` | a cache layer that asks the `ITokenStore` the same question, exposed as `IHttpResponseCache` so logout and forced logout can clear it |
+   | Retry of timeouts and 5xx with backoff | `RetryInterceptor` | a retrying client, for example `RetryClient` from `package:http/retry.dart` |
+   | Domain exceptions: a `ServerException` carrying the server's own error message and code, and coded `NetworkException`s (`CONNECTION_TIMEOUT`, `RECEIVE_TIMEOUT`, ...) that the UI localizes | `ErrorInterceptor`, `DioExceptionMapper` | parse the error body in the adapter instead of the fixed `'Server error'` above, and use the same codes |
+   | `API_TIMEOUT` end-to-end deadline, and the per-phase connect, send and receive timeouts | `DioNetworkClient`, `BaseOptions` | `.timeout(...)` on each send, honouring `NetworkRequest.timeout` |
+   | Caller cancellation through `RequestCancellation` | `DioNetworkClient.send` | close or abort the request on `whenCancelled` |
+   | Redacted request logging, performance traces | `ApiLoggingInterceptor`, `PerformanceInterceptor` | wrapping clients, if you used them |
+
+   The tests under `test/core/network/` drive the Dio chain; port each one
+   to your client rather than deleting it, so the behaviour above stays
+   covered.
 
 ### Alternative Error Handling Patterns
 
 #### From Result Pattern to Exceptions
 
-1. **Update use cases**
+1. **Update repositories and use cases**
+
+   The exception-to-`Failure` mapping lives in the repository, not the use
+   case: `AuthRepositoryImpl.login` catches the data source's exceptions and
+   returns a `ResultFailure`, and `LoginUseCase` passes that `Result` through.
+   So the repository contract changes first, and the use case only changes
+   its return type.
    ```dart
    // Before (Result Pattern)
+   // lib/features/auth/domain/repositories/auth_repository.dart
+   Future<Result<User>> login(String email, String password);
+
+   // lib/features/auth/domain/usecases/login_usecase.dart
    Future<Result<User>> call(String email, String password) async {
-     try {
-       final user = await repository.login(email, password);
-       return Success(user);
-     } on AuthException catch (e) {
-       return ResultFailure(AuthFailure(e.message));
-     }
+     return await repository.login(email, password);
    }
-   
+
    // After (Exceptions)
+   // AuthRepository: AuthRepositoryImpl.login stops mapping to a Failure and
+   // lets the data source's AppException subtypes propagate.
+   Future<User> login(String email, String password);
+
+   // LoginUseCase
    Future<User> call(String email, String password) async {
      return await repository.login(email, password);
-     // Exceptions bubble up automatically
    }
    ```
 
@@ -1147,26 +1208,25 @@ See the migration guidance in `docs/guides/migration/README.md` and apply equiva
    // Use Either<Failure, T> instead of Result<T>
    ```
 
-3. **Update use cases**
+3. **Update repositories and use cases**
    ```dart
    // Before (Result Pattern)
+   // AuthRepository
+   Future<Result<User>> login(String email, String password);
+
+   // LoginUseCase
    Future<Result<User>> call(String email, String password) async {
-     try {
-       final user = await repository.login(email, password);
-       return Success(user);
-     } on AuthException catch (e) {
-       return ResultFailure(AuthFailure(e.message));
-     }
+     return await repository.login(email, password);
    }
-   
+
    // After (Either Pattern)
+   // AuthRepository: AuthRepositoryImpl.login returns Left(failure) where it
+   // returned ResultFailure(failure), and Right(user) for Success(user).
+   Future<Either<Failure, User>> login(String email, String password);
+
+   // LoginUseCase
    Future<Either<Failure, User>> call(String email, String password) async {
-     try {
-       final user = await repository.login(email, password);
-       return Right(user);
-     } on AuthException catch (e) {
-       return Left(AuthFailure(e.message));
-     }
+     return await repository.login(email, password);
    }
    ```
 
