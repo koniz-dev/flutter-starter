@@ -1,0 +1,28 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_main_activity_test.dart
+00:00 +0: application_id com.example.flutter_starter keeps both entry points in its package
+00:08 +0 -1: application_id com.example.flutter_starter keeps both entry points in its package [E]
+  Expected: true
+    Actual: <false>
+  /var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/setup_main_activity_h984aN/android/app/src/main/kotlin/com/example/flutter_starter/MainActivity.kt
+  
+  package:matcher                                        expect
+  package:flutter_test/src/widget_tester.dart 473:18     expect
+  test/tooling/setup_brick_main_activity_test.dart 79:7  main.<fn>
+  
+00:08 +0 -1: application_id com.example.flutter_starter.dev keeps both entry points in its package
+00:17 +0 -2: application_id com.example.flutter_starter.dev keeps both entry points in its package [E]
+  Expected: true
+    Actual: <false>
+  /var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/setup_main_activity_PqwI6w/android/app/src/main/kotlin/com/example/flutter_starter/dev/MainActivity.kt
+  
+  package:matcher                                        expect
+  package:flutter_test/src/widget_tester.dart 473:18     expect
+  test/tooling/setup_brick_main_activity_test.dart 79:7  main.<fn>
+  
+00:17 +0 -2: application_id com.acme.shop keeps both entry points in its package
+00:25 +1 -2: a different id removes the emptied template package
+00:34 +2 -2: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_main_activity_test.dart: application_id com.example.flutter_starter keeps both entry points in its package
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_main_activity_test.dart: application_id com.example.flutter_starter.dev keeps both entry points in its package

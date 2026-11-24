@@ -1,0 +1,11 @@
+Red runs: test from the fixed branch against two hooks (macOS, case-insensitive APFS).
+origin/main = bbf483b2d0e (pre-fix); 896ca4ba = first branch revision (string path compare, non-recursive prune).
+== hook from origin/main
+00:08 +0 -1: application_id com.example.flutter_starter keeps both entry points [E]
+00:08 +0 -2: application_id com.example.flutter_starter.dev keeps both entry points [E]
+00:08 +0 -3: application_id com.Example.flutter_starter keeps both entry points [E]
+00:08 +6 -3: Some tests failed.
+== hook from 896ca4ba
+00:08 +2 -1: application_id com.Example.flutter_starter keeps both entry points [E]
+00:08 +7 -2: com.acme.shop with a .DS_Store in the template package removes the emptied com/example tree [E]
+00:08 +7 -2: Some tests failed.

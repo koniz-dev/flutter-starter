@@ -1,0 +1,17 @@
+$ git rev-parse HEAD
+2c6e9e2402f27317451b06a9972dbb6ae05830e6
+$ flutter test --reporter expanded test/tooling/setup_brick_main_activity_test.dart
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_main_activity_test.dart
+00:00 +0: (setUpAll)
+00:08 +0: application_id com.example.flutter_starter keeps both entry points
+00:08 +1: application_id com.example.flutter_starter.dev keeps both entry points
+00:08 +2: application_id com.Example.flutter_starter keeps both entry points
+00:08 +3: application_id com.example.other keeps both entry points
+00:08 +4: application_id com.acme.shop keeps both entry points
+00:08 +5: application_id com.acme.shop with a .DS_Store in the template package keeps both entry points
+00:08 +6: a sibling id removes the template package but keeps its parent
+00:08 +7: com.acme.shop removes the emptied com/example tree
+00:08 +8: com.acme.shop with a .DS_Store in the template package removes the emptied com/example tree
+00:08 +9: (tearDownAll)
+00:08 +9: All tests passed!
+exit: 0
