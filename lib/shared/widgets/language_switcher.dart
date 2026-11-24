@@ -7,6 +7,21 @@ import 'package:flutter_starter/shared/accessibility/accessibility_widgets.dart'
 import 'package:flutter_starter/shared/design_system/tokens/app_colors.dart';
 import 'package:material_ui/material_ui.dart';
 
+/// The entry that stands for [locale] in a language list: the current locale
+/// can carry the device's region (en_GB), and the entries carry their
+/// language's default one (en_US), so they compare by language.
+Locale _entryFor(Locale locale) =>
+    SupportedLocale.fromLanguageCode(locale.languageCode)?.locale ?? locale;
+
+/// The locale to apply for a picked [entry]: its language with the region
+/// the device pairs it with, the same locale the stored choice restores.
+Locale _withDeviceRegion(Locale entry) {
+  final supported = SupportedLocale.fromLanguageCode(entry.languageCode);
+  return supported == null
+      ? entry
+      : LocalizationService.withDeviceRegion(supported);
+}
+
 /// Language switcher widget
 ///
 /// Displays a button that opens a dialog to select the app language.
@@ -51,14 +66,14 @@ class LanguageSwitcher extends ConsumerWidget {
       builder: (context) => AlertDialog(
         title: Text(l10n.selectLanguage),
         content: RadioGroup<Locale>(
-          groupValue: currentLocale,
+          groupValue: _entryFor(currentLocale),
           onChanged: (locale) async {
             if (locale != null && ownerContext.mounted) {
               final notifier = ref.read(localeStateProvider.notifier);
               await localizationService.setCurrentLocale(locale);
               // The dialog may outlive the widget that supplied its ref.
               if (!ownerContext.mounted) return;
-              notifier.locale = locale;
+              notifier.locale = _withDeviceRegion(locale);
               if (context.mounted) {
                 Navigator.of(context).pop();
               }
@@ -131,14 +146,14 @@ class LanguageSwitcherMenuItem extends ConsumerWidget {
       builder: (context) => AlertDialog(
         title: Text(l10n.selectLanguage),
         content: RadioGroup<Locale>(
-          groupValue: currentLocale,
+          groupValue: _entryFor(currentLocale),
           onChanged: (locale) async {
             if (locale != null && ownerContext.mounted) {
               final notifier = ref.read(localeStateProvider.notifier);
               await localizationService.setCurrentLocale(locale);
               // The dialog may outlive the widget that supplied its ref.
               if (!ownerContext.mounted) return;
-              notifier.locale = locale;
+              notifier.locale = _withDeviceRegion(locale);
               if (context.mounted) {
                 Navigator.of(context).pop();
               }
@@ -183,13 +198,13 @@ class LanguageSelectionScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(title: Text(l10n.selectLanguage)),
       body: RadioGroup<Locale>(
-        groupValue: currentLocale,
+        groupValue: _entryFor(currentLocale),
         onChanged: (locale) async {
           if (locale != null) {
             final notifier = ref.read(localeStateProvider.notifier);
             await localizationService.setCurrentLocale(locale);
             if (context.mounted) {
-              notifier.locale = locale;
+              notifier.locale = _withDeviceRegion(locale);
               Navigator.of(context).pop();
             }
           }

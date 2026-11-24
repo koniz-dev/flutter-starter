@@ -86,13 +86,56 @@ class LocalizationService {
   /// returns the first whose language this app ships; [defaultLocale] when
   /// none matches. Used whenever the user has stored no choice, so a device
   /// set to Vietnamese opens in Vietnamese rather than always in
-  /// [defaultLocale].
+  /// [defaultLocale]. The device's region is kept (see [withDeviceRegion]),
+  /// so an en_GB device formats dates the British way.
   static Locale deviceLocale([List<Locale>? preferred]) {
-    for (final locale in preferred ?? _platformLocales) {
+    final locales = preferred ?? _platformLocales;
+    for (final locale in locales) {
       final supported = SupportedLocale.fromLanguageCode(locale.languageCode);
-      if (supported != null) return supported.locale;
+      if (supported != null) return withDeviceRegion(supported, locales);
     }
     return defaultLocale;
+  }
+
+  /// [supported]'s language with the region the device pairs it with.
+  ///
+  /// The first locale in [preferred], or the platform's preferred locales,
+  /// that has [supported]'s language and a country supplies the country, so
+  /// an en_GB device choosing English gets en_GB and an es_MX device gets
+  /// es_MX - their dates, numbers and default currency follow. With no such
+  /// locale, [SupportedLocale.locale] and its default region.
+  static Locale withDeviceRegion(
+    SupportedLocale supported, [
+    List<Locale>? preferred,
+  ]) {
+    final languageCode = supported.locale.languageCode;
+    for (final locale in preferred ?? _platformLocales) {
+      final countryCode = locale.countryCode;
+      if (locale.languageCode == languageCode &&
+          countryCode != null &&
+          countryCode.isNotEmpty) {
+        return Locale(languageCode, countryCode);
+      }
+    }
+    return supported.locale;
+  }
+
+  /// A `localeListResolutionCallback` for `MaterialApp` that keeps the region.
+  ///
+  /// The default resolution maps a requested locale to an entry of
+  /// [supportedLocales] by language, so a requested en_GB would be reported
+  /// by `Localizations.localeOf` as en_US. This returns the first requested
+  /// locale as is when its language is one the app ships, and `null`
+  /// otherwise, which leaves the default resolution in charge.
+  static Locale? resolveLocale(
+    List<Locale>? locales,
+    Iterable<Locale> supportedLocales,
+  ) {
+    final first = locales == null || locales.isEmpty ? null : locales.first;
+    if (first == null) return null;
+    return SupportedLocale.fromLanguageCode(first.languageCode) == null
+        ? null
+        : first;
   }
 
   /// The platform's preferred locales, read through the binding so that a
@@ -118,7 +161,10 @@ class LocalizationService {
     try {
       final languageCode = await _storageService.getString(_languageKey);
       final supportedLocale = SupportedLocale.fromLanguageCode(languageCode);
-      return supportedLocale?.locale ?? deviceLocale();
+      // Only the language is stored; the region comes from the device.
+      return supportedLocale == null
+          ? deviceLocale()
+          : withDeviceRegion(supportedLocale);
     } on Exception {
       return deviceLocale();
     }

@@ -300,6 +300,7 @@ class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
         ...GlobalMaterialLocalizations.delegates,
       ],
       supportedLocales: LocalizationService.supportedLocales,
+      localeListResolutionCallback: LocalizationService.resolveLocale,
       builder: (context, child) {
         return Directionality(
           textDirection: textDirection,

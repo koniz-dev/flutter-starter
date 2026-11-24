@@ -169,7 +169,7 @@ void main() {
     test('deviceLocale resolves against the supported list', () {
       expect(
         LocalizationService.deviceLocale(const [Locale('ar', 'EG')]),
-        SupportedLocale.ar.locale,
+        const Locale('ar', 'EG'),
       );
       expect(
         LocalizationService.deviceLocale(const [Locale('ja')]),
