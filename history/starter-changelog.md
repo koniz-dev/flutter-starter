@@ -19,6 +19,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - [Session-timeout blueprint ends an expired session on resume](https://github.com/koniz-dev/flutter-starter/issues/1362): a suspended app runs no timers, and the `SessionActivityTracker` in `docs/guides/security/blueprints.md` called `onUserActivity()` on resume, which reset the timer without checking the elapsed time, so an app left in the background never timed out. `SessionManager` now has `onResume()`, which signs out when the time since the last activity is at least `sessionTimeout` and only then restarts the timer, and the tracker calls it on resume. If you copied the old recipe, add `onResume()` and call it from your resume handler instead of `onUserActivity()`.
 
+- [The app keeps the device locale's region](https://github.com/koniz-dev/flutter-starter/issues/1363): `LocalizationService.deviceLocale()` and a stored language choice resolved to the region hard-coded in `SupportedLocale` (`en_US`, `es_ES`, `ar_SA`), and `MaterialApp`'s default resolution mapped a requested `en_GB` back to `en_US`, so an `en_GB` device read 9 March as `3/9/2026` and an `es_MX` device was shown euros. The locale now carries the region the device pairs the language with (new `LocalizationService.withDeviceRegion`), `MyApp` passes the new `LocalizationService.resolveLocale` as `localeListResolutionCallback` so `Localizations.localeOf` reports it, and the language pickers match the current locale by language. `Localizations.localeOf` and `localeStateProvider` can now hold a locale outside `LocalizationService.supportedLocales` (`en_GB`, `ar_EG`): compare by `languageCode`, not by equality with a `SupportedLocale.locale`.
+
 ## [5.0.3] - 2026-11-24
 
 ### Fixed
