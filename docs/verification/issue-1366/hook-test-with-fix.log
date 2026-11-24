@@ -1,0 +1,17 @@
+# test/tooling/setup_brick_bundle_id_test.dart against the fixed post_gen.dart on branch fix/1366-setup-brick-bundle-id-chain
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_bundle_id_test.dart
+00:00 +0: (setUpAll)
+00:08 +0: ios_bundle_id com.example.myApp with application_id com.acme.shop every PRODUCT_BUNDLE_IDENTIFIER in ios/Runner.xcodeproj/project.pbxproj
+00:08 +1: ios_bundle_id com.example.myApp with application_id com.acme.shop every PRODUCT_BUNDLE_IDENTIFIER in macos/Runner.xcodeproj/project.pbxproj
+00:08 +2: ios_bundle_id com.example.myApp with application_id com.acme.shop macOS AppInfo.xcconfig
+00:08 +3: ios_bundle_id com.example.myApp with application_id com.acme.shop the ExportOptions.plist provisioning profile key
+00:08 +4: ios_bundle_id com.example.myApp with application_id com.acme.shop the iOS fastlane Appfile app_identifier
+00:08 +5: ios_bundle_id com.example.myApp with application_id com.acme.shop the Android ids keep application_id
+00:08 +6: ios_bundle_id com.example.myApp with application_id com.example.acme.shop every PRODUCT_BUNDLE_IDENTIFIER in ios/Runner.xcodeproj/project.pbxproj
+00:08 +7: ios_bundle_id com.example.myApp with application_id com.example.acme.shop every PRODUCT_BUNDLE_IDENTIFIER in macos/Runner.xcodeproj/project.pbxproj
+00:08 +8: ios_bundle_id com.example.myApp with application_id com.example.acme.shop macOS AppInfo.xcconfig
+00:08 +9: ios_bundle_id com.example.myApp with application_id com.example.acme.shop the ExportOptions.plist provisioning profile key
+00:08 +10: ios_bundle_id com.example.myApp with application_id com.example.acme.shop the iOS fastlane Appfile app_identifier
+00:08 +11: ios_bundle_id com.example.myApp with application_id com.example.acme.shop the Android ids keep application_id
+00:08 +12: (tearDownAll)
+00:08 +12: All tests passed!

@@ -1,0 +1,113 @@
+# test/tooling/setup_brick_bundle_id_test.dart against bricks/flutter_starter_setup/hooks/post_gen.dart from origin/main 2c6e9e2402f (before the fix)
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_bundle_id_test.dart
+00:00 +0: (setUpAll)
+00:08 +0: ios_bundle_id com.example.myApp with application_id com.acme.shop every PRODUCT_BUNDLE_IDENTIFIER in ios/Runner.xcodeproj/project.pbxproj
+00:08 +1: ios_bundle_id com.example.myApp with application_id com.acme.shop every PRODUCT_BUNDLE_IDENTIFIER in macos/Runner.xcodeproj/project.pbxproj
+00:08 +1 -1: ios_bundle_id com.example.myApp with application_id com.acme.shop every PRODUCT_BUNDLE_IDENTIFIER in macos/Runner.xcodeproj/project.pbxproj [E]
+  Expected: every element(('com.example.myApp' or 'com.example.myApp.RunnerTests'))
+    Actual: [
+              'com.acme.myApp.RunnerTests',
+              'com.acme.myApp.RunnerTests',
+              'com.acme.myApp.RunnerTests'
+            ]
+     Which: has value 'com.acme.myApp.RunnerTests' which doesn't match ('com.example.myApp' or 'com.example.myApp.RunnerTests') at index 0
+  
+  package:matcher                                      expect
+  package:flutter_test/src/widget_tester.dart 473:18   expect
+  test/tooling/setup_brick_bundle_id_test.dart 115:11  main.<fn>.<fn>
+  
+00:08 +1 -1: ios_bundle_id com.example.myApp with application_id com.acme.shop macOS AppInfo.xcconfig
+00:08 +1 -2: ios_bundle_id com.example.myApp with application_id com.acme.shop macOS AppInfo.xcconfig [E]
+  Expected: ['com.example.myApp']
+    Actual: ['com.acme.myApp']
+     Which: at location [0] is 'com.acme.myApp' instead of 'com.example.myApp'
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/tooling/setup_brick_bundle_id_test.dart 125:9  main.<fn>.<fn>
+  
+00:08 +1 -2: ios_bundle_id com.example.myApp with application_id com.acme.shop the ExportOptions.plist provisioning profile key
+00:08 +1 -3: ios_bundle_id com.example.myApp with application_id com.acme.shop the ExportOptions.plist provisioning profile key [E]
+  Expected: ['com.example.myApp']
+    Actual: ['com.acme.myApp']
+     Which: at location [0] is 'com.acme.myApp' instead of 'com.example.myApp'
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/tooling/setup_brick_bundle_id_test.dart 135:9  main.<fn>.<fn>
+  
+00:08 +1 -3: ios_bundle_id com.example.myApp with application_id com.acme.shop the iOS fastlane Appfile app_identifier
+00:08 +1 -4: ios_bundle_id com.example.myApp with application_id com.acme.shop the iOS fastlane Appfile app_identifier [E]
+  Expected: ['com.example.myApp']
+    Actual: ['com.acme.myApp']
+     Which: at location [0] is 'com.acme.myApp' instead of 'com.example.myApp'
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/tooling/setup_brick_bundle_id_test.dart 145:9  main.<fn>.<fn>
+  
+00:08 +1 -4: ios_bundle_id com.example.myApp with application_id com.acme.shop the Android ids keep application_id
+00:08 +2 -4: ios_bundle_id com.example.myApp with application_id com.example.acme.shop every PRODUCT_BUNDLE_IDENTIFIER in ios/Runner.xcodeproj/project.pbxproj
+00:08 +3 -4: ios_bundle_id com.example.myApp with application_id com.example.acme.shop every PRODUCT_BUNDLE_IDENTIFIER in macos/Runner.xcodeproj/project.pbxproj
+00:08 +3 -5: ios_bundle_id com.example.myApp with application_id com.example.acme.shop every PRODUCT_BUNDLE_IDENTIFIER in macos/Runner.xcodeproj/project.pbxproj [E]
+  Expected: every element(('com.example.myApp' or 'com.example.myApp.RunnerTests'))
+    Actual: [
+              'com.example.acme.myApp.RunnerTests',
+              'com.example.acme.myApp.RunnerTests',
+              'com.example.acme.myApp.RunnerTests'
+            ]
+     Which: has value 'com.example.acme.myApp.RunnerTests' which doesn't match ('com.example.myApp' or 'com.example.myApp.RunnerTests') at index 0
+  
+  package:matcher                                      expect
+  package:flutter_test/src/widget_tester.dart 473:18   expect
+  test/tooling/setup_brick_bundle_id_test.dart 115:11  main.<fn>.<fn>
+  
+00:08 +3 -5: ios_bundle_id com.example.myApp with application_id com.example.acme.shop macOS AppInfo.xcconfig
+00:08 +3 -6: ios_bundle_id com.example.myApp with application_id com.example.acme.shop macOS AppInfo.xcconfig [E]
+  Expected: ['com.example.myApp']
+    Actual: ['com.example.acme.myApp']
+     Which: at location [0] is 'com.example.acme.myApp' instead of 'com.example.myApp'
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/tooling/setup_brick_bundle_id_test.dart 125:9  main.<fn>.<fn>
+  
+00:08 +3 -6: ios_bundle_id com.example.myApp with application_id com.example.acme.shop the ExportOptions.plist provisioning profile key
+00:08 +3 -7: ios_bundle_id com.example.myApp with application_id com.example.acme.shop the ExportOptions.plist provisioning profile key [E]
+  Expected: ['com.example.myApp']
+    Actual: ['com.example.acme.myApp']
+     Which: at location [0] is 'com.example.acme.myApp' instead of 'com.example.myApp'
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/tooling/setup_brick_bundle_id_test.dart 135:9  main.<fn>.<fn>
+  
+00:08 +3 -7: ios_bundle_id com.example.myApp with application_id com.example.acme.shop the iOS fastlane Appfile app_identifier
+00:08 +3 -8: ios_bundle_id com.example.myApp with application_id com.example.acme.shop the iOS fastlane Appfile app_identifier [E]
+  Expected: ['com.example.myApp']
+    Actual: ['com.example.acme.myApp']
+     Which: at location [0] is 'com.example.acme.myApp' instead of 'com.example.myApp'
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/tooling/setup_brick_bundle_id_test.dart 145:9  main.<fn>.<fn>
+  
+00:08 +3 -8: ios_bundle_id com.example.myApp with application_id com.example.acme.shop the Android ids keep application_id
+00:08 +3 -9: ios_bundle_id com.example.myApp with application_id com.example.acme.shop the Android ids keep application_id [E]
+  Expected: ['com.example.acme.shop']
+    Actual: ['com.example.acme.acme.shop']
+     Which: at location [0] is 'com.example.acme.acme.shop' instead of 'com.example.acme.shop'
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/tooling/setup_brick_bundle_id_test.dart 152:9  main.<fn>.<fn>
+  
+00:08 +3 -9: (tearDownAll)
+00:08 +3 -9: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_bundle_id_test.dart: ios_bundle_id com.example.myApp with application_id com.acme.shop every PRODUCT_BUNDLE_IDENTIFIER in macos/Runner.xcodeproj/project.pbxproj
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_bundle_id_test.dart: ios_bundle_id com.example.myApp with application_id com.acme.shop macOS AppInfo.xcconfig
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_bundle_id_test.dart: ios_bundle_id com.example.myApp with application_id com.acme.shop the ExportOptions.plist provisioning profile key
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_bundle_id_test.dart: ios_bundle_id com.example.myApp with application_id com.acme.shop the iOS fastlane Appfile app_identifier
+  ... and 5 more

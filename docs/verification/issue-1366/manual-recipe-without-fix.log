@@ -1,0 +1,26 @@
+# manual_recipe_check.sh: section 2 of fork-and-customize.md from origin/main 2c6e9e2402f (before the fix), APPLE_ID=com.example.myApp ANDROID_ID=com.acme.shop
+== origin/main guide: section 2 as run ==
+1:export NAME='My App'                    # display name
+2:export PACKAGE=my_app                   # the package name from section 1
+3:export ANDROID_ID=com.acme.shop
+4:export APPLE_ID=com.example.myApp
+5:export ORG="${ANDROID_ID%.*}"
+== origin/main guide: bundle-id sites ==
+ios/Runner.xcodeproj/project.pbxproj:475:				PRODUCT_BUNDLE_IDENTIFIER = com.example.myApp;
+ios/Runner.xcodeproj/project.pbxproj:492:				PRODUCT_BUNDLE_IDENTIFIER = com.example.myApp.RunnerTests;
+ios/Runner.xcodeproj/project.pbxproj:510:				PRODUCT_BUNDLE_IDENTIFIER = com.example.myApp.RunnerTests;
+ios/Runner.xcodeproj/project.pbxproj:526:				PRODUCT_BUNDLE_IDENTIFIER = com.example.myApp.RunnerTests;
+ios/Runner.xcodeproj/project.pbxproj:658:				PRODUCT_BUNDLE_IDENTIFIER = com.example.myApp;
+ios/Runner.xcodeproj/project.pbxproj:681:				PRODUCT_BUNDLE_IDENTIFIER = com.example.myApp;
+macos/Runner.xcodeproj/project.pbxproj:474:				PRODUCT_BUNDLE_IDENTIFIER = com.acme.myApp.RunnerTests;
+macos/Runner.xcodeproj/project.pbxproj:489:				PRODUCT_BUNDLE_IDENTIFIER = com.acme.myApp.RunnerTests;
+macos/Runner.xcodeproj/project.pbxproj:504:				PRODUCT_BUNDLE_IDENTIFIER = com.acme.myApp.RunnerTests;
+macos/Runner/Configs/AppInfo.xcconfig:11:PRODUCT_BUNDLE_IDENTIFIER = com.acme.myApp
+22-	<dict>
+23-		<key>com.example.myApp</key>
+ios/fastlane/Appfile:17:app_identifier("com.example.myApp") # Set by the rename: fork-and-customize section 2, or the setup brick
+fastlane/Appfile:7:package_name("com.acme.shop") # Set by the rename: fork-and-customize section 2, or the setup brick
+10:set(APPLICATION_ID "com.acme.shop")
+14:PRODUCT_COPYRIGHT = Copyright © 2025 com.acme. All rights reserved.
+92:            VALUE "CompanyName", "com.acme" "\0"
+96:            VALUE "LegalCopyright", "Copyright (C) 2025 com.acme. All rights reserved." "\0"
