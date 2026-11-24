@@ -1,0 +1,55 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_starter/core/localization/localization_providers.dart';
+import 'package:flutter_starter/core/localization/localization_service.dart';
+import 'package:flutter_starter/l10n/app_localizations.dart';
+import 'package:flutter_starter/shared/widgets/language_switcher.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
+import 'package:mocktail/mocktail.dart';
+
+class _M extends Mock implements LocalizationService {}
+
+void main() {
+  for (final c in [
+    (w: 844.0, h: 390.0, s: 1.0),
+    (w: 800.0, h: 360.0, s: 2.0),
+  ]) {
+    testWidgets('shot ${c.w}x${c.h} x${c.s}', (tester) async {
+      tester.view
+        ..physicalSize = Size(c.w, c.h)
+        ..devicePixelRatio = 1;
+      tester.platformDispatcher.textScaleFactorTestValue = c.s;
+      addTearDown(tester.view.reset);
+      addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+      final container = ProviderContainer(overrides: [
+        localizationServiceProvider.overrideWithValue(_M()),
+        currentLocaleProvider.overrideWith((ref) async => const Locale('en')),
+      ]);
+      addTearDown(container.dispose);
+      container.read(localeStateProvider.notifier).state = const Locale('en');
+      await tester.pumpWidget(UncontrolledProviderScope(
+        container: container,
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            ...GlobalMaterialLocalizations.delegates,
+          ],
+          supportedLocales: LocalizationService.supportedLocales,
+          home: const Scaffold(body: Center(child: LanguageSwitcher())),
+        ),
+      ));
+      await tester.pump();
+      await tester.tap(find.byType(LanguageSwitcher));
+      await tester.pumpAndSettle();
+      final name = 'dialog-${c.w.toInt()}x${c.h.toInt()}-x${c.s}';
+      await expectLater(find.byType(MaterialApp),
+          matchesGoldenFile('out/$name-top.png'));
+      await tester.ensureVisible(find.text('Tiếng Việt'));
+      await tester.pumpAndSettle();
+      await expectLater(find.byType(MaterialApp),
+          matchesGoldenFile('out/$name-scrolled.png'));
+      expect(tester.takeException(), isNull);
+    });
+  }
+}

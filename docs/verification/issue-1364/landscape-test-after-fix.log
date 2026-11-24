@@ -1,0 +1,21 @@
+bbf483b2d0e fix(design-system): scroll the language dialog in phone landscape (#1391)
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_landscape_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: LanguageSwitcher at 844x390 x1.0: the dialog fits and Cancel is reachable
+00:01 +1: LanguageSwitcher at 844x390 x1.0: the last locale scrolls into reach and applies
+00:01 +2: LanguageSwitcher at 844x390 x2.0: the dialog fits and Cancel is reachable
+00:01 +3: LanguageSwitcher at 844x390 x2.0: the last locale scrolls into reach and applies
+00:01 +4: LanguageSwitcher at 800x360 x1.0: the dialog fits and Cancel is reachable
+00:02 +5: LanguageSwitcher at 800x360 x1.0: the last locale scrolls into reach and applies
+00:02 +6: LanguageSwitcher at 800x360 x2.0: the dialog fits and Cancel is reachable
+00:02 +7: LanguageSwitcher at 800x360 x2.0: the last locale scrolls into reach and applies
+00:02 +8: LanguageSwitcherMenuItem at 844x390 x1.0: the dialog fits and Cancel is reachable
+00:02 +9: LanguageSwitcherMenuItem at 844x390 x1.0: the last locale scrolls into reach and applies
+00:02 +10: LanguageSwitcherMenuItem at 844x390 x2.0: the dialog fits and Cancel is reachable
+00:02 +11: LanguageSwitcherMenuItem at 844x390 x2.0: the last locale scrolls into reach and applies
+00:02 +12: LanguageSwitcherMenuItem at 800x360 x1.0: the dialog fits and Cancel is reachable
+00:02 +13: LanguageSwitcherMenuItem at 800x360 x1.0: the last locale scrolls into reach and applies
+00:02 +14: LanguageSwitcherMenuItem at 800x360 x2.0: the dialog fits and Cancel is reachable
+00:02 +15: LanguageSwitcherMenuItem at 800x360 x2.0: the last locale scrolls into reach and applies
+00:02 +16: (tearDownAll)
+00:03 +16: All tests passed!

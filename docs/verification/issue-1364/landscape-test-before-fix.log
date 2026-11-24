@@ -1,0 +1,444 @@
+lib/shared/widgets/language_switcher.dart at 32676032817 (before the fix), test from bbf483b2d0e
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_landscape_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: LanguageSwitcher at 844x390 x1.0: the dialog fits and Cancel is reachable
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: null
+  Actual: FlutterError:<A RenderFlex overflowed by 50 pixels on the bottom.>
+
+When the exception was thrown, this was the stack:
+#4      _openDialog (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_landscape_test.dart:79:3)
+<asynchronous suspension>
+#5      main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_landscape_test.dart:101:11)
+<asynchronous suspension>
+#6      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#7      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_landscape_test.dart line 79
+The test description was:
+  LanguageSwitcher at 844x390 x1.0: the dialog fits and Cancel is reachable
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:01 +0 -1: LanguageSwitcher at 844x390 x1.0: the dialog fits and Cancel is reachable [E]
+  Test failed. See exception logs above.
+  The test description was: LanguageSwitcher at 844x390 x1.0: the dialog fits and Cancel is reachable
+  
+00:01 +0 -1: LanguageSwitcher at 844x390 x1.0: the last locale scrolls into reach and applies
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: null
+  Actual: FlutterError:<A RenderFlex overflowed by 50 pixels on the bottom.>
+
+When the exception was thrown, this was the stack:
+#4      _openDialog (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_landscape_test.dart:79:3)
+<asynchronous suspension>
+#5      main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_landscape_test.dart:122:11)
+<asynchronous suspension>
+#6      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#7      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_landscape_test.dart line 79
+The test description was:
+  LanguageSwitcher at 844x390 x1.0: the last locale scrolls into reach and applies
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:01 +0 -2: LanguageSwitcher at 844x390 x1.0: the last locale scrolls into reach and applies [E]
+  Test failed. See exception logs above.
+  The test description was: LanguageSwitcher at 844x390 x1.0: the last locale scrolls into reach and applies
+  
+00:01 +0 -2: LanguageSwitcher at 844x390 x2.0: the dialog fits and Cancel is reachable
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: null
+  Actual: FlutterError:<A RenderFlex overflowed by 98 pixels on the bottom.>
+
+When the exception was thrown, this was the stack:
+#4      _openDialog (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_landscape_test.dart:79:3)
+<asynchronous suspension>
+#5      main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_landscape_test.dart:101:11)
+<asynchronous suspension>
+#6      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#7      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_landscape_test.dart line 79
+The test description was:
+  LanguageSwitcher at 844x390 x2.0: the dialog fits and Cancel is reachable
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:02 +0 -3: LanguageSwitcher at 844x390 x2.0: the dialog fits and Cancel is reachable [E]
+  Test failed. See exception logs above.
+  The test description was: LanguageSwitcher at 844x390 x2.0: the dialog fits and Cancel is reachable
+  
+00:02 +0 -3: LanguageSwitcher at 844x390 x2.0: the last locale scrolls into reach and applies
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: null
+  Actual: FlutterError:<A RenderFlex overflowed by 98 pixels on the bottom.>
+
+When the exception was thrown, this was the stack:
+#4      _openDialog (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_landscape_test.dart:79:3)
+<asynchronous suspension>
+#5      main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_landscape_test.dart:122:11)
+<asynchronous suspension>
+#6      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#7      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_landscape_test.dart line 79
+The test description was:
+  LanguageSwitcher at 844x390 x2.0: the last locale scrolls into reach and applies
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:02 +0 -4: LanguageSwitcher at 844x390 x2.0: the last locale scrolls into reach and applies [E]
+  Test failed. See exception logs above.
+  The test description was: LanguageSwitcher at 844x390 x2.0: the last locale scrolls into reach and applies
+  
+00:02 +0 -4: LanguageSwitcher at 800x360 x1.0: the dialog fits and Cancel is reachable
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: null
+  Actual: FlutterError:<A RenderFlex overflowed by 80 pixels on the bottom.>
+
+When the exception was thrown, this was the stack:
+#4      _openDialog (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_landscape_test.dart:79:3)
+<asynchronous suspension>
+#5      main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_landscape_test.dart:101:11)
+<asynchronous suspension>
+#6      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#7      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_landscape_test.dart line 79
+The test description was:
+  LanguageSwitcher at 800x360 x1.0: the dialog fits and Cancel is reachable
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:02 +0 -5: LanguageSwitcher at 800x360 x1.0: the dialog fits and Cancel is reachable [E]
+  Test failed. See exception logs above.
+  The test description was: LanguageSwitcher at 800x360 x1.0: the dialog fits and Cancel is reachable
+  
+00:02 +0 -5: LanguageSwitcher at 800x360 x1.0: the last locale scrolls into reach and applies
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: null
+  Actual: FlutterError:<A RenderFlex overflowed by 80 pixels on the bottom.>
+
+When the exception was thrown, this was the stack:
+#4      _openDialog (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_landscape_test.dart:79:3)
+<asynchronous suspension>
+#5      main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_landscape_test.dart:122:11)
+<asynchronous suspension>
+#6      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#7      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_landscape_test.dart line 79
+The test description was:
+  LanguageSwitcher at 800x360 x1.0: the last locale scrolls into reach and applies
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:02 +0 -6: LanguageSwitcher at 800x360 x1.0: the last locale scrolls into reach and applies [E]
+  Test failed. See exception logs above.
+  The test description was: LanguageSwitcher at 800x360 x1.0: the last locale scrolls into reach and applies
+  
+00:02 +0 -6: LanguageSwitcher at 800x360 x2.0: the dialog fits and Cancel is reachable
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: null
+  Actual: FlutterError:<A RenderFlex overflowed by 192 pixels on the bottom.>
+
+When the exception was thrown, this was the stack:
+#4      _openDialog (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_landscape_test.dart:79:3)
+<asynchronous suspension>
+#5      main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_landscape_test.dart:101:11)
+<asynchronous suspension>
+#6      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#7      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_landscape_test.dart line 79
+The test description was:
+  LanguageSwitcher at 800x360 x2.0: the dialog fits and Cancel is reachable
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:02 +0 -7: LanguageSwitcher at 800x360 x2.0: the dialog fits and Cancel is reachable [E]
+  Test failed. See exception logs above.
+  The test description was: LanguageSwitcher at 800x360 x2.0: the dialog fits and Cancel is reachable
+  
+00:02 +0 -7: LanguageSwitcher at 800x360 x2.0: the last locale scrolls into reach and applies
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: null
+  Actual: FlutterError:<A RenderFlex overflowed by 192 pixels on the bottom.>
+
+When the exception was thrown, this was the stack:
+#4      _openDialog (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_landscape_test.dart:79:3)
+<asynchronous suspension>
+#5      main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_landscape_test.dart:122:11)
+<asynchronous suspension>
+#6      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#7      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_landscape_test.dart line 79
+The test description was:
+  LanguageSwitcher at 800x360 x2.0: the last locale scrolls into reach and applies
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:02 +0 -8: LanguageSwitcher at 800x360 x2.0: the last locale scrolls into reach and applies [E]
+  Test failed. See exception logs above.
+  The test description was: LanguageSwitcher at 800x360 x2.0: the last locale scrolls into reach and applies
+  
+00:02 +0 -8: LanguageSwitcherMenuItem at 844x390 x1.0: the dialog fits and Cancel is reachable
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: null
+  Actual: FlutterError:<A RenderFlex overflowed by 50 pixels on the bottom.>
+
+When the exception was thrown, this was the stack:
+#4      _openDialog (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_landscape_test.dart:79:3)
+<asynchronous suspension>
+#5      main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_landscape_test.dart:101:11)
+<asynchronous suspension>
+#6      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#7      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_landscape_test.dart line 79
+The test description was:
+  LanguageSwitcherMenuItem at 844x390 x1.0: the dialog fits and Cancel is reachable
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:02 +0 -9: LanguageSwitcherMenuItem at 844x390 x1.0: the dialog fits and Cancel is reachable [E]
+  Test failed. See exception logs above.
+  The test description was: LanguageSwitcherMenuItem at 844x390 x1.0: the dialog fits and Cancel is reachable
+  
+00:02 +0 -9: LanguageSwitcherMenuItem at 844x390 x1.0: the last locale scrolls into reach and applies
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: null
+  Actual: FlutterError:<A RenderFlex overflowed by 50 pixels on the bottom.>
+
+When the exception was thrown, this was the stack:
+#4      _openDialog (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_landscape_test.dart:79:3)
+<asynchronous suspension>
+#5      main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_landscape_test.dart:122:11)
+<asynchronous suspension>
+#6      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#7      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_landscape_test.dart line 79
+The test description was:
+  LanguageSwitcherMenuItem at 844x390 x1.0: the last locale scrolls into reach and applies
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:03 +0 -10: LanguageSwitcherMenuItem at 844x390 x1.0: the last locale scrolls into reach and applies [E]
+  Test failed. See exception logs above.
+  The test description was: LanguageSwitcherMenuItem at 844x390 x1.0: the last locale scrolls into reach and applies
+  
+00:03 +0 -10: LanguageSwitcherMenuItem at 844x390 x2.0: the dialog fits and Cancel is reachable
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: null
+  Actual: FlutterError:<A RenderFlex overflowed by 98 pixels on the bottom.>
+
+When the exception was thrown, this was the stack:
+#4      _openDialog (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_landscape_test.dart:79:3)
+<asynchronous suspension>
+#5      main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_landscape_test.dart:101:11)
+<asynchronous suspension>
+#6      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#7      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_landscape_test.dart line 79
+The test description was:
+  LanguageSwitcherMenuItem at 844x390 x2.0: the dialog fits and Cancel is reachable
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:03 +0 -11: LanguageSwitcherMenuItem at 844x390 x2.0: the dialog fits and Cancel is reachable [E]
+  Test failed. See exception logs above.
+  The test description was: LanguageSwitcherMenuItem at 844x390 x2.0: the dialog fits and Cancel is reachable
+  
+00:03 +0 -11: LanguageSwitcherMenuItem at 844x390 x2.0: the last locale scrolls into reach and applies
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: null
+  Actual: FlutterError:<A RenderFlex overflowed by 98 pixels on the bottom.>
+
+When the exception was thrown, this was the stack:
+#4      _openDialog (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_landscape_test.dart:79:3)
+<asynchronous suspension>
+#5      main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_landscape_test.dart:122:11)
+<asynchronous suspension>
+#6      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#7      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_landscape_test.dart line 79
+The test description was:
+  LanguageSwitcherMenuItem at 844x390 x2.0: the last locale scrolls into reach and applies
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:03 +0 -12: LanguageSwitcherMenuItem at 844x390 x2.0: the last locale scrolls into reach and applies [E]
+  Test failed. See exception logs above.
+  The test description was: LanguageSwitcherMenuItem at 844x390 x2.0: the last locale scrolls into reach and applies
+  
+00:03 +0 -12: LanguageSwitcherMenuItem at 800x360 x1.0: the dialog fits and Cancel is reachable
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: null
+  Actual: FlutterError:<A RenderFlex overflowed by 80 pixels on the bottom.>
+
+When the exception was thrown, this was the stack:
+#4      _openDialog (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_landscape_test.dart:79:3)
+<asynchronous suspension>
+#5      main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_landscape_test.dart:101:11)
+<asynchronous suspension>
+#6      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#7      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_landscape_test.dart line 79
+The test description was:
+  LanguageSwitcherMenuItem at 800x360 x1.0: the dialog fits and Cancel is reachable
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:03 +0 -13: LanguageSwitcherMenuItem at 800x360 x1.0: the dialog fits and Cancel is reachable [E]
+  Test failed. See exception logs above.
+  The test description was: LanguageSwitcherMenuItem at 800x360 x1.0: the dialog fits and Cancel is reachable
+  
+00:03 +0 -13: LanguageSwitcherMenuItem at 800x360 x1.0: the last locale scrolls into reach and applies
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: null
+  Actual: FlutterError:<A RenderFlex overflowed by 80 pixels on the bottom.>
+
+When the exception was thrown, this was the stack:
+#4      _openDialog (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_landscape_test.dart:79:3)
+<asynchronous suspension>
+#5      main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_landscape_test.dart:122:11)
+<asynchronous suspension>
+#6      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#7      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_landscape_test.dart line 79
+The test description was:
+  LanguageSwitcherMenuItem at 800x360 x1.0: the last locale scrolls into reach and applies
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:03 +0 -14: LanguageSwitcherMenuItem at 800x360 x1.0: the last locale scrolls into reach and applies [E]
+  Test failed. See exception logs above.
+  The test description was: LanguageSwitcherMenuItem at 800x360 x1.0: the last locale scrolls into reach and applies
+  
+00:03 +0 -14: LanguageSwitcherMenuItem at 800x360 x2.0: the dialog fits and Cancel is reachable
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: null
+  Actual: FlutterError:<A RenderFlex overflowed by 192 pixels on the bottom.>
+
+When the exception was thrown, this was the stack:
+#4      _openDialog (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_landscape_test.dart:79:3)
+<asynchronous suspension>
+#5      main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_landscape_test.dart:101:11)
+<asynchronous suspension>
+#6      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#7      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_landscape_test.dart line 79
+The test description was:
+  LanguageSwitcherMenuItem at 800x360 x2.0: the dialog fits and Cancel is reachable
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:03 +0 -15: LanguageSwitcherMenuItem at 800x360 x2.0: the dialog fits and Cancel is reachable [E]
+  Test failed. See exception logs above.
+  The test description was: LanguageSwitcherMenuItem at 800x360 x2.0: the dialog fits and Cancel is reachable
+  
+00:03 +0 -15: LanguageSwitcherMenuItem at 800x360 x2.0: the last locale scrolls into reach and applies
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: null
+  Actual: FlutterError:<A RenderFlex overflowed by 192 pixels on the bottom.>
+
+When the exception was thrown, this was the stack:
+#4      _openDialog (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_landscape_test.dart:79:3)
+<asynchronous suspension>
+#5      main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_landscape_test.dart:122:11)
+<asynchronous suspension>
+#6      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#7      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_landscape_test.dart line 79
+The test description was:
+  LanguageSwitcherMenuItem at 800x360 x2.0: the last locale scrolls into reach and applies
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:03 +0 -16: LanguageSwitcherMenuItem at 800x360 x2.0: the last locale scrolls into reach and applies [E]
+  Test failed. See exception logs above.
+  The test description was: LanguageSwitcherMenuItem at 800x360 x2.0: the last locale scrolls into reach and applies
+  
+00:03 +0 -16: (tearDownAll)
+00:03 +0 -16: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_landscape_test.dart: LanguageSwitcher at 800x360 x1.0: the dialog fits and Cancel is reachable
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_landscape_test.dart: LanguageSwitcher at 800x360 x1.0: the last locale scrolls into reach and applies
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_landscape_test.dart: LanguageSwitcher at 800x360 x2.0: the dialog fits and Cancel is reachable
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_landscape_test.dart: LanguageSwitcher at 800x360 x2.0: the last locale scrolls into reach and applies
+  ... and 12 more
