@@ -116,11 +116,13 @@ git grep -lz -e 'Flutter Starter' -e 'com\.example\.flutter' -- . \
 
 # The launcher label and Patrol's app name are the display name; in the
 # desktop and web runners the bare template name is the binary, window
-# and page name.
+# and page name. A bare `com.example` (the company and copyright lines)
+# becomes ORG; one that starts an id set above, such as an APPLE_ID of
+# com.example.myApp, is left alone.
 perl -pi -e 's/android:label="flutter_starter"/android:label="$ENV{NAME}"/' \
   android/app/src/main/AndroidManifest.xml
 perl -pi -e 's/^(  app_name:) flutter_starter$/$1 $ENV{NAME}/' pubspec.yaml
-perl -pi -e 's/flutter_starter/$ENV{PACKAGE}/g; s/com\.example/$ENV{ORG}/g' \
+perl -pi -e 's/flutter_starter/$ENV{PACKAGE}/g; s/com\.example(?!\w|\.\w)/$ENV{ORG}/g' \
   ios/Runner/Info.plist web/index.html web/manifest.json \
   linux/CMakeLists.txt linux/runner/my_application.cc \
   windows/CMakeLists.txt windows/runner/Runner.rc windows/runner/main.cpp \
