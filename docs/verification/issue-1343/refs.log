@@ -1,0 +1,7 @@
+Commits in 797573efca9fdb8cc1788bee66ff6f5566ad0ff5..HEAD
+  ok    f0e84af7 docs: correct rename and configuration troubleshooting (#1356)
+  ok    e2f8901d fix(tooling): verify release formatting and classify pushed refs (#1353)
+  ok    7ee7aa0c fix(tasks): disable Edit while task mutations are pending (#1352)
+  ok    e85e1631 fix(auth): identify autofill usernames and prove unmount guards (#1351)
+
+OK: every message links with 'Refs koniz-dev/flutter-starter#N' and closes nothing.

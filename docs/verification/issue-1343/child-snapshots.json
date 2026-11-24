@@ -1,0 +1,179 @@
+[
+  {
+    "issue": 1345,
+    "pr": 1351,
+    "merge": "e85e16314c8e01a7e43a66965c4462ea888e8fa6",
+    "ci": [
+      {
+        "name": "Strip renamed-both + analyze + test",
+        "state": "SUCCESS",
+        "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/44341878694/job/134933774415"
+      },
+      {
+        "name": "Strip both-samples-removed + analyze + test",
+        "state": "SUCCESS",
+        "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/44341878694/job/134933774394"
+      },
+      {
+        "name": "Strip feature-flags-removed + analyze + test",
+        "state": "SUCCESS",
+        "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/44341878694/job/134933774294"
+      },
+      {
+        "name": "Strip keep-samples + analyze + test",
+        "state": "SUCCESS",
+        "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/44341878694/job/134933774101"
+      },
+      {
+        "name": "Strip tasks-removed + analyze + test",
+        "state": "SUCCESS",
+        "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/44341878694/job/134933773770"
+      },
+      {
+        "name": "Quality gate",
+        "state": "SUCCESS",
+        "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/44341877568/job/134933769181"
+      }
+    ],
+    "evidence": "https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1345/verification.md"
+  },
+  {
+    "issue": 1346,
+    "pr": 1352,
+    "merge": "7ee7aa0cc01fac2ba8510639290b9a368ea4e7eb",
+    "ci": [
+      {
+        "name": "Strip renamed-both + analyze + test",
+        "state": "SUCCESS",
+        "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/44345265238/job/134945822406"
+      },
+      {
+        "name": "Strip tasks-removed + analyze + test",
+        "state": "SUCCESS",
+        "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/44345265238/job/134945822099"
+      },
+      {
+        "name": "Strip keep-samples + analyze + test",
+        "state": "SUCCESS",
+        "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/44345265238/job/134945822078"
+      },
+      {
+        "name": "Strip both-samples-removed + analyze + test",
+        "state": "SUCCESS",
+        "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/44345265238/job/134945821973"
+      },
+      {
+        "name": "Strip feature-flags-removed + analyze + test",
+        "state": "SUCCESS",
+        "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/44345265238/job/134945821570"
+      },
+      {
+        "name": "Quality gate",
+        "state": "SUCCESS",
+        "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/44345264823/job/134945819954"
+      }
+    ],
+    "evidence": "https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1346/verification.md"
+  },
+  {
+    "issue": 1347,
+    "pr": 1353,
+    "merge": "e2f8901dd24f5fedf4bfb0b5a2543588b22c2f25",
+    "ci": [
+      {
+        "name": "Strip keep-samples + analyze + test",
+        "state": "SUCCESS",
+        "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/44349976847/job/134962825137"
+      },
+      {
+        "name": "Strip both-samples-removed + analyze + test",
+        "state": "SUCCESS",
+        "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/44349976847/job/134962824943"
+      },
+      {
+        "name": "Strip renamed-both + analyze + test",
+        "state": "SUCCESS",
+        "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/44349976847/job/134962824743"
+      },
+      {
+        "name": "Strip tasks-removed + analyze + test",
+        "state": "SUCCESS",
+        "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/44349976847/job/134962824657"
+      },
+      {
+        "name": "Strip feature-flags-removed + analyze + test",
+        "state": "SUCCESS",
+        "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/44349976847/job/134962824101"
+      },
+      {
+        "name": "Quality gate",
+        "state": "SUCCESS",
+        "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/44349976598/job/134962819256"
+      },
+      {
+        "name": "release scripts (ubuntu-latest)",
+        "state": "SUCCESS",
+        "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/44349976388/job/134962640731"
+      },
+      {
+        "name": "release scripts (macos-latest)",
+        "state": "SUCCESS",
+        "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/44349976388/job/134962640016"
+      },
+      {
+        "name": "Docs check",
+        "state": "SUCCESS",
+        "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/44349977179/job/134962625703"
+      },
+      {
+        "name": "pre-commit hook in a fresh clone",
+        "state": "SUCCESS",
+        "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/44349976500/job/134962621817"
+      }
+    ],
+    "evidence": "https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1347/verification.md"
+  },
+  {
+    "issue": 1348,
+    "pr": 1356,
+    "merge": "f0e84af7567f9585fad1f89031a56de56959cd6f",
+    "ci": [
+      {
+        "name": "Strip tasks-removed + analyze + test",
+        "state": "SUCCESS",
+        "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/45330711755/job/138230984353"
+      },
+      {
+        "name": "Strip renamed-both + analyze + test",
+        "state": "SUCCESS",
+        "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/45330711755/job/138230984211"
+      },
+      {
+        "name": "Strip both-samples-removed + analyze + test",
+        "state": "SUCCESS",
+        "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/45330711755/job/138230984156"
+      },
+      {
+        "name": "Strip feature-flags-removed + analyze + test",
+        "state": "SUCCESS",
+        "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/45330711755/job/138230984129"
+      },
+      {
+        "name": "Docs check",
+        "state": "SUCCESS",
+        "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/45330711903/job/138230983989"
+      },
+      {
+        "name": "Strip keep-samples + analyze + test",
+        "state": "SUCCESS",
+        "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/45330711755/job/138230983885"
+      },
+      {
+        "name": "Quality gate",
+        "state": "SUCCESS",
+        "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/45330711718/job/138230983273"
+      }
+    ],
+    "evidence": "https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1348/verification.md"
+  }
+]

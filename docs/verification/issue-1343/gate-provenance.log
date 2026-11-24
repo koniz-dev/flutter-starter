@@ -1,0 +1,5 @@
+Current aggregate main: f0e84af7567f9585fad1f89031a56de56959cd6f
+No source change is introduced by the audit ledger. Host gates reused from issue1348 at this exact merged tree; no new fullsuite run is claimed.
+format.log SHA256 6daf90d6fae7264fad8d1901050740834178ccf1aa0bd3765f934f33551f7d2b
+analyze.log SHA256 d946b6b98c8828abaa58e75e664751bc6ac4698a365189ec66ef13a6de88c4db
+tests.log SHA256 b571f3214ae8254cbc99411ece9091f74ef3eae70395f8773d4afd0fc7bd7361
