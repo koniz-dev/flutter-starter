@@ -54,6 +54,17 @@ abstract class AppColors {
   /// white rather than as what is actually on screen.
   static const Color textSecondaryInverse = Color(0xFFADB5BD);
 
+  // Borders
+  /// Unfocused outline of a text field, in both themes.
+  ///
+  /// WCAG 2.1 SC 1.4.11 asks 3:1 of a component's visible edge, and an
+  /// unfilled text field has no other. This clears it on every surface the
+  /// themes paint a field on: 4.45:1 on [background], 4.69:1 on [surface],
+  /// 4.00:1 on the dark background and 3.55:1 on the dark surface. The
+  /// translucent `Colors.black12` and `Colors.white24` it replaced were
+  /// 1.32:1 and 2.15:1.
+  static const Color outline = Color(0xFF6C757D);
+
   // Status Colors
   /// Success state color (valid input, success alerts).
   ///
