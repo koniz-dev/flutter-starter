@@ -1,0 +1,13 @@
+{
+  "open_issues": [],
+  "closed_release_issue": 1350,
+  "release_issue_state": "closed",
+  "release_version": "v5.0.3",
+  "release_url": "https://github.com/koniz-dev/flutter-starter/releases/tag/v5.0.3",
+  "published_at": "2026-11-24T05:33:00Z",
+  "verified_commit": "f5468e97a2ab85ef4502d753fd721d4e1fb16e36",
+  "separate_open_dependabot_prs": [
+    1355,
+    1354
+  ]
+}
