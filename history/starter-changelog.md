@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- [RASP starts inside the startup guard](https://github.com/koniz-dev/flutter-starter/issues/1358): `bootstrap()` now awaits `raspServiceProvider`'s `startProtection()` inside the guarded startup sequence, so a RASP SDK that throws shows `StartupFailureApp` instead of a black window (the default `NoOpRaspService` does nothing). The freeRASP recipe overrides the provider on Android and iOS only, and the adapter template starts freeRASP once per process, so Try again no longer re-starts it. If you applied the old recipe, delete your `startProtection()` call after `createContainer()` (bootstrap now makes it), move any `onThreatDetected` subscription to just above the new call, and add the platform guard.
+
 ## [5.0.3] - 2026-11-24
 
 ### Fixed
