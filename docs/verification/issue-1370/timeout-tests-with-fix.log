@@ -1,0 +1,16 @@
+# main @ 1b67cfc388d; flutter test -r expanded test/features/feature_flags/presentation/providers/feature_flags_timeout_test.dart
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/providers/feature_flags_timeout_test.dart
+00:00 +0: flag providers settle locally after timeout
+00:00 +1: flag providers settle locally after failure
+00:00 +2: refresh after timeout retries initialization and restores remote reads
+00:00 +3: activated remote values remain readable during a refresh
+00:00 +4: a failed refresh retains the activated remote values
+00:00 +5: a timed-out refresh retains the activated remote values
+00:00 +6: timed-out fetch cannot overlap a newer activation
+00:00 +7: offline cold start (values activated on an earlier launch) a failed fetch keeps serving the activated remote values
+00:00 +8: offline cold start (values activated on an earlier launch) a timed-out fetch keeps serving the activated remote values
+00:00 +9: offline cold start (values activated on an earlier launch) a timed-out SDK initialization still falls back to local values
+00:00 +10: offline cold start (values activated on an earlier launch) a failed SDK initialization still falls back to local values
+00:00 +11: FeatureFlagBuilder stops spinning when initialization times out
+00:01 +12: debug refresh waits for held initialization before fetching
+00:02 +13: All tests passed!

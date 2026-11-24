@@ -1,0 +1,46 @@
+# merged test file run against main@95962261fa4's feature_flags_repository_impl.dart (the pre-fix implementation)
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/providers/feature_flags_timeout_test.dart
+00:00 +0: flag providers settle locally after timeout
+00:00 +1: flag providers settle locally after failure
+00:00 +2: refresh after timeout retries initialization and restores remote reads
+00:00 +3: activated remote values remain readable during a refresh
+00:00 +4: a failed refresh retains the activated remote values
+00:00 +5: a timed-out refresh retains the activated remote values
+00:00 +6: timed-out fetch cannot overlap a newer activation
+00:00 +6 -1: timed-out fetch cannot overlap a newer activation [E]
+  Expected: <1>
+    Actual: <2>
+  the SDK already initialized
+  
+  package:matcher                                                                           expect
+  package:flutter_test/src/widget_tester.dart 473:18                                        expect
+  test/features/feature_flags/presentation/providers/feature_flags_timeout_test.dart 227:5  main.<fn>
+  
+00:00 +6 -1: offline cold start (values activated on an earlier launch) a failed fetch keeps serving the activated remote values
+00:00 +6 -2: offline cold start (values activated on an earlier launch) a failed fetch keeps serving the activated remote values [E]
+  Expected: true
+    Actual: <null>
+  
+  package:matcher                                                                           expect
+  package:flutter_test/src/widget_tester.dart 473:18                                        expect
+  test/features/feature_flags/presentation/providers/feature_flags_timeout_test.dart 162:5  main.expectActivatedValues
+  
+00:00 +6 -2: offline cold start (values activated on an earlier launch) a timed-out fetch keeps serving the activated remote values
+00:00 +6 -3: offline cold start (values activated on an earlier launch) a timed-out fetch keeps serving the activated remote values [E]
+  Expected: true
+    Actual: <null>
+  
+  package:matcher                                                                           expect
+  package:flutter_test/src/widget_tester.dart 473:18                                        expect
+  test/features/feature_flags/presentation/providers/feature_flags_timeout_test.dart 162:5  main.expectActivatedValues
+  
+00:00 +6 -3: offline cold start (values activated on an earlier launch) a timed-out SDK initialization still falls back to local values
+00:00 +7 -3: offline cold start (values activated on an earlier launch) a failed SDK initialization still falls back to local values
+00:00 +8 -3: FeatureFlagBuilder stops spinning when initialization times out
+00:01 +9 -3: debug refresh waits for held initialization before fetching
+00:02 +10 -3: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/providers/feature_flags_timeout_test.dart: offline cold start (values activated on an earlier launch) a failed fetch keeps serving the activated remote values
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/providers/feature_flags_timeout_test.dart: offline cold start (values activated on an earlier launch) a timed-out fetch keeps serving the activated remote values
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/providers/feature_flags_timeout_test.dart: timed-out fetch cannot overlap a newer activation
