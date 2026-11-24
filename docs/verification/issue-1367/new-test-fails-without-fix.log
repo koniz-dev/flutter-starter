@@ -1,0 +1,32 @@
+== guide reverted to origin/main, new test kept ==
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/demo_removal_steps_test.dart
+00:00 +0: the guide names every path it relies on
+00:00 +0 -1: the guide names every path it relies on [E]
+  Expected: contains '`README.md`'
+    Actual: '# Getting Started\n'
+     Which: does not contain '`README.md`'
+  README.md
+00:00 +0 -1: only the files the steps delete or edit use the demo
+00:00 +1 -1: only the files the steps delete or edit link to the section
+00:00 +2 -1: Some tests failed.
+
+== origin/main's _edited set (README.md entry removed), guide fixed ==
+ test/tooling/demo_removal_steps_test.dart | 1 -
+ 1 file changed, 1 deletion(-)
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/demo_removal_steps_test.dart
+00:00 +0: the guide names every path it relies on
+00:00 +1: only the files the steps delete or edit use the demo
+00:00 +1 -1: only the files the steps delete or edit use the demo [E]
+  Expected: empty
+    Actual: ['README.md']
+00:00 +1 -1: only the files the steps delete or edit link to the section
+00:00 +1 -2: only the files the steps delete or edit link to the section [E]
+  Expected: empty
+    Actual: ['README.md']
+00:00 +1 -2: Some tests failed.
+
+== with the fix (commit 28acb1ce21a) ==
+00:00 +0: the guide names every path it relies on
+00:00 +1: only the files the steps delete or edit use the demo
+00:00 +2: only the files the steps delete or edit link to the section
+00:00 +3: All tests passed!

@@ -1,0 +1,59 @@
+# Demo removal steps applied in a clone of fix/1367-demo-removal-readme-link at 28acb1ce21a
+# flutter: Flutter 3.47.0 • channel stable • https://github.com/flutter/flutter.git
+
+$ git status --short (after step 1 git rm + apply_removal_steps.py)
+ M README.md
+ M docs/api/features/auth/providers.md
+ M docs/guides/configuration.md
+ M docs/guides/onboarding/getting-started.md
+ M lib/core/config/app_config.dart
+D  lib/features/auth/demo/demo_auth.dart
+D  lib/features/auth/demo/demo_sign_in_card.dart
+ M lib/features/auth/di/auth_providers.dart
+ M lib/features/auth/presentation/screens/login_screen.dart
+D  test/acceptance/goldens/login_demo_dark.png
+D  test/acceptance/goldens/login_demo_light.png
+D  test/acceptance/login_demo_acceptance_test.dart
+D  test/core/config/app_config_has_backend_test.dart
+D  test/features/auth/demo/demo_auth_test.dart
+D  test/features/auth/demo/demo_sign_in_card_contrast_test.dart
+D  test/features/auth/demo/demo_sign_in_card_overflow_test.dart
+D  test/flutter_test_config.dart
+D  test/tooling/demo_removal_steps_test.dart
+
+$ git grep (step 2 command)
+exit 1
+
+$ flutter pub get
+exit 0
+
+$ flutter analyze
+Analyzing removal-1367...                                       
+No issues found! (ran in 10.0s)
+exit 0
+
+$ dart run tool/check_docs.dart
+dart-defines: scanned 62 file(s) against 14 known key(s); 0 unknown
+test paths: scanned 64 file(s); 0 missing
+
+OK: documentation checks passed.
+exit 0
+
+$ flutter test --timeout=5m
+11:33 +4755 ~13: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/ba9282fc-d36b-4d84-bc84-7771dc4b1bcd/scratchpad/removal-1367/test/helpers/helpers_test.dart: pumping createTestApp hosts a widget under a Scaffold
+11:34 +4756 ~13: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/ba9282fc-d36b-4d84-bc84-7771dc4b1bcd/scratchpad/removal-1367/test/helpers/helpers_test.dart: pumping createTestApp hosts a widget under a Scaffold
+11:34 +4757 ~13: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/ba9282fc-d36b-4d84-bc84-7771dc4b1bcd/scratchpad/removal-1367/test/helpers/helpers_test.dart: pumping createTestApp hosts a widget under a Scaffold
+11:34 +4758 ~13: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/ba9282fc-d36b-4d84-bc84-7771dc4b1bcd/scratchpad/removal-1367/test/helpers/helpers_test.dart: pumping pumpAppAndSettle pumps and settles animations
+11:35 +4759 ~13: All tests passed!
+exit 0
+
+# Control: the same clone with the README.md edit undone (the old steps, which did not name it)
+$ dart run tool/check_docs.dart --links
+Running build hooks...Running build hooks...README.md:181: missing anchor -> docs/guides/onboarding/getting-started.md#signing-in-before-you-have-a-backend
+links: checked 698 relative link(s) in 75 file(s); 1 broken
+
+1 problem(s) found.
+exit 1
+$ flutter test test/docs/doc_links_test.dart
+  README.md:181: missing anchor -> docs/guides/onboarding/getting-started.md#signing-in-before-you-have-a-backend
+00:01 +0 -1: Some tests failed.
