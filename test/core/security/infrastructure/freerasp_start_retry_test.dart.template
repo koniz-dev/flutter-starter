@@ -42,6 +42,7 @@ void main() {
         MockStreamHandler.inline(onListen: (_, _) {}),
       );
     addTearDown(() {
+      FreeRaspServiceImpl.debugForgetNativeStart();
       holdStart = null;
       messenger
         ..setMockMethodCallHandler(methods, null)
@@ -88,6 +89,20 @@ void main() {
 
     // Once started, a later call is a no-op.
     await service.startProtection();
+    expect(methodCalls.where((m) => m == 'start'), hasLength(1));
+  });
+
+  test('a second service in the same process does not start freeRASP '
+      'again', () async {
+    // Try again on the startup failure screen re-runs bootstrap with a new
+    // container, and so a new service, while freeRASP is already running.
+    mockChannels(TargetPlatform.iOS);
+    await FreeRaspServiceImpl().startProtection();
+    expect(methodCalls.where((m) => m == 'start'), hasLength(1));
+
+    final retried = FreeRaspServiceImpl();
+    await retried.startProtection();
+
     expect(methodCalls.where((m) => m == 'start'), hasLength(1));
   });
 }
