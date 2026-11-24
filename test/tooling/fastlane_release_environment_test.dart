@@ -30,6 +30,11 @@ String _ruby(String code) {
   return '${result.stdout}${result.stderr}';
 }
 
+/// [value] as a single-quoted Ruby literal, so a backslash or "#{" in it
+/// reaches Ruby unchanged.
+String _rubyString(String value) =>
+    "'${value.replaceAll(r'\', r'\\').replaceAll("'", r"\'")}'";
+
 void main() {
   final skip = _hasRuby ? null : 'ruby is not installed';
 
@@ -76,6 +81,53 @@ void main() {
     }
     expect(check('nil'), contains('BASE_URL_PRODUCTION'));
   }, skip: skip);
+
+  // The same rules, and messages, as scripts/ci/release_base_url.sh: a
+  // staging or production release refuses a scheme other than https at
+  // startup, and Dart decodes %61 to "a" and reads a backslash as "/", so
+  // either could spell the placeholder host past the host check.
+  group('a lane base URL follows the shell builds', () {
+    String check(String environment, String url) => _ruby(
+      'begin; '
+      'print ReleaseEnvironment.for_environment( '
+      '"$environment", ${_rubyString(url)}); '
+      'rescue ArgumentError => e; print "refused: #{e.message}"; end',
+    );
+
+    test('it refuses a scheme other than https', () {
+      for (final url in [
+        'http://api.acme.io',
+        'ftp://api.acme.io',
+        'HTTP://api.acme.io',
+        'https://',
+      ]) {
+        expect(
+          check('production', url),
+          "refused: base URL '$url' is not an absolute https URL. A "
+          'production release refuses any other scheme at startup.',
+          reason: url,
+        );
+      }
+      expect(check('staging', 'http://api.acme.io'), contains('A staging'));
+      expect(check('production', 'HTTPS://api.acme.io'), 'HTTPS://api.acme.io');
+    }, skip: skip);
+
+    test('it refuses whitespace, "%" or a backslash', () {
+      for (final url in [
+        'https://api.acme.io /x',
+        'https://api.acme.io\t/x',
+        'https://api.ex%61mple.com',
+        r'https://api.example.com\@acme.io',
+      ]) {
+        expect(
+          check('production', url),
+          "refused: base URL '$url' contains whitespace, '%' or a "
+          'backslash. Write the host and path literally.',
+          reason: url,
+        );
+      }
+    }, skip: skip);
+  });
 
   test('resolved environment chooses its URL with both variables set', () {
     const variables =

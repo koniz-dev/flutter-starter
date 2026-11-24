@@ -29,12 +29,31 @@ module ReleaseEnvironment
   # so a store lane run without base_url: or BASE_URL_<ENV> uploaded a build
   # pointing at a placeholder host, and nothing at startup refused it.
   #
-  # [value] trimmed, or an ArgumentError when it is unset or on example.com.
+  # The rules, and messages, are those of the shell builds
+  # (scripts/ci/release_base_url.sh).
+  #
+  # [value] trimmed, or an ArgumentError when it is unset, not https, spelled
+  # with whitespace, "%" or a backslash, or on example.com.
   # [source] names where it should come from, for the message.
-  def self.base_url(value, source)
+  # [environment] names the release, for the message.
+  def self.base_url(value, source,
+                    environment = source.sub(/\ABASE_URL_/, '').downcase)
     url = value.to_s.strip
     if url.empty?
       raise ArgumentError, "No API base URL: pass base_url:<url> or set #{source}."
+    end
+    # Dart reads %61 as "a" and a backslash as "/", so either could spell the
+    # placeholder host past the check below; whitespace is never part of a URL.
+    if url.match?(/[%\\[:space:]]/)
+      raise ArgumentError, "base URL '#{url}' contains whitespace, '%' or a " \
+                           'backslash. Write the host and path literally.'
+    end
+    # A staging or production release refuses any other scheme at startup
+    # (lib/main.dart).
+    unless url.match?(%r{\Ahttps://.}i)
+      raise ArgumentError, "base URL '#{url}' is not an absolute https URL. " \
+                           "A #{environment} release refuses any other " \
+                           'scheme at startup.'
     end
     host = url[%r{\A[a-z][a-z0-9+.-]*://(?:[^@/]*@)?([^/:?#]+)}i, 1]
     if host.nil?
@@ -53,8 +72,9 @@ module ReleaseEnvironment
 
   # Explicit lane option wins; otherwise use the resolved environment's URL.
   def self.for_environment(environment, value = nil)
-    source = "BASE_URL_#{normalize(environment).upcase}"
-    base_url(value || ENV[source], source)
+    environment = normalize(environment)
+    source = "BASE_URL_#{environment.upcase}"
+    base_url(value || ENV[source], source, environment)
   end
 
   # [for_environment], failing the lane with the message.

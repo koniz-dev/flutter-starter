@@ -197,9 +197,10 @@ Every build lane needs the API base URL: `base_url:<url>`, or
 `BASE_URL_<ENVIRONMENT>` for the resolved `environment:` (trimmed and
 lowercased), regardless of the lane name. Thus `environment:staging` reads
 `BASE_URL_STAGING`, and `environment:production` reads `BASE_URL_PRODUCTION`.
-An explicit `base_url:` always wins. Without one,
-or with the starter's `example.com` placeholder, the lane stops before
-building.
+An explicit `base_url:` always wins. Without one, the lane stops before
+building, and so it does on a URL that is not `https://`, that contains
+whitespace, `%` or a backslash, or that is on the starter's `example.com`
+placeholder: the same rules as the shell builds.
 
 ### Certificate pinning
 
