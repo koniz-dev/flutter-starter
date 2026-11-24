@@ -1,0 +1,21 @@
+# main 411645cfbc8: new test against the unfixed blueprint
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_timeout_blueprint_test.dart
+00:00 +0: resuming after the timeout signs out exactly once
+00:01 +0 -1: resuming after the timeout signs out exactly once [E]
+  Expected: 'signOuts=1'
+    Actual: 'signOuts=0'
+     Which: is different.
+            Expected: signOuts=1
+              Actual: signOuts=0
+                               ^
+             Differ at offset 9
+  
+  package:matcher                                      expect
+  package:flutter_test/src/widget_tester.dart 473:18   expect
+  test/docs/session_timeout_blueprint_test.dart 102:5  main.<fn>
+  
+00:01 +0 -1: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_timeout_blueprint_test.dart: resuming after the timeout signs out exactly once
+exit=1

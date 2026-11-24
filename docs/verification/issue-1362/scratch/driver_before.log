@@ -1,0 +1,5 @@
+$ dart --packages=.dart_tool/package_config.json driver_before.dart   (from blueprints-before.md)
+resume handler calls: onUserActivity
+before resume: timeUntilTimeout=0:00:00.000000
+after resume: signOuts=0
+exit=0
