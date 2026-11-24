@@ -1,0 +1,31 @@
+# main at b4caccdb8ecddff75424f9237df0577b73a8b519
+$ flutter test test/core/startup/startup_reachability_test.dart --plain-name "RASP service" -r expanded
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/startup/startup_reachability_test.dart
+00:00 +0: main() renders StartupFailureApp end to end a RASP service whose startProtection() throws boots into the failure screen
+═══════════════════════════════════════════════════════════
+📱 App Configuration
+═══════════════════════════════════════════════════════════
+Environment: development
+Debug Mode: true
+Release Mode: false
+
+🌐 API Configuration:
+  Base URL: http://localhost:3000
+  Timeout: 30s
+  Connect Timeout: 10s
+  Receive Timeout: 30s
+  Send Timeout: 30s
+  SSL Pinning Requested: false
+  SSL Pinning Effective: false
+  SSL Fingerprints Configured: 0
+
+🚩 Feature Flags:
+  Logging: true
+  Analytics: false
+  Crash Reporting: false
+  Performance Monitoring: false
+  Debug Features: true
+  HTTP Logging: true
+═══════════════════════════════════════════════════════════
+00:01 +1: All tests passed!
+exit=0

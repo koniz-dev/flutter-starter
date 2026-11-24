@@ -1,0 +1,86 @@
+# main at b4caccdb8ecddff75424f9237df0577b73a8b519
+## docs/guides/security/implementation.md, Step 2 (recipe)
+     1	#### Step 2: Override `raspServiceProvider` and start protection
+     2	
+     3	[`raspServiceProvider`](../../../lib/core/security/rasp_providers.dart) defaults to [`NoOpRaspService`](../../../lib/core/security/noop_rasp_service.dart). When you are ready to ship real RASP, override it in `createAppContainer` in `lib/main.dart` - the one container the app runs on - by adding it to the list that already holds `authModuleOverrides`:
+     4	
+     5	```dart
+     6	// lib/main.dart
+     7	// Extend the existing `show kReleaseMode` foundation import rather than
+     8	// adding a second one (duplicate_import). main.dart already imports
+     9	// rasp_providers.dart; only the adapter's import is new.
+    10	import 'package:flutter/foundation.dart'
+    11	    show TargetPlatform, defaultTargetPlatform, kIsWeb, kReleaseMode;
+    12	import 'package:flutter_starter/core/security/infrastructure/freerasp_service_impl.dart';
+    13	
+    14	// freerasp 8.2.4 ships an Android and an iOS plugin only. On web, macOS,
+    15	// Linux and Windows `Talsec.instance.start` throws MissingPluginException,
+    16	// so those builds keep the no-op service.
+    17	bool get _freeRaspSupported =>
+    18	    !kIsWeb &&
+    19	    (defaultTargetPlatform == TargetPlatform.android ||
+    20	        defaultTargetPlatform == TargetPlatform.iOS);
+    21	
+    22	ProviderContainer createAppContainer({
+    23	  List<Override> overrides = const <Override>[],
+    24	}) {
+    25	  return ProviderContainer(
+    26	    retry: _neverRetry,
+    27	    overrides: <Override>[
+    28	      ...authModuleOverrides,
+    29	      if (_freeRaspSupported)
+    30	        raspServiceProvider.overrideWithValue(FreeRaspServiceImpl()),
+    31	      ...overrides,
+    32	    ],
+    33	  );
+    34	}
+    35	```
+    36	
+    37	On web and desktop the recipe therefore never calls freeRASP: the guard keeps
+    38	`NoOpRaspService`, whose `startProtection()` does nothing. Keep the guard even
+    39	if you only ship mobile today, because `flutter run -d macos` or
+    40	`-d chrome` would otherwise land on the startup failure screen.
+    41	
+    42	`bootstrap()` already starts protection: it awaits
+    43	`container.read(raspServiceProvider).startProtection()` inside the same `try`
+    44	that routes every startup failure to `StartupFailureApp`. Do not move that
+    45	call above the `try`. `startProtection()` can throw - on an unsupported
+    46	platform, or when freeRASP rejects the `TalsecConfig` (the template's
+    47	placeholder values included) - and a throw outside the guard escapes
+    48	`bootstrap()` before `runApp`, leaving a black window. Inside it, the user gets
+    49	the failure screen and the error reaches `LoggingService`.
+    50	
+    51	Try again on that screen re-runs `bootstrap()` with a new container, and so a
+    52	new `FreeRaspServiceImpl`. freeRASP itself is a process-wide singleton, so the
+    53	adapter records a successful start in a static field: the new instance
+    54	attaches its own listener, which replaces the old one, and does not call
+    55	`Talsec.instance.start` a second time. A start that failed is attempted again.
+    56	
+    57	To act on threats, replace that call with a subscription followed by the
+    58	same start, still inside the `try`:
+    59	
+    60	```dart
+    61	final rasp = container.read(raspServiceProvider);
+    62	// Subscribe first: onThreatDetected is a broadcast stream, so a threat
+    63	// raised while startProtection() runs reaches only existing listeners.
+    64	rasp.onThreatDetected.listen((threat) {
+    65	  // Map SecurityThreat (privilegedAccess, emulator, debugger, ...) to policy
+    66	});
+    67	await rasp.startProtection();
+    68	```
+    69	
+
+## grep: platform guard and statement
+641:    show TargetPlatform, defaultTargetPlatform, kIsWeb, kReleaseMode;
+645:// Linux and Windows `Talsec.instance.start` throws MissingPluginException,
+647:bool get _freeRaspSupported =>
+648:    !kIsWeb &&
+649:    (defaultTargetPlatform == TargetPlatform.android ||
+650:        defaultTargetPlatform == TargetPlatform.iOS);
+659:      if (_freeRaspSupported)
+667:On web and desktop the recipe therefore never calls freeRASP: the guard keeps
+
+## lib/main.dart: the start is inside the try
+140:  try {
+195:    await container.read(raspServiceProvider).startProtection();
+211:  } on Object catch (error, stackTrace) {

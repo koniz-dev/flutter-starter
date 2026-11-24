@@ -1,0 +1,55 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/security/infrastructure/freerasp_service_impl_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/security/infrastructure/freerasp_service_impl_test.dart: a threat freeRASP reports reaches onThreatDetected
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/security/infrastructure/freerasp_service_impl_test.dart: a threat freeRASP reports reaches onThreatDetected
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/security/infrastructure/freerasp_service_impl_test.dart: a threat freeRASP reports reaches onThreatDetected
+00:00 +2 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/security/infrastructure/freerasp_service_impl_test.dart: a threat freeRASP reports reaches onThreatDetected
+00:00 +3 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/security/infrastructure/freerasp_service_impl_test.dart: a second service in the same process receives threats without starting freeRASP again
+00:00 +3 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/security/infrastructure/freerasp_start_retry_test.dart: a second service in the same process does not start freeRASP again [E]
+  Expected: an object with length of <1>
+    Actual: WhereIterable<String>:['start', 'start']
+     Which: has length of <2>
+  
+  package:matcher                                                         expect
+  package:flutter_test/src/widget_tester.dart 473:18                      expect
+  test/core/security/infrastructure/freerasp_start_retry_test.dart 106:5  main.<fn>
+  
+00:00 +3 -2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/security/infrastructure/freerasp_service_impl_test.dart: a second service in the same process receives threats without starting freeRASP again [E]
+  Expected: an object with length of <1>
+    Actual: WhereIterable<String>:['start', 'start']
+     Which: has length of <2>
+  
+  package:matcher                                                          expect
+  package:flutter_test/src/widget_tester.dart 473:18                       expect
+  test/core/security/infrastructure/freerasp_service_impl_test.dart 159:5  main.<fn>
+  
+00:00 +3 -2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/security/infrastructure/freerasp_service_impl_test.dart: every freeRASP detection is forwarded or deliberately ignored the wire-code table covers every Threat of the pinned freerasp
+00:00 +4 -2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/security/infrastructure/freerasp_service_impl_test.dart: every freeRASP detection is forwarded or deliberately ignored every Threat is either mapped or in the ignored set
+00:00 +5 -2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/security/infrastructure/freerasp_service_impl_test.dart: every freeRASP detection is forwarded or deliberately ignored securityThreatFor maps every Threat as documented
+00:00 +6 -2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/security/infrastructure/freerasp_service_impl_test.dart: every freeRASP detection is forwarded or deliberately ignored Threat.hooks sent by freeRASP reaches a listener
+00:00 +7 -2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/security/infrastructure/freerasp_service_impl_test.dart: every freeRASP detection is forwarded or deliberately ignored Threat.debug sent by freeRASP reaches a listener
+00:00 +8 -2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/security/infrastructure/freerasp_service_impl_test.dart: every freeRASP detection is forwarded or deliberately ignored Threat.passcode sent by freeRASP reaches a listener
+00:00 +9 -2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/security/infrastructure/freerasp_service_impl_test.dart: every freeRASP detection is forwarded or deliberately ignored Threat.deviceId sent by freeRASP reaches a listener
+00:00 +10 -2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/security/infrastructure/freerasp_service_impl_test.dart: every freeRASP detection is forwarded or deliberately ignored Threat.simulator sent by freeRASP reaches a listener
+00:00 +11 -2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/security/infrastructure/freerasp_service_impl_test.dart: every freeRASP detection is forwarded or deliberately ignored Threat.appIntegrity sent by freeRASP reaches a listener
+00:00 +12 -2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/security/infrastructure/freerasp_service_impl_test.dart: every freeRASP detection is forwarded or deliberately ignored Threat.obfuscationIssues sent by freeRASP reaches a listener
+00:00 +13 -2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/security/infrastructure/freerasp_service_impl_test.dart: every freeRASP detection is forwarded or deliberately ignored Threat.deviceBinding sent by freeRASP reaches a listener
+00:00 +14 -2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/security/infrastructure/freerasp_service_impl_test.dart: every freeRASP detection is forwarded or deliberately ignored Threat.unofficialStore sent by freeRASP reaches a listener
+00:00 +15 -2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/security/infrastructure/freerasp_service_impl_test.dart: every freeRASP detection is forwarded or deliberately ignored Threat.privilegedAccess sent by freeRASP reaches a listener
+00:00 +16 -2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/security/infrastructure/freerasp_service_impl_test.dart: every freeRASP detection is forwarded or deliberately ignored Threat.secureHardwareNotAvailable sent by freeRASP reaches a listener
+00:00 +17 -2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/security/infrastructure/freerasp_service_impl_test.dart: every freeRASP detection is forwarded or deliberately ignored Threat.systemVPN sent by freeRASP reaches a listener
+00:00 +18 -2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/security/infrastructure/freerasp_service_impl_test.dart: every freeRASP detection is forwarded or deliberately ignored Threat.devMode sent by freeRASP reaches a listener
+00:00 +19 -2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/security/infrastructure/freerasp_service_impl_test.dart: every freeRASP detection is forwarded or deliberately ignored Threat.adbEnabled sent by freeRASP reaches a listener
+00:00 +20 -2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/security/infrastructure/freerasp_service_impl_test.dart: every freeRASP detection is forwarded or deliberately ignored Threat.screenshot sent by freeRASP reaches a listener
+00:00 +21 -2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/security/infrastructure/freerasp_service_impl_test.dart: every freeRASP detection is forwarded or deliberately ignored Threat.screenRecording sent by freeRASP reaches a listener
+00:00 +22 -2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/security/infrastructure/freerasp_service_impl_test.dart: every freeRASP detection is forwarded or deliberately ignored Threat.multiInstance sent by freeRASP reaches a listener
+00:00 +23 -2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/security/infrastructure/freerasp_service_impl_test.dart: every freeRASP detection is forwarded or deliberately ignored Threat.unsecureWiFi sent by freeRASP reaches a listener
+00:00 +24 -2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/security/infrastructure/freerasp_service_impl_test.dart: every freeRASP detection is forwarded or deliberately ignored Threat.timeSpoofing sent by freeRASP reaches a listener
+00:00 +25 -2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/security/infrastructure/freerasp_service_impl_test.dart: every freeRASP detection is forwarded or deliberately ignored Threat.locationSpoofing sent by freeRASP reaches a listener
+00:00 +26 -2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/security/infrastructure/freerasp_service_impl_test.dart: every freeRASP detection is forwarded or deliberately ignored Threat.automation sent by freeRASP reaches a listener
+00:00 +27 -2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/security/infrastructure/freerasp_service_impl_test.dart: every freeRASP detection is forwarded or deliberately ignored Threat.bootloader sent by freeRASP reaches a listener
+00:00 +28 -2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/security/infrastructure/freerasp_service_impl_test.dart: every freeRASP detection is forwarded or deliberately ignored malware, delivered outside the Threat stream, is forwarded
+00:00 +29 -2: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/security/infrastructure/freerasp_service_impl_test.dart: a second service in the same process receives threats without starting freeRASP again
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/security/infrastructure/freerasp_start_retry_test.dart: a second service in the same process does not start freeRASP again
