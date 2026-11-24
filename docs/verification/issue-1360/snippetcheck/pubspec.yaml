@@ -1,0 +1,14 @@
+name: snippetcheck
+publish_to: none
+environment:
+  sdk: ^3.13.0
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_starter:
+    path: /Users/nguyenanhkiet/Playground/flutter-starter
+  provider: 6.1.5+1
+  http: 1.6.0
+dev_dependencies:
+  flutter_test:
+    sdk: flutter

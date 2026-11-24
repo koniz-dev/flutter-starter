@@ -1,0 +1,148 @@
+# Criterion 2: no snippet catches its own ServerException; Provider After is package:provider; BLoC pointer removed; Result -> Exceptions matches LoginUseCase
+# main at 411645cfbc8
+
+## 2a. ServerException in the Migration Guides section (expect: only the adapter's throw, after the try block closes)
+$ awk "/^## Migration Guides/,/^## Utilities with no sample/" docs/architecture/design-decisions.md | grep -n "try {\|} on \|} catch\|catch (e)\|throw ServerException"
+196:       try {
+199:       } on http.ClientException catch (e) {
+209:         throw ServerException(
+298:   try {
+301:   } on AuthException catch (e) {
+303:   } catch (e) {
+
+## 2b. Provider After
+#### From Riverpod to Provider
+
+1. **Replace dependencies**
+   ```yaml
+   dependencies:
+     # flutter_riverpod  # Remove
+     provider: ^6.0.0  # Add
+   ```
+
+2. **Convert providers**
+   ```dart
+   // Before (Riverpod)
+   final loginUseCaseProvider = Provider<LoginUseCase>((ref) {
+     final repository = ref.watch(authRepositoryProvider);
+     return LoginUseCase(repository);
+   });
+   
+   // After (Provider) - an entry in the MultiProvider's `providers` list
+   // (step 4), below the Provider<AuthRepository> it reads
+   ProxyProvider<AuthRepository, LoginUseCase>(
+     update: (_, repository, _) => LoginUseCase(repository),
+   ),
+   ```
+
+3. **Update widgets**
+   ```dart
+   // Before (Riverpod)
+   class LoginScreen extends ConsumerWidget {
+     @override
+     Widget build(BuildContext context, WidgetRef ref) {
+       final useCase = ref.watch(loginUseCaseProvider);
+     }
+   }
+   
+   // After (Provider)
+   class LoginScreen extends StatelessWidget {
+     @override
+     Widget build(BuildContext context) {
+       final useCase = Provider.of<LoginUseCase>(context);
+     }
+   }
+   ```
+
+4. **Update main.dart**
+   ```dart
+   // Before (Riverpod)
+   runApp(
+     const ProviderScope(
+       child: MyApp(),
+     ),
+   );
+   
+   // After (Provider)
+   runApp(
+     MultiProvider(
+       providers: [
+         Provider<AuthRepository>(create: (_) => AuthRepositoryImpl(...)),
+         ProxyProvider<AuthRepository, LoginUseCase>(
+           update: (_, repository, _) => LoginUseCase(repository),
+         ),
+       ],
+       child: const MyApp(),
+     ),
+   );
+   ```
+
+### Using Different HTTP Client
+
+## 2c. BLoC pointer
+$ grep -n "Riverpod to BLoC\|migration/README.md" docs/architecture/design-decisions.md (expect none)
+(no matches, exit 1)
+
+## 2d. Result -> Exceptions vs the real code
+$ sed -n "/^#### From Result Pattern to Exceptions/,/^2. \*\*Update UI handling/p" docs/architecture/design-decisions.md
+#### From Result Pattern to Exceptions
+
+1. **Update repositories and use cases**
+
+   The exception-to-`Failure` mapping lives in the repository, not the use
+   case: `AuthRepositoryImpl.login` catches the data source's exceptions and
+   returns a `ResultFailure`, and `LoginUseCase` passes that `Result` through.
+   So the repository contract changes first, and the use case only changes
+   its return type.
+   ```dart
+   // Before (Result Pattern)
+   // lib/features/auth/domain/repositories/auth_repository.dart
+   Future<Result<User>> login(String email, String password);
+
+   // lib/features/auth/domain/usecases/login_usecase.dart
+   Future<Result<User>> call(String email, String password) async {
+     return await repository.login(email, password);
+   }
+
+   // After (Exceptions)
+   // AuthRepository: AuthRepositoryImpl.login stops mapping to a Failure and
+   // lets the data source's AppException subtypes propagate.
+   Future<User> login(String email, String password);
+
+   // LoginUseCase
+   Future<User> call(String email, String password) async {
+     return await repository.login(email, password);
+   }
+   ```
+
+2. **Update UI handling**
+$ cat lib/features/auth/domain/usecases/login_usecase.dart
+import 'package:flutter_starter/core/utils/result.dart';
+import 'package:flutter_starter/features/auth/domain/entities/user.dart';
+import 'package:flutter_starter/features/auth/domain/repositories/auth_repository.dart';
+
+/// Use case for user login
+class LoginUseCase {
+  /// Creates a [LoginUseCase] with the given [repository]
+  LoginUseCase(this.repository);
+
+  /// Authentication repository for login operations
+  final AuthRepository repository;
+
+  /// Executes login with [email] and [password]
+  Future<Result<User>> call(String email, String password) async {
+    return await repository.login(email, password);
+  }
+}
+$ grep -n "login(" lib/features/auth/domain/repositories/auth_repository.dart
+7:  Future<Result<User>> login(String email, String password);
+$ grep -n "on AuthException catch\|return Success(user)" within Migration Guides (expect none)
+301:   } on AuthException catch (e) {
+
+Reading 2a: lines 196-209 are the http adapter. Its try (196) closes at the
+`on http.ClientException` clause (199), which only rethrows a transport
+failure; `throw ServerException` (209) sits after that block, so nothing
+catches it inside the snippet. Lines 298-303 are the Result -> Exceptions
+"Update UI handling" After: it catches AuthException and others from the use
+case and throws nothing. snippet-test.log runs the adapter: a 500 and a 404
+surface as ServerException, not NetworkException.

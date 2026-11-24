@@ -1,0 +1,10 @@
+# Snippets extracted from docs/architecture/design-decisions.md at main 411645cfbc8 into a scratch package
+# that depends on flutter_starter by path plus provider 6.1.5+1 and http 1.6.0.
+# lib/http_network_client.dart: the adapter code block, verbatim (3-space list indent removed).
+# lib/provider_snippet.dart: step 4 MultiProvider block, verbatim except AuthRepositoryImpl(...) -> _repository().
+# lib/result_to_exceptions.dart: the Result -> Exceptions 'After' contract and use case.
+Flutter 3.47.0 • channel stable • https://github.com/flutter/flutter.git
+$ dart analyze lib
+Analyzing lib...
+No issues found!
+exit=0
