@@ -3,6 +3,7 @@
 // only while every file that uses the demo is one the steps delete or edit;
 // a test that imports the demo from anywhere else breaks analyze after the
 // removal, and an unread hasBackend fails app_config_getters_used_test.
+// A link to the section the steps delete fails doc_links_test the same way.
 
 import 'dart:io';
 
@@ -28,12 +29,32 @@ const Map<String, String> _edited = {
   'lib/core/config/app_config.dart': 'app_config.dart',
   'docs/api/features/auth/providers.md': 'docs/api/features/auth/providers.md',
   'docs/guides/configuration.md': 'docs/guides/configuration.md',
+  'README.md': 'README.md',
   // The section itself, which step 3 deletes.
   _guide: _guide,
 };
 
+/// The anchor of the section the steps delete.
+const _anchor = '#signing-in-before-you-have-a-backend';
+
 /// The terms of the guide's own `git grep`.
-final _usesDemo = RegExp('DemoAuth|DemoSignInCard|auth/demo|hasBackend');
+final _usesDemo = RegExp(
+  'DemoAuth|DemoSignInCard|auth/demo|hasBackend|${_anchor.substring(1)}',
+);
+
+/// Tracked files, the existing ones only: a tree the strip tool has run on
+/// still lists the files it deleted.
+List<String> _trackedFiles(List<String> pathspecs) {
+  final result = Process.runSync('git', ['ls-files', ...pathspecs]);
+  expect(result.exitCode, 0, reason: '${result.stderr}');
+  return [
+    for (final path in (result.stdout as String).trim().split('\n'))
+      if (path.isNotEmpty && File(path).existsSync()) path,
+  ];
+}
+
+bool _deletedOrEdited(String path) =>
+    _deleted.any(path.startsWith) || _edited.containsKey(path);
 
 void main() {
   final guide = File(_guide).readAsStringSync();
@@ -50,24 +71,31 @@ void main() {
   test('only the files the steps delete or edit use the demo', () {
     // Tracked files only: CI generates a git-ignored coverage helper that
     // imports every library, the demo included.
-    final tracked = Process.runSync('git', [
-      'ls-files',
+    final strays = <String>[];
+    for (final path in _trackedFiles([
       'lib',
       'test',
       'integration_test',
       'docs',
-    ]);
-    expect(tracked.exitCode, 0, reason: '${tracked.stderr}');
-    final strays = <String>[];
-    for (final path in (tracked.stdout as String).trim().split('\n')) {
+      'README.md',
+    ])) {
       if (!path.endsWith('.dart') && !path.endsWith('.md')) continue;
-      // A tree the strip tool has run on still lists the files it deleted.
-      if (!File(path).existsSync()) continue;
-      if (_deleted.any(path.startsWith) || _edited.containsKey(path)) {
-        continue;
-      }
+      if (_deletedOrEdited(path)) continue;
       if (_usesDemo.hasMatch(File(path).readAsStringSync())) strays.add(path);
     }
+    expect(strays, isEmpty, reason: 'delete or edit these in $_guide too');
+  });
+
+  test('only the files the steps delete or edit link to the section', () {
+    // Every markdown file in the repository, not only the paths the guide's
+    // git grep covers: a link from anywhere else dangles once the section
+    // is gone.
+    final strays = [
+      for (final path in _trackedFiles(['*.md']))
+        if (!_deletedOrEdited(path) &&
+            File(path).readAsStringSync().contains(_anchor))
+          path,
+    ];
     expect(strays, isEmpty, reason: 'delete or edit these in $_guide too');
   });
 }
