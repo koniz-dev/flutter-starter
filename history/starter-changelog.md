@@ -29,6 +29,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - [The demo sign-in removal steps leave `flutter test` green](https://github.com/koniz-dev/flutter-starter/issues/1367): the steps in `docs/guides/onboarding/getting-started.md` delete the "Signing In Before You Have a Backend" section, but `README.md` links to it, so after following them `test/docs/doc_links_test.dart` and `dart run tool/check_docs.dart` failed on a missing anchor. Step 2's `git grep` now also searches `README.md` for the section's anchor and names that link, and `test/tooling/demo_removal_steps_test.dart` fails if any markdown file outside the deleted or edited set links to the section. If you already removed the demo, delete or reword the "how to remove it" link in your `README.md`.
 
+- [A failed legacy-key read no longer advances the storage schema](https://github.com/koniz-dev/flutter-starter/issues/1369): `MigrationV1ToV2` read its legacy keys with `getString` / `containsKey`, which on `SecureStorageService` answer `null` / `false` when the Keychain or Keystore read throws (for example, a Keystore key lost after an Android backup restore). An unreadable value was taken as "nothing to migrate", the stamp moved to v2, and the value was never migrated. On a storage implementing `IStrictStringRead` the migration now reads through `getStringOrThrow` and throws `MigrationException`, so startup reports the failure with the stamp still at v1 and the next launch retries. `docs/guides/features/storage-migration-guide.md` now teaches the same strict reads (`readLegacy` / `hasLegacy`). If you wrote your own migrations from the old guide and run them on secure storage, read their legacy keys the same way.
+
 ## [5.0.3] - 2026-11-24
 
 ### Fixed
