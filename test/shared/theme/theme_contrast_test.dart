@@ -60,6 +60,17 @@ Color _resolve(WidgetStateProperty<Color?>? property, String what) {
   return color;
 }
 
+/// The side colour of a text-field border from an `InputDecorationTheme`.
+///
+/// Throws, like [_resolve], when the border is unset, so a theme that drops
+/// it cannot pass by checking nothing.
+Color _borderColor(InputBorder? border, String what) {
+  if (border == null) {
+    throw StateError('$what is unset, so its contrast cannot be checked');
+  }
+  return border.borderSide.color;
+}
+
 void main() {
   final light = AppTheme.lightTheme;
   final dark = AppTheme.darkTheme;
@@ -369,6 +380,88 @@ void main() {
       AppColors.success,
       dark.colorScheme.surface,
       ratio: 3.25,
+      minimum: AccessibilityConstants.minContrastRatioLarge,
+    ),
+    // An unfilled text field's unfocused outline is its only visible edge,
+    // so it is held to 3:1 on every surface a field sits on, in both themes.
+    _Pair(
+      'light text-field border on the light background',
+      _borderColor(
+        light.inputDecorationTheme.border,
+        'light border',
+      ),
+      light.scaffoldBackgroundColor,
+      ratio: 4.45,
+      minimum: AccessibilityConstants.minContrastRatioLarge,
+    ),
+    _Pair(
+      'light text-field border on the light surface',
+      _borderColor(
+        light.inputDecorationTheme.border,
+        'light border',
+      ),
+      light.colorScheme.surface,
+      ratio: 4.69,
+      minimum: AccessibilityConstants.minContrastRatioLarge,
+    ),
+    _Pair(
+      'light text-field enabledBorder on the light background',
+      _borderColor(
+        light.inputDecorationTheme.enabledBorder,
+        'light enabledBorder',
+      ),
+      light.scaffoldBackgroundColor,
+      ratio: 4.45,
+      minimum: AccessibilityConstants.minContrastRatioLarge,
+    ),
+    _Pair(
+      'light text-field enabledBorder on the light surface',
+      _borderColor(
+        light.inputDecorationTheme.enabledBorder,
+        'light enabledBorder',
+      ),
+      light.colorScheme.surface,
+      ratio: 4.69,
+      minimum: AccessibilityConstants.minContrastRatioLarge,
+    ),
+    _Pair(
+      'dark text-field border on the dark background',
+      _borderColor(
+        dark.inputDecorationTheme.border,
+        'dark border',
+      ),
+      dark.scaffoldBackgroundColor,
+      ratio: 4,
+      minimum: AccessibilityConstants.minContrastRatioLarge,
+    ),
+    _Pair(
+      'dark text-field border on the dark surface',
+      _borderColor(
+        dark.inputDecorationTheme.border,
+        'dark border',
+      ),
+      dark.colorScheme.surface,
+      ratio: 3.55,
+      minimum: AccessibilityConstants.minContrastRatioLarge,
+    ),
+    _Pair(
+      'dark text-field enabledBorder on the dark background',
+      _borderColor(
+        dark.inputDecorationTheme.enabledBorder,
+        'dark enabledBorder',
+      ),
+      dark.scaffoldBackgroundColor,
+      ratio: 4,
+      minimum: AccessibilityConstants.minContrastRatioLarge,
+    ),
+    _Pair(
+      'dark text-field enabledBorder on the dark surface',
+      _borderColor(
+        dark.inputDecorationTheme.enabledBorder,
+        'dark enabledBorder',
+      ),
+      dark.colorScheme.surface,
+      ratio: 3.55,
       minimum: AccessibilityConstants.minContrastRatioLarge,
     ),
   ];
