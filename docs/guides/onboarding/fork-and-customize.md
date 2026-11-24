@@ -67,8 +67,8 @@ in section 2, substituting your current identifiers for the template defaults.
      | xargs -0 perl -pi -e "s#package:flutter_starter/#package:${NEW}/#g"
    ```
 3. Run `flutter pub get`, then re-sort the imports - your package name sorts
-   differently from `flutter_starter`, so roughly 200 files gain a
-   `directives_ordering` info - and analyze:
+   differently from `flutter_starter`, so imports may gain a
+   `directives_ordering` info. Re-sort them and analyze:
 
    ```bash
    flutter pub get

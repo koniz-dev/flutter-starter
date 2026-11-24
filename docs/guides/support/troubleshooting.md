@@ -64,8 +64,7 @@ flutter pub run build_runner build --delete-conflicting-outputs
 1. Ensure `.env` file exists in project root
 2. Pass it to the build: `flutter run --dart-define-from-file=.env`. `.env` is deliberately **not** in the `assets:` list - an asset ships in every release artifact - so it is not read without that flag. See [Never ship a secret in the bundle](../configuration.md#never-ship-a-secret-in-the-bundle)
 3. Check the key exists in `DartDefines.values` (`lib/core/config/dart_defines.dart`): a key missing there resolves to empty on every platform, Flutter web included. See [What works where](../configuration.md#what-works-where)
-4. Verify `EnvConfig.load()` is called in `main()` before `runApp()`
-5. Do a full restart (not hot reload) after changing `.env`; dart-defines need a rebuild
+4. Do a full restart (not hot reload) after changing `.env`; dart-defines need a rebuild
 
 **Debug:**
 ```dart
