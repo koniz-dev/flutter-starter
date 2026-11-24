@@ -634,8 +634,20 @@ stores). The class **`FreeRaspServiceImpl`** already implements
 
 ```dart
 // lib/main.dart
+// Extend the existing `show kReleaseMode` foundation import rather than
+// adding a second one (duplicate_import). main.dart already imports
+// rasp_providers.dart; only the adapter's import is new.
+import 'package:flutter/foundation.dart'
+    show TargetPlatform, defaultTargetPlatform, kIsWeb, kReleaseMode;
 import 'package:flutter_starter/core/security/infrastructure/freerasp_service_impl.dart';
-import 'package:flutter_starter/core/security/rasp_providers.dart';
+
+// freerasp 8.2.4 ships an Android and an iOS plugin only. On web, macOS,
+// Linux and Windows `Talsec.instance.start` throws MissingPluginException,
+// so those builds keep the no-op service.
+bool get _freeRaspSupported =>
+    !kIsWeb &&
+    (defaultTargetPlatform == TargetPlatform.android ||
+        defaultTargetPlatform == TargetPlatform.iOS);
 
 ProviderContainer createAppContainer({
   List<Override> overrides = const <Override>[],
@@ -644,14 +656,36 @@ ProviderContainer createAppContainer({
     retry: _neverRetry,
     overrides: <Override>[
       ...authModuleOverrides,
-      raspServiceProvider.overrideWithValue(FreeRaspServiceImpl()),
+      if (_freeRaspSupported)
+        raspServiceProvider.overrideWithValue(FreeRaspServiceImpl()),
       ...overrides,
     ],
   );
 }
 ```
 
-Then start protection in `bootstrap()`, right after `final container = createContainer();`:
+On web and desktop the recipe therefore never calls freeRASP: the guard keeps
+`NoOpRaspService`, whose `startProtection()` does nothing. Keep the guard even
+if you only ship mobile today, because `flutter run -d macos` or
+`-d chrome` would otherwise land on the startup failure screen.
+
+`bootstrap()` already starts protection: it awaits
+`container.read(raspServiceProvider).startProtection()` inside the same `try`
+that routes every startup failure to `StartupFailureApp`. Do not move that
+call above the `try`. `startProtection()` can throw - on an unsupported
+platform, or when freeRASP rejects the `TalsecConfig` (the template's
+placeholder values included) - and a throw outside the guard escapes
+`bootstrap()` before `runApp`, leaving a black window. Inside it, the user gets
+the failure screen and the error reaches `LoggingService`.
+
+Try again on that screen re-runs `bootstrap()` with a new container, and so a
+new `FreeRaspServiceImpl`. freeRASP itself is a process-wide singleton, so the
+adapter records a successful start in a static field: the new instance
+attaches its own listener, which replaces the old one, and does not call
+`Talsec.instance.start` a second time. A start that failed is attempted again.
+
+To act on threats, replace that call with a subscription followed by the
+same start, still inside the `try`:
 
 ```dart
 final rasp = container.read(raspServiceProvider);

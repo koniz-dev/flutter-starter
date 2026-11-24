@@ -33,6 +33,26 @@ class FreeRaspServiceImpl implements IRaspService {
   /// started once; cleared when it settles, so a failed start can be retried.
   Future<void>? _starting;
 
+  /// Whether `Talsec.instance.start` has succeeded in this process.
+  ///
+  /// Static, because `Talsec.instance` is a process-wide singleton while this
+  /// service is not: Try again on the startup failure screen re-runs
+  /// bootstrap with a fresh container, and so a fresh service. That service
+  /// attaches its own listener, so its [onThreatDetected] receives threats,
+  /// but must not start freeRASP a second time.
+  static bool _nativeStarted = false;
+
+  /// The native start in flight, shared across instances.
+  static Future<void>? _nativeStarting;
+
+  /// Forgets that freeRASP was started, so each test starts from a fresh
+  /// process. Never call this from app code.
+  @visibleForTesting
+  static void debugForgetNativeStart() {
+    _nativeStarted = false;
+    _nativeStarting = null;
+  }
+
   @override
   Stream<SecurityThreat> get onThreatDetected => _threatController.stream;
 
@@ -128,7 +148,12 @@ class FreeRaspServiceImpl implements IRaspService {
       onMalware: (_) => _threatController.add(SecurityThreat.malware),
     );
 
+    // attachListener replaces any listener an earlier instance attached.
     await Talsec.instance.attachListener(callback);
-    await Talsec.instance.start(config);
+    if (_nativeStarted) return;
+    await (_nativeStarting ??= Talsec.instance
+        .start(config)
+        .then((_) => _nativeStarted = true)
+        .whenComplete(() => _nativeStarting = null));
   }
 }

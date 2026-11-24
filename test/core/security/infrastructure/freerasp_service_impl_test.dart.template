@@ -116,6 +116,7 @@ void main() {
         MockStreamHandler.inline(onListen: (_, sink) => threatSink = sink),
       );
     addTearDown(() {
+      FreeRaspServiceImpl.debugForgetNativeStart();
       messenger
         ..setMockMethodCallHandler(methods, null)
         ..setMockStreamHandler(events, null);
@@ -138,6 +139,25 @@ void main() {
     await pumpEventQueue();
 
     expect(threats, [SecurityThreat.debugger]);
+  });
+
+  test('a second service in the same process receives threats without '
+      'starting freeRASP again', () async {
+    // Try again on the startup failure screen builds a new service while
+    // freeRASP is already running: it must take over the listener.
+    await startService();
+    final retried = FreeRaspServiceImpl();
+    final retriedThreats = <SecurityThreat>[];
+    final subscription = retried.onThreatDetected.listen(retriedThreats.add);
+    addTearDown(subscription.cancel);
+
+    await retried.startProtection();
+    await pumpEventQueue();
+    threatSink!.success(_wireCodes[Threat.debug]);
+    await pumpEventQueue();
+
+    expect(methodCalls.where((m) => m == 'start'), hasLength(1));
+    expect(retriedThreats, [SecurityThreat.debugger]);
   });
 
   group('every freeRASP detection is forwarded or deliberately ignored', () {

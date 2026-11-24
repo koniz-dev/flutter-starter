@@ -8,6 +8,8 @@ import 'package:flutter_starter/core/di/providers.dart';
 import 'package:flutter_starter/core/localization/localization_providers.dart';
 import 'package:flutter_starter/core/logging/error_reporter_providers.dart';
 import 'package:flutter_starter/core/logging/i_error_reporter.dart';
+import 'package:flutter_starter/core/security/i_rasp_service.dart';
+import 'package:flutter_starter/core/security/rasp_providers.dart';
 import 'package:flutter_starter/core/startup/startup_failure_app.dart';
 import 'package:flutter_starter/core/storage/migration/migration_executor.dart';
 import 'package:flutter_starter/core/storage/storage_version.dart';
@@ -46,6 +48,22 @@ class _RecordingReporter implements IErrorReporter {
     Map<String, dynamic>? context,
   }) async {
     reports.add((message: message, error: error, stack: stackTrace));
+  }
+}
+
+/// A RASP vendor SDK that cannot start, as freeRASP cannot on a platform its
+/// plugin does not support.
+class _ThrowingRaspService implements IRaspService {
+  int starts = 0;
+
+  @override
+  Stream<SecurityThreat> get onThreatDetected =>
+      const Stream<SecurityThreat>.empty();
+
+  @override
+  Future<void> startProtection() async {
+    starts++;
+    throw MissingPluginException('No implementation found for method start');
   }
 }
 
@@ -412,6 +430,28 @@ void main() {
             'the second failure route reaches the same screen and names its '
             'own class, so main() is not rendering one canned error',
       );
+    });
+
+    testWidgets('a RASP service whose startProtection() throws boots into '
+        'the failure screen', (tester) async {
+      // Storage is healthy, so the RASP start is the only thing that fails:
+      // freeRASP throws MissingPluginException on a platform its plugin does
+      // not support, and rejects a configuration it does not accept.
+      installSecureBackend(<String, String>{});
+      final rasp = _ThrowingRaspService();
+
+      await bootRealMain(
+        tester,
+        entry: () => app.bootstrap(
+          createContainer: () => app.createAppContainer(
+            overrides: [raspServiceProvider.overrideWithValue(rasp)],
+          ),
+        ),
+      );
+
+      expect(rasp.starts, 1);
+      expect(find.byKey(StartupFailureApp.bodyKey), findsOneWidget);
+      expect(find.textContaining('MissingPluginException'), findsOneWidget);
     });
   });
 
