@@ -1,0 +1,9 @@
+# flutter analyze of the guide's dart fences, assembled by assemble_guide.py
+Analyzing scratch_guide_snippets_test.dart...                   
+No issues found! (ran in 1.1s)
+
+# flutter test
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/scratch_guide_snippets_test.dart
+00:00 +0: guide example: a failed read throws and keeps the stamp at 1, a healthy rerun migrates
+00:00 +1: guide helpers: hasLegacy throws on a failed read
+00:00 +2: All tests passed!

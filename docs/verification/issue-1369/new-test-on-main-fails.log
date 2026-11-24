@@ -1,0 +1,91 @@
+# test/core/storage/migration/migrations/migration_legacy_read_failure_test.dart against origin/main (c2c2886d8a8) lib/core/storage/migration/migrations/migration_v1_to_v2.dart
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_legacy_read_failure_test.dart
+00:00 +0: a failed read of user_name throws MigrationException and keeps the stamp at 1
+00:00 +0 -1: a failed read of user_name throws MigrationException and keeps the stamp at 1 [E]
+  Expected: throws <Instance of 'MigrationException'> with `originalError`: <Instance of 'PlatformException'>
+    Actual: <Instance of 'Future<void>'>
+     Which: emitted <null>
+  
+  package:matcher                                                                       expectLater
+  package:flutter_test/src/widget_tester.dart 507:8                                     expectLater
+  test/core/storage/migration/migrations/migration_legacy_read_failure_test.dart 84:13  main.<fn>
+  
+00:00 +0 -1: a failed read of theme throws MigrationException and keeps the stamp at 1
+00:00 +0 -2: a failed read of theme throws MigrationException and keeps the stamp at 1 [E]
+  Expected: throws <Instance of 'MigrationException'> with `originalError`: <Instance of 'PlatformException'>
+    Actual: <Instance of 'Future<void>'>
+     Which: emitted <null>
+  
+  package:matcher                                                                       expectLater
+  package:flutter_test/src/widget_tester.dart 507:8                                     expectLater
+  test/core/storage/migration/migrations/migration_legacy_read_failure_test.dart 84:13  main.<fn>
+  
+00:00 +0 -2: a failed read of user_tags throws MigrationException and keeps the stamp at 1
+00:00 +0 -3: a failed read of user_tags throws MigrationException and keeps the stamp at 1 [E]
+  Expected: throws <Instance of 'MigrationException'> with `originalError`: <Instance of 'PlatformException'>
+    Actual: <Instance of 'Future<void>'>
+     Which: emitted <null>
+  
+  package:matcher                                                                       expectLater
+  package:flutter_test/src/widget_tester.dart 507:8                                     expectLater
+  test/core/storage/migration/migrations/migration_legacy_read_failure_test.dart 84:13  main.<fn>
+  
+00:00 +0 -3: a failed read of sync_interval_minutes throws MigrationException and keeps the stamp at 1
+00:00 +0 -4: a failed read of sync_interval_minutes throws MigrationException and keeps the stamp at 1 [E]
+  Expected: throws <Instance of 'MigrationException'> with `originalError`: <Instance of 'PlatformException'>
+    Actual: <Instance of 'Future<void>'>
+     Which: emitted <null>
+  
+  package:matcher                                                                       expectLater
+  package:flutter_test/src/widget_tester.dart 507:8                                     expectLater
+  test/core/storage/migration/migrations/migration_legacy_read_failure_test.dart 84:13  main.<fn>
+  
+00:00 +0 -4: a failed read of old_setting_1 throws MigrationException and keeps the stamp at 1
+00:00 +0 -5: a failed read of old_setting_1 throws MigrationException and keeps the stamp at 1 [E]
+  Expected: throws <Instance of 'MigrationException'> with `originalError`: <Instance of 'PlatformException'>
+    Actual: <Instance of 'Future<void>'>
+     Which: emitted <null>
+  
+  package:matcher                                                                       expectLater
+  package:flutter_test/src/widget_tester.dart 507:8                                     expectLater
+  test/core/storage/migration/migrations/migration_legacy_read_failure_test.dart 84:13  main.<fn>
+  
+00:00 +0 -5: a failed read of user_data throws MigrationException and keeps the stamp at 1
+00:00 +0 -6: a failed read of user_data throws MigrationException and keeps the stamp at 1 [E]
+  Expected: throws <Instance of 'MigrationException'> with `originalError`: <Instance of 'PlatformException'>
+    Actual: <Instance of 'Future<void>'>
+     Which: emitted <null>
+  
+  package:matcher                                                                       expectLater
+  package:flutter_test/src/widget_tester.dart 507:8                                     expectLater
+  test/core/storage/migration/migrations/migration_legacy_read_failure_test.dart 84:13  main.<fn>
+  
+00:00 +0 -6: through the executor, a failed user_name read leaves the stamp at 1 and the legacy value unmigrated
+00:00 +0 -7: through the executor, a failed user_name read leaves the stamp at 1 and the legacy value unmigrated [E]
+  Expected: throws <Instance of 'MigrationExecutionException'>
+    Actual: <Instance of 'Future<int>'>
+     Which: emitted <2>
+  
+  package:matcher                                                                        expectLater
+  package:flutter_test/src/widget_tester.dart 507:8                                      expectLater
+  test/core/storage/migration/migrations/migration_legacy_read_failure_test.dart 105:11  main.<fn>
+  
+00:00 +0 -7: after a failed read leaves the stamp at 1, a healthy rerun reaches 2 and migrates the data once
+00:00 +0 -8: after a failed read leaves the stamp at 1, a healthy rerun reaches 2 and migrates the data once [E]
+  Expected: throws <Instance of 'MigrationException'>
+    Actual: <Instance of 'Future<void>'>
+     Which: emitted <null>
+  
+  package:matcher                                                                        expectLater
+  package:flutter_test/src/widget_tester.dart 507:8                                      expectLater
+  test/core/storage/migration/migrations/migration_legacy_read_failure_test.dart 122:11  main.<fn>
+  
+00:00 +0 -8: control: with every read working, the migration advances to 2
+00:00 +1 -8: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_legacy_read_failure_test.dart: a failed read of old_setting_1 throws MigrationException and keeps the stamp at 1
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_legacy_read_failure_test.dart: a failed read of sync_interval_minutes throws MigrationException and keeps the stamp at 1
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_legacy_read_failure_test.dart: a failed read of theme throws MigrationException and keeps the stamp at 1
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_legacy_read_failure_test.dart: a failed read of user_data throws MigrationException and keeps the stamp at 1
+  ... and 4 more
