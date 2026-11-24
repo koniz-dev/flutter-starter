@@ -23,6 +23,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - [The language dialog scrolls in phone landscape](https://github.com/koniz-dev/flutter-starter/issues/1364): the dialogs opened by `LanguageSwitcher` and `LanguageSwitcherMenuItem` held their four locale tiles in a non-scrolling `Column`, so at 844x390 or 800x360 they overflowed even at the default text size and clipped the last locales. The list now scrolls inside the dialog, with the title and Cancel pinned. If you added locales or copied the dialog, it now has room for them.
 
+- [The setup brick keeps MainActivity for the template's own id](https://github.com/koniz-dev/flutter-starter/issues/1365): with `application_id` set to `com.example.flutter_starter`, an id under it such as `com.example.flutter_starter.dev`, or (on macOS or Windows) a case variant such as `com.Example.flutter_starter`, `mason make flutter_starter_setup` deleted `MainActivity.kt` and the Patrol `MainActivityTest.java` while logging that it moved them, leaving the Android app with no launcher activity. Both now end up in the id's package directory. A `.DS_Store` left by Finder in the template package no longer keeps the emptied `com/example` tree. If you ran the brick with one of those ids, restore both files from the template into `android/app/src/main/kotlin/<id path>/` and `android/app/src/androidTest/java/<id path>/` and set their `package` line to your id.
+
 ## [5.0.3] - 2026-11-24
 
 ### Fixed
