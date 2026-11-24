@@ -1,0 +1,44 @@
+[
+  {
+    "issue": 1341,
+    "state": "closed",
+    "closed_at": "2026-11-18T15:28:07Z",
+    "evidence": "https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1341/verification.md"
+  },
+  {
+    "issue": 1342,
+    "state": "closed",
+    "closed_at": "2026-11-18T15:55:44Z",
+    "evidence": "https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1342/verification.md"
+  },
+  {
+    "issue": 1343,
+    "state": "closed",
+    "closed_at": "2026-11-24T05:17:44Z",
+    "evidence": "https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1343/verification.md"
+  },
+  {
+    "issue": 1345,
+    "state": "closed",
+    "closed_at": "2026-11-18T16:13:33Z",
+    "evidence": "https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1345/verification.md"
+  },
+  {
+    "issue": 1346,
+    "state": "closed",
+    "closed_at": "2026-11-18T16:30:18Z",
+    "evidence": "https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1346/verification.md"
+  },
+  {
+    "issue": 1347,
+    "state": "closed",
+    "closed_at": "2026-11-24T05:03:07Z",
+    "evidence": "https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1347/verification.md"
+  },
+  {
+    "issue": 1348,
+    "state": "closed",
+    "closed_at": "2026-11-24T05:15:29Z",
+    "evidence": "https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1348/verification.md"
+  }
+]

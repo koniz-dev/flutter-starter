@@ -1,0 +1,49 @@
+{
+  "release": {
+    "url": "https://api.github.com/repos/koniz-dev/flutter-starter/releases/456346223",
+    "assets_url": "https://api.github.com/repos/koniz-dev/flutter-starter/releases/456346223/assets",
+    "upload_url": "https://uploads.github.com/repos/koniz-dev/flutter-starter/releases/456346223/assets{?name,label}",
+    "html_url": "https://github.com/koniz-dev/flutter-starter/releases/tag/v5.0.3",
+    "id": 456346223,
+    "author": {
+      "login": "koniz-dev",
+      "id": 84920219,
+      "node_id": "MDQ6VXNlcjg0OTIwMjE5",
+      "avatar_url": "https://avatars.githubusercontent.com/u/84920219?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/koniz-dev",
+      "html_url": "https://github.com/koniz-dev",
+      "followers_url": "https://api.github.com/users/koniz-dev/followers",
+      "following_url": "https://api.github.com/users/koniz-dev/following{/other_user}",
+      "gists_url": "https://api.github.com/users/koniz-dev/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/koniz-dev/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/koniz-dev/subscriptions",
+      "organizations_url": "https://api.github.com/users/koniz-dev/orgs",
+      "repos_url": "https://api.github.com/users/koniz-dev/repos",
+      "events_url": "https://api.github.com/users/koniz-dev/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/koniz-dev/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "node_id": "RE_kwDOQVGyw84bM0pv",
+    "tag_name": "v5.0.3",
+    "target_commitish": "f5468e97a2ab85ef4502d753fd721d4e1fb16e36",
+    "name": "v5.0.3",
+    "draft": false,
+    "immutable": false,
+    "prerelease": false,
+    "created_at": "2026-11-24T05:28:54Z",
+    "updated_at": "2026-11-24T05:33:00Z",
+    "published_at": "2026-11-24T05:33:00Z",
+    "assets": [],
+    "tarball_url": "https://api.github.com/repos/koniz-dev/flutter-starter/tarball/v5.0.3",
+    "zipball_url": "https://api.github.com/repos/koniz-dev/flutter-starter/zipball/v5.0.3",
+    "body": "\n### Fixed\n\n- [Correct rename/configuration guidance](https://github.com/koniz-dev/flutter-starter/issues/1348): remove the stale count of imports needing sorting after rename and the misleading suggestion to add the existing EnvConfig.load call when configuration is supplied through build defines.\n\n- [Finish release and hook audit findings](https://github.com/koniz-dev/flutter-starter/issues/1347): release formatting fails before tests or mutations, changelog headings strip version comments, tag/deletion-only pushes skip tests while branch pushes test the working tree, and docs state PowerShell7+ plus whole-repository pre-commit export costs. Part of the [November audit checklist](https://github.com/koniz-dev/flutter-starter/issues/1343).\n\n- [Prevent editing a pending task snapshot](https://github.com/koniz-dev/flutter-starter/issues/1346): disable the Edit menu item while that task is being mutated, so a title edit opened after a pending toggle completes keeps the updated completion state.\n\n- [Prove auth screen disposal and identify autofill usernames](https://github.com/koniz-dev/flutter-starter/issues/1345): login/register email fields advertise username before email for credential pairing. Pending-submit navigation tests verify the old screen is disposed before completing the request, and detect removal of either mounted guard.\n\n- [Remove Mason through the strip tool](https://github.com/koniz-dev/flutter-starter/issues/1342): onboarding instructions name --remove-bricks and explain that deleting bricks/mason.yaml by hand leaves broken test imports as well as documentation links; regression guards keep this warning in place.\n\n- [Clarify release TLS configuration](https://github.com/koniz-dev/flutter-starter/issues/1341): document that direct API and realtime TLS handshakes in staging/production release use the default or pinned context, and explain where to load private CAs and client certificates instead of relying on HttpOverrides.\n"
+  },
+  "resolved_tag": {
+    "sha": "f5468e97a2ab85ef4502d753fd721d4e1fb16e36",
+    "type": "commit",
+    "url": "https://api.github.com/repos/koniz-dev/flutter-starter/git/commits/f5468e97a2ab85ef4502d753fd721d4e1fb16e36"
+  }
+}

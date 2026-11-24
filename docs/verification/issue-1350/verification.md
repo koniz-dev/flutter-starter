@@ -1,0 +1,11 @@
+Verified in PR #1357.
+
+| Acceptance criterion | Result and artifact |
+|---|---|
+| All delivery audit issues are closed with committed evidence | PASS — [prerequisites.json](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1350/prerequisites.json). Fresh API confirms prerequisite closures and child verification links; only this release tracker remained open before the marker change. |
+| Marker PR passes actual checks and final candidate has clean host gates and a web release build | PASS — [web-build-manifest.json](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1350/web-build-manifest.json). Host4733/14, all7 final-head checks pass; docs-only Quality806/2. Exact merged main passes18-test G2 audit and web release build; SDK/output hashes and clean source recorded. Build uses a throwaway HTTPS backend, no live-backend/store-signing assurance. |
+| Published v5.0.3 tag/release and downloadable archive point to the exact verified main commit | PASS — [source-archive-manifest.json](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1350/source-archive-manifest.json). Official publisher dry-run and publication complete. Live API verifies latest published v5.0.3 and tag targetf5468e97a2ab85ef4502d753fd721d4e1fb16e36. Downloaded tag archive matches all980 git-archive files and executable modes, release marker and notes match; metadata recorded before closure. |
+
+Format, analyzer and full suite passed: [format.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1350/format.log), [analyze.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1350/analyze.log), [tests.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1350/tests.log). All actual PR checks passed. The accepted source tree is identical to merged main: [tree-parity.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1350/tree-parity.log).
+
+Self-QA inspected the named artifacts, source assertions, refs and status labels before closing. No screenshots were collected (`--no-goldens`); no criterion rests on standing goldens or device/live-backend/store assurance.

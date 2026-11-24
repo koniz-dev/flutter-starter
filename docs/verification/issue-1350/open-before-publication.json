@@ -1,0 +1,21 @@
+{
+  "open_issues": [
+    {
+      "number": 1350,
+      "state": "open",
+      "assignees": [
+        "koniz-dev"
+      ],
+      "labels": [
+        "type:task",
+        "epic:docs",
+        "priority:P2",
+        "status:in-progress"
+      ]
+    }
+  ],
+  "excluded_pull_requests": [
+    1355,
+    1354
+  ]
+}

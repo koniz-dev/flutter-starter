@@ -1,0 +1,13 @@
+{
+  "commit": "f5468e97a2ab85ef4502d753fd721d4e1fb16e36",
+  "tree": "0d02c3e3aaf432ed0f25cb75f2a855c89270fc6d",
+  "reference": "f5468e97a2ab85ef4502d753fd721d4e1fb16e36",
+  "release_url": null,
+  "download_url": "https://api.github.com/repos/koniz-dev/flutter-starter/zipball/f5468e97a2ab85ef4502d753fd721d4e1fb16e36",
+  "archive_sha256": "c05320fc643e40076217dd9d402a873e46cc3a4ab2ce82535f8edc7025b34284",
+  "archive_bytes": 2259258,
+  "source_files_verified": 980,
+  "content_matches_git_archive": true,
+  "executable_modes_verified": true,
+  "starter_marker": "v5.0.3"
+}

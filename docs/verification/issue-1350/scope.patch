@@ -1,0 +1,13 @@
+diff --git a/docs/guides/migration/upgrading-this-starter.md b/docs/guides/migration/upgrading-this-starter.md
+index 5ee829949f0..cb05dd18e96 100644
+--- a/docs/guides/migration/upgrading-this-starter.md
++++ b/docs/guides/migration/upgrading-this-starter.md
+@@ -3,7 +3,7 @@
+ This guide helps you upgrade your Flutter starter project to newer versions and
+ handle breaking changes.
+ 
+-**Starter version:** v5.0.2
++**Starter version:** v5.0.3
+ 
+ That line records which release of the starter this copy of the template came
+ from. It is not your app's version (`version:` in `pubspec.yaml` is yours), and

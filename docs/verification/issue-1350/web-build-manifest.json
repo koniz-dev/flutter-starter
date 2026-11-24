@@ -1,0 +1,51 @@
+{
+  "flutter_executable": "/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/sdk-350/flutter/bin/flutter",
+  "sdk": {
+    "frameworkVersion": "3.50.0",
+    "channel": "stable",
+    "repositoryUrl": "https://github.com/flutter/flutter.git",
+    "frameworkRevision": "ab2912035e160d9cad6306df307576da6128ebdb",
+    "frameworkCommitDate": "2026-11-09 08:50:21 -0800",
+    "engineRevision": "371f77202a73e8dff57a8b3bff75bca55c090aee",
+    "engineCommitDate": "2026-11-09 15:57:36.000Z",
+    "engineContentHash": "bf601093ad255aaf5c6d0fc5c4f9acfa60943b2a",
+    "engineBuildDate": "2026-11-09 08:33:19.494",
+    "dartSdkVersion": "3.14.0",
+    "devToolsVersion": "2.61.0",
+    "flutterVersion": "3.50.0",
+    "flutterRoot": "/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/sdk-350/flutter"
+  },
+  "commit": "f5468e97a2ab85ef4502d753fd721d4e1fb16e36",
+  "tree": "0d02c3e3aaf432ed0f25cb75f2a855c89270fc6d",
+  "command": [
+    "flutter",
+    "build",
+    "web",
+    "--release",
+    "--dart-define=ENVIRONMENT=staging",
+    "--dart-define=BASE_URL=https://api.delivery-check.invalid",
+    "--dart-define=ENABLE_SSL_PINNING=false"
+  ],
+  "exit": 0,
+  "artifacts": [
+    {
+      "path": "build/web/index.html",
+      "bytes": 1211,
+      "sha256": "c378fdf30b901fd1a41907d7209b218588d3287dc461df765c8a53e7d41db569"
+    },
+    {
+      "path": "build/web/flutter_bootstrap.js",
+      "bytes": 14127,
+      "sha256": "9546ab2357bc94dc96b146feaf781a9d469d69c7e032674a2510af4315f55734"
+    },
+    {
+      "path": "build/web/main.dart.js",
+      "bytes": 3654454,
+      "sha256": "525b5d926d827bb858e7b71082fb8820f55f81d6dda9c4fa1965afc3c6ac79ea"
+    }
+  ],
+  "total_files": 44,
+  "total_bytes": 43322288,
+  "backend": "throwaway HTTPS .invalid URL; compilation only, no live-backend/store-signing assurance",
+  "source_clean_after_build": true
+}
