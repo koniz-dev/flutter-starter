@@ -1,0 +1,18 @@
+$ git rev-parse HEAD
+32676032817501833612745a0fb0723d8558acfe
+$ flutter test --reporter expanded test/core/localization/device_region_test.dart test/features/tasks/presentation/screens/tasks_list_device_region_test.dart
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/device_region_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/device_region_test.dart: criterion 1: no stored choice follows the device region an en_GB device reports en_GB
+00:01 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_device_region_test.dart: no stored choice: an en_GB device reports en_GB and a British date
+00:01 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_device_region_test.dart: no stored choice: an en_GB device reports en_GB and a British date
+00:01 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_device_region_test.dart: no stored choice: an en_GB device reports en_GB and a British date
+00:01 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_device_region_test.dart: no stored choice: an en_GB device reports en_GB and a British date
+00:01 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/device_region_test.dart: criterion 2: a stored language keeps the device region stored en on an en_GB device stays en_GB
+00:01 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_device_region_test.dart: no stored choice: an en_GB device reports en_GB and a British date
+00:01 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_device_region_test.dart: no stored choice: an en_GB device reports en_GB and a British date
+00:01 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_device_region_test.dart: no stored choice: an en_GB device reports en_GB and a British date
+00:02 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/device_region_test.dart: the language picker on a regional locale marks the current language and applies the device region
+00:02 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_device_region_test.dart: stored en on an en_GB device stays en_GB
+00:02 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/device_region_test.dart: the language picker on a regional locale marks the current language and applies the device region
+00:03 +9: All tests passed!
+exit: 0

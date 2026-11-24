@@ -1,0 +1,187 @@
+# The new tests run against lib/ and tool/ from origin/main a263827bfea (before the fix), tests from the PR branch.
+# Command: git checkout origin/main -- lib tool && flutter test --reporter expanded test/core/localization/device_region_test.dart test/features/tasks/presentation/screens/tasks_list_device_region_test.dart
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/device_region_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/device_region_test.dart: criterion 1: no stored choice follows the device region an en_GB device reports en_GB
+00:01 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_device_region_test.dart: no stored choice: an en_GB device reports en_GB and a British date
+00:01 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/device_region_test.dart: criterion 1: no stored choice follows the device region an en_GB device reports en_GB
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: Locale:<en_GB>
+  Actual: Locale:<en_US>
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure>.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/device_region_test.dart:60:7)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/device_region_test.dart line 60
+The test description was:
+  an en_GB device reports en_GB
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:01 +0 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_device_region_test.dart: no stored choice: an en_GB device reports en_GB and a British date
+00:01 +0 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/device_region_test.dart: criterion 1: no stored choice follows the device region an en_GB device reports en_GB [E]
+  Test failed. See exception logs above.
+  The test description was: an en_GB device reports en_GB
+  
+00:01 +0 -2: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_device_region_test.dart: no stored choice: an en_GB device reports en_GB and a British date
+00:01 +0 -2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/device_region_test.dart: criterion 1: no stored choice follows the device region deviceLocale keeps the region of the first matching locale [E]
+  Expected: Locale:<en_GB>
+    Actual: Locale:<en_US>
+  
+  package:matcher                                      expect
+  package:flutter_test/src/widget_tester.dart 473:18   expect
+  test/core/localization/device_region_test.dart 67:7  main.<fn>.<fn>
+  
+00:01 +0 -3: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_device_region_test.dart: no stored choice: an en_GB device reports en_GB and a British date
+00:01 +0 -3: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/device_region_test.dart: criterion 1: no stored choice follows the device region an es_MX device is shown pesos, not euros [E]
+  Expected: contains '$'
+    Actual: '10,00 €'
+     Which: does not contain '$'
+  
+  package:matcher                                      expect
+  package:flutter_test/src/widget_tester.dart 473:18   expect
+  test/core/localization/device_region_test.dart 94:7  main.<fn>.<fn>
+  
+00:01 +0 -3: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/device_region_test.dart: criterion 2: a stored language keeps the device region stored en on an en_GB device stays en_GB
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: Locale:<en_GB>
+  Actual: Locale:<en_US>
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure>.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/device_region_test.dart:101:7)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/device_region_test.dart line 101
+The test description was:
+  stored en on an en_GB device stays en_GB
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:01 +0 -4: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_device_region_test.dart: no stored choice: an en_GB device reports en_GB and a British date
+00:01 +0 -4: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/device_region_test.dart: criterion 2: a stored language keeps the device region stored en on an en_GB device stays en_GB [E]
+  Test failed. See exception logs above.
+  The test description was: stored en on an en_GB device stays en_GB
+  
+00:02 +0 -4: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/device_region_test.dart: criterion 2: a stored language keeps the device region getCurrentLocale restores the device region
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: Locale:<en_GB>
+  Actual: Locale:<en_US>
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure>.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/device_region_test.dart:123:7)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/device_region_test.dart line 123
+The test description was:
+  getCurrentLocale restores the device region
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:02 +0 -5: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_device_region_test.dart: no stored choice: an en_GB device reports en_GB and a British date
+00:02 +0 -5: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/device_region_test.dart: criterion 2: a stored language keeps the device region getCurrentLocale restores the device region [E]
+  Test failed. See exception logs above.
+  The test description was: getCurrentLocale restores the device region
+  
+00:02 +1 -5: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_device_region_test.dart: no stored choice: an en_GB device reports en_GB and a British date
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: Locale:<en_GB>
+  Actual: Locale:<en_US>
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_device_region_test.dart:83:5)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_device_region_test.dart line 83
+The test description was:
+  no stored choice: an en_GB device reports en_GB and a British date
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:02 +1 -6: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/device_region_test.dart: the language picker on a regional locale marks the current language and applies the device region
+00:02 +1 -6: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_device_region_test.dart: no stored choice: an en_GB device reports en_GB and a British date [E]
+  Test failed. See exception logs above.
+  The test description was: no stored choice: an en_GB device reports en_GB and a British date
+  
+00:02 +1 -6: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_device_region_test.dart: stored en on an en_GB device stays en_GB
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: Locale:<en_GB>
+  Actual: Locale:<en_US>
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_device_region_test.dart:95:5)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_device_region_test.dart line 95
+The test description was:
+  stored en on an en_GB device stays en_GB
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:02 +1 -7: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/device_region_test.dart: the language picker on a regional locale marks the current language and applies the device region
+00:02 +1 -7: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_device_region_test.dart: stored en on an en_GB device stays en_GB [E]
+  Test failed. See exception logs above.
+  The test description was: stored en on an en_GB device stays en_GB
+  
+00:03 +1 -7: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/device_region_test.dart: the language picker on a regional locale marks the current language and applies the device region
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: Locale:<en_US>
+  Actual: Locale:<en_GB>
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure>.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/device_region_test.dart:184:7)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/device_region_test.dart line 184
+The test description was:
+  marks the current language and applies the device region
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:03 +1 -8: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/device_region_test.dart: the language picker on a regional locale marks the current language and applies the device region [E]
+  Test failed. See exception logs above.
+  The test description was: marks the current language and applies the device region
+  
+00:03 +1 -8: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/device_region_test.dart: criterion 1: no stored choice follows the device region an en_GB device reports en_GB
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/device_region_test.dart: criterion 1: no stored choice follows the device region an es_MX device is shown pesos, not euros
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/device_region_test.dart: criterion 1: no stored choice follows the device region deviceLocale keeps the region of the first matching locale
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/device_region_test.dart: criterion 2: a stored language keeps the device region getCurrentLocale restores the device region
+  ... and 4 more
