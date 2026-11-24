@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - [Text-field outlines meet 3:1 contrast](https://github.com/koniz-dev/flutter-starter/issues/1359): the unfocused `border` and `enabledBorder` in both themes were translucent `Colors.black12` (1.32:1 on the light background) and `Colors.white24` (2.15:1 on the dark one), below WCAG 2.1 SC 1.4.11. Both now use a new opaque `AppColors.outline` (`#6C757D`), 3.55:1 to 4.69:1 on every theme background and surface, so unfocused fields have a visibly darker (light) or lighter (dark) outline. Regenerate any golden of your own that shows a text field.
 
+- [Dio-to-http migration keeps the network contract](https://github.com/koniz-dev/flutter-starter/issues/1360): the sketch in `docs/architecture/design-decisions.md` told you to rewrite `ApiClient` to return `http.Response` and remove the interceptors, which silently drops SSL pinning, 401 refresh and forced logout, the response cache's credential guard, the release HTTPS-only redirect refusal and the `API_TIMEOUT` deadline. It now swaps an `HttpNetworkClient` adapter in behind `INetworkClient`, keeps `ApiClient`'s `NetworkResponse` verbs, and tables every behaviour the Dio chain carries with its `package:http` replacement. The Provider, Result -> Exceptions and Result -> Either sketches now match the real code, and the BLoC pointer to a guide with no BLoC content is gone. If you followed the old sketch, check your http client for the behaviours in that table.
+
 ## [5.0.3] - 2026-11-24
 
 ### Fixed
