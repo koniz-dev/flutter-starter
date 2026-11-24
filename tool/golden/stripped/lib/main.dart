@@ -16,6 +16,7 @@ import 'package:flutter_starter/core/logging/logging_providers.dart';
 import 'package:flutter_starter/core/logging/uncaught_error_handlers.dart';
 import 'package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart';
 import 'package:flutter_starter/core/routing/app_router.dart';
+import 'package:flutter_starter/core/security/rasp_providers.dart';
 import 'package:flutter_starter/core/startup/startup_failure_app.dart';
 import 'package:flutter_starter/features/auth/di/auth_providers.dart';
 import 'package:flutter_starter/features/auth/presentation/providers/auth_provider.dart';
@@ -185,6 +186,13 @@ Future<void> _bootstrap({
         'out of pinning explicitly.',
       );
     }
+
+    // RASP starts here, inside the guard, because a vendor SDK can throw: a
+    // platform its plugin does not support, or a configuration it rejects.
+    // The default NoOpRaspService does nothing. To handle threats, subscribe
+    // to `onThreatDetected` just above this line: the stream is broadcast, so
+    // a threat raised while protection starts reaches only existing listeners.
+    await container.read(raspServiceProvider).startProtection();
 
     // Storage initialization runs the schema migrations. It is the one startup
     // step that can fail with the user's local data on the line.
