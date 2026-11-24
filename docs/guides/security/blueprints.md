@@ -45,8 +45,24 @@ class SessionManager {
     _lastActivity = DateTime.now();
   }
 
-  /// Handle user activity (call from app lifecycle or user interactions)
+  /// Handle user activity (call from user interactions)
   void onUserActivity() {
+    resetSessionTimer();
+  }
+
+  /// Call when the app returns to the foreground.
+  ///
+  /// A suspended app runs no timers, so the session may have expired in the
+  /// background. Sign out first if it did, then start a fresh timer.
+  Future<void> onResume() async {
+    final lastActivity = _lastActivity;
+    if (lastActivity != null &&
+        DateTime.now().difference(lastActivity) >= sessionTimeout) {
+      // Cleared first, so a second resume during sign-out does not repeat it.
+      _sessionTimer?.cancel();
+      _lastActivity = null;
+      await _handleSessionTimeout();
+    }
     resetSessionTimer();
   }
 
@@ -74,10 +90,12 @@ class SessionManager {
 
 ### Step 2: App lifecycle (illustrative)
 
-Wrap the existing app **inside its configured provider scope** (`UncontrolledProviderScope` in the default bootstrap) with `SessionActivityTracker(child: const MyApp())`; retain the current router and localization setup. The default app scope already binds `signOutProvider` through `authModuleOverrides`. Wire other activity events to `onUserActivity` as your timeout policy requires; this wrapper shows the lifecycle hook.
+Wrap the existing app **inside its configured provider scope** (`UncontrolledProviderScope` in the default bootstrap) with `SessionActivityTracker(child: const MyApp())`; retain the current router and localization setup. The default app scope already binds `signOutProvider` through `authModuleOverrides`. Wire other activity events to `onUserActivity` as your timeout policy requires; this wrapper shows the lifecycle hook. The resume hook calls `onResume`, not `onUserActivity`: the timer cannot fire while the app is suspended, so returning to the foreground is where an idle session has to end.
 
 ```dart
 // Blueprint: lib/features/auth/presentation/widgets/session_activity_tracker.dart
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/di/providers.dart';
 import 'package:flutter_starter/core/security/session_manager.dart';
@@ -117,7 +135,7 @@ class _SessionActivityTrackerState extends ConsumerState<SessionActivityTracker>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      _sessionManager.onUserActivity();
+      unawaited(_sessionManager.onResume());
     }
   }
 
