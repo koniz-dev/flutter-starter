@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - [Dio-to-http migration keeps the network contract](https://github.com/koniz-dev/flutter-starter/issues/1360): the sketch in `docs/architecture/design-decisions.md` told you to rewrite `ApiClient` to return `http.Response` and remove the interceptors, which silently drops SSL pinning, 401 refresh and forced logout, the response cache's credential guard, the release HTTPS-only redirect refusal and the `API_TIMEOUT` deadline. It now swaps an `HttpNetworkClient` adapter in behind `INetworkClient`, keeps `ApiClient`'s `NetworkResponse` verbs, and tables every behaviour the Dio chain carries with its `package:http` replacement. The Provider, Result -> Exceptions and Result -> Either sketches now match the real code, and the BLoC pointer to a guide with no BLoC content is gone. If you followed the old sketch, check your http client for the behaviours in that table.
 
+- [Session-timeout blueprint ends an expired session on resume](https://github.com/koniz-dev/flutter-starter/issues/1362): a suspended app runs no timers, and the `SessionActivityTracker` in `docs/guides/security/blueprints.md` called `onUserActivity()` on resume, which reset the timer without checking the elapsed time, so an app left in the background never timed out. `SessionManager` now has `onResume()`, which signs out when the time since the last activity is at least `sessionTimeout` and only then restarts the timer, and the tracker calls it on resume. If you copied the old recipe, add `onResume()` and call it from your resume handler instead of `onUserActivity()`.
+
 ## [5.0.3] - 2026-11-24
 
 ### Fixed
