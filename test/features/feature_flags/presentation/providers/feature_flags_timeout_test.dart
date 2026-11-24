@@ -223,19 +223,71 @@ void main() {
     expect(remote.fetches, 1);
     remote.fetchGate!.complete();
     await pumpEventQueue();
-    expect((await repository.getFlag('remote')).isFailure, isTrue);
-    expect(
-      remote.reads,
-      0,
-      reason: 'late SDK completion cannot re-enable reads',
-    );
     expect((await repository.refreshRemoteFlags()).isSuccess, isTrue);
-    expect(remote.initializes, 2);
+    expect(remote.initializes, 1, reason: 'the SDK already initialized');
     expect(remote.fetches, 2);
     expect(
       (await repository.getFlag('remote')).dataOrNull?.source,
       FeatureFlagSource.remoteConfig,
     );
+  });
+
+  group('offline cold start (values activated on an earlier launch)', () {
+    setUp(() => remote.ready = true);
+
+    test('a failed fetch keeps serving the activated remote values', () async {
+      remote
+        ..gate.complete()
+        ..failFetch = true;
+      expect((await repository.initialize()).isFailure, isTrue);
+      await expectActivatedValues();
+    });
+
+    test(
+      'a timed-out fetch keeps serving the activated remote values',
+      () async {
+        remote
+          ..gate.complete()
+          ..fetchGate = Completer<void>();
+        try {
+          expect((await repository.initialize()).isFailure, isTrue);
+          await expectActivatedValues();
+        } finally {
+          remote.fetchGate!.complete();
+          await pumpEventQueue();
+        }
+      },
+    );
+
+    for (final fails in [false, true]) {
+      test('a ${fails ? 'failed' : 'timed-out'} SDK initialization still '
+          'falls back to local values', () async {
+        remote.fail = fails;
+        expect((await repository.initialize()).isFailure, isTrue);
+        final flag = (await repository.getFlag(
+          FeatureFlags.debugMenu.value,
+        )).dataOrNull;
+        expect(flag?.source, FeatureFlagSource.buildMode);
+        final all = (await repository.getAllFlags()).dataOrNull;
+        expect(all, isNotEmpty);
+        expect(
+          all!.values.where((f) => f.source == FeatureFlagSource.remoteConfig),
+          isEmpty,
+        );
+        expect(remote.fetches, 0);
+        expect(remote.reads, 0);
+        if (!fails) remote.gate.complete();
+        await pumpEventQueue();
+        expect(remote.reads, 0);
+        expect(
+          (await repository.getFlag(
+            FeatureFlags.debugMenu.value,
+          )).dataOrNull?.source,
+          FeatureFlagSource.buildMode,
+          reason: 'a late initialization cannot re-enable reads',
+        );
+      });
+    }
   });
 
   testWidgets(

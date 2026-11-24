@@ -30,7 +30,8 @@ class FeatureFlagsRepositoryImpl implements FeatureFlagsRepository {
   final Duration remoteTimeout;
 
   // Direct repository callers may supply an already initialized source.
-  // Failed initializations stay local; a refresh keeps activated SDK values.
+  // A failed SDK initialization stays local. Once the SDK has initialized it
+  // serves the values it activated earlier, so a failed fetch keeps them.
   bool _remoteAvailable = true;
   Future<Result<void>>? _remoteOperation;
   Future<void>? _sdkOperation;
@@ -65,9 +66,12 @@ class FeatureFlagsRepositoryImpl implements FeatureFlagsRepository {
     try {
       final operation = (() async {
         if (initialize) await remoteDataSource.initialize();
-        // A timed-out initialization cannot start a late fetch while a
-        // newer attempt is running. SDK futures themselves are not cancelable.
+        // A timed-out initialization cannot start a late fetch or re-enable
+        // reads. SDK futures themselves are not cancelable.
         if (generation != _remoteGeneration) return;
+        // An offline cold start fails only the fetch; reads still see the
+        // values activated on an earlier launch.
+        _remoteAvailable = true;
         await remoteDataSource.fetchAndActivate();
       })();
       _sdkOperation = operation;
