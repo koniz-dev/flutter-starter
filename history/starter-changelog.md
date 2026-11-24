@@ -21,6 +21,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - [The app keeps the device locale's region](https://github.com/koniz-dev/flutter-starter/issues/1363): `LocalizationService.deviceLocale()` and a stored language choice resolved to the region hard-coded in `SupportedLocale` (`en_US`, `es_ES`, `ar_SA`), and `MaterialApp`'s default resolution mapped a requested `en_GB` back to `en_US`, so an `en_GB` device read 9 March as `3/9/2026` and an `es_MX` device was shown euros. The locale now carries the region the device pairs the language with (new `LocalizationService.withDeviceRegion`), `MyApp` passes the new `LocalizationService.resolveLocale` as `localeListResolutionCallback` so `Localizations.localeOf` reports it, and the language pickers match the current locale by language. `Localizations.localeOf` and `localeStateProvider` can now hold a locale outside `LocalizationService.supportedLocales` (`en_GB`, `ar_EG`): compare by `languageCode`, not by equality with a `SupportedLocale.locale`.
 
+- [The language dialog scrolls in phone landscape](https://github.com/koniz-dev/flutter-starter/issues/1364): the dialogs opened by `LanguageSwitcher` and `LanguageSwitcherMenuItem` held their four locale tiles in a non-scrolling `Column`, so at 844x390 or 800x360 they overflowed even at the default text size and clipped the last locales. The list now scrolls inside the dialog, with the title and Cancel pinned. If you added locales or copied the dialog, it now has room for them.
+
 ## [5.0.3] - 2026-11-24
 
 ### Fixed
