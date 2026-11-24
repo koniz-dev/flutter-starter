@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+## [5.0.3] - 2026-11-24
+
+### Fixed
+
 - [Correct rename/configuration guidance](https://github.com/koniz-dev/flutter-starter/issues/1348): remove the stale count of imports needing sorting after rename and the misleading suggestion to add the existing EnvConfig.load call when configuration is supplied through build defines.
 
 - [Finish release and hook audit findings](https://github.com/koniz-dev/flutter-starter/issues/1347): release formatting fails before tests or mutations, changelog headings strip version comments, tag/deletion-only pushes skip tests while branch pushes test the working tree, and docs state PowerShell7+ plus whole-repository pre-commit export costs. Part of the [November audit checklist](https://github.com/koniz-dev/flutter-starter/issues/1343).
