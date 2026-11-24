@@ -79,14 +79,18 @@ class LanguageSwitcher extends ConsumerWidget {
               }
             }
           },
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: SupportedLocale.values.map((supportedLocale) {
-              return RadioListTile<Locale>(
-                title: Text(supportedLocale.displayName),
-                value: supportedLocale.locale,
-              );
-            }).toList(),
+          // Scrolls so the list fits a phone in landscape, where the four
+          // tiles, the title and the actions are taller than the screen.
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: SupportedLocale.values.map((supportedLocale) {
+                return RadioListTile<Locale>(
+                  title: Text(supportedLocale.displayName),
+                  value: supportedLocale.locale,
+                );
+              }).toList(),
+            ),
           ),
         ),
         actions: [
@@ -159,14 +163,18 @@ class LanguageSwitcherMenuItem extends ConsumerWidget {
               }
             }
           },
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: SupportedLocale.values.map((supportedLocale) {
-              return RadioListTile<Locale>(
-                title: Text(supportedLocale.displayName),
-                value: supportedLocale.locale,
-              );
-            }).toList(),
+          // Scrolls so the list fits a phone in landscape, where the four
+          // tiles, the title and the actions are taller than the screen.
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: SupportedLocale.values.map((supportedLocale) {
+                return RadioListTile<Locale>(
+                  title: Text(supportedLocale.displayName),
+                  value: supportedLocale.locale,
+                );
+              }).toList(),
+            ),
           ),
         ),
         actions: [
