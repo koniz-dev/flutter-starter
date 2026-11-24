@@ -325,10 +325,7 @@ Future<void> _relocateMainActivity(
   final segments = applicationId.split('.');
   final newDirPath = '${segments.join('/')}/MainActivity.kt';
   final newFile = File('$rootPath/android/app/src/main/kotlin/$newDirPath');
-  if (newFile.path == oldFile.path) return;
-  await newFile.parent.create(recursive: true);
-  await newFile.writeAsString(content);
-  await oldFile.delete();
+  if (!await _moveFile(oldFile, newFile, content)) return;
   await _pruneEmptyExamplePackage(
     '$rootPath/android/app/src/main/kotlin',
     'com/example/flutter_starter',
@@ -365,10 +362,7 @@ Future<void> _relocateMainActivityTest(
   final newFile = File(
     '$rootPath/$testRoot/${segments.join('/')}/MainActivityTest.java',
   );
-  if (newFile.path == oldFile.path) return;
-  await newFile.parent.create(recursive: true);
-  await newFile.writeAsString(content);
-  await oldFile.delete();
+  if (!await _moveFile(oldFile, newFile, content)) return;
   await _pruneEmptyExamplePackage(
     '$rootPath/$testRoot',
     'com/example/flutter_starter',
@@ -376,12 +370,33 @@ Future<void> _relocateMainActivityTest(
   logger.info('Moved MainActivityTest to match $applicationId');
 }
 
-/// Deletes [relativePackage] under [sourceRoot] and each ancestor, stopping
-/// at the first one that is not empty.
+/// Writes [content] to [target] and deletes [source], returning `true`.
 ///
-/// Never recursive: an application id nested under the template's (such as
-/// `com.example.flutter_starter.dev`) moves the file into a subdirectory of
-/// [relativePackage], and a recursive delete would take it with it.
+/// When both name the same file it rewrites [source] in place and returns
+/// `false` instead: deleting it would remove the file just written. That
+/// happens with the template's own id, and on a case-insensitive filesystem
+/// (APFS, NTFS) with any case variant of it, such as
+/// `com.Example.flutter_starter`, so the paths are compared by identity rather
+/// than as strings.
+Future<bool> _moveFile(File source, File target, String content) async {
+  await target.parent.create(recursive: true);
+  if (target.existsSync() &&
+      FileSystemEntity.identicalSync(source.path, target.path)) {
+    await source.writeAsString(content);
+    return false;
+  }
+  await target.writeAsString(content);
+  await source.delete();
+  return true;
+}
+
+/// Deletes [relativePackage] under [sourceRoot] and each ancestor, as long as
+/// it holds nothing but Finder's `.DS_Store` files.
+///
+/// Anything else keeps the directory: an application id nested under the
+/// template's (such as `com.example.flutter_starter.dev`) moves the file into
+/// a subdirectory of [relativePackage], and a sibling id (such as
+/// `com.example.other`) into a subdirectory of its parent.
 Future<void> _pruneEmptyExamplePackage(
   String sourceRoot,
   String relativePackage,
@@ -389,9 +404,12 @@ Future<void> _pruneEmptyExamplePackage(
   final segments = relativePackage.split('/');
   for (var i = segments.length; i > 0; i--) {
     final dir = Directory('$sourceRoot/${segments.take(i).join('/')}');
-    if (dir.existsSync() && dir.listSync().isEmpty) {
-      await dir.delete();
-    }
+    if (!dir.existsSync()) continue;
+    final onlyFinderMetadata = dir.listSync().every(
+      (e) => e is File && e.uri.pathSegments.last == '.DS_Store',
+    );
+    if (!onlyFinderMetadata) return;
+    await dir.delete(recursive: true);
   }
 }
 
