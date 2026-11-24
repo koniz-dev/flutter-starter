@@ -27,6 +27,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - [The setup brick keeps a `com.example` iOS bundle id](https://github.com/koniz-dev/flutter-starter/issues/1366): with an `ios_bundle_id` starting with `com.example` (the brick's default does), `mason make flutter_starter_setup` turned it into `<application_id organization>.<rest>` in `ios/ExportOptions.plist`, `ios/fastlane/Appfile`, `macos/Runner/Configs/AppInfo.xcconfig` and the macOS `project.pbxproj`, while the iOS `project.pbxproj` kept the real id; an `application_id` under `com.example` was doubled the same way in the Linux and Windows runners. The hook now rewrites each file in one pass. The fork-and-customize section 2 recipe had the same chain for macOS and now leaves an id it has set alone. If you renamed with such an id, set those files' bundle id back to your `ios_bundle_id` (and your Linux `APPLICATION_ID` to your `application_id`).
 
+- [The demo sign-in removal steps leave `flutter test` green](https://github.com/koniz-dev/flutter-starter/issues/1367): the steps in `docs/guides/onboarding/getting-started.md` delete the "Signing In Before You Have a Backend" section, but `README.md` links to it, so after following them `test/docs/doc_links_test.dart` and `dart run tool/check_docs.dart` failed on a missing anchor. Step 2's `git grep` now also searches `README.md` for the section's anchor and names that link, and `test/tooling/demo_removal_steps_test.dart` fails if any markdown file outside the deleted or edited set links to the section. If you already removed the demo, delete or reword the "how to remove it" link in your `README.md`.
+
 ## [5.0.3] - 2026-11-24
 
 ### Fixed
