@@ -466,10 +466,6 @@ Future<void> patchPatrolConfig(
   logger.info('Updated patrol config to $applicationId');
 }
 
-/// Replaces the template identifiers left in the desktop, web, Apple and
-/// fastlane configuration files.
-///
-/// Every entry is a plain literal substitution, applied longest-first so that
 /// Rewrites `package:flutter_starter/` in the `feature_clean` brick's
 /// templates to `package:<packageName>/`, returning how many files changed.
 ///
@@ -499,8 +495,15 @@ Future<int> rewriteFeatureBrickImports(
   return rewritten;
 }
 
-/// `com.example.flutter_starter` is consumed before the bare `flutter_starter`
-/// inside it.
+/// Replaces the template identifiers left in the desktop, web, Apple and
+/// fastlane configuration files.
+///
+/// Every entry is a plain literal substitution, and all of them run in one
+/// pass, the longer keys first, so that `com.example.flutter_starter` is
+/// consumed before the bare `flutter_starter` inside it. One pass also means a
+/// replacement is never rewritten by a later entry: an iOS bundle id such as
+/// `com.example.myApp` keeps its `com.example`, rather than having it turned
+/// into the Android organization.
 Future<void> patchPlatformIdentifiers({
   required String rootPath,
   required String packageName,
@@ -514,14 +517,17 @@ Future<void> patchPlatformIdentifiers({
       ? segments.sublist(0, segments.length - 1).join('.')
       : applicationId;
 
-  // Order is significant: the longer keys must run first.
+  // Order is significant: the longer keys must come first. The display name
+  // is escaped per file, so its value is filled in below.
+  const displayNameKey = 'Flutter Starter';
   final replacements = <String, String>{
     'com.example.flutterStarter': iosBundleId,
     'com.example.flutter_starter': applicationId,
-    'Flutter Starter': _displayNameMarker,
+    displayNameKey: '',
     'flutter_starter': packageName,
     'com.example': organization,
   };
+  final pattern = RegExp(replacements.keys.map(RegExp.escape).join('|'));
 
   const files = <String>[
     'macos/Runner/Configs/AppInfo.xcconfig',
@@ -558,15 +564,9 @@ Future<void> patchPlatformIdentifiers({
   for (final relative in files) {
     final file = File('$rootPath/$relative');
     if (!file.existsSync()) continue;
-    var s = await file.readAsString();
-    final before = s;
-    for (final entry in replacements.entries) {
-      s = s.replaceAll(entry.key, entry.value);
-    }
-    s = s.replaceAll(
-      _displayNameMarker,
-      displayNameFor(relative, appDisplayName),
-    );
+    final before = await file.readAsString();
+    replacements[displayNameKey] = displayNameFor(relative, appDisplayName);
+    final s = before.replaceAllMapped(pattern, (m) => replacements[m[0]]!);
     if (s != before) {
       await file.writeAsString(s);
       patched.add(relative);
@@ -574,11 +574,6 @@ Future<void> patchPlatformIdentifiers({
   }
   logger.info('Rewrote identifiers in ${patched.length} platform file(s)');
 }
-
-/// Stands in for the display name until the identifier replacements are done,
-/// so that a name containing `flutter_starter` or `com.example` is not
-/// rewritten by the entries after it.
-const _displayNameMarker = '\u0000display-name\u0000';
 
 /// [name] escaped for where [relative] puts the display name: XML content
 /// in a plist, scheme, HTML or XML file, a JSON string's inside in a `.json`
