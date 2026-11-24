@@ -325,6 +325,7 @@ Future<void> _relocateMainActivity(
   final segments = applicationId.split('.');
   final newDirPath = '${segments.join('/')}/MainActivity.kt';
   final newFile = File('$rootPath/android/app/src/main/kotlin/$newDirPath');
+  if (newFile.path == oldFile.path) return;
   await newFile.parent.create(recursive: true);
   await newFile.writeAsString(content);
   await oldFile.delete();
@@ -364,6 +365,7 @@ Future<void> _relocateMainActivityTest(
   final newFile = File(
     '$rootPath/$testRoot/${segments.join('/')}/MainActivityTest.java',
   );
+  if (newFile.path == oldFile.path) return;
   await newFile.parent.create(recursive: true);
   await newFile.writeAsString(content);
   await oldFile.delete();
@@ -374,17 +376,18 @@ Future<void> _relocateMainActivityTest(
   logger.info('Moved MainActivityTest to match $applicationId');
 }
 
-/// Deletes [relativePackage] under [sourceRoot] and any ancestor left empty.
+/// Deletes [relativePackage] under [sourceRoot] and each ancestor, stopping
+/// at the first one that is not empty.
+///
+/// Never recursive: an application id nested under the template's (such as
+/// `com.example.flutter_starter.dev`) moves the file into a subdirectory of
+/// [relativePackage], and a recursive delete would take it with it.
 Future<void> _pruneEmptyExamplePackage(
   String sourceRoot,
   String relativePackage,
 ) async {
-  final leaf = Directory('$sourceRoot/$relativePackage');
-  if (leaf.existsSync()) {
-    await leaf.delete(recursive: true);
-  }
   final segments = relativePackage.split('/');
-  for (var i = segments.length - 1; i > 0; i--) {
+  for (var i = segments.length; i > 0; i--) {
     final dir = Directory('$sourceRoot/${segments.take(i).join('/')}');
     if (dir.existsSync() && dir.listSync().isEmpty) {
       await dir.delete();
