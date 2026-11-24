@@ -116,6 +116,33 @@ void main() {
     expect(backing.containsKey('username'), isFalse);
   });
 
+  test('after a failed read leaves the stamp at 1, a healthy rerun reaches 2 '
+      'and migrates the data once', () async {
+    failingKey = 'user_name';
+    await expectLater(
+      MigrationV1ToV2().execute(SecureStorageService()),
+      throwsA(isA<MigrationException>()),
+    );
+    expect(backing[StorageVersion.versionKey], '1');
+
+    failingKey = null;
+    await MigrationV1ToV2().execute(SecureStorageService());
+
+    expect(backing[StorageVersion.versionKey], '2');
+    expect(backing['username'], 'alice');
+    expect(backing.containsKey('user_name'), isFalse);
+    expect(backing['theme_mode'], 'dark');
+    expect(backing.containsKey('theme'), isFalse);
+    expect(backing['sync_interval_minutes'], '15');
+    expect(backing.containsKey('old_setting_1'), isFalse);
+    // Migrated once: the comma list became one encoded list, not a list of
+    // fragments of an already encoded value.
+    expect(
+      await SecureStorageService().getStringList('user_tags'),
+      ['one', 'two'],
+    );
+  });
+
   test('control: with every read working, the migration advances to 2', () {
     return expectLater(
       MigrationV1ToV2().execute(SecureStorageService()).then((_) => backing),

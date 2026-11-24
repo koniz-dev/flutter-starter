@@ -142,7 +142,8 @@ class MigrationV1ToV2 extends StorageMigration {
   /// as "nothing to migrate" skipped the legacy value and still advanced the
   /// schema, so a storage implementing [IStrictStringRead] is read through
   /// its throwing read instead. Any other storage already throws on a failed
-  /// read.
+  /// read; a custom storage whose `getString` hides failures should implement
+  /// [IStrictStringRead] so this migration can tell them apart.
   Future<String?> _readRaw(IStorageService storage, String key) {
     return storage is IStrictStringRead
         ? (storage as IStrictStringRead).getStringOrThrow(key)

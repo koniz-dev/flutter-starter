@@ -54,8 +54,9 @@ class MigrationV2ToV3 extends StorageMigration {
   @override
   Future<void> migrate(IStorageService storage) async {
     // Your migration logic here
-    // Example: Rename a key
-    final oldValue = await storage.getString('old_key');
+    // Example: Rename a key. Read legacy keys through readLegacy - see
+    // "Reading Legacy Values" below.
+    final oldValue = await readLegacy(storage, 'old_key');
     if (oldValue != null) {
       await storage.setString('new_key', oldValue);
       await storage.remove('old_key');
@@ -91,10 +92,56 @@ class StorageVersion {
 
 ## Migration Patterns
 
+### Reading Legacy Values
+
+Do not read a legacy key with `getString` or `containsKey` on secure
+storage. `SecureStorageService.getString` returns `null` when the Keychain or
+Keystore read throws, and `containsKey` returns `false` - the same answers as
+a missing key. A migration that trusts them takes an unreadable value (for
+example, a Keystore key lost after an Android backup restore) as "nothing to
+migrate", the stamp still advances, and that value is never migrated.
+
+A storage that hides read failures implements `IStrictStringRead`, whose
+`getStringOrThrow` throws instead. Read through it, so a failed read fails the
+migration and the stamp stays where it was; the next launch tries again. The
+patterns below use these two helpers:
+
+```dart
+import 'package:flutter_starter/core/storage/migration/storage_migration.dart';
+import 'package:flutter_starter/core/storage/storage_service.dart';
+
+/// Reads [key]; a failed read throws instead of looking like a missing key.
+Future<String?> readLegacy(IStorageService storage, String key) async {
+  if (storage is! IStrictStringRead) return await storage.getString(key);
+  try {
+    return await (storage as IStrictStringRead).getStringOrThrow(key);
+  } on Object catch (error, stackTrace) {
+    throw MigrationException(
+      'Could not read $key; not advancing the schema',
+      originalError: error,
+      stackTrace: stackTrace,
+    );
+  }
+}
+
+/// Whether [key] is stored; a failed read throws instead of answering false.
+Future<bool> hasLegacy(IStorageService storage, String key) async {
+  if (storage is IStrictStringRead) {
+    return await readLegacy(storage, key) != null;
+  }
+  return await storage.containsKey(key);
+}
+```
+
+`StorageService` over SharedPreferences needs no strict read: its reads
+already throw on failure, so the helpers pass it straight through.
+`MigrationV1ToV2` does the same with its private `_readString` and
+`_containsKey`.
+
 ### Renaming Keys
 
 ```dart
-final oldValue = await storage.getString('old_key');
+final oldValue = await readLegacy(storage, 'old_key');
 if (oldValue != null) {
   await storage.setString('new_key', oldValue);
   await storage.remove('old_key');
@@ -104,16 +151,14 @@ if (oldValue != null) {
 ### Transforming Data
 
 ```dart
-final oldTheme = await storage.getString('theme');
+final oldTheme = await readLegacy(storage, 'theme');
 if (oldTheme != null) {
   String newTheme;
   switch (oldTheme.toLowerCase()) {
     case 'dark':
       newTheme = 'dark';
-      break;
     case 'light':
       newTheme = 'light';
-      break;
     default:
       newTheme = 'system';
   }
@@ -125,30 +170,35 @@ if (oldTheme != null) {
 ### Migrating Lists
 
 Changing the *type* stored under a key is the one pattern that is not safely
-re-runnable by default. `SharedPreferences.getString` casts the cached value
-blindly, so reading a key that now holds a `List<String>` throws a `TypeError`
-- an `Error`, not an `Exception`, so `on Exception` handlers do not catch it.
+re-runnable by default. `StorageService.getString` on a key that now holds a
+`List<String>` throws a `CacheException` coded `invalidPreferenceTypeCode`;
+a backend that casts the stored value blindly throws a `TypeError` instead -
+an `Error`, not an `Exception`, so `on Exception` handlers do not catch it.
 
 Prefer a new key:
 
 ```dart
-final oldTags = await storage.getString('user_tags');
+final oldTags = await readLegacy(storage, 'user_tags');
 if (oldTags != null) {
   await storage.setStringList('tags', oldTags.split(',').map((e) => e.trim()).toList());
   await storage.remove('user_tags');
 }
 ```
 
-If you must reuse the key, guard the read so a second run sees nothing to do -
-this is what `MigrationV1ToV2` does:
+If you must reuse the key, guard the read so a second run sees nothing to do,
+and let every other failure propagate - this is what `MigrationV1ToV2` does:
 
 ```dart
 Future<String?> _readLegacyString(IStorageService storage, String key) async {
   try {
-    return await storage.getString(key);
+    return await readLegacy(storage, key);
+  } on CacheException catch (error) {
+    if (error.code != invalidPreferenceTypeCode) rethrow;
+    return null; // already converted by an earlier run
+    // A backend that casts the stored value blindly throws TypeError instead.
     // ignore: avoid_catching_errors
   } on TypeError {
-    return null; // already converted by an earlier run
+    return null;
   }
 }
 ```
@@ -156,7 +206,7 @@ Future<String?> _readLegacyString(IStorageService storage, String key) async {
 ### Adding Default Values
 
 ```dart
-final hasSyncInterval = await storage.containsKey('sync_interval_minutes');
+final hasSyncInterval = await hasLegacy(storage, 'sync_interval_minutes');
 if (!hasSyncInterval) {
   await storage.setInt('sync_interval_minutes', 15);
 }
@@ -172,7 +222,7 @@ used to override the device language on every first launch.
 ```dart
 final deprecatedKeys = ['old_setting_1', 'old_setting_2'];
 for (final key in deprecatedKeys) {
-  if (await storage.containsKey(key)) {
+  if (await hasLegacy(storage, key)) {
     await storage.remove(key);
   }
 }
@@ -186,7 +236,7 @@ Migrations should be idempotent - running them multiple times should produce the
 
 ```dart
 // Good: Checks if key exists before migrating
-final oldValue = await storage.getString('old_key');
+final oldValue = await readLegacy(storage, 'old_key');
 if (oldValue != null) {
   await storage.setString('new_key', oldValue);
   await storage.remove('old_key');
@@ -199,10 +249,11 @@ await storage.remove('old_key');
 
 ### 2. Handle Missing Data
 
-Always check for null values:
+Always check for null values, and read through `readLegacy` so that `null`
+means the key is missing, not that the read failed:
 
 ```dart
-final value = await storage.getString('key');
+final value = await readLegacy(storage, 'key');
 if (value != null) {
   // Process value
 }
@@ -354,7 +405,8 @@ flutter test test/core/storage/migration/ \
 
 ## Example: Complete Migration
 
-Here's a complete example of migrating from v1 to v2:
+Here's a complete example of migrating from v1 to v2, using `readLegacy` and
+`hasLegacy` from "Reading Legacy Values":
 
 ```dart
 class MigrationV1ToV2 extends StorageMigration {
@@ -370,14 +422,14 @@ class MigrationV1ToV2 extends StorageMigration {
   @override
   Future<void> migrate(IStorageService storage) async {
     // 1. Rename key
-    final oldUserName = await storage.getString('user_name');
+    final oldUserName = await readLegacy(storage, 'user_name');
     if (oldUserName != null) {
       await storage.setString('username', oldUserName);
       await storage.remove('user_name');
     }
 
     // 2. Transform data
-    final oldTheme = await storage.getString('theme');
+    final oldTheme = await readLegacy(storage, 'theme');
     if (oldTheme != null) {
       final newTheme = _transformTheme(oldTheme);
       await storage.setString('theme_mode', newTheme);
@@ -385,7 +437,7 @@ class MigrationV1ToV2 extends StorageMigration {
     }
 
     // 3. Add defaults (never for a user choice; see "Adding Default Values")
-    if (!await storage.containsKey('sync_interval_minutes')) {
+    if (!await hasLegacy(storage, 'sync_interval_minutes')) {
       await storage.setInt('sync_interval_minutes', 15);
     }
 
