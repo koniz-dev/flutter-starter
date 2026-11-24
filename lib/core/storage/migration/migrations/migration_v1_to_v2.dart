@@ -28,7 +28,7 @@ class MigrationV1ToV2 extends StorageMigration {
   Future<void> migrate(IStorageService storage) async {
     // Example 1: Rename a key
     // Old key: 'user_name' -> New key: 'username'
-    final oldUserName = await storage.getString('user_name');
+    final oldUserName = await _readString(storage, 'user_name');
     if (oldUserName != null) {
       await _requirePersisted(
         storage.setString('username', oldUserName),
@@ -39,7 +39,7 @@ class MigrationV1ToV2 extends StorageMigration {
 
     // Example 2: Transform data format
     // Old: 'theme' as string -> New: 'theme_mode' as string with validation
-    final oldTheme = await storage.getString('theme');
+    final oldTheme = await _readString(storage, 'theme');
     if (oldTheme != null) {
       // Transform old theme values to new format
       String newTheme;
@@ -89,7 +89,10 @@ class MigrationV1ToV2 extends StorageMigration {
     // v1, so it ran on every first launch, and `language` is the key
     // LocalizationService reads as the user's pick - so the device language
     // lost to an English preference nobody had made.
-    final hasSyncInterval = await storage.containsKey('sync_interval_minutes');
+    final hasSyncInterval = await _containsKey(
+      storage,
+      'sync_interval_minutes',
+    );
     if (!hasSyncInterval) {
       await _requirePersisted(
         storage.setInt('sync_interval_minutes', 15),
@@ -101,14 +104,14 @@ class MigrationV1ToV2 extends StorageMigration {
     final deprecatedKeys = ['old_setting_1', 'old_setting_2', 'deprecated_key'];
 
     for (final key in deprecatedKeys) {
-      if (await storage.containsKey(key)) {
+      if (await _containsKey(storage, key)) {
         await _requirePersisted(storage.remove(key), key);
       }
     }
 
     // Example 6: Migrate nested data structure
     // If you stored JSON strings, parse and restructure them
-    final oldUserData = await storage.getString('user_data');
+    final oldUserData = await _readString(storage, 'user_data');
     if (oldUserData != null) {
       try {
         // Example: Parse old JSON and restructure
@@ -132,6 +135,61 @@ class MigrationV1ToV2 extends StorageMigration {
     }
   }
 
+  /// Reads [key], telling a failed read apart from a missing value.
+  ///
+  /// `SecureStorageService.getString` returns null when the Keychain or
+  /// Keystore read throws, the same answer as a missing key. Taking that null
+  /// as "nothing to migrate" skipped the legacy value and still advanced the
+  /// schema, so a storage implementing [IStrictStringRead] is read through
+  /// its throwing read instead. Any other storage already throws on a failed
+  /// read; a custom storage whose `getString` hides failures should implement
+  /// [IStrictStringRead] so this migration can tell them apart.
+  Future<String?> _readRaw(IStorageService storage, String key) {
+    return storage is IStrictStringRead
+        ? (storage as IStrictStringRead).getStringOrThrow(key)
+        : storage.getString(key);
+  }
+
+  /// Reads [key]; a failed read is never reported as a missing value.
+  Future<String?> _readString(IStorageService storage, String key) async {
+    try {
+      return await _readRaw(storage, key);
+    } on Object catch (error, stackTrace) {
+      _readFailed(storage, key, error, stackTrace);
+    }
+  }
+
+  /// Whether [key] is present; a failed read is never reported as absent.
+  ///
+  /// `SecureStorageService.containsKey` answers false when the read throws,
+  /// so a storage implementing [IStrictStringRead] is asked through its
+  /// throwing read. Any other storage keeps [IStorageService.containsKey],
+  /// which also sees keys stored as a non-string type.
+  Future<bool> _containsKey(IStorageService storage, String key) async {
+    if (storage is IStrictStringRead) {
+      return await _readString(storage, key) != null;
+    }
+    return await storage.containsKey(key);
+  }
+
+  /// Rethrows a failed read of [key], as a [MigrationException] when it came
+  /// from an [IStrictStringRead] storage.
+  Never _readFailed(
+    IStorageService storage,
+    String key,
+    Object error,
+    StackTrace stackTrace,
+  ) {
+    if (storage is IStrictStringRead) {
+      throw MigrationException(
+        'Could not read legacy key $key; not advancing the schema',
+        originalError: error,
+        stackTrace: stackTrace,
+      );
+    }
+    Error.throwWithStackTrace(error, stackTrace);
+  }
+
   /// Reads a legacy string, skipping a value already stored as another type.
   ///
   /// Re-runs see a `List<String>` under 'user_tags'. StorageService reports
@@ -140,14 +198,18 @@ class MigrationV1ToV2 extends StorageMigration {
   /// so an unreadable legacy value cannot be skipped while advancing schema.
   Future<String?> _readLegacyString(IStorageService storage, String key) async {
     try {
-      return await storage.getString(key);
-    } on CacheException catch (error) {
-      if (error.code != invalidPreferenceTypeCode) rethrow;
+      return await _readRaw(storage, key);
+    } on CacheException catch (error, stackTrace) {
+      if (error.code != invalidPreferenceTypeCode) {
+        _readFailed(storage, key, error, stackTrace);
+      }
       return null;
       // Backward compatibility for a backend that still casts blindly.
       // ignore: avoid_catching_errors
     } on TypeError {
       return null;
+    } on Object catch (error, stackTrace) {
+      _readFailed(storage, key, error, stackTrace);
     }
   }
 }
