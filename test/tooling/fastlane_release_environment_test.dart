@@ -127,6 +127,48 @@ void main() {
         );
       }
     }, skip: skip);
+
+    // The host is the authority up to the first "/", "?" or "#", after the
+    // last "@" and before a port, without its trailing dots: what Dart's
+    // Uri.parse(...).host reads, and the shell builds check.
+    test('it reads the host as Dart does', () {
+      for (final url in [
+        'https://example.com?x@acme.io',
+        'https://example.com#@acme.io',
+        'https://example.com..',
+        'https://api.example.com../x',
+        'HTTPS://API.EXAMPLE.COM/v1',
+        'https://user@pw@api.example.com:8443',
+      ]) {
+        expect(
+          check('production', url),
+          startsWith("refused: base URL '$url' is the starter's placeholder"),
+          reason: url,
+        );
+      }
+      for (final url in [
+        'https://acme.io?x@example.com',
+        'https://acme.io/v1#@example.com',
+        'https://user@acme.io:8443/v1',
+      ]) {
+        expect(check('production', url), url, reason: url);
+      }
+      expect(
+        check('production', 'https://@/v1'),
+        "refused: base URL 'https://@/v1' has no host.",
+      );
+    }, skip: skip);
+
+    test('a direct base_url call names the environment from its source', () {
+      expect(
+        _ruby(
+          'begin; '
+          'ReleaseEnvironment.base_url("http://acme.io", "BASE_URL_STAGING"); '
+          'rescue ArgumentError => e; print e.message; end',
+        ),
+        contains('A staging release refuses any other scheme'),
+      );
+    }, skip: skip);
   });
 
   test('resolved environment chooses its URL with both variables set', () {

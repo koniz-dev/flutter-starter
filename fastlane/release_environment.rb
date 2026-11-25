@@ -55,17 +55,18 @@ module ReleaseEnvironment
                            "A #{environment} release refuses any other " \
                            'scheme at startup.'
     end
-    host = url[%r{\A[a-z][a-z0-9+.-]*://(?:[^@/]*@)?([^/:?#]+)}i, 1]
-    if host.nil?
-      raise ArgumentError, "base_url #{url} is not an absolute URL " \
-                           "(https://host/...)."
-    end
-    # A trailing dot names the same host (api.example.com.).
-    host = host.downcase.chomp('.')
+    # The host as Dart reads it: the authority ends at the first "/", "?" or
+    # "#", userinfo runs to its last "@", and a port follows a ":" (outside
+    # an IPv6 literal). Trailing dots name the same host (api.example.com.).
+    host = url.downcase.sub(%r{\Ahttps://}, '')[%r{\A[^/?#]*}]
+    host = host.sub(/\A.*@/, '')
+    host = host.sub(/:.*\z/, '') unless host.start_with?('[')
+    host = host.sub(/\.+\z/, '')
+    raise ArgumentError, "base URL '#{url}' has no host." if host.empty?
     if host == 'example.com' || host.end_with?('.example.com')
-      raise ArgumentError, "base_url #{url} is the starter's placeholder " \
-                           "host. Pass base_url:<url> or set #{source} to " \
-                           "your API."
+      raise ArgumentError, "base URL '#{url}' is the starter's placeholder " \
+                           'host. Pass the URL of your API, or set ' \
+                           "#{source} to it."
     end
     url
   end
