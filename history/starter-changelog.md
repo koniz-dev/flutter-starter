@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- [UI sign-in examples publish the router session](https://github.com/koniz-dev/flutter-starter/issues/1372): widgets call AuthNotifier.login and observe AuthState; domain use-case examples are explicitly non-UI. A Markdown/Dartdoc guard and real session-graph tests prevent the direct-use-case navigation regression.
+
 - [RASP starts inside the startup guard](https://github.com/koniz-dev/flutter-starter/issues/1358): `bootstrap()` now awaits `raspServiceProvider`'s `startProtection()` inside the guarded startup sequence, so a RASP SDK that throws shows `StartupFailureApp` instead of a black window (the default `NoOpRaspService` does nothing). The freeRASP recipe overrides the provider on Android and iOS only, and the adapter template starts freeRASP once per process, so Try again no longer re-starts it. If you applied the old recipe, delete your `startProtection()` call after `createContainer()` (bootstrap now makes it), move any `onThreatDetected` subscription to just above the new call, and add the platform guard.
 
 - [Text-field outlines meet 3:1 contrast](https://github.com/koniz-dev/flutter-starter/issues/1359): the unfocused `border` and `enabledBorder` in both themes were translucent `Colors.black12` (1.32:1 on the light background) and `Colors.white24` (2.15:1 on the dark one), below WCAG 2.1 SC 1.4.11. Both now use a new opaque `AppColors.outline` (`#6C757D`), 3.55:1 to 4.69:1 on every theme background and surface, so unfocused fields have a visibly darker (light) or lighter (dark) outline. Regenerate any golden of your own that shows a text field.
