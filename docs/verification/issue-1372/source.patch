@@ -1,0 +1,714 @@
+diff --git a/docs/api/README.md b/docs/api/README.md
+index 1e385b97a74..3239bdea0c3 100644
+--- a/docs/api/README.md
++++ b/docs/api/README.md
+@@ -58,7 +58,7 @@ This documentation provides comprehensive reference for all public APIs in the F
+ All repository and use case methods return `Result<T>` for type-safe error handling:
+ 
+ ```dart
+-final result = await loginUseCase('user@example.com', 'password');
++final result = await getUserUseCase();
+ result.when(
+   success: (user) => handleSuccess(user),
+   failureCallback: (failure) => handleFailure(failure),
+@@ -69,11 +69,12 @@ See [Utils - Result](core/utils.md#result) for details.
+ 
+ ### Dependency Injection
+ 
+-All dependencies are provided via Riverpod providers:
++All dependencies are provided via Riverpod providers. UI sign-in goes through `AuthNotifier`, which publishes the session observed by the router:
+ 
+ ```dart
+ // Access in widgets
+-final useCase = ref.read(loginUseCaseProvider);
++final auth = ref.read(authNotifierProvider.notifier);
++await auth.login('user@example.com', 'password123');
+ 
+ // Access in providers
+ final repository = ref.watch(authRepositoryProvider);
+diff --git a/docs/api/core/errors.md b/docs/api/core/errors.md
+index 96398b3341d..8832e687ad0 100644
+--- a/docs/api/core/errors.md
++++ b/docs/api/core/errors.md
+@@ -212,7 +212,7 @@ final failure = UnknownFailure('An unexpected error occurred');
+ ### Handling Failures in Result
+ 
+ ```dart
+-final result = await loginUseCase('user@example.com', 'password');
++final result = await getUserUseCase();
+ result.when(
+   success: (user) {
+     // Handle success
+diff --git a/docs/api/core/utils.md b/docs/api/core/utils.md
+index 7ee826acf89..9baf45b2bff 100644
+--- a/docs/api/core/utils.md
++++ b/docs/api/core/utils.md
+@@ -82,15 +82,17 @@ R when<R>({
+ 
+ ### Usage Examples
+ 
++These `Result` examples handle a user lookup. UI sign-in instead awaits `ref.read(authNotifierProvider.notifier).login(email, password)` and observes `AuthState`; that method publishes the session and returns `Future<void>`, not a `Result`.
++
+ #### Basic Usage
+ 
+ ```dart
+-final result = await loginUseCase('user@example.com', 'password');
++final result = await getUserUseCase();
+ 
+ // Check result type
+ if (result.isSuccess) {
+   final user = result.dataOrNull;
+-  print('Logged in: ${user?.email}');
++  print('User: ${user?.email}');
+ } else {
+   final error = result.errorOrNull;
+   print('Error: $error');
+@@ -100,11 +102,11 @@ if (result.isSuccess) {
+ #### Pattern Matching
+ 
+ ```dart
+-final result = await loginUseCase('user@example.com', 'password');
++final result = await getUserUseCase();
+ result.when(
+   success: (user) {
+-    print('Logged in: ${user.email}');
+-    navigateToHome();
++    print('User: ${user.email}');
++    handleSuccess(user);
+   },
+   failureCallback: (failure) {
+     if (failure is AuthFailure) {
+diff --git a/docs/api/examples/api-integration.md b/docs/api/examples/api-integration.md
+index 82a6867c2b7..ab07a421618 100644
+--- a/docs/api/examples/api-integration.md
++++ b/docs/api/examples/api-integration.md
+@@ -205,7 +205,7 @@ Future<Result<T>> executeWithRetry<T>(
+ }
+ 
+ // Usage
+-final result = await executeWithRetry(() => loginUseCase(email, password));
++final result = await executeWithRetry(() => getUserUseCase());
+ ```
+ 
+ ---
+diff --git a/docs/api/examples/common-patterns.md b/docs/api/examples/common-patterns.md
+index 815d61c434d..1580d69c40d 100644
+--- a/docs/api/examples/common-patterns.md
++++ b/docs/api/examples/common-patterns.md
+@@ -14,12 +14,14 @@ All repository and use case methods return `Result<T>` for type-safe error handl
+ 
+ ### Basic Usage
+ 
++This example handles a user lookup, not UI sign-in. Widgets sign in with `ref.read(authNotifierProvider.notifier).login(email, password)` and observe `AuthState`; a login use case alone does not update the router session.
++
+ ```dart
+-final result = await loginUseCase('user@example.com', 'password');
++final result = await getUserUseCase();
+ result.when(
+   success: (user) {
+     // Handle success
+-    navigateToHome();
++    handleSuccess(user);
+   },
+   failureCallback: (failure) {
+     // Handle failure
+@@ -68,7 +70,7 @@ All dependencies are provided via Riverpod providers.
+ class MyWidget extends ConsumerWidget {
+   @override
+   Widget build(BuildContext context, WidgetRef ref) {
+-    final useCase = ref.read(loginUseCaseProvider);
++    final useCase = ref.read(getCurrentUserUseCaseProvider);
+     // Use useCase...
+   }
+ }
+@@ -90,7 +92,7 @@ final myProvider = Provider<MyService>((ref) {
+ 
+ ```dart
+ // One-time access
+-final useCase = ref.read(loginUseCaseProvider);
++final useCase = ref.read(getCurrentUserUseCaseProvider);
+ 
+ // Reactive access (rebuilds when provider changes)
+ final repository = ref.watch(authRepositoryProvider);
+@@ -289,11 +291,11 @@ try {
+ 
+ ```dart
+ // Good
+-final useCase = ref.read(loginUseCaseProvider);
++final useCase = ref.read(getCurrentUserUseCaseProvider);
+ 
+ // Bad
+ final repository = AuthRepositoryImpl(...);
+-final useCase = LoginUseCase(repository);
++final useCase = GetCurrentUserUseCase(repository);
+ ```
+ 
+ ### 3. Handle Errors Appropriately
+diff --git a/docs/api/features/auth/providers.md b/docs/api/features/auth/providers.md
+index ddb90449669..a7288c3e998 100644
+--- a/docs/api/features/auth/providers.md
++++ b/docs/api/features/auth/providers.md
+@@ -212,19 +212,29 @@ final isAuthenticatedUseCaseProvider = Provider<IsAuthenticatedUseCase>((ref) {
+ 
+ ### In Widgets
+ 
++UI sign-in calls the notifier, which publishes the user to the session observed by the router. `login` returns `Future<void>`; observe `AuthState.user` and `AuthState.failure` for the outcome. Calling `LoginUseCase` alone does not publish that state. Let the router preserve the intended destination instead of forcing Home.
++
+ Text shown to the user is a plain string here to keep the example short. Under `lib/features/**/presentation/`, `test/tooling/text_literal_guard_test.dart` fails on a bare `Text('...')`: take the string from `context.l10n`, as in [Adding a New Feature](../../examples/adding-features.md).
+ 
+ ```dart
++import 'package:flutter_riverpod/flutter_riverpod.dart';
++import 'package:flutter_starter/features/auth/presentation/providers/auth_provider.dart';
++import 'package:material_ui/material_ui.dart';
++
+ class LoginScreen extends ConsumerWidget {
++  const LoginScreen({super.key});
++
+   @override
+   Widget build(BuildContext context, WidgetRef ref) {
++    final authState = ref.watch(authNotifierProvider);
+     return ElevatedButton(
+-      onPressed: () async {
+-        final loginUseCase = ref.read(loginUseCaseProvider);
+-        final result = await loginUseCase('user@example.com', 'password');
+-        // Handle result...
++      onPressed: authState.isLoading ? null : () async {
++        await ref.read(authNotifierProvider.notifier).login(
++          'user@example.com', 'password123',
++        );
++        // The router observes the published session and redirects on success.
+       },
+-      child: Text('Login'),
++      child: const Text('Login'),
+     );
+   }
+ }
+diff --git a/docs/api/features/auth/usecases.md b/docs/api/features/auth/usecases.md
+index a61f478d626..2a1503f5fd3 100644
+--- a/docs/api/features/auth/usecases.md
++++ b/docs/api/features/auth/usecases.md
+@@ -37,13 +37,13 @@ LoginUseCase(this.repository);
+ /// Returns:
+ /// - [Future<Result<User>>]: Success with User entity, or Failure with error details
+ /// 
+-/// Example:
++/// Domain/service example, not UI sign-in:
+ /// ```dart
+ /// final useCase = LoginUseCase(authRepository);
+ /// final result = await useCase('user@example.com', 'password123');
+ /// result.when(
+-///   success: (user) => navigateToHome(),
+-///   failureCallback: (failure) => showError(failure.message),
++///   success: (user) => handleUser(user),
++///   failureCallback: (failure) => handleFailure(failure),
+ /// );
+ /// ```
+ Future<Result<User>> call(String email, String password);
+@@ -259,6 +259,8 @@ Future<Result<String>> call();
+ 
+ ## Usage Pattern
+ 
++The following pattern is for domain/services and tests, not UI sign-in. Widgets use `authNotifierProvider.notifier.login` and observe `AuthState` so the router sees the signed-in session.
++
+ All use cases follow the same pattern:
+ 
+ 1. Access via provider
+diff --git a/docs/architecture/design-decisions.md b/docs/architecture/design-decisions.md
+index 537b98a6085..79eb5968d36 100644
+--- a/docs/architecture/design-decisions.md
++++ b/docs/architecture/design-decisions.md
+@@ -247,17 +247,10 @@ final loginUseCaseProvider = Provider<LoginUseCase>((ref) {
+   return LoginUseCase(repository);
+ });
+ 
+-// Presentation layer - state management
+-class AuthNotifier extends Notifier<AuthState> {
+-  @override
+-  AuthState build() => const AuthState();
+-  
+-  Future<void> login(String email, String password) async {
+-    final useCase = ref.read(loginUseCaseProvider);
+-    final result = await useCase(email, password);
+-    // Handle result
+-  }
+-}
++// Presentation layer: use the shipped session owner.
++await ref.read(authNotifierProvider.notifier).login(email, password);
++// AuthState publishes user/failure to the UI and sessionStatusProvider.
++// The router redirects after a successful sign-in.
+ ```
+ 
+ **One default this template overrides:** Riverpod 3 retries a failed provider
+@@ -398,12 +391,9 @@ class LoginUseCase {
+   }
+ }
+ 
+-// Usage in UI
+-final result = await loginUseCase(email, password);
+-result.when(
+-  success: (user) => navigateToHome(),
+-  failureCallback: (failure) => showError(failure.message),
+-);
++// Usage in UI: publish the session before the router redirects.
++await ref.read(authNotifierProvider.notifier).login(email, password);
++// Observe authNotifierProvider for user/failure; login returns Future<void>.
+ ```
+ 
+ ### Trade-offs
+@@ -957,6 +947,8 @@ The subsections below are **illustrative migration sketches** (hypothetical file
+ 
+ #### From Riverpod to Provider
+ 
++This illustrates a non-sign-in user lookup. A sign-in migration must also port the session owner and the router session-status binding; calling a domain use case from a widget is insufficient.
++
+ 1. **Replace dependencies**
+    ```yaml
+    dependencies:
+@@ -967,33 +959,33 @@ The subsections below are **illustrative migration sketches** (hypothetical file
+ 2. **Convert providers**
+    ```dart
+    // Before (Riverpod)
+-   final loginUseCaseProvider = Provider<LoginUseCase>((ref) {
++   final getCurrentUserUseCaseProvider = Provider<GetCurrentUserUseCase>((ref) {
+      final repository = ref.watch(authRepositoryProvider);
+-     return LoginUseCase(repository);
++     return GetCurrentUserUseCase(repository);
+    });
+    
+    // After (Provider) - an entry in the MultiProvider's `providers` list
+    // (step 4), below the Provider<AuthRepository> it reads
+-   ProxyProvider<AuthRepository, LoginUseCase>(
+-     update: (_, repository, _) => LoginUseCase(repository),
++   ProxyProvider<AuthRepository, GetCurrentUserUseCase>(
++     update: (_, repository, _) => GetCurrentUserUseCase(repository),
+    ),
+    ```
+ 
+ 3. **Update widgets**
+    ```dart
+    // Before (Riverpod)
+-   class LoginScreen extends ConsumerWidget {
++   class UserScreen extends ConsumerWidget {
+      @override
+      Widget build(BuildContext context, WidgetRef ref) {
+-       final useCase = ref.watch(loginUseCaseProvider);
++       final useCase = ref.watch(getCurrentUserUseCaseProvider);
+      }
+    }
+    
+    // After (Provider)
+-   class LoginScreen extends StatelessWidget {
++   class UserScreen extends StatelessWidget {
+      @override
+      Widget build(BuildContext context) {
+-       final useCase = Provider.of<LoginUseCase>(context);
++       final useCase = Provider.of<GetCurrentUserUseCase>(context);
+      }
+    }
+    ```
+@@ -1012,8 +1004,8 @@ The subsections below are **illustrative migration sketches** (hypothetical file
+      MultiProvider(
+        providers: [
+          Provider<AuthRepository>(create: (_) => AuthRepositoryImpl(...)),
+-         ProxyProvider<AuthRepository, LoginUseCase>(
+-           update: (_, repository, _) => LoginUseCase(repository),
++         ProxyProvider<AuthRepository, GetCurrentUserUseCase>(
++           update: (_, repository, _) => GetCurrentUserUseCase(repository),
+          ),
+        ],
+        child: const MyApp(),
+@@ -1132,6 +1124,8 @@ to return `http.Response`: that puts the transport back in every data source.
+ 
+ ### Alternative Error Handling Patterns
+ 
++The before/after calls below are domain/service consumers. UI sign-in still goes through the session owner (`AuthNotifier`); if its use-case contract changes, adapt the notifier while retaining publication to the router session.
++
+ #### From Result Pattern to Exceptions
+ 
+ 1. **Update repositories and use cases**
+@@ -1162,23 +1156,23 @@ to return `http.Response`: that puts the transport back in every data source.
+    }
+    ```
+ 
+-2. **Update UI handling**
++2. **Update domain/service callers**
+    ```dart
+    // Before (Result Pattern)
+    final result = await loginUseCase(email, password);
+    result.when(
+-     success: (user) => navigateToHome(),
+-     failureCallback: (failure) => showError(failure.message),
++     success: (user) => handleUser(user),
++     failureCallback: (failure) => handleFailure(failure),
+    );
+    
+    // After (Exceptions)
+    try {
+      final user = await loginUseCase(email, password);
+-     navigateToHome();
++     handleUser(user);
+    } on AuthException catch (e) {
+-     showError(e.message);
++     handleFailure(e);
+    } catch (e) {
+-     showError('Unexpected error');
++     handleFailure(e);
+    }
+    ```
+ 
+@@ -1230,18 +1224,18 @@ to return `http.Response`: that puts the transport back in every data source.
+    }
+    ```
+ 
+-4. **Update UI handling**
++4. **Update domain/service callers**
+    ```dart
+    // Before (Result Pattern)
+    result.when(
+-     success: (user) => navigateToHome(),
+-     failureCallback: (failure) => showError(failure.message),
++     success: (user) => handleUser(user),
++     failureCallback: (failure) => handleFailure(failure),
+    );
+    
+    // After (Either Pattern)
+    result.fold(
+-     (failure) => showError(failure.message),
+-     (user) => navigateToHome(),
++     (failure) => handleFailure(failure),
++     (user) => handleUser(user),
+    );
+    ```
+ 
+diff --git a/docs/guides/features/common-tasks.md b/docs/guides/features/common-tasks.md
+index 4b9d3755673..53d5509afc9 100644
+--- a/docs/guides/features/common-tasks.md
++++ b/docs/guides/features/common-tasks.md
+@@ -320,20 +320,25 @@ See [API Integration](../../api/examples/api-integration.md) for more patterns.
+ class MyWidget extends ConsumerWidget {
+   @override
+   Widget build(BuildContext context, WidgetRef ref) {
+-    // Read (one-time)
+-    final useCase = ref.read(loginUseCaseProvider);
++    // Read the session owner for callbacks, not a login use case.
++    final auth = ref.read(authNotifierProvider.notifier);
+     
+     // Watch (reactive)
+     final authState = ref.watch(authNotifierProvider);
+     
+-    return Container();
++    return ElevatedButton(
++      onPressed: authState.isLoading ? null : () async {
++        await auth.login('user@example.com', 'password123');
++      },
++      child: const Text('Login'),
++    );
+   }
+ }
+ 
+ // In callbacks
+-onPressed: () {
+-  final useCase = ref.read(loginUseCaseProvider);
+-  // Use useCase
++onPressed: () async {
++  final auth = ref.read(authNotifierProvider.notifier);
++  await auth.login('user@example.com', 'password123');
+ }
+ ```
+ 
+diff --git a/docs/guides/onboarding/understanding-codebase.md b/docs/guides/onboarding/understanding-codebase.md
+index f324fb6c095..21b842ff991 100644
+--- a/docs/guides/onboarding/understanding-codebase.md
++++ b/docs/guides/onboarding/understanding-codebase.md
+@@ -96,7 +96,7 @@ docs/
+ All repository and use case methods return `Result<T>` for type-safe error handling:
+ 
+ ```dart
+-final result = await loginUseCase('user@example.com', 'password');
++final result = await getUserUseCase();
+ result.when(
+   success: (user) => handleSuccess(user),
+   failureCallback: (failure) => handleFailure(failure),
+@@ -112,11 +112,12 @@ See [Common Patterns](../../api/examples/common-patterns.md#result-pattern) for
+ 
+ ### 2. Dependency Injection with Riverpod
+ 
+-All dependencies are provided via Riverpod providers:
++All dependencies are provided via Riverpod providers. UI sign-in goes through `AuthNotifier`, which publishes the session observed by the router:
+ 
+ ```dart
+ // In widgets
+-final useCase = ref.read(loginUseCaseProvider);
++final auth = ref.read(authNotifierProvider.notifier);
++await auth.login('user@example.com', 'password123');
+ 
+ // In providers
+ final repository = ref.watch(authRepositoryProvider);
+diff --git a/test/docs/auth_flow_examples_test.dart b/test/docs/auth_flow_examples_test.dart
+index fc91332f3e6..bf5d8de0c51 100644
+--- a/test/docs/auth_flow_examples_test.dart
++++ b/test/docs/auth_flow_examples_test.dart
+@@ -82,39 +82,65 @@ void main() {
+     _section(blueprints, '## Session management', '## GDPR'),
+   );
+ 
+-  testWidgets('the documented login call publishes the signed-in session', (
+-    tester,
+-  ) async {
+-    final example = _section(
++  for (final entry in <String, String>{
++    'integration': _section(
+       integration,
+       '### Complete Login Flow',
+       '### Check Authentication Status',
+-    );
+-    final selector = RegExp(
+-      r'ref\.read\((loginUseCaseProvider|authNotifierProvider\.notifier)\)',
+-    ).firstMatch(example);
+-    expect(
+-      selector,
+-      isNotNull,
+-      reason: 'compile and execute the documented API',
+-    );
+-    final graph = await _graph(tester);
+-    // Both documented API shapes compile here. Selecting the actual quoted
+-    // one makes the old usecase-only example fail on real session state.
+-    if (selector!.group(1) == 'loginUseCaseProvider') {
+-      await graph.ref.read(loginUseCaseProvider)(
+-        'doc@example.com',
+-        'password123',
++    ),
++    'auth providers': _section(
++      File('docs/api/features/auth/providers.md').readAsStringSync(),
++      '### In Widgets',
++      '### In Providers',
++    ),
++  }.entries) {
++    testWidgets('the ${entry.key} login call publishes the signed-in session', (
++      tester,
++    ) async {
++      final example = entry.value;
++      final selector = RegExp(
++        r'ref\.read\((loginUseCaseProvider|authNotifierProvider\.notifier)\)',
++      ).firstMatch(example);
++      expect(
++        selector,
++        isNotNull,
++        reason: 'compile and execute the documented API',
+       );
+-    } else {
+-      await graph.ref
+-          .read(authNotifierProvider.notifier)
+-          .login('doc@example.com', 'password123');
+-    }
+-    await tester.pump();
+-    expect(graph.tokens.accessToken, 'doc-access');
+-    expect(graph.container.read(sessionStatusProvider), SessionStatus.signedIn);
+-  });
++      final graph = await _graph(tester);
++      // Both documented API shapes compile here. Selecting the actual quoted
++      // one makes the old usecase-only example fail on real session state.
++      if (selector!.group(1) == 'loginUseCaseProvider') {
++        await graph.ref.read(loginUseCaseProvider)(
++          'doc@example.com',
++          'password123',
++        );
++      } else {
++        await graph.ref
++            .read(authNotifierProvider.notifier)
++            .login('doc@example.com', 'password123');
++      }
++      await tester.pump();
++      expect(graph.tokens.accessToken, 'doc-access');
++      expect(
++        graph.container.read(sessionStatusProvider),
++        SessionStatus.signedIn,
++      );
++    });
++  }
++
++  test(
++    'the documented auth-provider widget compiles against the session API',
++    () {
++      final source = _section(
++        File('docs/api/features/auth/providers.md').readAsStringSync(),
++        '### In Widgets',
++        '### In Providers',
++      );
++      final blocks = importingDartBlocks(source);
++      expect(blocks, hasLength(1));
++      expect(analyzeSnippets('auth_provider_login', blocks), isEmpty);
++    },
++  );
+ 
+   test('the session blueprint obeys the import guard where it is placed', () {
+     final path = RegExp(r'Blueprint: (lib/[^\s]+\.dart)')
+diff --git a/test/docs/auth_login_examples_test.dart b/test/docs/auth_login_examples_test.dart
+new file mode 100644
+index 00000000000..2bd7de973fd
+--- /dev/null
++++ b/test/docs/auth_login_examples_test.dart
+@@ -0,0 +1,163 @@
++import 'dart:io';
++
++import 'package:analyzer/dart/analysis/features.dart';
++import 'package:analyzer/dart/ast/token.dart';
++import 'package:analyzer/src/dart/scanner/scanner.dart';
++import 'package:flutter_test/flutter_test.dart';
++
++import '../../tool/doc_fences.dart';
++
++// A vocabulary guard for the documented login/navigation idioms, not a
++// whole-program call graph. Lexing avoids treating comments/strings as calls.
++List<String> _tokens(String source) {
++  final features = FeatureSet.latestLanguageVersion();
++  final scanner = Scanner(inputText: source, reportError: (_) {})
++    ..configureFeatures(featureSetForOverriding: features, featureSet: features)
++    ..preserveComments = false;
++  return [
++    for (var t = scanner.tokenize(); t.type != TokenType.EOF; t = t.next!)
++      if (t.type != TokenType.STRING &&
++          t.type != TokenType.BAD_INPUT &&
++          !t.isSynthetic)
++        t.lexeme,
++  ];
++}
++
++List<String> _dartBlocks(String markdown) {
++  final tracker = FenceTracker();
++  final blocks = <String>[];
++  var body = <String>[];
++  var dart = false;
++  for (final original in markdown.split('\n')) {
++    final line = original.replaceFirst(RegExp(r'^(?:[ \t]*>[ \t]?)+'), '');
++    final wasOpen = tracker.inFence;
++    if (tracker.isFence(line)) {
++      if (!wasOpen) {
++        final match = fenceLike.firstMatch(line)!;
++        final language = line
++            .substring(match.end)
++            .trim()
++            .split(RegExp(r'\s+'))
++            .first;
++        dart = language.isEmpty || language == 'dart';
++        body = [];
++      } else if (dart) {
++        blocks.add(body.join('\n'));
++      }
++    } else if (tracker.inFence && dart) {
++      body.add(line);
++    }
++  }
++  return [
++    for (final block in blocks) ...[
++      block,
++      // Dartdoc examples are executable guidance inside an outer Dart fence.
++      ..._dartBlocks(
++        block
++            .split('\n')
++            .where((line) => line.trimLeft().startsWith('///'))
++            .map((line) => line.replaceFirst(RegExp(r'^[ \t]*/// ?'), ''))
++            .join('\n'),
++      ),
++    ],
++  ];
++}
++
++List<String> _problems(String markdown) {
++  final problems = <String>[];
++  for (final block in _dartBlocks(markdown)) {
++    final tokens = _tokens(block);
++    if (!tokens.any(
++      const {
++        'loginUseCase',
++        'LoginUseCase',
++        'loginUseCaseProvider',
++      }.contains,
++    )) {
++      continue;
++    }
++    final navigation =
++        tokens.any((t) => t.startsWith('navigateTo') || t == 'Navigator') ||
++        RegExp(r'\b(?:context|router)\s*\.\s*(?:go|push|replace)\w*\s*\(')
++            .hasMatch(tokens.join(' '));
++    final widget =
++        tokens.contains('WidgetRef') ||
++        tokens.contains('ConsumerStatefulWidget') ||
++        tokens.contains('ConsumerState') ||
++        tokens.contains('ConsumerWidget');
++    if (navigation || widget) {
++      problems.add('A UI/navigation example bypasses AuthNotifier.login');
++    }
++  }
++  return problems;
++}
++
++void main() {
++  test(
++    'all documented UI login flows publish the session through AuthNotifier',
++    () {
++      final paths =
++          (Process.runSync('git', ['ls-files', '*.md']).stdout as String).split(
++            '\n',
++          );
++      final problems = <String>[];
++      for (final path in paths.where((p) => p.isNotEmpty)) {
++        final file = File(path);
++        if (file.existsSync()) {
++          problems.addAll(
++            _problems(file.readAsStringSync()).map((p) => '$path: $p'),
++          );
++        }
++      }
++      expect(problems, isEmpty);
++    },
++  );
++
++  test('guard rejects direct, aliased and Dartdoc use-case navigation', () {
++    for (final code in [
++      '''
++class Login extends ConsumerWidget {
++  Widget build(BuildContext context, WidgetRef ref) {
++    final call = ref.read(loginUseCaseProvider);
++    return button(() => call(email, password));
++  }
++}
++''',
++      'final result = await loginUseCase(email, password); navigateToHome();',
++      '''
++final call = ref.read(loginUseCaseProvider);
++await call(email, password);
++router.go('/home');
++''',
++      '''
++final call = LoginUseCase(repository);
++await call(email, password);
++context.goToHome();
++''',
++    ]) {
++      expect(_problems('```dart\n$code\n```'), isNotEmpty);
++      final dartdoc = code.split('\n').map((line) => '/// $line').join('\n');
++      expect(
++        _problems('```dart\n/// ```dart\n$dartdoc\n/// ```\n```'),
++        isNotEmpty,
++      );
++      expect(_problems('~~~~dart\n$code\n~~~~'), isNotEmpty);
++    }
++  });
++
++  test('guard accepts session-owner UI, domain-only results and text', () {
++    for (final code in [
++      '''
++await ref.read(authNotifierProvider.notifier).login(email, password);
++router.go('/home');
++''',
++      'final result = await loginUseCase(email, password); handleUser(result);',
++      '''
++final result = await loginUseCase(email, password);
++print('navigateToHome()'); // Navigator.push()
++''',
++    ]) {
++      expect(_problems('```dart\n$code\n```'), isEmpty);
++    }
++  });
++}

@@ -1,0 +1,12 @@
+8d7c387a4443fd81646479345ba8b6f0e2d4d608: 9 findings
+docs/api/core/utils.md: A UI/navigation example bypasses AuthNotifier.login
+docs/api/examples/common-patterns.md: A UI/navigation example bypasses AuthNotifier.login
+docs/api/examples/common-patterns.md: A UI/navigation example bypasses AuthNotifier.login
+docs/api/features/auth/providers.md: A UI/navigation example bypasses AuthNotifier.login
+docs/api/features/auth/usecases.md: A UI/navigation example bypasses AuthNotifier.login
+docs/architecture/design-decisions.md: A UI/navigation example bypasses AuthNotifier.login
+docs/architecture/design-decisions.md: A UI/navigation example bypasses AuthNotifier.login
+docs/architecture/design-decisions.md: A UI/navigation example bypasses AuthNotifier.login
+docs/guides/features/common-tasks.md: A UI/navigation example bypasses AuthNotifier.login
+e3d326baaf98fb9f59d67f23d55595bae4c4f6bb: 0 findings
+Independent fence and lexical controls passed

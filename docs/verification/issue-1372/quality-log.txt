@@ -1,0 +1,27 @@
+Decoded log for job 139217888399, accepted e3d326baaf98fb9f59d67f23d55595bae4c4f6bb.
+Selected verification lines (not the complete raw log):
+
+2026-11-25T12:53:06.3297033Z Formatted 669 files (0 changed) in 1.03 seconds.
+2026-11-25T12:53:21.3996541Z No issues found! (ran in 14.4s)
+2026-11-25T13:01:22.3355043Z 🎉 4811 tests passed, 16 skipped.
+2026-11-25T13:01:22.4467209Z   Coverage: 97.17%
+2026-11-25T13:01:22.4479089Z ✓ Coverage 97.17% meets minimum threshold of 94%
+
+Tail:
+2026-11-25T13:01:22.9051583Z includeif.gitdir:/github/workspace/.git.path
+2026-11-25T13:01:22.9052095Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-11-25T13:01:22.9055137Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git.path
+2026-11-25T13:01:22.9069418Z /home/runner/work/_temp/git-credentials-2dd07f18-e17a-4bfa-9b73-e16433f1ff92.config
+2026-11-25T13:01:22.9076087Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-2dd07f18\-e17a\-4bfa\-9b73\-e16433f1ff92\.config
+2026-11-25T13:01:22.9103776Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git/worktrees/*.path
+2026-11-25T13:01:22.9120957Z /home/runner/work/_temp/git-credentials-2dd07f18-e17a-4bfa-9b73-e16433f1ff92.config
+2026-11-25T13:01:22.9128269Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-2dd07f18\-e17a\-4bfa\-9b73\-e16433f1ff92\.config
+2026-11-25T13:01:22.9153527Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-11-25T13:01:22.9168744Z /github/runner_temp/git-credentials-2dd07f18-e17a-4bfa-9b73-e16433f1ff92.config
+2026-11-25T13:01:22.9181841Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-2dd07f18\-e17a\-4bfa\-9b73\-e16433f1ff92\.config
+2026-11-25T13:01:22.9196943Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-11-25T13:01:22.9214222Z /github/runner_temp/git-credentials-2dd07f18-e17a-4bfa-9b73-e16433f1ff92.config
+2026-11-25T13:01:22.9218569Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-2dd07f18\-e17a\-4bfa\-9b73\-e16433f1ff92\.config
+2026-11-25T13:01:22.9242976Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-25T13:01:22.9415267Z Removing credentials config '/home/runner/work/_temp/git-credentials-2dd07f18-e17a-4bfa-9b73-e16433f1ff92.config'
+2026-11-25T13:01:22.9530313Z Cleaning up orphan processes

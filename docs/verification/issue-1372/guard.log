@@ -1,0 +1,5 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter-1372/test/docs/auth_login_examples_test.dart
+00:00 +0: all documented UI login flows publish the session through AuthNotifier
+00:00 +1: guard rejects direct, aliased and Dartdoc use-case navigation
+00:00 +2: guard accepts session-owner UI, domain-only results and text
+00:00 +3: All tests passed!

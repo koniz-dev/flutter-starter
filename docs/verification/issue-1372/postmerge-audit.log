@@ -1,0 +1,37 @@
+==> env asset guard
+OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+==> generated code (skipped: AUDIT_SKIP_CODEGEN=1)
+==> format (lib test integration_test tool examples)
+Formatted 669 files (0 changed) in 2.52 seconds.
+==> flutter analyze
+Analyzing flutter-starter-1372...                               
+No issues found! (ran in 5.9s)
+==> flutter test
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter-1372/test/docs/auth_login_examples_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter-1372/test/docs/auth_login_examples_test.dart: all documented UI login flows publish the session through AuthNotifier
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter-1372/test/docs/auth_login_examples_test.dart: guard rejects direct, aliased and Dartdoc use-case navigation
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter-1372/test/docs/auth_login_examples_test.dart: guard accepts session-owner UI, domain-only results and text
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter-1372/test/docs/auth_providers_quotes_test.dart: the doc quotes at least the two providers this test was written for
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter-1372/test/docs/auth_providers_quotes_test.dart: authModuleOverrides quote includes every declared binding
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter-1372/test/docs/auth_providers_quotes_test.dart: authLocalDataSourceProvider is quoted as auth_providers.dart declares it
+00:00 +6: /Users/nguyenanhkiet/Playground/flutter-starter-1372/test/docs/auth_providers_quotes_test.dart: authRemoteDataSourceProvider is quoted as auth_providers.dart declares it
+00:00 +7: /Users/nguyenanhkiet/Playground/flutter-starter-1372/test/docs/auth_providers_quotes_test.dart: authRepositoryProvider is quoted as auth_providers.dart declares it
+00:00 +8: /Users/nguyenanhkiet/Playground/flutter-starter-1372/test/docs/auth_providers_quotes_test.dart: loginUseCaseProvider is quoted as auth_providers.dart declares it
+00:00 +9: /Users/nguyenanhkiet/Playground/flutter-starter-1372/test/docs/auth_providers_quotes_test.dart: registerUseCaseProvider is quoted as auth_providers.dart declares it
+00:00 +10: /Users/nguyenanhkiet/Playground/flutter-starter-1372/test/docs/auth_providers_quotes_test.dart: logoutUseCaseProvider is quoted as auth_providers.dart declares it
+00:00 +11: /Users/nguyenanhkiet/Playground/flutter-starter-1372/test/docs/auth_providers_quotes_test.dart: refreshTokenUseCaseProvider is quoted as auth_providers.dart declares it
+00:00 +12: /Users/nguyenanhkiet/Playground/flutter-starter-1372/test/docs/auth_providers_quotes_test.dart: getCurrentUserUseCaseProvider is quoted as auth_providers.dart declares it
+00:00 +13: /Users/nguyenanhkiet/Playground/flutter-starter-1372/test/docs/auth_providers_quotes_test.dart: isAuthenticatedUseCaseProvider is quoted as auth_providers.dart declares it
+00:00 +14: /Users/nguyenanhkiet/Playground/flutter-starter-1372/test/docs/auth_flow_examples_test.dart: the integration login call publishes the signed-in session
+00:01 +15: /Users/nguyenanhkiet/Playground/flutter-starter-1372/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:01 +16: /Users/nguyenanhkiet/Playground/flutter-starter-1372/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
+00:01 +17: /Users/nguyenanhkiet/Playground/flutter-starter-1372/test/docs/auth_flow_examples_test.dart: the documented auth-provider widget compiles against the session API
+00:01 +18: /Users/nguyenanhkiet/Playground/flutter-starter-1372/test/docs/auth_flow_examples_test.dart: the documented auth-provider widget compiles against the session API
+00:01 +19: /Users/nguyenanhkiet/Playground/flutter-starter-1372/test/docs/auth_flow_examples_test.dart: the documented auth-provider widget compiles against the session API
+00:01 +20: /Users/nguyenanhkiet/Playground/flutter-starter-1372/test/docs/auth_flow_examples_test.dart: the documented auth-provider widget compiles against the session API
+00:01 +21: /Users/nguyenanhkiet/Playground/flutter-starter-1372/test/docs/auth_flow_examples_test.dart: the documented auth-provider widget compiles against the session API
+00:11 +22: /Users/nguyenanhkiet/Playground/flutter-starter-1372/test/docs/auth_flow_examples_test.dart: the session blueprint obeys the import guard where it is placed
+00:20 +23: /Users/nguyenanhkiet/Playground/flutter-starter-1372/test/docs/auth_flow_examples_test.dart: the blueprint sign-out action ends the visible session
+00:20 +24: /Users/nguyenanhkiet/Playground/flutter-starter-1372/test/docs/auth_flow_examples_test.dart: the Logout contract documents revocation body and bearer header
+00:20 +25: /Users/nguyenanhkiet/Playground/flutter-starter-1372/test/docs/auth_flow_examples_test.dart: both refresh examples end only an expired session without token writes
+00:20 +26: All tests passed!

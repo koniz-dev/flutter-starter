@@ -1,0 +1,57 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter-1372/test/docs/auth_login_examples_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter-1372/test/docs/auth_login_examples_test.dart: all documented UI login flows publish the session through AuthNotifier
+00:00 +0 -1: /Users/nguyenanhkiet/Playground/flutter-starter-1372/test/docs/auth_login_examples_test.dart: all documented UI login flows publish the session through AuthNotifier [E]
+  Expected: empty
+    Actual: [
+              'docs/api/core/utils.md: A UI/navigation example bypasses AuthNotifier.login',
+              'docs/api/examples/common-patterns.md: A UI/navigation example bypasses AuthNotifier.login',
+              'docs/api/examples/common-patterns.md: A UI/navigation example bypasses AuthNotifier.login',
+              'docs/api/features/auth/providers.md: A UI/navigation example bypasses AuthNotifier.login',
+              'docs/api/features/auth/usecases.md: A UI/navigation example bypasses AuthNotifier.login',
+              'docs/architecture/design-decisions.md: A UI/navigation example bypasses AuthNotifier.login',
+              'docs/architecture/design-decisions.md: A UI/navigation example bypasses AuthNotifier.login',
+              'docs/architecture/design-decisions.md: A UI/navigation example bypasses AuthNotifier.login',
+              'docs/guides/features/common-tasks.md: A UI/navigation example bypasses AuthNotifier.login'
+            ]
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/docs/auth_login_examples_test.dart 90:5        main.<fn>
+  
+00:00 +0 -1: /Users/nguyenanhkiet/Playground/flutter-starter-1372/test/docs/auth_login_examples_test.dart: guard rejects direct, aliased and Dartdoc use-case navigation
+00:00 +1 -1: /Users/nguyenanhkiet/Playground/flutter-starter-1372/test/docs/auth_login_examples_test.dart: guard accepts session-owner UI, domain-only results and literal text
+00:05 +2 -1: /Users/nguyenanhkiet/Playground/flutter-starter-1372/test/docs/auth_flow_examples_test.dart: the integration login call publishes the signed-in session
+00:06 +3 -1: /Users/nguyenanhkiet/Playground/flutter-starter-1372/test/docs/auth_flow_examples_test.dart: the auth providers login call publishes the signed-in session
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: SessionStatus:<SessionStatus.signedIn>
+  Actual: SessionStatus:<SessionStatus.signedOut>
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter-1372/test/docs/auth_flow_examples_test.dart:116:5)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1968:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///Users/nguyenanhkiet/Playground/flutter-starter-1372/test/docs/auth_flow_examples_test.dart line 116
+The test description was:
+  the auth providers login call publishes the signed-in session
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:06 +3 -2: /Users/nguyenanhkiet/Playground/flutter-starter-1372/test/docs/auth_flow_examples_test.dart: the auth providers login call publishes the signed-in session [E]
+  Test failed. See exception logs above.
+  The test description was: the auth providers login call publishes the signed-in session
+  
+00:06 +3 -2: /Users/nguyenanhkiet/Playground/flutter-starter-1372/test/docs/auth_flow_examples_test.dart: the session blueprint obeys the import guard where it is placed
+00:21 +4 -2: /Users/nguyenanhkiet/Playground/flutter-starter-1372/test/docs/auth_flow_examples_test.dart: the blueprint sign-out action ends the visible session
+00:21 +5 -2: /Users/nguyenanhkiet/Playground/flutter-starter-1372/test/docs/auth_flow_examples_test.dart: the Logout contract documents revocation body and bearer header
+00:21 +6 -2: /Users/nguyenanhkiet/Playground/flutter-starter-1372/test/docs/auth_flow_examples_test.dart: both refresh examples end only an expired session without token writes
+00:21 +7 -2: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter-1372/test/docs/auth_flow_examples_test.dart: the auth providers login call publishes the signed-in session
+  /Users/nguyenanhkiet/Playground/flutter-starter-1372/test/docs/auth_login_examples_test.dart: all documented UI login flows publish the session through AuthNotifier
