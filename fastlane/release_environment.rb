@@ -29,32 +29,53 @@ module ReleaseEnvironment
   # so a store lane run without base_url: or BASE_URL_<ENV> uploaded a build
   # pointing at a placeholder host, and nothing at startup refused it.
   #
-  # [value] trimmed, or an ArgumentError when it is unset or on example.com.
+  # The rules, and messages, are those of the shell builds
+  # (scripts/ci/release_base_url.sh).
+  #
+  # [value] trimmed, or an ArgumentError when it is unset, not https, spelled
+  # with whitespace, "%" or a backslash, or on example.com.
   # [source] names where it should come from, for the message.
-  def self.base_url(value, source)
+  # [environment] names the release, for the message.
+  def self.base_url(value, source,
+                    environment = source.sub(/\ABASE_URL_/, '').downcase)
     url = value.to_s.strip
     if url.empty?
       raise ArgumentError, "No API base URL: pass base_url:<url> or set #{source}."
     end
-    host = url[%r{\A[a-z][a-z0-9+.-]*://(?:[^@/]*@)?([^/:?#]+)}i, 1]
-    if host.nil?
-      raise ArgumentError, "base_url #{url} is not an absolute URL " \
-                           "(https://host/...)."
+    # Dart reads %61 as "a" and a backslash as "/", so either could spell the
+    # placeholder host past the check below; whitespace is never part of a URL.
+    if url.match?(/[%\\[:space:]]/)
+      raise ArgumentError, "base URL '#{url}' contains whitespace, '%' or a " \
+                           'backslash. Write the host and path literally.'
     end
-    # A trailing dot names the same host (api.example.com.).
-    host = host.downcase.chomp('.')
+    # A staging or production release refuses any other scheme at startup
+    # (lib/main.dart).
+    unless url.match?(%r{\Ahttps://.}i)
+      raise ArgumentError, "base URL '#{url}' is not an absolute https URL. " \
+                           "A #{environment} release refuses any other " \
+                           'scheme at startup.'
+    end
+    # The host as Dart reads it: the authority ends at the first "/", "?" or
+    # "#", userinfo runs to its last "@", and a port follows a ":" (outside
+    # an IPv6 literal). Trailing dots name the same host (api.example.com.).
+    host = url.downcase.sub(%r{\Ahttps://}, '')[%r{\A[^/?#]*}]
+    host = host.sub(/\A.*@/, '')
+    host = host.sub(/:.*\z/, '') unless host.start_with?('[')
+    host = host.sub(/\.+\z/, '')
+    raise ArgumentError, "base URL '#{url}' has no host." if host.empty?
     if host == 'example.com' || host.end_with?('.example.com')
-      raise ArgumentError, "base_url #{url} is the starter's placeholder " \
-                           "host. Pass base_url:<url> or set #{source} to " \
-                           "your API."
+      raise ArgumentError, "base URL '#{url}' is the starter's placeholder " \
+                           'host. Pass the URL of your API, or set ' \
+                           "#{source} to it."
     end
     url
   end
 
   # Explicit lane option wins; otherwise use the resolved environment's URL.
   def self.for_environment(environment, value = nil)
-    source = "BASE_URL_#{normalize(environment).upcase}"
-    base_url(value || ENV[source], source)
+    environment = normalize(environment)
+    source = "BASE_URL_#{environment.upcase}"
+    base_url(value || ENV[source], source, environment)
   end
 
   # [for_environment], failing the lane with the message.
