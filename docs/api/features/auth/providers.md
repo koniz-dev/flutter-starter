@@ -212,19 +212,29 @@ final isAuthenticatedUseCaseProvider = Provider<IsAuthenticatedUseCase>((ref) {
 
 ### In Widgets
 
+UI sign-in calls the notifier, which publishes the user to the session observed by the router. `login` returns `Future<void>`; observe `AuthState.user` and `AuthState.failure` for the outcome. Calling `LoginUseCase` alone does not publish that state. Let the router preserve the intended destination instead of forcing Home.
+
 Text shown to the user is a plain string here to keep the example short. Under `lib/features/**/presentation/`, `test/tooling/text_literal_guard_test.dart` fails on a bare `Text('...')`: take the string from `context.l10n`, as in [Adding a New Feature](../../examples/adding-features.md).
 
 ```dart
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_starter/features/auth/presentation/providers/auth_provider.dart';
+import 'package:material_ui/material_ui.dart';
+
 class LoginScreen extends ConsumerWidget {
+  const LoginScreen({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final authState = ref.watch(authNotifierProvider);
     return ElevatedButton(
-      onPressed: () async {
-        final loginUseCase = ref.read(loginUseCaseProvider);
-        final result = await loginUseCase('user@example.com', 'password');
-        // Handle result...
+      onPressed: authState.isLoading ? null : () async {
+        await ref.read(authNotifierProvider.notifier).login(
+          'user@example.com', 'password123',
+        );
+        // The router observes the published session and redirects on success.
       },
-      child: Text('Login'),
+      child: const Text('Login'),
     );
   }
 }

@@ -96,7 +96,7 @@ docs/
 All repository and use case methods return `Result<T>` for type-safe error handling:
 
 ```dart
-final result = await loginUseCase('user@example.com', 'password');
+final result = await getUserUseCase();
 result.when(
   success: (user) => handleSuccess(user),
   failureCallback: (failure) => handleFailure(failure),
@@ -112,11 +112,12 @@ See [Common Patterns](../../api/examples/common-patterns.md#result-pattern) for 
 
 ### 2. Dependency Injection with Riverpod
 
-All dependencies are provided via Riverpod providers:
+All dependencies are provided via Riverpod providers. UI sign-in goes through `AuthNotifier`, which publishes the session observed by the router:
 
 ```dart
 // In widgets
-final useCase = ref.read(loginUseCaseProvider);
+final auth = ref.read(authNotifierProvider.notifier);
+await auth.login('user@example.com', 'password123');
 
 // In providers
 final repository = ref.watch(authRepositoryProvider);

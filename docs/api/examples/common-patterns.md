@@ -14,12 +14,14 @@ All repository and use case methods return `Result<T>` for type-safe error handl
 
 ### Basic Usage
 
+This example handles a user lookup, not UI sign-in. Widgets sign in with `ref.read(authNotifierProvider.notifier).login(email, password)` and observe `AuthState`; a login use case alone does not update the router session.
+
 ```dart
-final result = await loginUseCase('user@example.com', 'password');
+final result = await getUserUseCase();
 result.when(
   success: (user) {
     // Handle success
-    navigateToHome();
+    handleSuccess(user);
   },
   failureCallback: (failure) {
     // Handle failure
@@ -68,7 +70,7 @@ All dependencies are provided via Riverpod providers.
 class MyWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final useCase = ref.read(loginUseCaseProvider);
+    final useCase = ref.read(getCurrentUserUseCaseProvider);
     // Use useCase...
   }
 }
@@ -90,7 +92,7 @@ final myProvider = Provider<MyService>((ref) {
 
 ```dart
 // One-time access
-final useCase = ref.read(loginUseCaseProvider);
+final useCase = ref.read(getCurrentUserUseCaseProvider);
 
 // Reactive access (rebuilds when provider changes)
 final repository = ref.watch(authRepositoryProvider);
@@ -289,11 +291,11 @@ try {
 
 ```dart
 // Good
-final useCase = ref.read(loginUseCaseProvider);
+final useCase = ref.read(getCurrentUserUseCaseProvider);
 
 // Bad
 final repository = AuthRepositoryImpl(...);
-final useCase = LoginUseCase(repository);
+final useCase = GetCurrentUserUseCase(repository);
 ```
 
 ### 3. Handle Errors Appropriately

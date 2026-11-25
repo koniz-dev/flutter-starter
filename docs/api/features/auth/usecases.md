@@ -37,13 +37,13 @@ LoginUseCase(this.repository);
 /// Returns:
 /// - [Future<Result<User>>]: Success with User entity, or Failure with error details
 /// 
-/// Example:
+/// Domain/service example, not UI sign-in:
 /// ```dart
 /// final useCase = LoginUseCase(authRepository);
 /// final result = await useCase('user@example.com', 'password123');
 /// result.when(
-///   success: (user) => navigateToHome(),
-///   failureCallback: (failure) => showError(failure.message),
+///   success: (user) => handleUser(user),
+///   failureCallback: (failure) => handleFailure(failure),
 /// );
 /// ```
 Future<Result<User>> call(String email, String password);
@@ -258,6 +258,8 @@ Future<Result<String>> call();
 ---
 
 ## Usage Pattern
+
+The following pattern is for domain/services and tests, not UI sign-in. Widgets use `authNotifierProvider.notifier.login` and observe `AuthState` so the router sees the signed-in session.
 
 All use cases follow the same pattern:
 
