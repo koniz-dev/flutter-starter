@@ -205,7 +205,7 @@ Future<Result<T>> executeWithRetry<T>(
 }
 
 // Usage
-final result = await executeWithRetry(() => loginUseCase(email, password));
+final result = await executeWithRetry(() => getUserUseCase());
 ```
 
 ---

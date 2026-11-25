@@ -82,39 +82,65 @@ void main() {
     _section(blueprints, '## Session management', '## GDPR'),
   );
 
-  testWidgets('the documented login call publishes the signed-in session', (
-    tester,
-  ) async {
-    final example = _section(
+  for (final entry in <String, String>{
+    'integration': _section(
       integration,
       '### Complete Login Flow',
       '### Check Authentication Status',
-    );
-    final selector = RegExp(
-      r'ref\.read\((loginUseCaseProvider|authNotifierProvider\.notifier)\)',
-    ).firstMatch(example);
-    expect(
-      selector,
-      isNotNull,
-      reason: 'compile and execute the documented API',
-    );
-    final graph = await _graph(tester);
-    // Both documented API shapes compile here. Selecting the actual quoted
-    // one makes the old usecase-only example fail on real session state.
-    if (selector!.group(1) == 'loginUseCaseProvider') {
-      await graph.ref.read(loginUseCaseProvider)(
-        'doc@example.com',
-        'password123',
+    ),
+    'auth providers': _section(
+      File('docs/api/features/auth/providers.md').readAsStringSync(),
+      '### In Widgets',
+      '### In Providers',
+    ),
+  }.entries) {
+    testWidgets('the ${entry.key} login call publishes the signed-in session', (
+      tester,
+    ) async {
+      final example = entry.value;
+      final selector = RegExp(
+        r'ref\.read\((loginUseCaseProvider|authNotifierProvider\.notifier)\)',
+      ).firstMatch(example);
+      expect(
+        selector,
+        isNotNull,
+        reason: 'compile and execute the documented API',
       );
-    } else {
-      await graph.ref
-          .read(authNotifierProvider.notifier)
-          .login('doc@example.com', 'password123');
-    }
-    await tester.pump();
-    expect(graph.tokens.accessToken, 'doc-access');
-    expect(graph.container.read(sessionStatusProvider), SessionStatus.signedIn);
-  });
+      final graph = await _graph(tester);
+      // Both documented API shapes compile here. Selecting the actual quoted
+      // one makes the old usecase-only example fail on real session state.
+      if (selector!.group(1) == 'loginUseCaseProvider') {
+        await graph.ref.read(loginUseCaseProvider)(
+          'doc@example.com',
+          'password123',
+        );
+      } else {
+        await graph.ref
+            .read(authNotifierProvider.notifier)
+            .login('doc@example.com', 'password123');
+      }
+      await tester.pump();
+      expect(graph.tokens.accessToken, 'doc-access');
+      expect(
+        graph.container.read(sessionStatusProvider),
+        SessionStatus.signedIn,
+      );
+    });
+  }
+
+  test(
+    'the documented auth-provider widget compiles against the session API',
+    () {
+      final source = _section(
+        File('docs/api/features/auth/providers.md').readAsStringSync(),
+        '### In Widgets',
+        '### In Providers',
+      );
+      final blocks = importingDartBlocks(source);
+      expect(blocks, hasLength(1));
+      expect(analyzeSnippets('auth_provider_login', blocks), isEmpty);
+    },
+  );
 
   test('the session blueprint obeys the import guard where it is placed', () {
     final path = RegExp(r'Blueprint: (lib/[^\s]+\.dart)')

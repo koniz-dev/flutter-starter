@@ -320,20 +320,25 @@ See [API Integration](../../api/examples/api-integration.md) for more patterns.
 class MyWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Read (one-time)
-    final useCase = ref.read(loginUseCaseProvider);
+    // Read the session owner for callbacks, not a login use case.
+    final auth = ref.read(authNotifierProvider.notifier);
     
     // Watch (reactive)
     final authState = ref.watch(authNotifierProvider);
     
-    return Container();
+    return ElevatedButton(
+      onPressed: authState.isLoading ? null : () async {
+        await auth.login('user@example.com', 'password123');
+      },
+      child: const Text('Login'),
+    );
   }
 }
 
 // In callbacks
-onPressed: () {
-  final useCase = ref.read(loginUseCaseProvider);
-  // Use useCase
+onPressed: () async {
+  final auth = ref.read(authNotifierProvider.notifier);
+  await auth.login('user@example.com', 'password123');
 }
 ```
 

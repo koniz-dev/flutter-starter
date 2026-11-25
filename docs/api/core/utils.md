@@ -82,15 +82,17 @@ R when<R>({
 
 ### Usage Examples
 
+These `Result` examples handle a user lookup. UI sign-in instead awaits `ref.read(authNotifierProvider.notifier).login(email, password)` and observes `AuthState`; that method publishes the session and returns `Future<void>`, not a `Result`.
+
 #### Basic Usage
 
 ```dart
-final result = await loginUseCase('user@example.com', 'password');
+final result = await getUserUseCase();
 
 // Check result type
 if (result.isSuccess) {
   final user = result.dataOrNull;
-  print('Logged in: ${user?.email}');
+  print('User: ${user?.email}');
 } else {
   final error = result.errorOrNull;
   print('Error: $error');
@@ -100,11 +102,11 @@ if (result.isSuccess) {
 #### Pattern Matching
 
 ```dart
-final result = await loginUseCase('user@example.com', 'password');
+final result = await getUserUseCase();
 result.when(
   success: (user) {
-    print('Logged in: ${user.email}');
-    navigateToHome();
+    print('User: ${user.email}');
+    handleSuccess(user);
   },
   failureCallback: (failure) {
     if (failure is AuthFailure) {

@@ -247,17 +247,10 @@ final loginUseCaseProvider = Provider<LoginUseCase>((ref) {
   return LoginUseCase(repository);
 });
 
-// Presentation layer - state management
-class AuthNotifier extends Notifier<AuthState> {
-  @override
-  AuthState build() => const AuthState();
-  
-  Future<void> login(String email, String password) async {
-    final useCase = ref.read(loginUseCaseProvider);
-    final result = await useCase(email, password);
-    // Handle result
-  }
-}
+// Presentation layer: use the shipped session owner.
+await ref.read(authNotifierProvider.notifier).login(email, password);
+// AuthState publishes user/failure to the UI and sessionStatusProvider.
+// The router redirects after a successful sign-in.
 ```
 
 **One default this template overrides:** Riverpod 3 retries a failed provider
@@ -398,12 +391,9 @@ class LoginUseCase {
   }
 }
 
-// Usage in UI
-final result = await loginUseCase(email, password);
-result.when(
-  success: (user) => navigateToHome(),
-  failureCallback: (failure) => showError(failure.message),
-);
+// Usage in UI: publish the session before the router redirects.
+await ref.read(authNotifierProvider.notifier).login(email, password);
+// Observe authNotifierProvider for user/failure; login returns Future<void>.
 ```
 
 ### Trade-offs
@@ -957,6 +947,8 @@ The subsections below are **illustrative migration sketches** (hypothetical file
 
 #### From Riverpod to Provider
 
+This illustrates a non-sign-in user lookup. A sign-in migration must also port the session owner and the router session-status binding; calling a domain use case from a widget is insufficient.
+
 1. **Replace dependencies**
    ```yaml
    dependencies:
@@ -967,33 +959,33 @@ The subsections below are **illustrative migration sketches** (hypothetical file
 2. **Convert providers**
    ```dart
    // Before (Riverpod)
-   final loginUseCaseProvider = Provider<LoginUseCase>((ref) {
+   final getCurrentUserUseCaseProvider = Provider<GetCurrentUserUseCase>((ref) {
      final repository = ref.watch(authRepositoryProvider);
-     return LoginUseCase(repository);
+     return GetCurrentUserUseCase(repository);
    });
    
    // After (Provider) - an entry in the MultiProvider's `providers` list
    // (step 4), below the Provider<AuthRepository> it reads
-   ProxyProvider<AuthRepository, LoginUseCase>(
-     update: (_, repository, _) => LoginUseCase(repository),
+   ProxyProvider<AuthRepository, GetCurrentUserUseCase>(
+     update: (_, repository, _) => GetCurrentUserUseCase(repository),
    ),
    ```
 
 3. **Update widgets**
    ```dart
    // Before (Riverpod)
-   class LoginScreen extends ConsumerWidget {
+   class UserScreen extends ConsumerWidget {
      @override
      Widget build(BuildContext context, WidgetRef ref) {
-       final useCase = ref.watch(loginUseCaseProvider);
+       final useCase = ref.watch(getCurrentUserUseCaseProvider);
      }
    }
    
    // After (Provider)
-   class LoginScreen extends StatelessWidget {
+   class UserScreen extends StatelessWidget {
      @override
      Widget build(BuildContext context) {
-       final useCase = Provider.of<LoginUseCase>(context);
+       final useCase = Provider.of<GetCurrentUserUseCase>(context);
      }
    }
    ```
@@ -1012,8 +1004,8 @@ The subsections below are **illustrative migration sketches** (hypothetical file
      MultiProvider(
        providers: [
          Provider<AuthRepository>(create: (_) => AuthRepositoryImpl(...)),
-         ProxyProvider<AuthRepository, LoginUseCase>(
-           update: (_, repository, _) => LoginUseCase(repository),
+         ProxyProvider<AuthRepository, GetCurrentUserUseCase>(
+           update: (_, repository, _) => GetCurrentUserUseCase(repository),
          ),
        ],
        child: const MyApp(),
@@ -1132,6 +1124,8 @@ to return `http.Response`: that puts the transport back in every data source.
 
 ### Alternative Error Handling Patterns
 
+The before/after calls below are domain/service consumers. UI sign-in still goes through the session owner (`AuthNotifier`); if its use-case contract changes, adapt the notifier while retaining publication to the router session.
+
 #### From Result Pattern to Exceptions
 
 1. **Update repositories and use cases**
@@ -1162,23 +1156,23 @@ to return `http.Response`: that puts the transport back in every data source.
    }
    ```
 
-2. **Update UI handling**
+2. **Update domain/service callers**
    ```dart
    // Before (Result Pattern)
    final result = await loginUseCase(email, password);
    result.when(
-     success: (user) => navigateToHome(),
-     failureCallback: (failure) => showError(failure.message),
+     success: (user) => handleUser(user),
+     failureCallback: (failure) => handleFailure(failure),
    );
    
    // After (Exceptions)
    try {
      final user = await loginUseCase(email, password);
-     navigateToHome();
+     handleUser(user);
    } on AuthException catch (e) {
-     showError(e.message);
+     handleFailure(e);
    } catch (e) {
-     showError('Unexpected error');
+     handleFailure(e);
    }
    ```
 
@@ -1230,18 +1224,18 @@ to return `http.Response`: that puts the transport back in every data source.
    }
    ```
 
-4. **Update UI handling**
+4. **Update domain/service callers**
    ```dart
    // Before (Result Pattern)
    result.when(
-     success: (user) => navigateToHome(),
-     failureCallback: (failure) => showError(failure.message),
+     success: (user) => handleUser(user),
+     failureCallback: (failure) => handleFailure(failure),
    );
    
    // After (Either Pattern)
    result.fold(
-     (failure) => showError(failure.message),
-     (user) => navigateToHome(),
+     (failure) => handleFailure(failure),
+     (user) => handleUser(user),
    );
    ```
 

@@ -212,7 +212,7 @@ final failure = UnknownFailure('An unexpected error occurred');
 ### Handling Failures in Result
 
 ```dart
-final result = await loginUseCase('user@example.com', 'password');
+final result = await getUserUseCase();
 result.when(
   success: (user) {
     // Handle success
