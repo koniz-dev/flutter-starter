@@ -14,7 +14,8 @@
 #     needs-uat state, the issue workflow, the acceptance harness, or the
 #     process-only strip.
 #   * points into this repository's tracker or evidence: a
-#     "koniz-dev/flutter-starter#N" reference, or an issues/pull/evidence URL.
+#     "koniz-dev/flutter-starter#N" reference, an issues/pull/evidence URL, or
+#     a bare evidence path ("evidence:<path>", "docs/verification/issue-N").
 #     Those are another project's history, not the adopter's; the comment
 #     should say why the code is the way it is instead
 #     (koniz-dev/flutter-starter#629). A path in ref_allowlist may keep one.
@@ -45,7 +46,9 @@ forbidden_paths=(
 vocabulary='status:(todo|in-progress|blocked|needs-uat)|priority:P[0-3]|epic:[a-z]|needs-uat|issue-workflow|\.claude/agents|process-only|run_acceptance|bootstrap-issue-labels|check_issue_refs|issue-refs\.yml|epic[-_ ]coverage'
 
 # Upstream tracker and evidence pointers.
-refs='koniz-dev/flutter-starter#[0-9]|github\.com/koniz-dev/flutter-starter/(issues|pull)/[0-9]|github\.com/koniz-dev/flutter-starter/(blob|tree)/evidence'
+# "evidence:" needs a non-space after it, so prose such as "Visual evidence:"
+# does not match.
+refs='koniz-dev/flutter-starter#[0-9]|github\.com/koniz-dev/flutter-starter/(issues|pull)/[0-9]|github\.com/koniz-dev/flutter-starter/(blob|tree)/evidence|evidence:[^[:space:]]|docs/verification/issue-'
 
 # Files that may keep such a pointer, each with its reason. Keep it short.
 ref_allowlist=(
