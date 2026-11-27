@@ -1,0 +1,68 @@
+$ git diff (mutation 2: link into the tasks sample from docs/guides/README.md)
+diff --git a/docs/guides/README.md b/docs/guides/README.md
+index 929da0be228..0707b775c69 100644
+--- a/docs/guides/README.md
++++ b/docs/guides/README.md
+@@ -151,3 +151,5 @@ For understanding architectural decisions and design rationale:
+ **Welcome to the team!**
+ 
+ 
++
++See [tasks list](../../lib/features/tasks/presentation/screens/tasks_list_screen.dart).
+
+$ flutter test test/tooling/strip_markdown_inputs_test.dart
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_markdown_inputs_test.dart
+00:00 +0: strip-smoke.yml extracts the rename recipe the way this test does
+00:00 +1: the documented rename recipe renames every package import
+00:03 +2: docs still check after `--apply `
+00:13 +2 -1: docs still check after `--apply ` [E]
+  Expected: <0>
+    Actual: <1>
+  The stripped tree fails check_docs.dart. A link the strip leaves dangling belongs inside the matching strip marker.
+  exit 1
+  links: checked 687 relative link(s) in 75 file(s); 1 broken
+  emoji: scanned 62 file(s); 0 line(s) with emoji
+  signatures: checked 13 documented constructor(s); 0 mismatched
+  symbols: checked 111 directive(s); 0 unresolved
+  env runs: scanned 64 file(s); 0 run(s) ignoring the copied .env
+  dart-defines: scanned 62 file(s) against 14 known key(s); 0 unknown
+  test paths: scanned 64 file(s); 0 missing
+  docs/guides/README.md:155: missing path -> ../../lib/features/tasks/presentation/screens/tasks_list_screen.dart
+  
+  1 problem(s) found.
+  
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/tooling/strip_markdown_inputs_test.dart 203:7  main.<fn>
+  
+00:14 +2 -1: docs still check after `--apply --remove-tasks`
+00:21 +2 -2: docs still check after `--apply --remove-tasks` [E]
+  Expected: <0>
+    Actual: <1>
+  The stripped tree fails check_docs.dart. A link the strip leaves dangling belongs inside the matching strip marker.
+  exit 1
+  links: checked 688 relative link(s) in 75 file(s); 1 broken
+  emoji: scanned 62 file(s); 0 line(s) with emoji
+  signatures: checked 13 documented constructor(s); 0 mismatched
+  symbols: checked 114 directive(s); 0 unresolved
+  env runs: scanned 64 file(s); 0 run(s) ignoring the copied .env
+  dart-defines: scanned 62 file(s) against 14 known key(s); 0 unknown
+  test paths: scanned 64 file(s); 0 missing
+  docs/guides/README.md:155: missing path -> ../../lib/features/tasks/presentation/screens/tasks_list_screen.dart
+  
+  1 problem(s) found.
+  
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/tooling/strip_markdown_inputs_test.dart 203:7  main.<fn>
+  
+00:21 +2 -2: docs still check after `--apply --remove-feature-flags`
+00:28 +3 -2: docs still check after `--apply --keep-samples --remove-bricks`
+00:34 +4 -2: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_markdown_inputs_test.dart: docs still check after `--apply --remove-tasks`
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_markdown_inputs_test.dart: docs still check after `--apply `
+exit 1

@@ -1,0 +1,49 @@
+$ git diff (mutation 1: drop tool from the rename recipe)
+diff --git a/docs/guides/onboarding/fork-and-customize.md b/docs/guides/onboarding/fork-and-customize.md
+index 2e23f4ef192..fca16e4042e 100644
+--- a/docs/guides/onboarding/fork-and-customize.md
++++ b/docs/guides/onboarding/fork-and-customize.md
+@@ -61,7 +61,7 @@ in section 2, substituting your current identifiers for the template defaults.
+ 
+    ```bash
+    NEW=your_package
+-   git grep -lz 'package:flutter_starter/' -- lib test integration_test tool \
++   git grep -lz 'package:flutter_starter/' -- lib test integration_test \
+      examples bricks/feature_clean scripts/dev/create_feature.sh \
+      scripts/dev/create_feature.ps1 'docs/*.dart' CONTRIBUTING.md \
+      | xargs -0 perl -pi -e "s#package:flutter_starter/#package:${NEW}/#g"
+
+$ flutter test test/tooling/strip_markdown_inputs_test.dart
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_markdown_inputs_test.dart
+00:00 +0: strip-smoke.yml extracts the rename recipe the way this test does
+00:00 +1: the documented rename recipe renames every package import
+00:03 +1 -1: the documented rename recipe renames every package import [E]
+  Expected: empty
+    Actual: [
+              'tool/golden/no_feature_flags/lib/core/routing/navigation_extensions.dart',
+              'tool/golden/no_feature_flags/lib/core/routing/routes_registry.dart',
+              'tool/golden/no_tasks/lib/core/routing/navigation_extensions.dart',
+              'tool/golden/no_tasks/lib/core/routing/routes_registry.dart',
+              'tool/golden/stripped/integration_test/app_e2e_test.dart',
+              'tool/golden/stripped/lib/core/routing/app_router.dart',
+              'tool/golden/stripped/lib/core/routing/navigation_extensions.dart',
+              'tool/golden/stripped/lib/core/routing/routes_registry.dart',
+              'tool/golden/stripped/lib/features/home/presentation/screens/home_screen.dart',
+              'tool/golden/stripped/lib/main.dart',
+              'tool/strip_sample_features.dart'
+            ]
+  After the rename recipe in docs/guides/onboarding/fork-and-customize.md these files still import package:flutter_starter/, so a renamed tree fails `flutter pub get`. Add their directory to the recipe.
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/tooling/strip_markdown_inputs_test.dart 171:5  main.<fn>
+  
+00:04 +1 -1: docs still check after `--apply `
+00:14 +2 -1: docs still check after `--apply --remove-tasks`
+00:21 +3 -1: docs still check after `--apply --remove-feature-flags`
+00:29 +4 -1: docs still check after `--apply --keep-samples --remove-bricks`
+00:34 +5 -1: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_markdown_inputs_test.dart: the documented rename recipe renames every package import
+exit 1

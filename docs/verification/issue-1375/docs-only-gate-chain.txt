@@ -1,0 +1,48 @@
+# main @ e1f2947e39d3bca0256958acf236b8ce9f2f5920
+
+## ci.yml: docs-only scope runs DOC_TESTS (test/tooling included)
+62:      # `DOC_TESTS` paths in the step below; test/tooling/
+63:      # ci_doc_tests_cover_markdown_readers_test.dart fails if a test that
+128:          doc_tests=false
+129:          if [ "$run" = false ]; then doc_tests=true; fi
+132:          echo "doc_tests=$doc_tests" >> "$GITHUB_OUTPUT"
+163:        if: steps.scope.outputs.run == 'true' || steps.scope.outputs.doc_tests == 'true'
+170:        if: steps.scope.outputs.run == 'true' || steps.scope.outputs.doc_tests == 'true'
+177:      # of these paths; test/tooling/ci_doc_tests_cover_markdown_readers_test.dart
+179:      - name: Run the tests that read markdown
+180:        if: steps.scope.outputs.doc_tests == 'true'
+182:          DOC_TESTS: >-
+184:            test/tooling
+188:          # Word splitting is the point: DOC_TESTS is a list of paths.
+190:          flutter test --timeout=5m $DOC_TESTS
+
+## the new test lives under test/tooling
+test/tooling/strip_markdown_inputs_test.dart
+
+## required status checks on main (branch protection)
+Quality gate
+Strip both-samples-removed + analyze + test
+Strip feature-flags-removed + analyze + test
+Strip tasks-removed + analyze + test
+Strip keep-samples + analyze + test
+Strip renamed-both + analyze + test
+
+## a docs-only PR's Quality gate runs the DOC_TESTS step (precedent run)
+docs/http-migration-keeps-network-contract
+https://github.com/koniz-dev/flutter-starter/actions/runs/45430746054
+  Set up job: success
+  Checkout code: success
+  Decide the gate scope: success
+  Setup Flutter: success
+  Install dependencies: success
+  Run the tests that read markdown: success
+  Check generated code is up to date: skipped
+  Verify formatting: skipped
+  Analyze code: skipped
+  Import every library for coverage: skipped
+  Run tests (random order): skipped
+  Enforce minimum coverage: skipped
+  Tracked files are unchanged: skipped
+  Post Setup Flutter: success
+  Post Checkout code: success
+  Complete job: success

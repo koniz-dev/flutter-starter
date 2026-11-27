@@ -1,0 +1,12 @@
+$ git rev-parse HEAD  # merged main
+e1f2947e39d3bca0256958acf236b8ce9f2f5920
+$ flutter test --reporter expanded test/tooling/strip_markdown_inputs_test.dart
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_markdown_inputs_test.dart
+00:00 +0: strip-smoke.yml extracts the rename recipe the way this test does
+00:00 +1: the documented rename recipe renames every package import
+00:04 +2: docs still check after `--apply `
+00:17 +3: docs still check after `--apply --remove-tasks`
+00:26 +4: docs still check after `--apply --remove-feature-flags`
+00:35 +5: docs still check after `--apply --keep-samples --remove-bricks`
+00:42 +6: All tests passed!
+exit 0

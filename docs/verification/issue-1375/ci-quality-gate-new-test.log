@@ -1,0 +1,7 @@
+# PR #1400 Quality gate, run 46011067203 (head 32cda72), lines for the new test
+Quality gate	Run tests (random order)	2026-11-27T13:58:47.1843978Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/strip_markdown_inputs_test.dart: docs still check after `--apply --remove-feature-flags`
+Quality gate	Run tests (random order)	2026-11-27T13:58:50.0592039Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/strip_markdown_inputs_test.dart: docs still check after `--apply --keep-samples --remove-bricks`
+Quality gate	Run tests (random order)	2026-11-27T13:58:50.7404130Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/strip_markdown_inputs_test.dart: the documented rename recipe renames every package import
+Quality gate	Run tests (random order)	2026-11-27T13:58:50.7494394Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/strip_markdown_inputs_test.dart: strip-smoke.yml extracts the rename recipe the way this test does
+Quality gate	Run tests (random order)	2026-11-27T13:58:55.7099082Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/strip_markdown_inputs_test.dart: docs still check after `--apply `
+Quality gate	Run tests (random order)	2026-11-27T13:58:59.5887644Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/strip_markdown_inputs_test.dart: docs still check after `--apply --remove-tasks`
