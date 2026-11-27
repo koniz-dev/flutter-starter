@@ -1,0 +1,33 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_release_environment_test.dart
+00:00 +0: only staging and production pass, trimmed and lowercased
+00:00 +1: a lane base URL must be set and not the example.com placeholder
+00:01 +2: a lane base URL follows the shell builds it refuses a scheme other than https
+00:01 +3: a lane base URL follows the shell builds it refuses whitespace, "%" or a backslash
+00:02 +4: a lane base URL follows the shell builds it reads the host as Dart does
+00:02 +4 -1: a lane base URL follows the shell builds it reads the host as Dart does [E]
+  Expected: a string starting with 'refused: base URL \'https://example.com?x@acme.io\' is the starter\'s placeholder'
+    Actual: 'https://example.com?x@acme.io'
+  https://example.com?x@acme.io
+  
+  package:matcher                                            expect
+  package:flutter_test/src/widget_tester.dart 473:18         expect
+  test/tooling/fastlane_release_environment_test.dart 143:9  main.<fn>.<fn>
+  
+00:02 +4 -1: a lane base URL follows the shell builds a direct base_url call names the environment from its source
+00:02 +5 -1: resolved environment chooses its URL with both variables set
+00:02 +6 -1: every lane in fastlane/Fastfile validates its base URL
+00:02 +7 -1: every lane in fastlane/Fastfile validates its environment
+00:02 +8 -1: get_version in fastlane/Fastfile reads "1.2.3" as 1.2.3 1
+00:02 +9 -1: get_version in fastlane/Fastfile reads "1.2.3+45" as 1.2.3 45
+00:02 +10 -1: get_version in fastlane/Fastfile reads "1.2.3+45 # bumped" as 1.2.3 45
+00:02 +11 -1: get_version in fastlane/Fastfile reads "1.0.0-beta+7" as no match
+00:02 +12 -1: every lane in ios/fastlane/Fastfile validates its base URL
+00:02 +13 -1: every lane in ios/fastlane/Fastfile validates its environment
+00:02 +14 -1: get_version in ios/fastlane/Fastfile reads "1.2.3" as 1.2.3 1
+00:02 +15 -1: get_version in ios/fastlane/Fastfile reads "1.2.3+45" as 1.2.3 45
+00:03 +16 -1: get_version in ios/fastlane/Fastfile reads "1.2.3+45 # bumped" as 1.2.3 45
+00:03 +17 -1: get_version in ios/fastlane/Fastfile reads "1.0.0-beta+7" as no match
+00:03 +18 -1: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_release_environment_test.dart: a lane base URL follows the shell builds it reads the host as Dart does

@@ -1,0 +1,51 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_release_environment_test.dart
+00:00 +0: only staging and production pass, trimmed and lowercased
+00:00 +1: a lane base URL must be set and not the example.com placeholder
+00:01 +2: a lane base URL follows the shell builds it refuses a scheme other than https
+00:01 +2 -1: a lane base URL follows the shell builds it refuses a scheme other than https [E]
+  Expected: 'refused: base URL \'http://api.acme.io\' is not an absolute https URL. A production release refuses any other scheme at startup.'
+    Actual: 'http://api.acme.io'
+     Which: is different.
+            Expected: refused: b ...
+              Actual: http://api ...
+                      ^
+             Differ at offset 0
+  http://api.acme.io
+  
+  package:matcher                                            expect
+  package:flutter_test/src/widget_tester.dart 473:18         expect
+  test/tooling/fastlane_release_environment_test.dart 103:9  main.<fn>.<fn>
+  
+00:01 +2 -1: a lane base URL follows the shell builds it refuses whitespace, "%" or a backslash
+00:01 +2 -2: a lane base URL follows the shell builds it refuses whitespace, "%" or a backslash [E]
+  Expected: 'refused: base URL \'https://api.acme.io /x\' contains whitespace, \'%\' or a backslash. Write the host and path literally.'
+    Actual: 'https://api.acme.io /x'
+     Which: is different.
+            Expected: refused: b ...
+              Actual: https://ap ...
+                      ^
+             Differ at offset 0
+  https://api.acme.io /x
+  
+  package:matcher                                            expect
+  package:flutter_test/src/widget_tester.dart 473:18         expect
+  test/tooling/fastlane_release_environment_test.dart 121:9  main.<fn>.<fn>
+  
+00:01 +2 -2: resolved environment chooses its URL with both variables set
+00:01 +3 -2: every lane in fastlane/Fastfile validates its base URL
+00:01 +4 -2: every lane in fastlane/Fastfile validates its environment
+00:01 +5 -2: get_version in fastlane/Fastfile reads "1.2.3" as 1.2.3 1
+00:01 +6 -2: get_version in fastlane/Fastfile reads "1.2.3+45" as 1.2.3 45
+00:01 +7 -2: get_version in fastlane/Fastfile reads "1.2.3+45 # bumped" as 1.2.3 45
+00:01 +8 -2: get_version in fastlane/Fastfile reads "1.0.0-beta+7" as no match
+00:02 +9 -2: every lane in ios/fastlane/Fastfile validates its base URL
+00:02 +10 -2: every lane in ios/fastlane/Fastfile validates its environment
+00:02 +11 -2: get_version in ios/fastlane/Fastfile reads "1.2.3" as 1.2.3 1
+00:02 +12 -2: get_version in ios/fastlane/Fastfile reads "1.2.3+45" as 1.2.3 45
+00:02 +13 -2: get_version in ios/fastlane/Fastfile reads "1.2.3+45 # bumped" as 1.2.3 45
+00:02 +14 -2: get_version in ios/fastlane/Fastfile reads "1.0.0-beta+7" as no match
+00:02 +15 -2: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_release_environment_test.dart: a lane base URL follows the shell builds it refuses a scheme other than https
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_release_environment_test.dart: a lane base URL follows the shell builds it refuses whitespace, "%" or a backslash

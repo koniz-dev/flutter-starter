@@ -1,0 +1,17 @@
+a20fad5bfc4
+https://example.com?x@acme.io              -> accepted: https://example.com?x@acme.io
+https://example.com#@acme.io               -> accepted: https://example.com#@acme.io
+https://example.com..                      -> accepted: https://example.com..
+https://api.example.com../x                -> accepted: https://api.example.com../x
+HTTPS://API.EXAMPLE.COM/v1                 -> refused: base_url HTTPS://API.EXAMPLE.COM/v1 is the starter's placeholder host. Pass base_url:<url> or set BASE_URL_PRODUCTION to your API.
+https://user@pw@api.example.com:8443       -> refused: base_url https://user@pw@api.example.com:8443 is the starter's placeholder host. Pass base_url:<url> or set BASE_URL_PRODUCTION to your API.
+https://acme.io?x@example.com              -> refused: base_url https://acme.io?x@example.com is the starter's placeholder host. Pass base_url:<url> or set BASE_URL_PRODUCTION to your API.
+https://acme.io/v1#@example.com            -> accepted: https://acme.io/v1#@example.com
+https://user@acme.io:8443/v1               -> accepted: https://user@acme.io:8443/v1
+https://@/v1                               -> accepted: https://@/v1
+http://api.myco.com                        -> refused: base URL 'http://api.myco.com' is not an absolute https URL. A production release refuses any other scheme at startup.
+ftp://api.myco.com                         -> refused: base URL 'ftp://api.myco.com' is not an absolute https URL. A production release refuses any other scheme at startup.
+https://api.myco.com /x                    -> refused: base URL 'https://api.myco.com /x' contains whitespace, '%' or a backslash. Write the host and path literally.
+https://api.ex%61mple.com                  -> refused: base URL 'https://api.ex%61mple.com' contains whitespace, '%' or a backslash. Write the host and path literally.
+https://api.example.com\@good.com          -> refused: base URL 'https://api.example.com\@good.com' contains whitespace, '%' or a backslash. Write the host and path literally.
+https://api.myco.com                       -> accepted: https://api.myco.com

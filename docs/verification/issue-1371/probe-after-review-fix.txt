@@ -1,0 +1,17 @@
+main at d2f223b6a25
+https://example.com?x@acme.io              -> refused: base URL 'https://example.com?x@acme.io' is the starter's placeholder host. Pass the URL of your API, or set BASE_URL_PRODUCTION to it.
+https://example.com#@acme.io               -> refused: base URL 'https://example.com#@acme.io' is the starter's placeholder host. Pass the URL of your API, or set BASE_URL_PRODUCTION to it.
+https://example.com..                      -> refused: base URL 'https://example.com..' is the starter's placeholder host. Pass the URL of your API, or set BASE_URL_PRODUCTION to it.
+https://api.example.com../x                -> refused: base URL 'https://api.example.com../x' is the starter's placeholder host. Pass the URL of your API, or set BASE_URL_PRODUCTION to it.
+HTTPS://API.EXAMPLE.COM/v1                 -> refused: base URL 'HTTPS://API.EXAMPLE.COM/v1' is the starter's placeholder host. Pass the URL of your API, or set BASE_URL_PRODUCTION to it.
+https://user@pw@api.example.com:8443       -> refused: base URL 'https://user@pw@api.example.com:8443' is the starter's placeholder host. Pass the URL of your API, or set BASE_URL_PRODUCTION to it.
+https://acme.io?x@example.com              -> accepted: https://acme.io?x@example.com
+https://acme.io/v1#@example.com            -> accepted: https://acme.io/v1#@example.com
+https://user@acme.io:8443/v1               -> accepted: https://user@acme.io:8443/v1
+https://@/v1                               -> refused: base URL 'https://@/v1' has no host.
+http://api.myco.com                        -> refused: base URL 'http://api.myco.com' is not an absolute https URL. A production release refuses any other scheme at startup.
+ftp://api.myco.com                         -> refused: base URL 'ftp://api.myco.com' is not an absolute https URL. A production release refuses any other scheme at startup.
+https://api.myco.com /x                    -> refused: base URL 'https://api.myco.com /x' contains whitespace, '%' or a backslash. Write the host and path literally.
+https://api.ex%61mple.com                  -> refused: base URL 'https://api.ex%61mple.com' contains whitespace, '%' or a backslash. Write the host and path literally.
+https://api.example.com\@good.com          -> refused: base URL 'https://api.example.com\@good.com' contains whitespace, '%' or a backslash. Write the host and path literally.
+https://api.myco.com                       -> accepted: https://api.myco.com

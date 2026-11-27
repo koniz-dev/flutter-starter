@@ -1,0 +1,19 @@
+main at d2f223b6a25
+https://example.com?x@acme.io              shell=refused  ruby=refused  same
+https://example.com#@acme.io               shell=refused  ruby=refused  same
+https://example.com..                      shell=refused  ruby=refused  same
+https://api.example.com../x                shell=refused  ruby=refused  same
+HTTPS://API.EXAMPLE.COM/v1                 shell=refused  ruby=refused  same
+https://user@pw@api.example.com:8443       shell=refused  ruby=refused  same
+https://acme.io?x@example.com              shell=accepted ruby=accepted same
+https://acme.io/v1#@example.com            shell=accepted ruby=accepted same
+https://user@acme.io:8443/v1               shell=accepted ruby=accepted same
+https://@/v1                               shell=refused  ruby=refused  same
+http://api.myco.com                        shell=refused  ruby=refused  same
+ftp://api.myco.com                         shell=refused  ruby=refused  same
+https://api.myco.com /x                    shell=refused  ruby=refused  same
+https://api.ex%61mple.com                  shell=refused  ruby=refused  same
+https://api.example.com\@good.com          shell=refused  ruby=refused  same
+https://api.myco.com                       shell=accepted ruby=accepted same
+parity.sh exit=0
+GNU bash, version 3.2.57(1)-release (x86_64-apple-darwin24)
