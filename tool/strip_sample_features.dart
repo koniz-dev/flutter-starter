@@ -99,6 +99,7 @@ const _selfPaths = <String>[
   'tool/strip_sample_features.dart',
   'tool/golden',
   '.github/workflows/strip-smoke.yml',
+  'test/tooling/strip_markdown_inputs_test.dart',
   'test/tooling/strip_markers_test.dart',
   'test/tooling/strip_sample_prose_test.dart',
   'test/tooling/strip_rerun_test.dart',
