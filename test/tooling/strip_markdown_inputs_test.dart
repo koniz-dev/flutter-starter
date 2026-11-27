@@ -105,6 +105,13 @@ void main() {
   final skip = File('tool/strip_sample_features.dart').existsSync()
       ? null
       : 'the strip tool has been removed';
+  const workflow = '.github/workflows/strip-smoke.yml';
+  final noWorkflow = File(workflow).existsSync()
+      ? null
+      : 'no $workflow: nothing extracts the recipe';
+  final noRecipe = File(_recipeDoc).existsSync()
+      ? null
+      : 'no $_recipeDoc: there is no rename recipe to run';
 
   Directory? current;
   tearDown(() {
@@ -115,13 +122,13 @@ void main() {
 
   test('strip-smoke.yml extracts the rename recipe the way this test does', () {
     expect(
-      File('.github/workflows/strip-smoke.yml').readAsStringSync(),
+      File(workflow).readAsStringSync(),
       contains(_extractRecipe),
       reason:
           'renamed-both changed how it reads the recipe; change '
           '_extractRecipe to match',
     );
-  }, skip: skip);
+  }, skip: skip ?? noWorkflow);
 
   test('the documented rename recipe renames every package import', () {
     final root = current = _copyOfWorkingTree();
@@ -169,7 +176,7 @@ bash -euo pipefail "$RECIPE"
           '$_oldImport, so a renamed tree fails `flutter pub get`. Add their '
           'directory to the recipe.',
     );
-  }, skip: skip);
+  }, skip: skip ?? noRecipe);
 
   // Each Strip job that runs check_docs.dart after its strip.
   for (final flags in [
