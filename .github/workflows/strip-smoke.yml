@@ -117,7 +117,11 @@ jobs:
       # gate runs every test that reads markdown (ci.yml, DOC_TESTS), the
       # strip-marker tests among them, so this matrix does not repeat that. A docs-only pull request
       # is exactly that, and would otherwise cost several billed minutes across
-      # the variants.
+      # the variants. The two steps below that read markdown are repeated
+      # there too, by test/tooling/strip_markdown_inputs_test.dart: the rename
+      # recipe renamed-both extracts from fork-and-customize.md, and
+      # check_docs.dart on each stripped tree, which catches a link the strip
+      # leaves dangling.
       #
       # Anything the step cannot resolve a diff for - workflow_dispatch, a brand
       # new branch, a force push that dropped `before` - fails SAFE and runs the
@@ -267,8 +271,11 @@ jobs:
           leftovers=0
           for path in tool/strip_sample_features.dart tool/golden \
             .github/workflows/strip-smoke.yml \
+            test/tooling/strip_markdown_inputs_test.dart \
             test/tooling/strip_markers_test.dart \
-            test/tooling/strip_sample_prose_test.dart; do
+            test/tooling/strip_sample_prose_test.dart \
+            test/tooling/strip_rerun_test.dart \
+            test/tooling/strip_unknown_flags_test.dart; do
             if [ -e "$path" ]; then
               echo "still present after the strip: $path"
               leftovers=$((leftovers + 1))
