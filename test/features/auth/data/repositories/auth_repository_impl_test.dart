@@ -526,9 +526,8 @@ void main() {
       // guards each of its steps separately; these pin the explicit path to
       // the same rule.
       //
-      // Counterfactual, actually run
-      // (evidence:docs/verification/issue-168/counterfactual.log): against the chained
-      // pre-fix body both cases below fail on `httpCache.clearCalls`, which is
+      // Counterfactual, actually run: against the chained pre-fix body
+      // both cases below fail on `httpCache.clearCalls`, which is
       // 0 rather than 1.
       group('local teardown steps are independent', () {
         for (final failure in _thrownCases) {

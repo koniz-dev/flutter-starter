@@ -1,8 +1,8 @@
 // `mason get` writes `.mason/bricks.json` and `mason-lock.json`, both holding
 // absolute paths on the machine that ran it, and neither was ignored - the
 // next `git add -A` committed one developer's local paths.
-// evidence:docs/verification/issue-340 runs a real
-// `mason get` in a fresh clone; this pins the ignore rules it relies on.
+// A real `mason get` in a fresh clone showed both files staying untracked
+// under these ignore rules; this pins them.
 
 import 'dart:io';
 
