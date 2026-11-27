@@ -19,8 +19,8 @@
 // reader having moved by -7h, and it is portable: it holds whatever the host
 // zone actually is, including UTC (as on CI).
 //
-// Counterfactual, actually run against the pre-fix `cache_interceptor.dart`
-// (evidence:docs/verification/issue-188/counterfactual.log): 5 of these 12 tests fail,
+// Counterfactual, actually run against the pre-fix `cache_interceptor.dart`:
+// 5 of these 12 tests fail,
 // including the end-to-end cross-zone one, which reports the age a reader
 // seven hours away computes for an entry written seconds earlier as 7:00:00.
 

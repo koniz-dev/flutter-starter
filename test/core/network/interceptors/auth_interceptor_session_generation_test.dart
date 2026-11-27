@@ -25,8 +25,7 @@
 // SharedPreferences or Keychain channel makes `flutter test` hang rather than
 // fail.
 //
-// Counterfactual, actually run and recorded in
-// evidence:docs/verification/issue-169/counterfactual.log: with the three
+// Counterfactual, actually run: with the three
 // `isCurrent(...)` guards removed and nothing else changed, six of these eight
 // tests fail, the first of them reporting the security phase's own probe
 // output - `Expected: null / Actual: 'NEW-access-1'`.

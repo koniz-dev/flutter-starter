@@ -706,8 +706,8 @@ void main() {
   // A sibling group rather than a nested one: these drive real in-memory
   // stores directly, so they need none of the method-channel harness above.
   //
-  // Counterfactual, actually run
-  // (evidence:docs/verification/issue-168/counterfactual.log).
+  // Counterfactual, actually run: against the pre-fix chained body each case
+  // below fails, reporting the tokens still in the token store.
   group('clearCache tears its two stores down independently', () {
     for (final failure in <({String label, Object thrown})>[
       (
