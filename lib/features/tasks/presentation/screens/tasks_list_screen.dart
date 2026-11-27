@@ -36,12 +36,20 @@ class TasksListScreen extends ConsumerWidget {
         title: Text(l10n.tasks),
         actions: [
           if (tasksState.isLoading)
-            const Padding(
-              padding: EdgeInsets.all(16),
+            Padding(
+              padding: const EdgeInsets.all(16),
               child: SizedBox(
                 width: 20,
                 height: 20,
-                child: CircularProgressIndicator(strokeWidth: 2),
+                // Unset, the spinner paints in colorScheme.primary, which is
+                // the light app bar's own background. The app bar's action
+                // icon colour is the one built to read against it.
+                child: Builder(
+                  builder: (context) => CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: IconTheme.of(context).color,
+                  ),
+                ),
               ),
             ),
           IconButton(
