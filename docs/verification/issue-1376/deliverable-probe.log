@@ -1,0 +1,49 @@
+# Probe for criterion 2: check_deliverable.sh (maintainers fb63afeb224) against scratch commits
+# built with git plumbing on top of PR head daaccd2a275; never checked out, never pushed.
+
+## probe line: // Counterfactual (evidence:docs/x/counterfactual.log)
+$ check_deliverable.sh probe-1376
+upstream tracker reference in test/tooling/mason_state_ignored_test.dart:1:// Counterfactual (evidence:docs/x/counterfactual.log)
+
+Move these to the maintainers branch, or reword them for an adopter.
+For a tracker reference, keep the reason and drop the pointer.
+exit=1
+
+## probe line: // see docs/verification/issue-1/run.log
+$ check_deliverable.sh probe-1376
+upstream tracker reference in test/tooling/mason_state_ignored_test.dart:1:// see docs/verification/issue-1/run.log
+
+Move these to the maintainers branch, or reword them for an adopter.
+For a tracker reference, keep the reason and drop the pointer.
+exit=1
+
+## probe line: /// Visual evidence: prose that must stay clean
+$ check_deliverable.sh probe-1376
+Deliverable: probe-1376 carries nothing that only serves the upstream process.
+exit=0
+
+## PR head itself
+$ check_deliverable.sh daaccd2a275
+Deliverable: HEAD carries nothing that only serves the upstream process.
+exit=0
+
+## origin/main before the PR, with the extended pattern
+upstream tracker reference in test/core/accessibility/accessibility_helpers_test.dart:167:    // the committed goldens in evidence:docs/verification/issue-55/pixel-sample.log,
+upstream tracker reference in test/core/network/api_client_cache_policy_test.dart:13:// Counterfactual, actually run (evidence:docs/verification/issue-77/counterfactual.log):
+upstream tracker reference in test/core/network/forced_logout_cache_test.dart:17:// Counterfactual, actually run (evidence:docs/verification/issue-114/counterfactual.log):
+upstream tracker reference in test/core/network/forced_logout_cache_test.dart:505:    // (evidence:docs/verification/issue-168/counterfactual.log): against the pre-fix
+upstream tracker reference in test/core/network/forced_logout_session_test.dart:18:// Counterfactual, actually run (evidence:docs/verification/issue-127/counterfactual.log):
+upstream tracker reference in test/core/network/interceptors/auth_interceptor_session_generation_test.dart:29:// evidence:docs/verification/issue-169/counterfactual.log: with the three
+upstream tracker reference in test/core/network/interceptors/cache_interceptor_timestamp_test.dart:23:// (evidence:docs/verification/issue-188/counterfactual.log): 5 of these 12 tests fail,
+upstream tracker reference in test/features/auth/data/datasources/auth_local_datasource_test.dart:710:  // (evidence:docs/verification/issue-168/counterfactual.log).
+upstream tracker reference in test/features/auth/data/repositories/auth_repository_impl_test.dart:530:      // (evidence:docs/verification/issue-168/counterfactual.log): against the chained
+upstream tracker reference in test/tooling/launcher_icons_config_test.dart:6:// evidence:docs/verification/issue-339/alpha_probe.sh runs the real generator on an
+upstream tracker reference in test/tooling/mason_state_ignored_test.dart:4:// evidence:docs/verification/issue-340 runs a real
+
+Move these to the maintainers branch, or reword them for an adopter.
+For a tracker reference, keep the reason and drop the pointer.
+exit=1
+
+## Counterfactual: the script before the change (maintainers fb63afeb224~1) on origin/main
+Deliverable: origin/main carries nothing that only serves the upstream process.
+exit=0

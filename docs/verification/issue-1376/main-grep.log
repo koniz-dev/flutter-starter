@@ -1,0 +1,181 @@
+# Criterion 1, after PR #1401 merged (origin/main = f1163ba8675)
+$ git grep -n "docs/verification/issue-\|evidence:docs" origin/main
+exit=1 (1 = no match)
+
+# Same grep on the parent, before the merge
+hits: 11
+
+# check_deliverable.sh (maintainers fb63afeb224) on origin/main
+Deliverable: origin/main carries nothing that only serves the upstream process.
+exit=0
+
+# The merged diff (comments only)
+f1163ba8675208fed2d1f926cc38f769588601a9 chore(testing): drop evidence-branch pointers from test comments (#1401)
+
+ test/core/accessibility/accessibility_helpers_test.dart            | 4 ++--
+ test/core/network/api_client_cache_policy_test.dart                | 2 +-
+ test/core/network/forced_logout_cache_test.dart                    | 7 +++----
+ test/core/network/forced_logout_session_test.dart                  | 2 +-
+ .../interceptors/auth_interceptor_session_generation_test.dart     | 3 +--
+ .../network/interceptors/cache_interceptor_timestamp_test.dart     | 4 ++--
+ .../features/auth/data/datasources/auth_local_datasource_test.dart | 4 ++--
+ .../features/auth/data/repositories/auth_repository_impl_test.dart | 5 ++---
+ test/tooling/launcher_icons_config_test.dart                       | 4 ++--
+ test/tooling/mason_state_ignored_test.dart                         | 4 ++--
+ 10 files changed, 18 insertions(+), 21 deletions(-)
+diff --git a/test/core/accessibility/accessibility_helpers_test.dart b/test/core/accessibility/accessibility_helpers_test.dart
+index dbbfde1c9ae..65f7100a0d4 100644
+--- a/test/core/accessibility/accessibility_helpers_test.dart
++++ b/test/core/accessibility/accessibility_helpers_test.dart
+@@ -164,8 +164,8 @@ void main() {
+ 
+     // Honouring alpha must not re-baseline the
+     // palette. These are the colours a real renderer painted, sampled out of
+-    // the committed goldens in evidence:docs/verification/issue-55/pixel-sample.log,
+-    // with the ratios that log recorded. They are literals rather than theme
++    // the committed acceptance goldens, with the ratios measured from those
++    // samples. They are literals rather than theme
+     // lookups on purpose - this pins the *helper*, so it fails even if the
+     // palette is edited at the same time.
+     group('opaque colours are scored exactly as before', () {
+diff --git a/test/core/network/api_client_cache_policy_test.dart b/test/core/network/api_client_cache_policy_test.dart
+index 7e53deb52e4..da53f1828ce 100644
+--- a/test/core/network/api_client_cache_policy_test.dart
++++ b/test/core/network/api_client_cache_policy_test.dart
+@@ -10,7 +10,7 @@
+ // order, so on the request leg the header it looked for did not exist yet.
+ // clearCache() had an empty body and no callers.
+ //
+-// Counterfactual, actually run (evidence:docs/verification/issue-77/counterfactual.log):
++// Counterfactual, actually run:
+ // with `_hasSessionCredential()` replaced by `return false` (header sniff only)
+ // and `clearCache()` restored to an empty body, 4 of these 9 tests fail:
+ //
+diff --git a/test/core/network/forced_logout_cache_test.dart b/test/core/network/forced_logout_cache_test.dart
+index 3dbecec57fb..e167394fa90 100644
+--- a/test/core/network/forced_logout_cache_test.dart
++++ b/test/core/network/forced_logout_cache_test.dart
+@@ -14,7 +14,7 @@
+ // and which the sample code here can produce today (see the seeded `/public`
+ // GET below).
+ //
+-// Counterfactual, actually run (evidence:docs/verification/issue-114/counterfactual.log):
++// Counterfactual, actually run:
+ // with `attachResponseCache` never called from `ApiClient._createDio` - i.e.
+ // pre-fix wiring, the interceptor holding no cache - 4 of these 6 tests fail,
+ // including the equivalence test, which reports the surviving `http_cache_*`
+@@ -501,9 +501,8 @@ void main() {
+     // separately, while the explicit path chained them inside one `try`, so
+     // the first throw skipped everything after it.
+     //
+-    // Counterfactual, actually run
+-    // (evidence:docs/verification/issue-168/counterfactual.log): against the pre-fix
+-    // chained bodies both cases below fail, reporting the surviving tokens and
++    // Counterfactual, actually run: against the pre-fix chained bodies
++    // both cases below fail, reporting the surviving tokens and
+     // `http_cache_*` keys as the difference between the two paths.
+     for (final failure in <({String label, Object thrown})>[
+       (label: 'an Exception', thrown: const CacheException('prefs locked')),
+diff --git a/test/core/network/forced_logout_session_test.dart b/test/core/network/forced_logout_session_test.dart
+index d5694fd6561..7e966971349 100644
+--- a/test/core/network/forced_logout_session_test.dart
++++ b/test/core/network/forced_logout_session_test.dart
+@@ -15,7 +15,7 @@
+ // `StorageService`, Keychain-backed token store) plus the transport. Nothing
+ // about the logout path itself is mocked.
+ //
+-// Counterfactual, actually run (evidence:docs/verification/issue-127/counterfactual.log):
++// Counterfactual, actually run:
+ // with the `sessionSink:` argument removed from `authInterceptorProvider` -
+ // i.e. pre-fix wiring - 3 of these 5 tests fail, each reporting a `User` still
+ // sitting in `AuthState` after the 401.
+diff --git a/test/core/network/interceptors/auth_interceptor_session_generation_test.dart b/test/core/network/interceptors/auth_interceptor_session_generation_test.dart
+index 6945f0d222c..d6ad5dd92a6 100644
+--- a/test/core/network/interceptors/auth_interceptor_session_generation_test.dart
++++ b/test/core/network/interceptors/auth_interceptor_session_generation_test.dart
+@@ -25,8 +25,7 @@
+ // SharedPreferences or Keychain channel makes `flutter test` hang rather than
+ // fail.
+ //
+-// Counterfactual, actually run and recorded in
+-// evidence:docs/verification/issue-169/counterfactual.log: with the three
++// Counterfactual, actually run: with the three
+ // `isCurrent(...)` guards removed and nothing else changed, six of these eight
+ // tests fail, the first of them reporting the security phase's own probe
+ // output - `Expected: null / Actual: 'NEW-access-1'`.
+diff --git a/test/core/network/interceptors/cache_interceptor_timestamp_test.dart b/test/core/network/interceptors/cache_interceptor_timestamp_test.dart
+index f2f2b0217d4..31dd893d781 100644
+--- a/test/core/network/interceptors/cache_interceptor_timestamp_test.dart
++++ b/test/core/network/interceptors/cache_interceptor_timestamp_test.dart
+@@ -19,8 +19,8 @@
+ // reader having moved by -7h, and it is portable: it holds whatever the host
+ // zone actually is, including UTC (as on CI).
+ //
+-// Counterfactual, actually run against the pre-fix `cache_interceptor.dart`
+-// (evidence:docs/verification/issue-188/counterfactual.log): 5 of these 12 tests fail,
++// Counterfactual, actually run against the pre-fix `cache_interceptor.dart`:
++// 5 of these 12 tests fail,
+ // including the end-to-end cross-zone one, which reports the age a reader
+ // seven hours away computes for an entry written seconds earlier as 7:00:00.
+ 
+diff --git a/test/features/auth/data/datasources/auth_local_datasource_test.dart b/test/features/auth/data/datasources/auth_local_datasource_test.dart
+index 0cc2b7b51fd..375ba9430e2 100644
+--- a/test/features/auth/data/datasources/auth_local_datasource_test.dart
++++ b/test/features/auth/data/datasources/auth_local_datasource_test.dart
+@@ -706,8 +706,8 @@ void main() {
+   // A sibling group rather than a nested one: these drive real in-memory
+   // stores directly, so they need none of the method-channel harness above.
+   //
+-  // Counterfactual, actually run
+-  // (evidence:docs/verification/issue-168/counterfactual.log).
++  // Counterfactual, actually run: against the pre-fix chained body each case
++  // below fails, reporting the tokens still in the token store.
+   group('clearCache tears its two stores down independently', () {
+     for (final failure in <({String label, Object thrown})>[
+       (
+diff --git a/test/features/auth/data/repositories/auth_repository_impl_test.dart b/test/features/auth/data/repositories/auth_repository_impl_test.dart
+index e9ef7cdd22b..2ff85662461 100644
+--- a/test/features/auth/data/repositories/auth_repository_impl_test.dart
++++ b/test/features/auth/data/repositories/auth_repository_impl_test.dart
+@@ -526,9 +526,8 @@ void main() {
+       // guards each of its steps separately; these pin the explicit path to
+       // the same rule.
+       //
+-      // Counterfactual, actually run
+-      // (evidence:docs/verification/issue-168/counterfactual.log): against the chained
+-      // pre-fix body both cases below fail on `httpCache.clearCalls`, which is
++      // Counterfactual, actually run: against the chained pre-fix body
++      // both cases below fail on `httpCache.clearCalls`, which is
+       // 0 rather than 1.
+       group('local teardown steps are independent', () {
+         for (final failure in _thrownCases) {
+diff --git a/test/tooling/launcher_icons_config_test.dart b/test/tooling/launcher_icons_config_test.dart
+index 2c8bd090183..483105cfd64 100644
+--- a/test/tooling/launcher_icons_config_test.dart
++++ b/test/tooling/launcher_icons_config_test.dart
+@@ -3,8 +3,8 @@
+ // flutter_launcher_icons.yaml set `ios: true` without `remove_alpha_ios`, so
+ // branding with a PNG logo - which normally has alpha - produced an RGBA 1024
+ // icon that App Store Connect rejects, while the generator still exited 0.
+-// evidence:docs/verification/issue-339/alpha_probe.sh runs the real generator on an
+-// RGBA logo; this pins the setting that makes it pass.
++// Running the real generator on an RGBA logo confirmed that
++// `remove_alpha_ios: true` yields an RGB icon; this pins that setting.
+ 
+ import 'dart:io';
+ 
+diff --git a/test/tooling/mason_state_ignored_test.dart b/test/tooling/mason_state_ignored_test.dart
+index b917232e3dd..26b21794ac8 100644
+--- a/test/tooling/mason_state_ignored_test.dart
++++ b/test/tooling/mason_state_ignored_test.dart
+@@ -1,8 +1,8 @@
+ // `mason get` writes `.mason/bricks.json` and `mason-lock.json`, both holding
+ // absolute paths on the machine that ran it, and neither was ignored - the
+ // next `git add -A` committed one developer's local paths.
+-// evidence:docs/verification/issue-340 runs a real
+-// `mason get` in a fresh clone; this pins the ignore rules it relies on.
++// A real `mason get` in a fresh clone showed both files staying untracked
++// under these ignore rules; this pins them.
+ 
+ import 'dart:io';
+ 
