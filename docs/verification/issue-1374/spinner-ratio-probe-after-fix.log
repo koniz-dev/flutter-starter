@@ -1,0 +1,10 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/zz_spinner_ratio_probe_test.dart
+00:00 +0: light theme, tasks list: the app-bar spinner reads against the app bar
+RATIO light / tasks list: spinner ffffffff on app bar ff0069d9 = 5.22:1
+00:01 +1: light theme, task detail: the app-bar spinner reads against the app bar
+RATIO light / task detail: spinner ffffffff on app bar ff0069d9 = 5.22:1
+00:01 +2: dark theme, tasks list: the app-bar spinner reads against the app bar
+RATIO dark / tasks list: spinner ffffffff on app bar ff1e1e1e = 16.67:1
+00:01 +3: dark theme, task detail: the app-bar spinner reads against the app bar
+RATIO dark / task detail: spinner ffffffff on app bar ff1e1e1e = 16.67:1
+00:01 +4: All tests passed!

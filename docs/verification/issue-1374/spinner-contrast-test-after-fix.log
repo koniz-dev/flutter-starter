@@ -1,0 +1,6 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_app_bar_spinner_contrast_test.dart
+00:00 +0: light theme, tasks list: the app-bar spinner reads against the app bar
+00:01 +1: light theme, task detail: the app-bar spinner reads against the app bar
+00:01 +2: dark theme, tasks list: the app-bar spinner reads against the app bar
+00:01 +3: dark theme, task detail: the app-bar spinner reads against the app bar
+00:01 +4: All tests passed!
