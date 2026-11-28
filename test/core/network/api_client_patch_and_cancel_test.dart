@@ -11,6 +11,7 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_starter/core/errors/exceptions.dart';
+import 'package:flutter_starter/core/logging/logging_service.dart';
 import 'package:flutter_starter/core/network/api_client.dart';
 import 'package:flutter_starter/core/network/interceptors/auth_interceptor.dart';
 import 'package:flutter_starter/core/network/request_cancellation.dart';
@@ -22,6 +23,8 @@ import 'package:mocktail/mocktail.dart';
 import '../../helpers/in_memory_stores.dart';
 
 class _MockSecureStorageService extends Mock implements SecureStorageService {}
+
+class _MockLoggingService extends Mock implements LoggingService {}
 
 /// Records every request that reaches the transport and replies from a
 /// script; the last entry repeats.
@@ -94,6 +97,8 @@ void main() {
   ApiClient build(
     _Transport transport, {
     Future<Result<String>> Function()? refreshToken,
+    LoggingService? loggingService,
+    Duration? retryInitialDelay,
   }) {
     return ApiClient(
       storageService: InMemoryStorage(),
@@ -102,6 +107,9 @@ void main() {
         tokenStore: tokens,
         refreshToken: refreshToken ?? () async => const Success('fresh'),
       ),
+      loggingService: loggingService,
+      retryInitialDelay: retryInitialDelay,
+      retryMaxJitter: retryInitialDelay == null ? null : Duration.zero,
     )..dio.httpClientAdapter = transport;
   }
 
@@ -160,17 +168,40 @@ void main() {
 
     test('a cancel during the retry backoff stops the re-send reaching the '
         'transport', () async {
+      const backoff = Duration(milliseconds: 500);
       final cancellation = RequestCancellation();
-      // 503 is retried for a GET; cancel as the first attempt is answered.
-      final transport = _Transport([503], onHit: (_) => cancellation.cancel());
-      final client = build(transport);
+      // 503 is retried for a GET. RetryInterceptor logs "Retrying request"
+      // once it has the 503 in hand and is about to sleep through the
+      // backoff, so a cancel scheduled from that line lands inside the sleep,
+      // after the first response was delivered.
+      final logging = _MockLoggingService();
+      var retryScheduled = false;
+      when(
+        () => logging.debug(any(), context: any(named: 'context')),
+      ).thenAnswer((invocation) {
+        final message = invocation.positionalArguments.first as String;
+        if (!retryScheduled && message.startsWith('Retrying request')) {
+          retryScheduled = true;
+          Timer(backoff ~/ 5, cancellation.cancel);
+        }
+      });
+      final transport = _Transport([503]);
+      final client = build(
+        transport,
+        loggingService: logging,
+        retryInitialDelay: backoff,
+      );
 
       final thrown = await _thrownBy(
         client
             .get('/flaky', cancellation: cancellation)
             .timeout(const Duration(seconds: 30)),
       );
+      // Outlive the backoff, so a re-send that ignores the cancel has time
+      // to reach the transport.
+      await Future<void>.delayed(backoff * 3);
 
+      expect(retryScheduled, isTrue, reason: 'the 503 entered the backoff');
       expect(thrown, _isCancelled);
       expect(transport.sent, hasLength(1), reason: 'no retry was sent');
     });
