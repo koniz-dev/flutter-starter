@@ -185,9 +185,13 @@ class TasksListScreen extends ConsumerWidget {
             Icon(Icons.error_outline, color: colorScheme.onErrorContainer),
             const SizedBox(width: 12),
             Expanded(
-              child: Text(
-                state.failure?.taskMessage(l10n) ?? state.error!,
-                style: TextStyle(color: colorScheme.onErrorContainer),
+              // A live region, so a screen reader announces the failure.
+              child: Semantics(
+                liveRegion: true,
+                child: Text(
+                  state.failure?.taskMessage(l10n) ?? state.error!,
+                  style: TextStyle(color: colorScheme.onErrorContainer),
+                ),
               ),
             ),
           ],

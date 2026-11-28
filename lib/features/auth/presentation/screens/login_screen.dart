@@ -127,15 +127,20 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 if (authState.error != null)
                   Padding(
                     padding: const EdgeInsets.only(bottom: 16),
-                    child: Text(
-                      // The failure in the user's language, never the log
-                      // text in `error`.
-                      authState.failure?.localizedMessage(l10n) ??
-                          authState.error!,
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.error,
+                    // A live region, so a screen reader announces the
+                    // failure: focus stays on the submit button.
+                    child: Semantics(
+                      liveRegion: true,
+                      child: Text(
+                        // The failure in the user's language, never the log
+                        // text in `error`.
+                        authState.failure?.localizedMessage(l10n) ??
+                            authState.error!,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.error,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                      textAlign: TextAlign.center,
                     ),
                   ),
                 const SizedBox(height: 16),
@@ -143,10 +148,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   key: UiKeys.loginSubmit,
                   onPressed: authState.isLoading ? null : _handleLogin,
                   child: authState.isLoading
-                      ? const SizedBox(
+                      ? SizedBox(
                           height: 20,
                           width: 20,
-                          child: CircularProgressIndicator(strokeWidth: 2),
+                          // The spinner alone would leave the button nameless.
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            semanticsLabel: l10n.login,
+                          ),
                         )
                       : Text(l10n.login),
                 ),
