@@ -1,0 +1,17 @@
+$ git rev-parse HEAD
+ff5330bb05d1b137a28734f57b8981508141439c
+$ flutter test -r expanded test/docs/doc_test_paths_test.dart
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/doc_test_paths_test.dart
+00:00 +0: a fence inside a longer or other-character fence does not close it
+00:00 +1: a block ending in a backslash does not swallow its closing fence
+00:00 +2: covers README.md, CONTRIBUTING.md and CLAUDE.md as well as docs/
+00:00 +3: criterion 2: the path CONTRIBUTING used to name fails
+00:00 +4: a `dart test` command is checked too
+00:00 +5: criterion 2: the real path passes
+00:00 +6: skips flags, flag values, placeholders and prose outside fences
+00:00 +7: joins a backslash-continued command and checks every path
+00:00 +8: checks a path with a :line suffix without the suffix
+00:00 +9: every `flutter test <path>` in the repository names a real path
+Shell: test paths: scanned 64 file(s); 0 missing
+00:00 +10: All tests passed!
+exit: 0

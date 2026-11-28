@@ -1,0 +1,22 @@
+$ git rev-parse HEAD
+ff5330bb05d1b137a28734f57b8981508141439c
+$ git mv test/core/accessibility/accessibility_helpers_test.dart test/core/accessibility/a11y_helpers_test.dart
+$ git status --short
+R  test/core/accessibility/accessibility_helpers_test.dart -> test/core/accessibility/a11y_helpers_test.dart
+$ dart run tool/check_docs.dart --test-paths
+test paths: scanned 64 file(s); 1 missing
+
+1 problem(s) found.
+exit: 1
+$ flutter test -r expanded test/docs
+Shell: docs/guides/accessibility/testing-procedures.md:335: `flutter test test/core/accessibility/accessibility_helpers_test.dart` names no file or directory
+00:40 +171 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/doc_test_paths_test.dart: every `flutter test <path>` in the repository names a real path [E]
+  Expected: <0>
+    Actual: <1>
+  test/docs/doc_test_paths_test.dart 148:5            main.<fn>
+00:53 +199 -1: Some tests failed.
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/doc_test_paths_test.dart: every `flutter test <path>` in the repository names a real path
+exit (flutter test): 1
+$ git mv test/core/accessibility/a11y_helpers_test.dart test/core/accessibility/accessibility_helpers_test.dart
+$ git status --short (empty = restored)

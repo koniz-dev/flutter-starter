@@ -1,0 +1,25 @@
+00:43 +179 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/lib_doc_snippets_test.dart: criterion 1: every // compile doc example in lib/ analyzes with no error or warning
+00:43 +180 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/lib_doc_snippets_test.dart: criterion 1: every // compile doc example in lib/ analyzes with no error or warning
+00:44 +181 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/lib_doc_snippets_test.dart: criterion 1: every // compile doc example in lib/ analyzes with no error or warning
+00:45 +182 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/lib_doc_snippets_test.dart: criterion 1: every // compile doc example in lib/ analyzes with no error or warning
+00:46 +183 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/lib_doc_snippets_test.dart: criterion 1: every // compile doc example in lib/ analyzes with no error or warning
+00:47 +184 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/lib_doc_snippets_test.dart: criterion 1: every // compile doc example in lib/ analyzes with no error or warning
+00:47 +185 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/lib_doc_snippets_test.dart: criterion 1: every // compile doc example in lib/ analyzes with no error or warning
+00:48 +186 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/lib_doc_snippets_test.dart: criterion 1: every // compile doc example in lib/ analyzes with no error or warning
+00:49 +187 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/lib_doc_snippets_test.dart: criterion 1: every // compile doc example in lib/ analyzes with no error or warning
+00:49 +188 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/testing_guide_snippets_test.dart: criterion 1: every self-contained dart snippet in docs/architecture/overview.md analyzes with no error or warning
+00:49 +189 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/testing_guide_snippets_test.dart: criterion 1: every self-contained dart snippet in docs/architecture/overview.md analyzes with no error or warning
+00:49 +190 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/testing_guide_snippets_test.dart: criterion 1: every self-contained dart snippet in docs/architecture/overview.md analyzes with no error or warning
+00:49 +191 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/testing_guide_snippets_test.dart: criterion 1: every self-contained dart snippet in docs/architecture/overview.md analyzes with no error or warning
+00:50 +192 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/testing_guide_snippets_test.dart: criterion 1: every self-contained dart snippet in docs/architecture/overview.md analyzes with no error or warning
+00:50 +193 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/testing_guide_snippets_test.dart: criterion 1: every self-contained dart snippet in docs/architecture/overview.md analyzes with no error or warning
+00:50 +194 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/testing_guide_snippets_test.dart: criterion 1: every self-contained dart snippet in docs/architecture/overview.md analyzes with no error or warning
+00:50 +195 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/testing_guide_snippets_test.dart: criterion 1: every self-contained dart snippet in docs/architecture/overview.md analyzes with no error or warning
+00:50 +196 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/testing_guide_snippets_test.dart: criterion 1: every self-contained dart snippet in docs/architecture/overview.md analyzes with no error or warning
+00:50 +197 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/testing_guide_snippets_test.dart: criterion 1: every self-contained dart snippet in docs/architecture/overview.md analyzes with no error or warning
+00:50 +198 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/testing_guide_snippets_test.dart: criterion 1: every self-contained dart snippet in docs/architecture/overview.md analyzes with no error or warning
+00:52 +199 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/testing_guide_snippets_test.dart: no snippet imports test/ through the package
+00:52 +200 -1: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/doc_test_paths_test.dart: every `flutter test <path>` in the repository names a real path
