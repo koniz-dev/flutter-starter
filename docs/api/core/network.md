@@ -424,7 +424,7 @@ Handle stream errors when subscribing, and apply your application's retry policy
 <!-- symbol: lib/core/network/realtime/realtime_providers.dart realtimeClientFactoryProvider -->
 <!-- symbol: lib/core/network/realtime/i_realtime_client.dart RealtimeConnectionClosed -->
 
-The message, reconnect, transport-error and signed-in callbacks below are supplied by your app.
+The message, reconnect, transport-error, connect-error and signed-in callbacks below are supplied by your app.
 
 ### Usage Example
 
@@ -438,10 +438,23 @@ Stream<dynamic> realtimeMessages(Ref ref) {
   final realtimeClient = ref.watch(realtimeClientProvider);
   // Your app's signed-in check; connect as the current user only.
   if (!isSignedIn(ref)) return const Stream.empty();
-  unawaited(realtimeClient.connect('wss://example.com/socket'));
+  // A failed connect adds nothing to the stream: its error arrives only
+  // through this future, so leaving it unhandled makes it an uncaught error.
+  unawaited(
+    realtimeClient
+        .connect('wss://example.com/socket')
+        .catchError(handleRealtimeConnectError),
+  );
   return realtimeClient.stream;
 }
 ```
+
+`connect` fails when the host is unreachable or refuses the connection (an
+offline launch, for example), when the handshake times out, and when a
+session change disconnects the client while it is still connecting. Route
+the error to the same retry policy as a `RealtimeConnectionClosed`, and
+retry only while signed in: after a session change, the rebuilt provider
+connects the new session's client itself.
 
 The calls on a client, wherever you hold it:
 
