@@ -1,0 +1,4 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/realtime_messages_snippet_test.dart
+00:00 +0: network.md quotes realtimeMessages as this test runs it
+00:00 +1: the documented realtimeMessages leaves no uncaught error when the connection is refused
+00:00 +2: All tests passed!
