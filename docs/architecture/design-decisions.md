@@ -785,13 +785,16 @@ class ApiClient {
     // Add interceptors. ErrorInterceptor goes LAST: it rejects, and dio
     // runs error handlers in registration order. PerformanceInterceptor
     // comes after Auth and Retry, so a trace records how the request
-    // finally ended - a refreshed 401 is the replay's 200.
+    // finally ended - a refreshed 401 is the replay's 200. The stale-entry
+    // fallback resolves, ending the chain, so it follows all of those.
+    final cache = CacheInterceptor();
     dio.interceptors.addAll([
-      CacheInterceptor(),           // Cache responses
+      cache,                        // Cache responses
       AuthInterceptor(),            // Add auth tokens, refresh on 401
       RetryInterceptor(),           // Retry transient failures
       ApiLoggingInterceptor(),      // Log requests/responses
       PerformanceInterceptor(),     // Track performance
+      cache.staleFallback,          // Serve a stale entry if the refetch failed
       ErrorInterceptor(),           // Convert to domain exceptions
     ]);
     

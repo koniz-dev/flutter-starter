@@ -151,6 +151,9 @@ class ApiClient {
     // how the request finally ended - a refreshed-and-replayed 401 is the
     // replay's 200, not a failed 401
     // (omitted if performanceService is null)
+    // cacheInterceptor.staleFallback serves a stale cache entry when the
+    // refetch failed for transport reasons. Its handler.resolve ends the
+    // chain, so it comes after retry, logging and the trace stop
     // ErrorInterceptor converts whatever survives into a domain exception
     dio.interceptors.addAll([
       cacheInterceptor,
@@ -165,6 +168,7 @@ class ApiClient {
         ApiLoggingInterceptor(loggingService: loggingService),
       if (performanceService != null)
         PerformanceInterceptor(performanceService: performanceService),
+      cacheInterceptor.staleFallback,
       ErrorInterceptor(),
     ]);
 
