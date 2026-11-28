@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Breaking
 
+- [A stale cache entry is served only after retry, logging and the trace stop](https://github.com/koniz-dev/flutter-starter/issues/1377): `CacheInterceptor` sits first in the chain and served a stale entry from its own `onError`, which ended the chain before `RetryInterceptor`, `ApiLoggingInterceptor` and `PerformanceInterceptor` saw the failed refetch. So a transient failure was never retried, never logged, and the refetch's trace was never stopped. The fallback now lives in a second interceptor, `CacheInterceptor.staleFallback`, which `ApiClient` registers just before `ErrorInterceptor`. A failed refetch is now retried first and a successful retry wins. Offline, the stale entry therefore arrives after the retry backoff (about 7 to 8.5 s with the defaults) instead of at once. If you build your own Dio chain with `CacheInterceptor`, add `cache.staleFallback` after your retry, logging and performance interceptors and before `ErrorInterceptor`. Without it, a failed refetch surfaces as an error instead of the stale entry.
+
 ### Fixed
 
 - [UI sign-in examples publish the router session](https://github.com/koniz-dev/flutter-starter/issues/1372): widgets call AuthNotifier.login and observe AuthState; domain use-case examples are explicitly non-UI. A Markdown/Dartdoc guard and real session-graph tests prevent the direct-use-case navigation regression.
