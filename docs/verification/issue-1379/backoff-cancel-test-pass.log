@@ -1,0 +1,3 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_patch_and_cancel_test.dart
+00:00 +0: criterion 2: cancellation a cancel during the retry backoff stops the re-send reaching the transport
+00:01 +1: All tests passed!

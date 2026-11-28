@@ -1,0 +1,21 @@
+# Mutant: 'cancelToken: options.cancelToken,' deleted from lib/core/network/interceptors/retry_interceptor.dart (re-send), on test commit 130caf35; source restored afterwards.
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_patch_and_cancel_test.dart
+00:00 +0: criterion 2: cancellation a cancel during the retry backoff stops the re-send reaching the transport
+00:01 +0 -1: criterion 2: cancellation a cancel during the retry backoff stops the re-send reaching the transport [E]
+  Expected: an object with length of <1>
+    Actual: [
+              Instance of 'RequestOptions',
+              Instance of 'RequestOptions',
+              Instance of 'RequestOptions'
+            ]
+     Which: has length of <3>
+  no retry was sent
+  
+  package:matcher                                                expect
+  package:flutter_test/src/widget_tester.dart 473:18             expect
+  test/core/network/api_client_patch_and_cancel_test.dart 206:7  main.<fn>.<fn>
+  
+00:01 +0 -1: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_patch_and_cancel_test.dart: criterion 2: cancellation a cancel during the retry backoff stops the re-send reaching the transport
