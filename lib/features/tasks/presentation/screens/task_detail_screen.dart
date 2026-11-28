@@ -243,9 +243,14 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
           padding: const EdgeInsets.all(16),
           children: [
             if (_saveError != null) ...[
-              Text(
-                _saveError!.taskMessage(l10n),
-                style: TextStyle(color: Theme.of(context).colorScheme.error),
+              // A live region, so a screen reader announces the failure:
+              // focus stays on the save button.
+              Semantics(
+                liveRegion: true,
+                child: Text(
+                  _saveError!.taskMessage(l10n),
+                  style: TextStyle(color: Theme.of(context).colorScheme.error),
+                ),
               ),
               const SizedBox(height: 16),
             ],
