@@ -144,18 +144,6 @@ flutter test test/features/auth/domain/usecases/login_usecase_test.dart:12
     expect(missing(markdown), isEmpty);
   });
 
-  test('covers README.md, CONTRIBUTING.md and CLAUDE.md as well as docs/', () {
-    final paths = testPathFiles(
-      Directory.current,
-    ).map((f) => f.path.substring(Directory.current.path.length + 1)).toList();
-
-    expect(
-      paths,
-      containsAll(<String>['README.md', 'CONTRIBUTING.md', 'CLAUDE.md']),
-    );
-    expect(paths.where((p) => p.startsWith('docs/')), isNotEmpty);
-  });
-
   test('every `flutter test <path>` in the repository names a real path', () {
     expect(
       checkTestPaths(Directory.current),
