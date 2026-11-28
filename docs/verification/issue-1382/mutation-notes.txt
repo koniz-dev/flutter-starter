@@ -15,8 +15,8 @@ mutation-no-xmllint.log: xmlEscaped in
   records +5 ~2: All tests passed!
 fixed-no-xmllint.log: same skip, escaping restored. +7 ~2: All tests passed!
 
-Removing one escape at a time, with xmllint still skipped (results checked in
-the terminal, not saved to a log):
+Removing one escape at a time, rerun on merged main 08a89201cd2 with xmllint
+still skipped, logged in mutation-drop-{amp,lt,quot}.log:
   drop &amp;  -> both new tests fail (unescaped &)
   drop &lt;   -> both new tests fail (unescaped <)
   drop &quot; -> the manifest test fails: the quote ends the attribute early,

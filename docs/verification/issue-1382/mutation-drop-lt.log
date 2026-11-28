@@ -1,0 +1,54 @@
+# main 08a89201cd2, xmllint tests forced to skip, mutation:
+diff --git a/bricks/flutter_starter_setup/hooks/input_rules.dart b/bricks/flutter_starter_setup/hooks/input_rules.dart
+index 1d6d635a442..183bb06a70a 100644
+--- a/bricks/flutter_starter_setup/hooks/input_rules.dart
++++ b/bricks/flutter_starter_setup/hooks/input_rules.dart
+@@ -130,7 +130,7 @@ String? displayNameProblem(String name) {
+ /// [text] escaped for an XML attribute value or element content.
+ String xmlEscaped(String text) => text
+     .replaceAll('&', '&amp;')
+-    .replaceAll('<', '&lt;')
++    
+     .replaceAll('>', '&gt;')
+     .replaceAll('"', '&quot;')
+     .replaceAll("'", '&apos;');
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_display_name_test.dart
+00:00 +0: (setUpAll)
+00:08 +0: the AndroidManifest parses and carries the name
+  Skip: xmllint is not installed
+00:08 +0 ~1: the Info.plist parses and carries the name
+  Skip: xmllint is not installed
+00:08 +0 ~2: the AndroidManifest label is escaped, without xmllint
+00:08 +0 ~2 -1: the AndroidManifest label is escaped, without xmllint [E]
+  Expected: not contains '<'
+    Actual: 'Tom &amp; &quot;Jerry&quot;: #1 <&apos;x&apos;&gt; \\ #(oops)'
+  unescaped < in "Tom &amp; &quot;Jerry&quot;: #1 <&apos;x&apos;&gt; \ #(oops)"
+  
+  package:matcher                                         expect
+  package:flutter_test/src/widget_tester.dart 473:18      expect
+  test/tooling/setup_brick_display_name_test.dart 56:3    _decodeXmlText
+  test/tooling/setup_brick_display_name_test.dart 175:12  main.<fn>
+  
+00:08 +0 ~2 -1: the Info.plist display name is escaped, without xmllint
+00:08 +0 ~2 -2: the Info.plist display name is escaped, without xmllint [E]
+  Expected: not contains '<'
+    Actual: 'Tom &amp; &quot;Jerry&quot;: #1 <&apos;x&apos;&gt; \\ #(oops)'
+  unescaped < in "Tom &amp; &quot;Jerry&quot;: #1 <&apos;x&apos;&gt; \ #(oops)"
+  
+  package:matcher                                         expect
+  package:flutter_test/src/widget_tester.dart 473:18      expect
+  test/tooling/setup_brick_display_name_test.dart 56:3    _decodeXmlText
+  test/tooling/setup_brick_display_name_test.dart 183:12  main.<fn>
+  
+00:08 +0 ~2 -2: pubspec's patrol app_name parses back to the name
+00:08 +1 ~2 -2: every locale names the app, in appTitle and in welcome
+00:08 +2 ~2 -2: the tests that find the welcome sentence still parse
+00:08 +3 ~2 -2: fastlane/Fastfile APP_NAME evaluates to the name
+00:09 +4 ~2 -2: ios/fastlane/Fastfile APP_NAME evaluates to the name
+00:09 +5 ~2 -2: (tearDownAll)
+00:09 +5 ~2 -2: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_display_name_test.dart: the AndroidManifest label is escaped, without xmllint
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_display_name_test.dart: the Info.plist display name is escaped, without xmllint
+exit: 1

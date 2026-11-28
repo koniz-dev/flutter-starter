@@ -1,0 +1,42 @@
+# main 08a89201cd2, xmllint tests forced to skip, mutation:
+diff --git a/bricks/flutter_starter_setup/hooks/input_rules.dart b/bricks/flutter_starter_setup/hooks/input_rules.dart
+index 1d6d635a442..3a315d6eeed 100644
+--- a/bricks/flutter_starter_setup/hooks/input_rules.dart
++++ b/bricks/flutter_starter_setup/hooks/input_rules.dart
+@@ -132,7 +132,7 @@ String xmlEscaped(String text) => text
+     .replaceAll('&', '&amp;')
+     .replaceAll('<', '&lt;')
+     .replaceAll('>', '&gt;')
+-    .replaceAll('"', '&quot;')
++    
+     .replaceAll("'", '&apos;');
+ 
+ /// [text] as a double-quoted YAML scalar, quotes included. JSON's string
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_display_name_test.dart
+00:00 +0: (setUpAll)
+00:08 +0: the AndroidManifest parses and carries the name
+  Skip: xmllint is not installed
+00:08 +0 ~1: the Info.plist parses and carries the name
+  Skip: xmllint is not installed
+00:08 +0 ~2: the AndroidManifest label is escaped, without xmllint
+00:08 +0 ~2 -1: the AndroidManifest label is escaped, without xmllint [E]
+  Expected: 'Tom & "Jerry": #1 <\'x\'> \\ #(oops)'
+    Actual: 'Tom & '
+     Which: is different. Both strings start the same, but the actual value is missing the following trailing characters: "Jerry": # ...
+  
+  package:matcher                                        expect
+  package:flutter_test/src/widget_tester.dart 473:18     expect
+  test/tooling/setup_brick_display_name_test.dart 175:5  main.<fn>
+  
+00:08 +0 ~2 -1: the Info.plist display name is escaped, without xmllint
+00:08 +1 ~2 -1: pubspec's patrol app_name parses back to the name
+00:08 +2 ~2 -1: every locale names the app, in appTitle and in welcome
+00:08 +3 ~2 -1: the tests that find the welcome sentence still parse
+00:08 +4 ~2 -1: fastlane/Fastfile APP_NAME evaluates to the name
+00:09 +5 ~2 -1: ios/fastlane/Fastfile APP_NAME evaluates to the name
+00:09 +6 ~2 -1: (tearDownAll)
+00:09 +6 ~2 -1: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_display_name_test.dart: the AndroidManifest label is escaped, without xmllint
+exit: 1
