@@ -1,0 +1,26 @@
+lib at f1163ba8675208fed2d1f926cc38f769588601a9 (origin/main, fix stashed)
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/stale_cache_retry_order_test.dart
+00:00 +0: a transient refetch failure is retried before the stale entry is served, and the retry answer wins
+00:00 +0 -1: a transient refetch failure is retried before the stale entry is served, and the retry answer wins [E]
+  Expected: <3>
+    Actual: <2>
+  the refetch must be retried
+  
+  package:matcher                                            expect
+  package:flutter_test/src/widget_tester.dart 473:18         expect
+  test/core/network/stale_cache_retry_order_test.dart 194:5  main.<fn>
+  
+00:00 +0 -1: when every retry fails, the stale entry is served after the failure is logged and the refetch trace is stopped
+00:00 +0 -2: when every retry fails, the stale entry is served after the failure is logged and the refetch trace is stopped [E]
+  Expected: <5>
+    Actual: <2>
+  
+  package:matcher                                            expect
+  package:flutter_test/src/widget_tester.dart 473:18         expect
+  test/core/network/stale_cache_retry_order_test.dart 212:5  main.<fn>
+  
+00:00 +0 -2: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/stale_cache_retry_order_test.dart: a transient refetch failure is retried before the stale entry is served, and the retry answer wins
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/stale_cache_retry_order_test.dart: when every retry fails, the stale entry is served after the failure is logged and the refetch trace is stopped
