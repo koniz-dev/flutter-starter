@@ -49,6 +49,33 @@ String? _skipReason() {
 
 ProcessResult _run(String exe, List<String> args) => Process.runSync(exe, args);
 
+/// The character data or attribute value [raw], as an XML parser would read
+/// it, or a failure naming what makes it malformed. Works without xmllint,
+/// which ubuntu-latest runners lack, so the escaping is checked on CI too.
+String _decodeXmlText(String raw) {
+  expect(raw, isNot(contains('<')), reason: 'unescaped < in "$raw"');
+  final entity = RegExp('&(amp|lt|gt|quot|apos|#[0-9]+|#x[0-9a-fA-F]+);');
+  expect(
+    raw.replaceAll(entity, ''),
+    isNot(contains('&')),
+    reason: 'unescaped & in "$raw"',
+  );
+  return raw.replaceAllMapped(entity, (m) {
+    final name = m.group(1)!;
+    return switch (name) {
+      'amp' => '&',
+      'lt' => '<',
+      'gt' => '>',
+      'quot' => '"',
+      'apos' => "'",
+      _ when name.startsWith('#x') => String.fromCharCode(
+        int.parse(name.substring(2), radix: 16),
+      ),
+      _ => String.fromCharCode(int.parse(name.substring(1))),
+    };
+  });
+}
+
 bool _has(String exe) {
   try {
     return Process.runSync(exe, ['--version']).exitCode == 0 ||
@@ -138,6 +165,23 @@ void main() {
       expect(plutil.exitCode, 0, reason: '${plutil.stdout}');
     }
   }, skip: skip ?? (_has('xmllint') ? null : 'xmllint is not installed'));
+
+  test('the AndroidManifest label is escaped, without xmllint', () {
+    final label = RegExp(
+      'android:label="([^"]*)"',
+    ).firstMatch(read(_files[0]))!.group(1)!;
+    // An unescaped quote ends the attribute early, so the decoded value
+    // comes up short of the name.
+    expect(_decodeXmlText(label), _name);
+  }, skip: skip);
+
+  test('the Info.plist display name is escaped, without xmllint', () {
+    final value = RegExp(
+      r'<key>CFBundleDisplayName</key>\s*<string>(.*?)</string>',
+      dotAll: true,
+    ).firstMatch(read(_files[1]))!.group(1)!;
+    expect(_decodeXmlText(value), _name);
+  }, skip: skip);
 
   test("pubspec's patrol app_name parses back to the name", () {
     final yaml = loadYaml(read('pubspec.yaml')) as YamlMap;
