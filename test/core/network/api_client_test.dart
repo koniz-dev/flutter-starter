@@ -129,7 +129,7 @@ void main() {
         // refresh, performance teardown and error logging never run.
         final interceptors = apiClient.dio.interceptors.toList();
 
-        expect(interceptors, hasLength(5));
+        expect(interceptors, hasLength(6));
         // dio seeds the list with its own ImplyContentTypeInterceptor, which
         // is not exported from package:dio, hence the runtimeType check.
         expect(
@@ -139,7 +139,13 @@ void main() {
         expect(interceptors[1], isA<CacheInterceptor>());
         expect(interceptors[2], same(authInterceptor));
         expect(interceptors[3], isA<RetryInterceptor>());
-        expect(interceptors[4], isA<ErrorInterceptor>());
+        // The stale-entry fallback resolves, which ends the chain, so it
+        // comes after retry and just before ErrorInterceptor.
+        expect(
+          interceptors[4],
+          same((interceptors[1] as CacheInterceptor).staleFallback),
+        );
+        expect(interceptors[5], isA<ErrorInterceptor>());
       });
 
       test(
@@ -154,7 +160,7 @@ void main() {
           );
           final interceptors = client.dio.interceptors.toList();
 
-          expect(interceptors, hasLength(7));
+          expect(interceptors, hasLength(8));
           expect(
             interceptors[0].runtimeType.toString(),
             'ImplyContentTypeInterceptor',
@@ -166,7 +172,11 @@ void main() {
           expect(interceptors[3], isA<RetryInterceptor>());
           expect(interceptors[4], isA<ApiLoggingInterceptor>());
           expect(interceptors[5], isA<PerformanceInterceptor>());
-          expect(interceptors[6], isA<ErrorInterceptor>());
+          expect(
+            interceptors[6],
+            same((interceptors[1] as CacheInterceptor).staleFallback),
+          );
+          expect(interceptors[7], isA<ErrorInterceptor>());
         },
       );
     });

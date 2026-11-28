@@ -317,7 +317,14 @@ void main() {
 
         // dio installs its own (unexported) ImplyContentTypeInterceptor at
         // index 0; assert on the interceptors ApiClient registers.
+        // The cache's stale-entry fallback is a private type; it is checked
+        // by identity in api_client_test.dart.
+        final staleFallback = apiClient.dio.interceptors
+            .whereType<CacheInterceptor>()
+            .single
+            .staleFallback;
         final types = apiClient.dio.interceptors
+            .where((i) => !identical(i, staleFallback))
             .map((i) => i.runtimeType)
             .where((t) => '$t' != 'ImplyContentTypeInterceptor')
             .toList();

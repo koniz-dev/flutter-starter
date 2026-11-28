@@ -72,6 +72,8 @@ void main() {
         refreshToken: () async => const Success('unused'),
       ),
       cacheConfig: cacheConfig,
+      retryInitialDelay: Duration.zero,
+      retryMaxJitter: Duration.zero,
     )..dio.httpClientAdapter = adapter;
     return (client: client, adapter: adapter);
   }
@@ -118,7 +120,9 @@ void main() {
 
           final response = await h.client.get('/feed');
 
-          expect(h.adapter.hits, 2, reason: 'the network must be asked first');
+          // The first fetch, the refetch and RetryInterceptor's three
+          // retries: the stale entry is served only once they all failed.
+          expect(h.adapter.hits, 5, reason: 'the network must be asked first');
           expect(response.data, {'hit': 1});
         },
       );

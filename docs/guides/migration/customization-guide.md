@@ -210,6 +210,9 @@ dio.interceptors.addAll([
   MyTenantHeaderInterceptor(),
   RetryInterceptor(/* ... */),
   // ...
+  // Serves a stale cache entry when the refetch failed; its resolve ends the
+  // error chain, so it follows retry, logging and performance.
+  cacheInterceptor.staleFallback,
   ErrorInterceptor(), // stays last
 ]);
 ```

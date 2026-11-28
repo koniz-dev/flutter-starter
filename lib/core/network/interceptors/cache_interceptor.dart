@@ -50,6 +50,15 @@ class CacheConfig {
 /// replaces the entry. `maxAge` used to have no effect: a stale entry was
 /// served straight from the cache for up to seven days with no network
 /// attempt at all.
+///
+/// The stale entry is served by [staleFallback], a second interceptor that
+/// must be registered after the retry, logging and performance interceptors
+/// and before `ErrorInterceptor`. dio runs `onError` in registration order
+/// and `handler.resolve` ends the chain, so serving it from this interceptor,
+/// which sits first, skipped the retries (a retry could have fetched a fresh
+/// answer), the error log and the refetch's trace stop. Without
+/// [staleFallback] in the chain a failed refetch surfaces as an error.
+///
 /// ## What is cached
 ///
 /// Only **unauthenticated** `GET` responses with status 200, for a request
@@ -216,6 +225,10 @@ class CacheInterceptor extends Interceptor implements IHttpResponseCache {
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) async {
+    // A retry re-enters the chain carrying a copy of the first attempt's
+    // `extra`; the fallback is decided afresh for every attempt.
+    options.extra.remove(_staleFallbackKey);
+
     // First, and whether or not caching is on: entries an earlier version
     // stored under a verbatim URL can hold a query-string secret, and with
     // caching disabled nothing else would ever touch them again.
@@ -258,14 +271,13 @@ class CacheInterceptor extends Interceptor implements IHttpResponseCache {
     super.onRequest(options, handler);
   }
 
-  @override
-  void onError(DioException err, ErrorInterceptorHandler handler) {
-    final stale = err.requestOptions.extra.remove(_staleFallbackKey);
-    if (stale is Response<dynamic> && _isTransportFailure(err)) {
-      return handler.resolve(stale);
-    }
-    super.onError(err, handler);
-  }
+  /// Serves the stale entry kept by [onRequest] when the refetch fails for
+  /// transport reasons.
+  ///
+  /// Register it after `RetryInterceptor`, `ApiLoggingInterceptor` and
+  /// `PerformanceInterceptor` and before `ErrorInterceptor`, so the refetch is
+  /// retried, logged and its trace stopped before the stale entry answers.
+  late final Interceptor staleFallback = _StaleFallbackInterceptor();
 
   /// Whether [err] means the network could not answer, as opposed to the
   /// server answering with an error of its own.
@@ -679,5 +691,21 @@ class CacheInterceptor extends Interceptor implements IHttpResponseCache {
         debugPrint('Cache clear error: $e');
       }
     }
+  }
+}
+
+/// The fallback half of [CacheInterceptor]; see
+/// [CacheInterceptor.staleFallback].
+class _StaleFallbackInterceptor extends Interceptor {
+  @override
+  void onError(DioException err, ErrorInterceptorHandler handler) {
+    final stale = err.requestOptions.extra.remove(
+      CacheInterceptor._staleFallbackKey,
+    );
+    if (stale is Response<dynamic> &&
+        CacheInterceptor._isTransportFailure(err)) {
+      return handler.resolve(stale);
+    }
+    super.onError(err, handler);
   }
 }
