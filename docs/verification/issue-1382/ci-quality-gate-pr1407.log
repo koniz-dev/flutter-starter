@@ -1,0 +1,4 @@
+⏭️ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_brick_display_name_test.dart: the AndroidManifest parses and carries the name (skipped)
+⏭️ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_brick_display_name_test.dart: the Info.plist parses and carries the name (skipped)
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_brick_display_name_test.dart: the AndroidManifest label is escaped, without xmllint
+✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_brick_display_name_test.dart: the Info.plist display name is escaped, without xmllint

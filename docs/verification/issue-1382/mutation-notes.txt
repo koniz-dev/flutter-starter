@@ -1,0 +1,25 @@
+How the mutation logs were produced (issue 1382, PR 1407)
+
+Both logs come from the PR branch before merge. The only difference from the
+merged test is the lint fix that dropped a raw-string prefix ('...' in place
+of r'...'), which leaves the regex unchanged.
+
+To mimic ubuntu-latest, which has no xmllint, the two xmllint tests were made
+to skip locally by temporarily changing _has('xmllint') to
+_has('xmllint-absent-as-on-ci'). That edit was reverted and never committed.
+
+mutation-no-xmllint.log: xmlEscaped in
+  bricks/flutter_starter_setup/hooks/input_rules.dart returns its input
+  unchanged. Result: +5 ~2 -2, Some tests failed. Both new tests fail, one on
+  "unescaped &" and one on "unescaped <". Without the new tests the issue
+  records +5 ~2: All tests passed!
+fixed-no-xmllint.log: same skip, escaping restored. +7 ~2: All tests passed!
+
+Removing one escape at a time, with xmllint still skipped (results checked in
+the terminal, not saved to a log):
+  drop &amp;  -> both new tests fail (unescaped &)
+  drop &lt;   -> both new tests fail (unescaped <)
+  drop &quot; -> the manifest test fails: the quote ends the attribute early,
+                 so the decoded value is 'Tom & ' and does not match the name.
+                 The Info.plist test passes, which is correct: a " inside
+                 element content is well-formed XML.

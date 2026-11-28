@@ -1,0 +1,15 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_display_name_test.dart
+00:00 +0: (setUpAll)
+00:08 +0: the AndroidManifest parses and carries the name
+  Skip: xmllint is not installed
+00:08 +0 ~1: the Info.plist parses and carries the name
+  Skip: xmllint is not installed
+00:08 +0 ~2: the AndroidManifest label is escaped, without xmllint
+00:08 +1 ~2: the Info.plist display name is escaped, without xmllint
+00:08 +2 ~2: pubspec's patrol app_name parses back to the name
+00:08 +3 ~2: every locale names the app, in appTitle and in welcome
+00:08 +4 ~2: the tests that find the welcome sentence still parse
+00:09 +5 ~2: fastlane/Fastfile APP_NAME evaluates to the name
+00:09 +6 ~2: ios/fastlane/Fastfile APP_NAME evaluates to the name
+00:09 +7 ~2: (tearDownAll)
+00:09 +7 ~2: All tests passed!
