@@ -45,6 +45,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - [A docs-only change can no longer break the strip with every check green](https://github.com/koniz-dev/flutter-starter/issues/1375): the Strip jobs skip their work when a pull request changes only markdown, but two of their steps read markdown: the package rename recipe in `docs/guides/onboarding/fork-and-customize.md`, and `tool/check_docs.dart` on each stripped tree. The new `test/tooling/strip_markdown_inputs_test.dart`, part of the Quality gate's docs-only set, runs that recipe and requires no `package:flutter_starter/` import left outside the setup brick, and runs `check_docs.dart` after each strip mode on a copy of the tree. It adds about 35 s to `flutter test` while the strip tool is in your tree; a sample strip deletes it with the strip's other tests.
 
+- [Renaming a test file a doc runs now fails `flutter test`](https://github.com/koniz-dev/flutter-starter/issues/1381): the check that every `flutter test <path>` in README.md, CONTRIBUTING.md, CLAUDE.md and `docs/` names a real file ran only in Docs check, which a pull request triggers only when markdown changes, so renaming or deleting such a test file passed every check. `test/docs/doc_test_paths_test.dart` now runs the check over the real tree, so `flutter test` (and the Quality gate) fails with the document and line to fix. If you rename a test that your docs run, update the doc in the same change.
+
 ## [5.0.3] - 2026-11-24
 
 ### Fixed
