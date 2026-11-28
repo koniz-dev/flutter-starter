@@ -1,4 +1,9 @@
 // `flutter test <path>` in the docs must name a real file.
+//
+// `tool/check_docs.dart --test-paths` runs only when markdown changes, but the
+// usual way to break this rule is renaming or deleting a test file, which
+// changes no markdown. So besides pinning the rule on fixtures, this test runs
+// it over the repository from the Quality gate.
 
 import 'dart:io';
 
@@ -137,5 +142,28 @@ flutter test test/features/auth/domain/usecases/login_usecase_test.dart:12
 ```
 ''';
     expect(missing(markdown), isEmpty);
+  });
+
+  test('covers README.md, CONTRIBUTING.md and CLAUDE.md as well as docs/', () {
+    final paths = testPathFiles(
+      Directory.current,
+    ).map((f) => f.path.substring(Directory.current.path.length + 1)).toList();
+
+    expect(
+      paths,
+      containsAll(<String>['README.md', 'CONTRIBUTING.md', 'CLAUDE.md']),
+    );
+    expect(paths.where((p) => p.startsWith('docs/')), isNotEmpty);
+  });
+
+  test('every `flutter test <path>` in the repository names a real path', () {
+    expect(
+      checkTestPaths(Directory.current),
+      0,
+      reason:
+          'A document runs `flutter test` on a path that no longer exists. '
+          'Run `dart run tool/check_docs.dart --test-paths` for the list, '
+          'then fix the document or restore the test file.',
+    );
   });
 }
