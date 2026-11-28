@@ -14,8 +14,9 @@ import 'package:mocktail/mocktail.dart';
 
 import '../../../../helpers/test_fixtures.dart';
 
-// The tasks error banner and the detail screen's save error were plain text
-// that appeared without moving focus, so a screen reader never mentioned them.
+// The tasks list errors (full-screen and banner) and the detail save error
+// were plain text that appeared without moving focus, so a screen reader
+// never mentioned them.
 
 class _TasksRepository extends Mock implements TasksRepository {}
 
@@ -74,6 +75,21 @@ void main() {
 
     // The banner sits above the still-loaded list.
     expect(find.text('Original Title'), findsOneWidget);
+    expectLiveRegion(tester, en.failureNoConnection);
+    handle.dispose();
+  });
+
+  testWidgets('a failed first load is announced', (tester) async {
+    final handle = tester.ensureSemantics();
+    when(
+      () => repo.getAllTasks(),
+    ).thenAnswer((_) async => const ResultFailure<List<Task>>(_offline));
+
+    await _pump(tester, const TasksListScreen(), repo);
+    await tester.pumpAndSettle();
+
+    // The full-screen error, with its retry button.
+    expect(find.text(en.retry), findsOneWidget);
     expectLiveRegion(tester, en.failureNoConnection);
     handle.dispose();
   });

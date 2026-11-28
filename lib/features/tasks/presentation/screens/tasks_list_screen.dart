@@ -92,10 +92,14 @@ class TasksListScreen extends ConsumerWidget {
                 color: Theme.of(context).colorScheme.error,
               ),
               const SizedBox(height: 16),
-              Text(
-                state.failure?.taskMessage(l10n) ?? state.error!,
-                style: TextStyle(color: Theme.of(context).colorScheme.error),
-                textAlign: TextAlign.center,
+              // A live region, so a screen reader announces the failure.
+              Semantics(
+                liveRegion: true,
+                child: Text(
+                  state.failure?.taskMessage(l10n) ?? state.error!,
+                  style: TextStyle(color: Theme.of(context).colorScheme.error),
+                  textAlign: TextAlign.center,
+                ),
               ),
               const SizedBox(height: 16),
               ElevatedButton(
